@@ -13,8 +13,7 @@ class GameInit
     public start()
     : void
     {
-    var config = 
-    {
+    var config = {
       type: Phaser.WEBGL,
       scale: 
       {
