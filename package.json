@@ -1,0 +1,26 @@
+{
+  "name": "1942-dragon-combat",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaxMald/1942-dragon-combat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MaxMald/1942-dragon-combat/issues"
+  },
+  "homepage": "https://github.com/MaxMald/1942-dragon-combat#readme",
+  "dependencies": {
+    "http-server": "^0.12.3",
+    "typescript": "^3.9.6"
+  }
+}

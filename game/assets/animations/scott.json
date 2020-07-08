@@ -1,0 +1,554 @@
+{
+  "anims": [
+    {
+      "key": "scott_run",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "scott",
+          "frame": "scott_18.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_19.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_20.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_21.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_22.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_23.png",
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 12,
+      "duration": 1,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "scott_attack",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "scott",
+          "frame": "scott_01.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_02.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_03.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_04.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_05.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_06.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_07.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_08.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_09.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_10.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_11.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_12.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_13.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_14.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_15.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_16.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_17.png",
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 12,
+      "duration": 1,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "scott_kick_1",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "scott",
+          "frame": "scott_32.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_33.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_34.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_35.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_36.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_37.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_38.png",
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 12,
+      "duration": 1,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "scott_kick_2",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "scott",
+          "frame": "scott_39.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_40.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_41.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_42.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_43.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_44.png",
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 12,
+      "duration": 1,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "scott_mega_attack",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "scott",
+          "frame": "scott_45.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_46.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_47.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_48.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_50.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_51.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_52.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_53.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_55.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_57.png",
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 12,
+      "duration": 1,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "scott_attack_2",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "scott",
+          "frame": "scott_58.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_59.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_60.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_61.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_62.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_63.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_64.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_65.png",
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 12,
+      "duration": 1,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "scott_attack_3",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "scott",
+          "frame": "scott_66.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_67.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_68.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_69.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_70.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_71.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_72.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_73.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_74.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_75.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_76.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_77.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_78.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_79.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_80.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_81.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_82.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_83.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_84.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "scott",
+          "frame": "scott_85.png",
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 12,
+      "duration": 1,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    }
+  ],
+  "globalTimeScale": 1
+}
