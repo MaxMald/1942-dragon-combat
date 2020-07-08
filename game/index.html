@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Ambience Generator Test</title>
+        <link property="stylesheet" rel='stylesheet' href='../css/style.css' type='text/css' media='all' />
+        
+        <!--Loads the Landscape Mode.-->
+        <script src="../js/gameBoxPortrait.js"></script>
+    </head>
+    <body onload="init_gamebox()">
+        <div id="game_box">
+            <div class="game_app" id="phaser-game">
+            </div>                  
+        </div>
+    </body>
+
+    <script src="../externals/phaser/build/phaser.min.js"></script>
+    <script data-main="src/main" src="../externals/requireJs/require.js"></script>
+</html>
