@@ -23,12 +23,31 @@ export class AmbienceGenerator
   /* Public                                           */
   /****************************************************/
   
+  /**
+   * Create and initalize this AmbienceGenerator's members. This method should 
+   * be called once after the creation of this AmbienceGenerator.
+   */
   init()
   : void 
   {
+    this._m_surfacePainter = new SurfacePainter();
     return;
   }
 
+  /**
+   * Get the SurfacePainter instance of this AmbienceGenerator.
+   * 
+   * @returns SurfacePainter instance.
+   */
+  getSurfacePainter()
+  : SurfacePainter
+  {
+    return this._m_surfacePainter;
+  }
+
+  /**
+   * Call the destroy() method of all members.
+   */
   destroy()
   : void
   {

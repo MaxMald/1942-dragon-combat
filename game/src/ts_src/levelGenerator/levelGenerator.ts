@@ -21,10 +21,27 @@ export class LevelGenerator
   /* Public                                           */
   /****************************************************/
   
+  /**
+   * Create and initalize this LevelGenerator's member. This method should be 
+   * called once after the creation of this LevelGenerator.
+   */
   init()
   : void
   {
+    this._m_ambienceGenerator  = new AmbienceGenerator();
+    this._m_ambienceGenerator.init();
     return;
+  }
+
+  /**
+   * Get the AmbienceGenerator of this LevelGenerator.
+   * 
+   * @returns AmbienceGenerator instance.
+   */
+  getAmbienceGenerator()
+  : AmbienceGenerator
+  {
+    return this._m_ambienceGenerator;
   }
 
   /**
@@ -44,7 +61,7 @@ export class LevelGenerator
   /****************************************************/
   
   /**
-   * Ambience generator reference.
+   * AmbienceGenerator.
    */
   private _m_ambienceGenerator : AmbienceGenerator;
 }
