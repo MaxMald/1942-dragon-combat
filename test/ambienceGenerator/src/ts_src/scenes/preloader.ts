@@ -12,30 +12,10 @@ export class Preloader extends Phaser.Scene
     ///////////////////////////////////
     // Images    
     this.load.image('duke', 'images/inge_logo_02.png');
+
+    ///////////////////////////////////
+    // Shaders
     
-    ///////////////////////////////////
-    // Atlas    
-    this.load.atlas
-    (
-      'summer_props',
-      'atlas/rpg_summer_tileset_props.png',
-      'atlas/rpg_summer_tileset_props.js'
-    );
-
-    this.load.atlas
-    (
-      'scott',
-      'atlas/scott.png',
-      'atlas/scott.js'
-    );
-
-    ///////////////////////////////////
-    // Animations
-    this.load.animation
-    (
-      'scottAnimation',
-      'animations/scott.json'
-    );
 
     return;
   }
@@ -43,7 +23,7 @@ export class Preloader extends Phaser.Scene
   create()
   : void
   {
-    this.scene.start('actorFrameAnimation');
+    this.scene.start('test');
     return;
   }
 }

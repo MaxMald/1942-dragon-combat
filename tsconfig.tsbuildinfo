@@ -1,0 +1,168 @@
+{
+  "program": {
+    "fileInfos": {
+      "./node_modules/typescript/lib/lib.es5.d.ts": {
+        "version": "70ae6416528e68c2ee7b62892200d2ca631759943d4429f8b779b947ff1e124d",
+        "signature": "70ae6416528e68c2ee7b62892200d2ca631759943d4429f8b779b947ff1e124d",
+        "affectsGlobalScope": true
+      },
+      "./node_modules/typescript/lib/lib.dom.d.ts": {
+        "version": "9affb0a2ddc57df5b8174c0af96c288d697a262e5bc9ca1f544c999dc64a91e6",
+        "signature": "9affb0a2ddc57df5b8174c0af96c288d697a262e5bc9ca1f544c999dc64a91e6",
+        "affectsGlobalScope": true
+      },
+      "./node_modules/typescript/lib/lib.scripthost.d.ts": {
+        "version": "097a57355ded99c68e6df1b738990448e0bf170e606707df5a7c0481ff2427cd",
+        "signature": "097a57355ded99c68e6df1b738990448e0bf170e606707df5a7c0481ff2427cd",
+        "affectsGlobalScope": true
+      },
+      "./node_modules/typescript/lib/lib.es2015.collection.d.ts": {
+        "version": "43fb1d932e4966a39a41b464a12a81899d9ae5f2c829063f5571b6b87e6d2f9c",
+        "signature": "43fb1d932e4966a39a41b464a12a81899d9ae5f2c829063f5571b6b87e6d2f9c",
+        "affectsGlobalScope": true
+      },
+      "./externals/ts_definitions/matter.d.ts": {
+        "version": "9374865c5c6274676e16385594e5e06fcbb8f649052c80adfe2a0fbcf728f59f",
+        "signature": "9374865c5c6274676e16385594e5e06fcbb8f649052c80adfe2a0fbcf728f59f",
+        "affectsGlobalScope": true
+      },
+      "./externals/ts_definitions/phaser.d.ts": {
+        "version": "1edf2ed1520dd6f029fd9267ad17582e9bfb26af2f9618db9910c0c4c95f89ea",
+        "signature": "1edf2ed1520dd6f029fd9267ad17582e9bfb26af2f9618db9910c0c4c95f89ea",
+        "affectsGlobalScope": true
+      },
+      "./externals/ts_definitions/nineslice.d.ts": {
+        "version": "47b29b247e21e46c66720c94c5b4757439a7fa5db2723d89392f1b2b55163393",
+        "signature": "47b29b247e21e46c66720c94c5b4757439a7fa5db2723d89392f1b2b55163393",
+        "affectsGlobalScope": true
+      },
+      "./externals/ts_definitions/spine-webgl.d.ts": {
+        "version": "b15bf1f159322d4ff46ce17a601008f86907c29c2b8ff8a286a0558f9d8ffee0",
+        "signature": "b15bf1f159322d4ff46ce17a601008f86907c29c2b8ff8a286a0558f9d8ffee0",
+        "affectsGlobalScope": true
+      },
+      "./externals/ts_definitions/mxutilities.d.ts": {
+        "version": "b2d8c15894f7093646e1aef66e7aff331e3d5059605b9a04e0117732cf6766c3",
+        "signature": "b2d8c15894f7093646e1aef66e7aff331e3d5059605b9a04e0117732cf6766c3",
+        "affectsGlobalScope": false
+      },
+      "./game/src/ts_src/scenes/boot.ts": {
+        "version": "7c5ec438e94efcf99edbf859b7169e0c34b2dff22c80c8cc1d08886723f91aed",
+        "signature": "08cc0d5bec40911d207ed392476e84b5cecfb01b69cc5e66d7e8d0a2af79d8a8",
+        "affectsGlobalScope": false
+      },
+      "./game/src/ts_src/scenes/preloader.ts": {
+        "version": "e8084e2eb86f14bfe9955ec55dcba60307075037d4ca1211f5803087297f517f",
+        "signature": "776c48c6d2e113b448e832213900bd8fa920949fc2e0908743dc40f4ff42d5a3",
+        "affectsGlobalScope": false
+      },
+      "./game/src/ts_src/scenes/game.ts": {
+        "version": "b06306f11c82f206263ed8e7a7582e0d938b198215a9204bca06c4ef33f86826",
+        "signature": "657bd60c650d0fa1c37043d1ea65ead6ccee19830b6d466b7160890aee0ace11",
+        "affectsGlobalScope": false
+      },
+      "./game/src/ts_src/game_init.ts": {
+        "version": "d405dbcc7f5a94a670508aea50fead2cbae67e15dbf6ebc355f01b1a32b2628a",
+        "signature": "8c2eb6ae01c8fe93a7d8b725da675ad02f888addbd2786174b56ab3cf139258b",
+        "affectsGlobalScope": false
+      },
+      "./game/src/ts_src/levelgenerator/ambiencegenerator/surfacepainter.ts": {
+        "version": "2389b6845028f056bbe17037bcf236b6d23d28622e52c1a52bc3a9e6b3f9c93d",
+        "signature": "4dc29dcdee564de2b1f052a6b1441f5a59cb6dc804687a5d5f70882d2bed56b5",
+        "affectsGlobalScope": false
+      },
+      "./game/src/ts_src/levelgenerator/ambiencegenerator/ambiencegenerator.ts": {
+        "version": "cc40132a9d4927501b17e62780925c816c1cc0df0f8bbc528fc4e8c6f24eb79e",
+        "signature": "d9fa9654a0cf418faf7e05884a06430d1e7fc98ea4a06df766b2e11c84d8bbf4",
+        "affectsGlobalScope": false
+      },
+      "./game/src/ts_src/levelgenerator/levelgenerator.ts": {
+        "version": "c1c55eaabb2839d8b8f3013b2611ae593d9d49c4a0e7c2af5ef982b3f0e67dcb",
+        "signature": "bde2dfc724063752dafb16dcdffdf8a3ac3673a454da28ab9884f0956e2efb0b",
+        "affectsGlobalScope": false
+      }
+    },
+    "options": {
+      "declaration": true,
+      "declarationMap": false,
+      "target": 1,
+      "module": 2,
+      "noImplicitReturns": true,
+      "noFallthroughCasesInSwitch": true,
+      "removeComments": true,
+      "sourceMap": true,
+      "lib": [
+        "lib.es5.d.ts",
+        "lib.dom.d.ts",
+        "lib.es2015.collection.d.ts",
+        "lib.scripthost.d.ts"
+      ],
+      "outDir": "./game/lib",
+      "rootDir": "./game/src/ts_src",
+      "composite": true,
+      "configFilePath": "./game/tsconfig.json"
+    },
+    "referencedMap": {
+      "./externals/ts_definitions/mxutilities.d.ts": [
+        "./externals/ts_definitions/mxutilities.d.ts"
+      ],
+      "./externals/ts_definitions/phaser.d.ts": [
+        "./externals/ts_definitions/matter.d.ts"
+      ],
+      "./game/src/ts_src/game_init.ts": [
+        "./externals/ts_definitions/nineslice.d.ts",
+        "./game/src/ts_src/scenes/boot.ts",
+        "./game/src/ts_src/scenes/game.ts",
+        "./game/src/ts_src/scenes/preloader.ts"
+      ],
+      "./game/src/ts_src/levelgenerator/ambiencegenerator/ambiencegenerator.ts": [
+        "./game/src/ts_src/levelgenerator/ambiencegenerator/surfacepainter.ts"
+      ],
+      "./game/src/ts_src/levelgenerator/ambiencegenerator/surfacepainter.ts": [
+        "./externals/ts_definitions/mxutilities.d.ts"
+      ],
+      "./game/src/ts_src/levelgenerator/levelgenerator.ts": [
+        "./game/src/ts_src/levelgenerator/ambiencegenerator/ambiencegenerator.ts"
+      ],
+      "./game/src/ts_src/scenes/boot.ts": [
+        "./externals/ts_definitions/mxutilities.d.ts"
+      ]
+    },
+    "exportedModulesMap": {
+      "./externals/ts_definitions/mxutilities.d.ts": [
+        "./externals/ts_definitions/mxutilities.d.ts"
+      ],
+      "./externals/ts_definitions/phaser.d.ts": [
+        "./externals/ts_definitions/matter.d.ts"
+      ],
+      "./game/src/ts_src/levelgenerator/ambiencegenerator/ambiencegenerator.ts": [
+        "./game/src/ts_src/levelgenerator/ambiencegenerator/surfacepainter.ts"
+      ],
+      "./game/src/ts_src/levelgenerator/ambiencegenerator/surfacepainter.ts": [
+        "./externals/ts_definitions/mxutilities.d.ts"
+      ],
+      "./game/src/ts_src/levelgenerator/levelgenerator.ts": [
+        "./game/src/ts_src/levelgenerator/ambiencegenerator/ambiencegenerator.ts"
+      ]
+    },
+    "semanticDiagnosticsPerFile": [
+      "./externals/ts_definitions/matter.d.ts",
+      "./externals/ts_definitions/mxutilities.d.ts",
+      "./externals/ts_definitions/nineslice.d.ts",
+      "./externals/ts_definitions/phaser.d.ts",
+      "./externals/ts_definitions/spine-webgl.d.ts",
+      "./game/src/ts_src/game_init.ts",
+      "./game/src/ts_src/levelgenerator/ambiencegenerator/ambiencegenerator.ts",
+      "./game/src/ts_src/levelgenerator/ambiencegenerator/surfacepainter.ts",
+      "./game/src/ts_src/levelgenerator/levelgenerator.ts",
+      "./game/src/ts_src/scenes/boot.ts",
+      "./game/src/ts_src/scenes/game.ts",
+      "./game/src/ts_src/scenes/preloader.ts",
+      "./node_modules/typescript/lib/lib.dom.d.ts",
+      "./node_modules/typescript/lib/lib.es2015.collection.d.ts",
+      "./node_modules/typescript/lib/lib.es5.d.ts",
+      "./node_modules/typescript/lib/lib.scripthost.d.ts"
+    ]
+  },
+  "version": "3.9.6"
+}

@@ -4,7 +4,7 @@
   "compilerOptions":
   {       
     "outDir": "../lib/ambienceGenerator",
-    "rootDir": "./src/ts_src",
+    "rootDir": "../../",
     "outFile": "../lib/ambienceGenerator/test_ambienceGenerator.js"  
   },
 
@@ -17,7 +17,8 @@
   ],
 
   "include": [
-    "./src/ts_src/**/*", 
+    "./src/ts_src/**/*",
+    "../../game/src/ts_src/levelGenerator/**/*",
 	  "../../externals/mxUtilities/*"
   ]
 }

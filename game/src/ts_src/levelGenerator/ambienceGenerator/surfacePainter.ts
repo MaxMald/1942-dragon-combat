@@ -61,6 +61,10 @@ export class SurfacePainter
    * and will have the same size as the game's canvas. The shader depth will be
    * set to 1000.0.
    * 
+   * The shader should have available the iChannel0 and iChannel1. The first one 
+   * is used for the perlin noise texture, the second one for the terrain color 
+   * texture.
+   * 
    * The SurfacePainter should have the terrain color texture and perlin noise
    * texture before calling this method, otherwise it will returns an 
    * OPRESULT.kFail.
@@ -89,8 +93,8 @@ export class SurfacePainter
     // set an array with the textures keys.
     let a_textureKeys : string[] = new Array<string>();
 
-    a_textureKeys.push(this._m_terrainColorTexture.key);
     a_textureKeys.push(this._m_terrainPerlinTexture.key);
+    a_textureKeys.push(this._m_terrainColorTexture.key);
 
     // Create the Phaser Shader Gameobject.
     let shader : Phaser.GameObjects.Shader = _scene.add.shader
@@ -148,7 +152,8 @@ export class SurfacePainter
 
   /**
    * This shader is used to draw the background surface. This shader should
-   * have available the first and second texture slots for the 
+   * have available the iChannel0 and iChannel1. The first one is used for the
+   * perlin noise texture, the second one for the terrain color texture.
    */
   private _m_surfaceShader : CmpShader;
 }

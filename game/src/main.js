@@ -15,7 +15,9 @@
       'mxUtilities' : [
         "mxUtilitites", 
         "behaviour/mxActor", 
-        "behaviour/components/cmpSprite"
+        "behaviour/components/cmpSprite",
+        "behaviour/components/cmpShader",
+        "commons/mxEnums"
       ]
     },
 

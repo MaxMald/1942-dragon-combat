@@ -1,8 +1,7 @@
 import { Plugin } from "phaser3-nineslice";
 import { Boot } from "./scenes/boot";
 import { Preloader } from "./scenes/preloader";
-import { ScnActorHierarchy } from "./scenes/test/scnActorHierarchy";
-import { ScnActorAnimation } from "./scenes/test/scnActorAnimation";
+import { Test } from "./scenes/test";
 
 class GameInit
 {
@@ -23,8 +22,8 @@ class GameInit
         autoCenter: Phaser.Scale.CENTER_BOTH,
         mode: Phaser.Scale.FIT
       },
-      width : 1920,
-      height : 1080,
+      width : 1080,
+      height : 1920,
       input:
       {
         gamepad:true
@@ -45,9 +44,7 @@ class GameInit
 
     this.m_game.scene.add('boot', Boot);
     this.m_game.scene.add('preloader', Preloader);
-
-    this.m_game.scene.add('actorHierarchy', ScnActorHierarchy);
-    this.m_game.scene.add('actorFrameAnimation', ScnActorAnimation);
+    this.m_game.scene.add('test', Test);
 
     ///////////////////////////////////
     // Start BOOT    
