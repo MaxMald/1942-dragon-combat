@@ -2,6 +2,7 @@ precision mediump float;
 
 uniform sampler2D iChannel0;
 uniform sampler2D iChannel1;
+uniform sampler2D iChannel2;
 
 uniform vec2 resolution;
 uniform float time;
@@ -55,14 +56,16 @@ void main()
 {
   // get the UV coords of the PerlinNoise map.
   vec2 uv = fragCoord.xy / resolution.xy;
-  uv.y *= -1.0;
+  //uv.y *= -1.0;
   
   // get the color from the PerlinNoixe map
   vec4 perlinColor = texture2D(iChannel0, uv, 0.0);
+  vec4 testColor = texture2D(iChannel2, uv, 0.0);
 
   // Grow the perlin noise contrast.
-  vec3 perlinColorSat = BrightnessSaturationContrast(perlinColor.xyz, 1.0, 1.0, 1.5);
+  vec3 perlinColorSat = BrightnessSaturationContrast(perlinColor.xyz, 1.0, 1.0, 1.5);  
 
   // draw the terrain color.
-  gl_FragColor = terrainColor(perlinColorSat);  
+  gl_FragColor = terrainColor(perlinColorSat);
+  gl_FragColor = testColor;
 }

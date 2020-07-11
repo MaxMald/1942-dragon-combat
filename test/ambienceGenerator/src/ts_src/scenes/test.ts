@@ -1,6 +1,7 @@
 import { LevelGenerator } from "../../../../../game/src/ts_src/levelGenerator/levelGenerator";
 import { AmbienceGenerator } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGenerator";
 import { SurfacePainter } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/surfacePainter";
+import { OPRESULT } from "commons/mxEnums";
 
 export class Test extends Phaser.Scene
 {
@@ -46,19 +47,28 @@ export class Test extends Phaser.Scene
 
     let surfacePainter : SurfacePainter
       = ambienceGenerator.getSurfacePainter();
-    
-    surfacePainter.setPerlinTexture
-    (
-      this.textures.get('perlinTexture')
-    );
 
     surfacePainter.setTerrainColorTexture
     (
       this.textures.get('colorTerrainTexture')
     );
 
-    surfacePainter.createAmbiencecShader(this, 'terrain_painter_01');
-    
+    surfacePainter.setPerlinTexture
+    (
+      this.textures.get('perlinTexture')
+    );
+
+    // Create the height map.
+    ambienceGenerator.generateTerrainHeightMap
+    (
+      this.textures,
+      'height_map',
+      256,
+      256
+    );
+
+    let result : OPRESULT =
+      ambienceGenerator.createBackgroundAmbience(this, 'terrain_painter_01');    
     return;
   }
 

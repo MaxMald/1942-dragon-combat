@@ -11,6 +11,7 @@
 
 import { OPRESULT } from "commons/mxEnums";
 import { CmpShader } from "behaviour/components/cmpShader";
+import { CustomTextureShader } from "./customTextureShader";
 
  /**
   * The SurfacePainter draw the background ambience, as well as some effects
@@ -96,16 +97,51 @@ export class SurfacePainter
     a_textureKeys.push(this._m_terrainPerlinTexture.key);
     a_textureKeys.push(this._m_terrainColorTexture.key);
 
+    ///////////////////////////////////
+    // Test
+
+    let width : number = 256;
+    let height : number = 256;
+
+    let length : number = width * height * 4;
+
+    let a_pixels : Uint8Array = new Uint8Array(length);
+
+    let index : number = 0;
+    while(index < length)
+    {
+      a_pixels[index] = 255;      
+      ++index;
+      
+      a_pixels[index] = 0;
+      ++index;
+
+      a_pixels[index] = 0;
+      ++index;
+
+      a_pixels[index] = 255;
+      ++index;
+    }
+
     // Create the Phaser Shader Gameobject.
-    let shader : Phaser.GameObjects.Shader = _scene.add.shader
+    
+    let shader : CustomTextureShader = new CustomTextureShader
     (
-        _shaderKey,
-        0,
-        0, 
-        _scene.game.canvas.width, 
-        _scene.game.canvas.height,
-        a_textureKeys
+      _scene, 
+      _shaderKey,
+      0.0,
+      0.0,
+      _scene.game.canvas.width, 
+      _scene.game.canvas.height,
+      a_textureKeys
     );
+
+    // Add the shader to the scene.
+    _scene.children.add(shader);
+    
+    let context = _scene.game.context as WebGLRenderingContext;
+    shader.prepare(a_pixels, context.RGBA, width, height, 2);    
+
     shader.setOrigin(0.0, 0.0);
     shader.setDepth(1000.0);
 
