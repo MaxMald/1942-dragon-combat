@@ -53,18 +53,13 @@ export class Test extends Phaser.Scene
       this.textures.get('colorTerrainTexture')
     );
 
-    surfacePainter.setPerlinTexture
-    (
-      this.textures.get('perlinTexture')
-    );
-
     // Create the height map.
     ambienceGenerator.generateTerrainHeightMap
     (
-      this.textures,
-      'height_map',
       256,
-      256
+      256,
+      0.015,
+      this.game.canvas.width / this.game.canvas.height
     );
 
     let result : OPRESULT =

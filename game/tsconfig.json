@@ -4,7 +4,7 @@
   "compilerOptions":
   {       
     "outDir": "./lib/",
-    "rootDir": "./src/ts_src",
+    "rootDir": "./src",
     "outFile": "./lib/1942-dragon-combat.js"
   },
 
@@ -17,6 +17,7 @@
   ],
 
   "include": [
+    "./src/js/**/*",
     "./src/ts_src/**/*", 
     "../externals/mxUtilities/*"
   ]

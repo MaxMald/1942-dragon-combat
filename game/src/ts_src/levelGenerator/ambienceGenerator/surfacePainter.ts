@@ -12,6 +12,7 @@
 import { OPRESULT } from "commons/mxEnums";
 import { CmpShader } from "behaviour/components/cmpShader";
 import { CustomTextureShader } from "./customTextureShader";
+import { HeightMap } from "./heightMap";
 
  /**
   * The SurfacePainter draw the background ambience, as well as some effects
@@ -26,7 +27,7 @@ export class SurfacePainter
   init()
   : void
   {
-
+    return;
   }
 
   /**
@@ -42,14 +43,14 @@ export class SurfacePainter
   }
 
   /**
-   * Set the perlin noise texture.
+   * Set the HeightMap of this surface painter.
    * 
-   * @param _pelinTexture The perlin noise texture. 
+   * @param _heightMap The height map.
    */
-  setPerlinTexture(_pelinTexture : Phaser.Textures.Texture)
+  setHeightMap(_heightMap : HeightMap)
   : void
   {
-    this._m_terrainPerlinTexture = _pelinTexture;
+    this._m_heightMap = _heightMap;
     return;
   }
 
@@ -80,10 +81,10 @@ export class SurfacePainter
   {
     // Check if the SurfacePainter is ready to create its ambience shader.
     if(this._m_terrainColorTexture == null 
-      || this._m_terrainPerlinTexture == null) 
+      || this._m_heightMap == null) 
     {
       return OPRESULT.kFail;  
-    }    
+    }
 
     // Destroy the previous shader if it exists.
     if(this._m_surfaceShader != null) {
@@ -93,37 +94,40 @@ export class SurfacePainter
 
     // set an array with the textures keys.
     let a_textureKeys : string[] = new Array<string>();
-
-    a_textureKeys.push(this._m_terrainPerlinTexture.key);
     a_textureKeys.push(this._m_terrainColorTexture.key);
+    
+    let width : integer = this._m_heightMap.getWidth();
+    let height : integer = this._m_heightMap.getHeight();
 
-    ///////////////////////////////////
-    // Test
+    let pixelLength : integer = 4; // RGBA
 
-    let width : number = 256;
-    let height : number = 256;
+    let a_pixels : Uint8Array = new Uint8Array(pixelLength * width * height);
 
-    let length : number = width * height * 4;
+    let col : integer = 0;
+    let row : integer = 0;
+    let baseIndex : integer = 0;
+    let heightValue : integer = 0;
 
-    let a_pixels : Uint8Array = new Uint8Array(length);
-
-    let index : number = 0;
-    while(index < length)
-    {
-      a_pixels[index] = 255;      
-      ++index;
+    let rowSize : integer = width * pixelLength;
+    
+    while(row < height) {
       
-      a_pixels[index] = 0;
-      ++index;
+      while(col < width) {
 
-      a_pixels[index] = 0;
-      ++index;
+        baseIndex = (rowSize * row) + (col * pixelLength);
+        heightValue = this._m_heightMap.get(col, row);
 
-      a_pixels[index] = 255;
-      ++index;
+        a_pixels[baseIndex] = heightValue;
+        a_pixels[baseIndex + 1] = heightValue;
+        a_pixels[baseIndex + 2] = heightValue;
+        a_pixels[baseIndex + 3] = 255;
+        
+        ++col;
+      }
+
+      col = 0;
+      ++row;
     }
-
-    // Create the Phaser Shader Gameobject.
     
     let shader : CustomTextureShader = new CustomTextureShader
     (
@@ -165,7 +169,6 @@ export class SurfacePainter
     }
 
     this._m_terrainColorTexture = null;
-    this._m_terrainPerlinTexture = null;
     return;
   }
 
@@ -177,14 +180,7 @@ export class SurfacePainter
    * This texture is used to paint the terrain color according to the "height"
    * of in the perlin texture.
    */
-  private _m_terrainColorTexture : Phaser.Textures.Texture;
-
-  /**
-   * This texture describes the "height" of the terrain. A completely black color
-   * represent the lowest terrain level, however the white color represent the
-   * highest terrain level.
-   */
-  private _m_terrainPerlinTexture : Phaser.Textures.Texture;
+  private _m_terrainColorTexture : Phaser.Textures.Texture; 
 
   /**
    * This shader is used to draw the background surface. This shader should
@@ -192,4 +188,9 @@ export class SurfacePainter
    * perlin noise texture, the second one for the terrain color texture.
    */
   private _m_surfaceShader : CmpShader;
+
+  /**
+   * Height map.
+   */
+  private _m_heightMap : HeightMap;
 }

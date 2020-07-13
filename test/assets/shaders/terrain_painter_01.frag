@@ -49,7 +49,7 @@ vec4 terrainColor(vec3 _perlinColor)
   vec2 t_uv = vec2(t_u, t_v);
 
   // Get the terrain color;
-  return texture2D(iChannel1, t_uv, 0.0);
+  return texture2D(iChannel0, t_uv, 0.0);
 }
 
 void main() 
@@ -59,13 +59,13 @@ void main()
   //uv.y *= -1.0;
   
   // get the color from the PerlinNoixe map
-  vec4 perlinColor = texture2D(iChannel0, uv, 0.0);
+  vec4 perlinColor = texture2D(iChannel2, uv, 0.0);
   vec4 testColor = texture2D(iChannel2, uv, 0.0);
 
   // Grow the perlin noise contrast.
   vec3 perlinColorSat = BrightnessSaturationContrast(perlinColor.xyz, 1.0, 1.0, 1.5);  
 
   // draw the terrain color.
-  gl_FragColor = terrainColor(perlinColorSat);
-  gl_FragColor = testColor;
+  gl_FragColor = terrainColor(perlinColor.xyz);  
+  //gl_FragColor = testColor;  
 }

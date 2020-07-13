@@ -12,6 +12,7 @@
 
 import { SurfacePainter } from "./surfacePainter";
 import { OPRESULT } from "commons/mxEnums";
+import { HeightMap } from "./heightMap";
 
 /**
  * The AmbienceGenerator draw the background and place ambience props over
@@ -32,57 +33,36 @@ export class AmbienceGenerator
   : void 
   {
     this._m_surfacePainter = new SurfacePainter();
+    this._m_surfacePainter.init();
     return;
   }
 
   /**
-   * Creates a new Canvas Texture with the TextureManager. This texture will store 
-   * terrain height map data used to draw the the background terrain.
+   * Creates a new HeightMap and destroys the previous if exists. These method
+   * call the setHeightMap(HeightMap) method of the SurfacePainter.
    * 
-   * If a canvas texture (with the same key) already exists, it will be destroyed 
-   * and repleaced by the new one.
-   * 
-   * @param _textureManager The TextureManager used to create the Canvas Texture.
-   * @param _textureKey The key to identify the new Canvas Texture.
-   * @param _blockWidth The width of the texture block.
-   * @param _blocHeight The height of the texture block.
-   * 
-   * @returns OPRESULT.kOk if the operation was successful.
+   * @param _width Width of the map. 
+   * @param _height Height of the map.
+   * @param _amplitude Amplitude.
+   * @param _ratio Ratio.
    */
   generateTerrainHeightMap
   (
-    _textureManager : Phaser.Textures.TextureManager,
-    _textureKey : string,
-    _blockWidth : integer,
-    _blockHeight : integer,
-  )
-  : OPRESULT
-  {
-    /*
-    // If a texture with the same key already exists, destroy it.
-    if(_textureManager.exists(_textureKey)) {
-      _textureManager.remove(_textureKey);
+    _width : number,
+    _height : number,
+    _amplitude ?: number,
+    _ratio ?: number
+  ) : OPRESULT
+  { 
+    if(this._m_heightMap != null) {
+      this._m_heightMap.destroy();
     }
 
-    // Create the canvas texture.
-    this._m_terrainHeightMap 
-      = _textureManager.createCanvas(_textureKey, _blockWidth, _blockHeight);
+    this._m_heightMap = new HeightMap();    
+    this._m_heightMap.init(_width, _height, _amplitude, _ratio);
+    
+    this._m_surfacePainter.setHeightMap(this._m_heightMap);
 
-    // Paint each pixel with a red color.
-    let x : integer = 0;
-    let y : integer = 0;
-    while(y < _blockHeight) {
-      while(x < _blockWidth) {
-        this._m_terrainHeightMap.setPixel(x, y, 255, 0, 0, 255);
-        ++x;
-      }
-      x = 0;
-      ++y;
-    }
-
-    // Refresh the texture.
-    this._m_terrainHeightMap.refresh();
-*/
     return OPRESULT.kOk;
   }
 
@@ -101,12 +81,9 @@ export class AmbienceGenerator
   : OPRESULT
   {
     // Check if the height map is ready.
-    //if(this._m_terrainHeightMap == null) {
-      //return OPRESULT.kOk;
-    //}
-
-    // Set the height map texture.
-    //this._m_surfacePainter.setPerlinTexture(this._m_terrainHeightMap);
+    if(this._m_heightMap == null) {
+      return OPRESULT.kFail;
+    }
 
     // Create the ambiencec shader.
     return this._m_surfacePainter.createAmbiencecShader(_scene, _shaderKey);
@@ -131,10 +108,7 @@ export class AmbienceGenerator
   {
     this._m_surfacePainter.destroy();
     this._m_surfacePainter = null;
-
-    // Is prefered to destroy this element with the TextureManager's remove()
-    // method.
-    this._m_terrainHeightMap = null;
+    
     return;
   }
   
@@ -148,8 +122,7 @@ export class AmbienceGenerator
   private _m_surfacePainter : SurfacePainter;
 
   /**
-   * This texture has the information about the height map used to draw
-   * the terrain in the background of the scene.
+   * Reference to the Height Map.
    */
-  private _m_terrainHeightMap : Phaser.Textures.CanvasTexture; 
+  private _m_heightMap : HeightMap;
 }
