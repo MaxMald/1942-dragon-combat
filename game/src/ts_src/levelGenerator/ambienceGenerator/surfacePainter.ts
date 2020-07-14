@@ -55,6 +55,18 @@ export class SurfacePainter
   }
 
   /**
+   * Set the terrain maps for this SurfacePainter.
+   * 
+   * @param _terrainMaps Texture with the terrain maps used by this surface painter.
+   */
+  setTerrainMap(_terrainMaps : Phaser.Textures.Texture)
+  : void
+  {
+    this._m_terrainMaps = _terrainMaps;
+    return;
+  }
+
+  /**
    * Creates the Shader used to draw the ambience background. This method creates
    * and prepare the shader. If a Shader already exists, it will be destroyed 
    * and replaced by a new one.
@@ -81,7 +93,8 @@ export class SurfacePainter
   {
     // Check if the SurfacePainter is ready to create its ambience shader.
     if(this._m_terrainColorTexture == null 
-      || this._m_heightMap == null) 
+      || this._m_heightMap == null
+      || this._m_terrainMaps == null) 
     {
       return OPRESULT.kFail;  
     }
@@ -95,6 +108,7 @@ export class SurfacePainter
     // set an array with the textures keys.
     let a_textureKeys : string[] = new Array<string>();
     a_textureKeys.push(this._m_terrainColorTexture.key);
+    a_textureKeys.push(this._m_terrainMaps.key);
     
     let width : integer = this._m_heightMap.getWidth();
     let height : integer = this._m_heightMap.getHeight();
@@ -181,6 +195,11 @@ export class SurfacePainter
    * of in the perlin texture.
    */
   private _m_terrainColorTexture : Phaser.Textures.Texture; 
+
+  /**
+   * This texture have the normal map for water reflection.
+   */
+  private _m_terrainMaps : Phaser.Textures.Texture;
 
   /**
    * This shader is used to draw the background surface. This shader should

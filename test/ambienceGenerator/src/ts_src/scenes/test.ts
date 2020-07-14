@@ -33,6 +33,12 @@ export class Test extends Phaser.Scene
       'perlinTexture',
       'images/perlin_256_01.png'
     );
+
+    this.load.image
+    (
+      'waterNormalMap',
+      'images/water_normal.png'
+    );
     return;
   }
   
@@ -51,6 +57,11 @@ export class Test extends Phaser.Scene
     surfacePainter.setTerrainColorTexture
     (
       this.textures.get('colorTerrainTexture')
+    );
+
+    surfacePainter.setTerrainMap
+    (
+      this.textures.get('waterNormalMap')
     );
 
     // Create the height map.
