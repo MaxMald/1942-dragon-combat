@@ -110,38 +110,47 @@ export class SurfacePainter
     a_textureKeys.push(this._m_terrainColorTexture.key);
     a_textureKeys.push(this._m_terrainMaps.key);
     
-    let width : integer = this._m_heightMap.getWidth();
-    let height : integer = this._m_heightMap.getHeight();
+    let texWidth : integer = 256;
+    let texHeight : integer = 256;
 
     let pixelLength : integer = 4; // RGBA
 
-    let a_pixels : Uint8Array = new Uint8Array(pixelLength * width * height);
+    let a_pixels : Uint8Array = new Uint8Array(pixelLength * texWidth * texHeight);
 
     let col : integer = 0;
     let row : integer = 0;
     let baseIndex : integer = 0;
     let heightValue : integer = 0;
+    let layer : integer = 0;
 
-    let rowSize : integer = width * pixelLength;
-    
-    while(row < height) {
+    let rowSize : integer = texWidth * pixelLength;
+
+    while(layer < 4)  {
+
+      while(row < texHeight) {
       
-      while(col < width) {
+        while(col < texWidth) {       
 
-        baseIndex = (rowSize * row) + (col * pixelLength);
-        heightValue = this._m_heightMap.get(col, row);
-
-        a_pixels[baseIndex] = heightValue;
-        a_pixels[baseIndex + 1] = heightValue;
-        a_pixels[baseIndex + 2] = heightValue;
-        a_pixels[baseIndex + 3] = 255;
-        
-        ++col;
+          baseIndex = (rowSize * row) + (col * pixelLength);         
+            
+          if(layer < 3) {
+            heightValue = this._m_heightMap.get(col, row + (texHeight * layer));
+            a_pixels[baseIndex + layer] = heightValue;            
+          }
+          else {
+            a_pixels[baseIndex + layer] = 255;
+          }
+          
+          ++col;
+        }
+  
+        col = 0;
+        ++row;
       }
 
-      col = 0;
-      ++row;
-    }
+      row = 0;
+      ++layer;
+    }    
     
     let shader : CustomTextureShader = new CustomTextureShader
     (
@@ -158,7 +167,7 @@ export class SurfacePainter
     _scene.children.add(shader);
     
     let context = _scene.game.context as WebGLRenderingContext;
-    shader.prepare(a_pixels, context.RGBA, width, height, 2);    
+    shader.prepare(a_pixels, context.RGBA, texWidth, texHeight, 2);    
 
     shader.setOrigin(0.0, 0.0);
     shader.setDepth(1000.0);

@@ -40,6 +40,34 @@ vec3 BrightnessSaturationContrast
 }
 
 /**
+* Get the height from the texture.
+*
+* @param _uv the UV coordinates.
+* @param _d the delta distance of the 
+* 
+* @returns the height value (0.0,1.0)
+*/
+float getHeight(vec2 _uv, float _d)
+{
+  _uv.y = _uv.y + _d;
+
+  float layer = floor(_uv.y);
+  _uv.y = _uv.y - layer;
+
+  vec4 color = texture2D(iChannel2, _uv, 0.0);
+
+  if(layer == 0.0) {
+    return color.x;
+  }
+  else if(layer == 1.0) {
+    return color.y;
+  }
+  else {
+    return color.z;
+  }
+}
+
+/**
 * Get the specular value in the given cell position.
 *
 * This method use the Blinn-Phong model to calculate the specular value.
@@ -141,18 +169,17 @@ vec3 normalToModelSpace(vec3 _normal)
 
   return _normal;
 }
+
 void main() 
 {
   // get the UV coords of the PerlinNoise map.
   vec2 uv = fragCoord.xy / resolution.xy;
 
-  float ratio = resolution.y / resolution.x;
+  float ratio = resolution.y / resolution.x;  
 
-  // Get the height value.
-  vec3 heightMap = texture2D(iChannel2, uv, 0.0).xyz;  
-  //heightMap = BrightnessSaturationContrast(heightMap, 1.0, 1.0, 2.0); 
+  float d = time / 30.0;
 
-  float heightValue = heightMap.x; 
+  float heightValue = getHeight(uv, d);
 
   // Get the terrain color from the height value.
   vec4 baseTerrain = getTerrainColor(heightValue);
@@ -164,20 +191,19 @@ void main()
   vec3 cellPosition = vec3(fragCoord.xy, 1.0);
 
   vec2 normalSize = vec2(256.0, 256.0);
-  vec2 normalScaleFactor = vec2(4.0, 4.0);
+  vec2 normalScaleFactor = vec2(5.0, 5.0);
 
   vec2 waterNormalUV = uv;
-  waterNormalUV.y = waterNormalUV.y * ratio;
+  waterNormalUV.y = waterNormalUV.y * ratio;  
 
   waterNormalUV = uv * normalScaleFactor * normalSize;
-  
+
   vec2 defase;
-  defase.x = sin(time) * 0.05;
+  defase.x = sin( (uv.y * 16.0) + time) * 0.2;
+  defase.y = time / 6.0;
 
   waterNormalUV = waterNormalUV + (defase * normalSize);
   waterNormalUV = mod(waterNormalUV, normalSize) / normalSize;
-
-  //waterNormalUV = clamp(waterNormalUV, 0.01, 0.99);
 
   vec3 normal 
     = normalToModelSpace(texture2D(iChannel1, waterNormalUV, 0.0).xyz);  

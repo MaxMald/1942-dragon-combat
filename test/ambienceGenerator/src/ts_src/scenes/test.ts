@@ -68,7 +68,7 @@ export class Test extends Phaser.Scene
     ambienceGenerator.generateTerrainHeightMap
     (
       256,
-      256,
+      1024,
       0.015,
       this.game.canvas.width / this.game.canvas.height
     );

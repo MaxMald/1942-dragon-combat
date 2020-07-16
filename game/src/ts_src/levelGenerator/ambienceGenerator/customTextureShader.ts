@@ -95,14 +95,14 @@ export class CustomTextureShader extends Phaser.GameObjects.Shader
     (
       gl.TEXTURE_2D, 
       gl.TEXTURE_WRAP_S,
-      gl.REPEAT
+      gl.CLAMP_TO_EDGE
     );
     
     gl.texParameteri
     (
       gl.TEXTURE_2D, 
       gl.TEXTURE_WRAP_T,
-      gl.REPEAT
+      gl.CLAMP_TO_EDGE
     );
 
     let renderer : Phaser.Renderer.WebGL.WebGLRenderer 
