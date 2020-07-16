@@ -9,35 +9,38 @@ uniform float time;
 
 varying vec2 fragCoord;
 
-vec3 BrightnessSaturationContrast
-(
-  vec3 color, 
-  float brightness, 
-  float saturation, 
-  float contrast
-)
-{
-	// adjust these values to adjust R, G, B colors separately
-	float avgLumR = 0.5;
-	float avgLumG = 0.5;
-	float avgLumB = 0.5;
+//////////////////////////////////
+// Mask
 
-	// luminance coefficient for getting luminance from the image
-	vec3 luminanceCoeff = vec3(0.2125, 0.7154, 0.0721);
-	
-  // Brightness calculation
-	vec3 avgLum = vec3(avgLumR, avgLumG, avgLumB);
-	vec3 brightnessColor = color * brightness;
-	float intensityf = dot(brightnessColor, luminanceCoeff);
-	vec3 intensity = vec3(intensityf, intensityf, intensityf);
-	
-  // Saturation calculation
-	vec3 saturationColor = mix(intensity, brightnessColor, saturation);
-	
-  // Contrast calculation
-	vec3 contrastColor = mix(avgLum, saturationColor, contrast);
-	return contrastColor;
-}
+const float maskThr = 0.5;
+const float maskMax = 0.6;
+
+//////////////////////////////////
+// SunLight
+
+const vec3 sunColor = vec3(0.5255, 0.4627, 0.1804);
+const vec3 lightColor = vec3(0.7451, 0.6039, 0.3373);
+const float lightPower = 150.0;
+
+//////////////////////////////////
+// Specular 
+
+const vec3 specColor = vec3(1.0, 1.0, 1.0);
+
+const vec3 specLightDir = vec3(-0.577, 0.577, -0.577);
+const vec3 specEyeDir = vec3(0.0,0.0,-1.0);
+
+const float shininess = 30.0;
+const float specPower = 75.0;
+
+//////////////////////////////////
+// Ocean Volumen 
+
+const vec3 depthBaseColor = vec3(0.0118, 0.0863, 0.102);
+
+const float depthPower = 40.0;
+const float depthMinDist = 900.0;
+const float detphDistMult = 9000.0;
 
 /**
 * Get the height from the texture.
@@ -65,59 +68,6 @@ float getHeight(vec2 _uv, float _d)
   else {
     return color.z;
   }
-}
-
-/**
-* Get the specular value in the given cell position.
-*
-* This method use the Blinn-Phong model to calculate the specular value.
-*
-* @param _lightDirection The direction of the light source.
-* @param _power The power of the light source.
-* @param _cellPosition The position vector of point in the surface.
-* @param _cellNormal The normal vector of the point in the surface.
-* @param _eyeDirection The direction of the light source.
-*
-* @returns The specular valua at that cell position.
-*/
-float getSpecular
-(
-  vec3 _lightDirection,
-  float _distance,
-  float _power,
-  vec3 _cellPosition,
-  vec3 _cellNormal,
-  vec3 _eyeDirection
-)
-{
-  if(_power > 0.0) {
-    vec3 h = normalize(_eyeDirection + _lightDirection);
-    return pow(max(0.0, dot(_cellNormal, h)), 0.5) * _power / _distance;
-  }
-
-  return 0.0;
-}
-
-/**
-* Get the diffuse illuminatio intensity in a range of (0.0, 1.0).
-*
-* @param _lightDirection : light source direction.
-* @param _distance : The distance between the source of ligth and the position * in the surface.
-* @param _power : The intensity of the source light.
-* @param _cellNormal : The normal vector of the surface point.
-*
-* @returns The intensity of the reflection of light in the surface.
-*/
-float getDiffuseIllumination
-(
-  vec3 _lightDirection,
-  float _distance,
-  float _power,
-  vec3 _cellNormal
-)
-{
-  float value = dot(_lightDirection, _cellNormal) / _distance * _power; 
-  return clamp(value, 0.0, 1.0);
 }
 
 /**
@@ -179,13 +129,16 @@ void main()
 
   float d = time / 30.0;
 
+  //////////////////////////////////
+  // Diffuse Color
+
   float heightValue = getHeight(uv, d);
 
   // Get the terrain color from the height value.
-  vec4 baseTerrain = getTerrainColor(heightValue);
+  vec3 diffuse = getTerrainColor(heightValue).xyz;
 
   //////////////////////////////////
-  // Illumination
+  // Water normal vector
 
   // Normal vector of the point.
   vec3 cellPosition = vec3(fragCoord.xy, 1.0);
@@ -200,7 +153,7 @@ void main()
 
   vec2 defase;
   defase.x = sin( (uv.y * 16.0) + time) * 0.2;
-  defase.y = time / 6.0;
+  defase.y = time / 5.0;
 
   waterNormalUV = waterNormalUV + (defase * normalSize);
   waterNormalUV = mod(waterNormalUV, normalSize) / normalSize;
@@ -208,44 +161,80 @@ void main()
   vec3 normal 
     = normalToModelSpace(texture2D(iChannel1, waterNormalUV, 0.0).xyz);  
   
-  // Light source.
+  //////////////////////////////////
+  // Light source
+
   vec3 lightPosition;
+
   lightPosition.x = resolution.x * 0.3;
   lightPosition.y = resolution.y * 0.8;
-  lightPosition.z = -40.0;
+  lightPosition.z = -50.0;
   
   vec3 lightDirection = lightPosition - cellPosition;
+
   float lightDistance = length(lightDirection);
-  lightDirection = lightDirection / lightDistance;
 
-  vec4 lightColor = vec4(0.6588, 0.4392, 0.0314, 1.0);
+  lightDirection = normalize(lightDirection);
 
-  // Eye.
+  //////////////////////////////////
+  // Eye
+  
   vec3 eyePosition = vec3(resolution.xy * 0.5, -10.0);
+  
   vec3 eyeDirection = normalize(eyePosition - cellPosition);
   
-  // Ilumination mask.
+  //////////////////////////////////
+  // Mask
+
   float hMask = 1.0;
-  float mark = 0.4;
-  if(heightValue > mark){    
-    hMask =  clamp(1.0 - ((heightValue - mark) / (0.6 - mark)), 0.0, 1.0);
+  if(heightValue > maskThr){    
+    hMask =  clamp(1.0 - ((heightValue - maskThr) / (maskMax - maskThr)), 0.0, 1.0);
   }
 
-  // Diffuse
-  float diffuseValue = getDiffuseIllumination(lightDirection, lightDistance, 75.0, normal);
-  vec4 diffuseColor = diffuseValue  * lightColor * hMask;
+  //////////////////////////////////
+  // Blinn Phong  
 
-  // Specular
-  float specular = getSpecular
-  (
-    eyePosition,
-    lightDistance,
-    100.0, 
-    cellPosition, 
-    normal, 
-    eyeDirection
-  ); 
-  vec4 specularColor = lightColor * specular * hMask * diffuseValue;
+  float lambertian = max(dot(lightDirection, normal), 0.0);
+
+  float specValue = 0.0;
   
-  gl_FragColor = baseTerrain + specularColor + diffuseColor;
+  if(lambertian > 0.0) {
+
+    vec3 h = normalize(specLightDir + specEyeDir);
+    
+    float specAngle = max(dot(h, normal), 0.0);
+
+    specValue = pow(specAngle, shininess);
+  }
+
+  //////////////////////////////////
+  // Ocean Volumen  
+
+  float depthValue = 0.0;  
+
+  if(lightDistance > depthMinDist) {
+    depthValue = ((lightDistance - depthMinDist) / detphDistMult);
+  }     
+
+  //////////////////////////////////
+  // Diffuse Color  
+
+  vec3 diffuseColor =  sunColor * lambertian * lightColor * lightPower / lightDistance;
+
+  //////////////////////////////////
+  // Specular Color  
+
+  vec3 specular = specColor * specValue * lightColor * specPower / lightDistance;
+
+  //////////////////////////////////
+  // Depth Color
+  
+  vec3 depthColor = depthBaseColor * depthValue * depthPower * hMask;
+
+  //////////////////////////////////
+  // Final Color
+
+  vec3 finalColor = diffuse + (diffuseColor + specular - depthColor ) * hMask;
+
+  gl_FragColor = vec4(finalColor, 1.0);
 }
