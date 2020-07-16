@@ -172,11 +172,27 @@ export class SurfacePainter
     shader.setOrigin(0.0, 0.0);
     shader.setDepth(1000.0);
 
+    shader.uniforms.d = {type : "1f", value : 0.0};   
+
     // Create the Shader Component.
     this._m_surfaceShader = new CmpShader();
     this._m_surfaceShader.prepare(shader);
 
+    this._m_surfaceShader.initUniform('d');
+
     return OPRESULT.kOk;
+  }
+
+  /**
+   * Updatate the distance traveled by the camera.
+   * 
+   * @param _distance distance. 
+   */
+  update(_distance : number)
+  : void
+  {
+    this._m_surfaceShader.setUniform('d.value', _distance);
+    return;
   }
 
   /**

@@ -6,6 +6,7 @@ uniform sampler2D iChannel2;
 
 uniform vec2 resolution;
 uniform float time;
+uniform float d;
 
 varying vec2 fragCoord;
 
@@ -125,9 +126,7 @@ void main()
   // get the UV coords of the PerlinNoise map.
   vec2 uv = fragCoord.xy / resolution.xy;
 
-  float ratio = resolution.y / resolution.x;  
-
-  float d = time / 30.0;
+  float ratio = resolution.y / resolution.x;
 
   //////////////////////////////////
   // Diffuse Color
@@ -153,7 +152,7 @@ void main()
 
   vec2 defase;
   defase.x = sin( (uv.y * 16.0) + time) * 0.2;
-  defase.y = time / 5.0;
+  defase.y = d + (time * 0.05);
 
   waterNormalUV = waterNormalUV + (defase * normalSize);
   waterNormalUV = mod(waterNormalUV, normalSize) / normalSize;

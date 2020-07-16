@@ -703,76 +703,80 @@ declare module "optimization/mxObjectPool" {
 declare module "behaviour/mxComponent" {
     import { MxUObject } from "gameObjects/mxUObject";
     import { MxActor } from "behaviour/mxActor";
+    /**
+     * The MxComponent contains data or state of a MxActor.
+     */
     export class MxComponent extends MxUObject {
         /****************************************************/
         /****************************************************/
         /**
-         *
+         * Creates the Null Object of the MxComponent class.
          */
         static Prepare(): void;
         /**
-         *
+         * Destroys the Null Object of the MxComponent class.
          */
         static Shutdown(): void;
         /**
-         *
+         * Chech if the given MxCompoennt is the MxCompoent's Null Object.
          */
         static IsNull(_object: MxComponent): boolean;
         /**
-         *
+         * Get the MxComponent Null Object.
          */
         static GetNull(): MxComponent;
         /**
+         * Build a new MxComponent with an identifier.
          *
-         * @param _id
+         * @param _id The idendtifier of this MxComponent.
          */
         constructor(_id: number);
         /**
-         * This method is called when the actor is been initialized. Override this
-         * method to initialize properties. Usually the components of the actor have
-         * already beed attached to it, so (in theory) you can get references to other
-         * components.
+         * Can be overrided. This method is called when the MxActor have just been
+         * initialized. Base method do nothing.
          *
-         * @param _actor
+         * @param _actor The MxActor to wich this MxComponent belongs.
          */
         init(_actor: MxActor): void;
         /**
-         * This method is called during the actor update. Override this method to
-         * implement logic.
+         * Can be overrided. This method is called during the actor update. Base
+         * method do nothing.
          *
-         * @param _actor
+         * @param _actor The MxActor to wich this MxComponent belogns.
          */
         update(_actor: MxActor): void;
         /**
-         * This method is called by the MxComponentManager when a message is recived.
-         * Override this method to handle messages.
+         * Can be overrided. This method is called by the MxComponentManager when a
+         * message is recived. Base method do nothing.
          *
-         * @param _id Message's id.
-         * @param _data Message's data.
+         * @param _id Message identifier.
+         * @param _data Message data.
          */
         receive(_id: number, _data: unknown): void;
         /**
-         * Gets this component's identifier.
+         * Gets this MxComponent's identifier.
          */
         getID(): number;
         /**
-         * This method is called by the MxComponentManager when the component
-         * is attach to an actor. Override this method if you need to initialize
-         * properties, and the init() was already called.
+         * Can be overided. This method is called by the MxComponentManager when the component
+         * is attach to a MxActor. Base method do nothing.
          *
-         * @param _actor
+         * This method is useful if the MxActor had been initialized before, so the
+         * MxComponent can intialized when is attached to the MxActor.
+         *
+         * @param _actor The MxActor to which this MxComponent belongs.
          */
         onAttach(_actor: MxActor): void;
         /**
-         * This method is called by the MxComponentManager when the component
-         * is dettach to an actor. Override thisi method if you need to do some
-         * stuff before the component is fully removed from his actual actor.
+         * Can be overrided. This method is called by the MxComponentManager when the component
+         * is dettach from the MxActor. Base method do nothing.
          *
          * @param _actor
          */
         onDettach(_actor: MxActor): void;
         /**
-         * Destroys method.
+         * Can be overrided. This method is called by the MxComponentManager when the MxActor is
+         * destroyed. Base method calls its super.destroy() method.
          */
         destroy(): void;
         /****************************************************/
@@ -793,9 +797,7 @@ declare module "behaviour/components/cmpTransform" {
     import { MxComponent } from "behaviour/mxComponent";
     import { MxActor } from "behaviour/mxActor";
     /**
-     * This component defines the position of a MxActor. The
-     * MxActor factory already include a CmpTransform component when it creates a
-     * new one.
+     * This component defines the position of a MxActor.
      */
     export class CmpTransform extends MxComponent {
         /****************************************************/
@@ -939,15 +941,24 @@ declare module "behaviour/mxActor" {
     import { MxComponent } from "behaviour/mxComponent";
     import { CmpTransform } from "behaviour/components/cmpTransform";
     import { MxComponentManager } from "behaviour/mxComponentManager";
+    /**
+     * Architectural pattern wich follows the composition over inheritance principle
+     * that allows greate flexibility in defining entities.
+     *
+     * Every MxActor consists of one or more MxComponent wich contains data or state.
+     * The mix of MxComponents defines the behaviour of the MxActor. Therefore, the
+     * behaviour of a MxActor can be changed during runtime by systems that add,
+     * remove or mutate MxCompoents.
+     */
     export class MxActor extends MxUObject {
         /****************************************************/
         /****************************************************/
         /**
-         * Creates the Null Object.
+         * Creates the Null Object of the MxActor class.
          */
         static Prepare(): void;
         /**
-         * Shutdown Null Object.
+         * Destroys the Null Object of the MxActor class.
          */
         static Shutdown(): void;
         /**
@@ -1131,89 +1142,205 @@ declare module "mxUtilities" {
 declare module "behaviour/mxState" {
     import { MxFSM } from "behaviour/mxFSM";
     /**
-   * State that can be added to an FSM instance.
-   */
-    export class MxState {
+     * Logic unit used by the MxFSM to define an execution block. The class need to
+     * define its controller type.
+     *
+     * The controller can be used to store a common
+     * object that every MxState from the same MxFSM share, for example an
+     * MxActor.
+     */
+    export class MxState<T> {
         /****************************************************/
         /****************************************************/
+        /**
+         * Creates a new MxState without MxFSM and controller.
+         */
         constructor();
         /**
-         * This method is called when the state is jus been activated.
+         * Can be overrided. This method is called by the mxFSM just after this MxState change
+         * its status from desactive to active. Base method do nothing.
          */
         onEnter(): void;
         /**
-         * This method is called when the states has just been desactived.
+         * Can be overrided. This method is called by the mxFSM just after this MxState change
+         * its status from active to desactive. Base method do nothing.
          */
         onExit(): void;
         /**
-         * Update methdo.
+         * Can be overrided. This method is called by the MxFSM if this MxState is
+         * currently active. Base method do nothing.
+         *
+         * @returns number without a specific use.
          */
         update(): number;
         /**
-         * Draw method.
+         * Can be overrided. This method is called by the mxFSM if this MxState is
+         * currently active. Base method do nothing.
+         *
+         * @returns number without a specific use.
          */
         draw(): number;
         /**
-         * Sets the FSM of this state.
+         * Set the MxFSM where this MxState belongs. The parameter can be a null type
+         * object. This method should be used only by the MxFSM.
          *
-         * @param _fsm
+         * @param _fsm The MxFSM where this MxState belongs.
          */
-        setFSM(_fsm: MxFSM): void;
+        attachToFSM(_fsm: MxFSM<T>): void;
+        /**
+         * Set the controller object o this MxState. This parameter can be a null type
+         * object. This method should be use only by the MxFSM.
+         *
+         * @param _controller The controller instance.
+         */
+        setController(_controller: T): void;
+        /**
+         * Can be overrided. This method are called by the MxFSM when the MxState is
+         * deleted or the MxFSM is destroyed. Base method do nothing.
+         */
+        destroy(): void;
         /****************************************************/
         /****************************************************/
         /**
-         * Reference to the FSM of this state.
+         * The MxFSM to wich this MxState belongs.
          */
-        protected _m_fsm: MxFSM;
+        protected _m_fsm: MxFSM<T>;
+        /**
+         * The controller instance. This propertie can be used to store a common
+         * object that every MxState from the same MxFSM share, for example an
+         * MxActor.
+         */
+        protected _m_controller: T;
     }
 }
 declare module "behaviour/mxFSM" {
     import { MxState } from "behaviour/mxState";
-    export class MxFSM {
+    import { OPRESULT } from "commons/mxEnums";
+    /**
+     * Model that can be used to simulate secuential logic, or in other words, to
+     * represent and control execution flow. This class need to define the type of
+     * its controller.
+     *
+     * The controller can be used to store a common
+     * object that every MxState from the same MxFSM share, for example an
+     * MxActor.
+     */
+    export class MxFSM<T> {
         /****************************************************/
         /****************************************************/
         /**
-         *
+         * Creates a new MxFSM with null values. Use the init() method after the MxFSM
+         * is builded, so it can be used.
          */
         constructor();
         /**
+         * Intialize this MxFSM with a controller. This method creates a new
+         * Map for the MxState. This method should be called once and before any
+         * other method.
          *
+         * @param _controller The controller object of this MxFSM.
+         */
+        init(_controller: T): void;
+        /**
+         * Calls the update() method of the active MxState. Take care that if there
+         * isn't an active MxState this method will returns -1.
+         *
+         * @returns Result of the update() method of the active MxState. This value allways
+         * will be -1 if ther isn't any active MxState.
          */
         update(): number;
         /**
+         * Calls the draw() method of the active MxState. Take care that if there
+         * isn't an active MxState this method will returns -1.
          *
+         * @returns Result of the draw() method of the active MxState. This value allways
+         * will be -1 if ther isn't any active MxState.
          */
         draw(): number;
         /**
-         *
+         * Removes all the MxState of this MxFSM. This method will not destroy the
+         * MxState. This method will not call the onExit() method of the active
+         * MxState.
          */
         clear(): void;
         /**
+         * Set the active MxState by its identifier. This method calls the onExit()
+         * callback of the previous MxState (if it exists), later calls the onEnter()
+         * callback of the new active MxState.
          *
-         * @param _idx
+         * This method returns OPRESULT.KObject_doesnt_found if none of the MxState have
+         * the given identifier.
+         *
+         * @param _idx The identifier of the MxState.
+         *
+         * @returns OPRESULT.kOk if the operation was successfull.
          */
-        setActive(_idx: number): number;
+        setActive(_idx: number): OPRESULT;
         /**
+         * Adds a new state to this MxFSM. The new MxState needs a number to be identified.
          *
-         * @param _idx
-         * @param _state
+         * This method returns an OPRESULT.kObject_already_exists if there is a MxState
+         * with the same identifier as the given, and the MxState will not be added
+         * to the MxFSM.
+         *
+         * @param _idx The identifier of the given MxState.
+         * @param _state The MxState that will be added to this MxFSM.
+         *
+         * @returns OPRESULT.kOk if the operation was succesfull.
          */
-        addState(_idx: number, _state: MxState): number;
+        addState(_idx: number, _state: MxState<T>): OPRESULT;
         /**
+         * Removes a MxState by its identifier. If the MxState to be removed is the
+         * active MxState, the onExit() method of the MxState will be called before
+         * removing it.
          *
-         * @param _idx
+         * If you want to destroy the MxState, use the deleteState(number)
+         * method instead.
+         *
+         * Returns OPRESULT:kObject_not_found if none of the MxState have the given
+         * identifier.
+         *
+         * @param _idx The identifier of the MxState to be removed.
+         *
+         * @param OPRESULT.kOk if the operation was succesfull.
          */
-        removeState(_idx: number): number;
+        removeState(_idx: number): OPRESULT;
+        /**
+         * Destroys a MxState by its identifier. This method will call the destroy() method
+         * of  the MxState. If the MxState to be deleted is the active MxState, the
+         * onExit() method of the MxState will be called before removing it.
+         *
+         * If you only want to remove the MxState from this MxFSM, witout
+         * destroying it, use removeState(number) method instead.
+         *
+         * Returns OPRESULT:kObject_not_found if none of the MxState have the given
+         * identifier.
+         *
+         * @param _idx The identifier of the MxState to be deleted.
+         *
+         * @returns OPRESULT.kOk if the operation was succesfull.
+         */
+        deleteState(_idx: number): OPRESULT;
+        /**
+         * Call the destroy() method of each MxState in this MxFSM. Finally clears
+         * the list of MxState. This method will not call the onExit() method of the
+         * active MxState.
+         */
+        deleteAll(): void;
         /****************************************************/
         /****************************************************/
         /**
-         *
+         * List of MxState attached to this MxFSM.
          */
-        protected _m_states_map: Map<number, MxState>;
+        protected _m_states_map: Map<number, MxState<T>>;
         /**
-         *
+         * The active MxState of this MxFSM.
          */
-        protected _m_active_state: MxState;
+        protected _m_active_state: MxState<T>;
+        /**
+         * The controller of this MxFSM.
+         */
+        protected _m_controller: T;
     }
 }
 declare module "behaviour/components/cmpAudioClipsManager" {
@@ -1695,6 +1822,7 @@ declare module "behaviour/components/cmpShader" {
          */
         on(_event: string, _fn: Function, _context: any): void;
         setActive(_active: boolean): void;
+        initUniform(_key: string): void;
         destroy(): void;
         /****************************************************/
         /****************************************************/
@@ -1895,11 +2023,15 @@ declare module "commons/mxDateTime" {
     }
 }
 declare module "commons/mxInterpolation" {
+    /**
+      * Constructs new data from a range of discrete set of known
+      * data points.
+    */
     export class MxInterpolation {
         /****************************************************/
         /****************************************************/
         /**
-         * Method that constructs new data from a range of discrete set of known
+         * Constructs new data from a range of discrete set of known
          * data points.
          *
          * @param x1 Point 1: x value.
@@ -1983,11 +2115,6 @@ declare module "commons/mxPerlinNoise" {
         /****************************************************/
         /****************************************************/
         private static MAX_LENGHT;
-    }
-}
-declare module "commons/mxShaderUtilities" {
-    export class MxShaderUtilties {
-        static InitShaderUniform(_key: string, _shader: Phaser.GameObjects.Shader): void;
     }
 }
 declare module "ui/mxUI" {

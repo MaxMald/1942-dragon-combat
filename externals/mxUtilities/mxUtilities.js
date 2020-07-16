@@ -1137,11 +1137,15 @@ define("optimization/mxObjectPool", ["require", "exports", "commons/mxEnums", "c
 define("behaviour/mxComponent", ["require", "exports", "gameObjects/mxUObject"], function (require, exports, mxUObject_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * The MxComponent contains data or state of a MxActor.
+     */
     var MxComponent = /** @class */ (function (_super) {
         __extends(MxComponent, _super);
         /**
+         * Build a new MxComponent with an identifier.
          *
-         * @param _id
+         * @param _id The idendtifier of this MxComponent.
          */
         function MxComponent(_id) {
             var _this = _super.call(this) || this;
@@ -1152,7 +1156,7 @@ define("behaviour/mxComponent", ["require", "exports", "gameObjects/mxUObject"],
         /* Public                                           */
         /****************************************************/
         /**
-         *
+         * Creates the Null Object of the MxComponent class.
          */
         MxComponent.Prepare = function () {
             if (MxComponent._NULL_OBJECT == null
@@ -1162,7 +1166,7 @@ define("behaviour/mxComponent", ["require", "exports", "gameObjects/mxUObject"],
             return;
         };
         /**
-         *
+         * Destroys the Null Object of the MxComponent class.
          */
         MxComponent.Shutdown = function () {
             if (typeof MxComponent._NULL_OBJECT == 'object') {
@@ -1172,68 +1176,67 @@ define("behaviour/mxComponent", ["require", "exports", "gameObjects/mxUObject"],
             return;
         };
         /**
-         *
+         * Chech if the given MxCompoennt is the MxCompoent's Null Object.
          */
         MxComponent.IsNull = function (_object) {
             var uuid = _object.getUUID();
             return uuid.compare(MxComponent._NULL_OBJECT.getUUID());
         };
         /**
-         *
+         * Get the MxComponent Null Object.
          */
         MxComponent.GetNull = function () {
             return this._NULL_OBJECT;
         };
         /**
-         * This method is called when the actor is been initialized. Override this
-         * method to initialize properties. Usually the components of the actor have
-         * already beed attached to it, so (in theory) you can get references to other
-         * components.
+         * Can be overrided. This method is called when the MxActor have just been
+         * initialized. Base method do nothing.
          *
-         * @param _actor
+         * @param _actor The MxActor to wich this MxComponent belongs.
          */
         MxComponent.prototype.init = function (_actor) {
             return;
         };
         /**
-         * This method is called during the actor update. Override this method to
-         * implement logic.
+         * Can be overrided. This method is called during the actor update. Base
+         * method do nothing.
          *
-         * @param _actor
+         * @param _actor The MxActor to wich this MxComponent belogns.
          */
         MxComponent.prototype.update = function (_actor) {
             return;
         };
         /**
-         * This method is called by the MxComponentManager when a message is recived.
-         * Override this method to handle messages.
+         * Can be overrided. This method is called by the MxComponentManager when a
+         * message is recived. Base method do nothing.
          *
-         * @param _id Message's id.
-         * @param _data Message's data.
+         * @param _id Message identifier.
+         * @param _data Message data.
          */
         MxComponent.prototype.receive = function (_id, _data) {
             return;
         };
         /**
-         * Gets this component's identifier.
+         * Gets this MxComponent's identifier.
          */
         MxComponent.prototype.getID = function () {
             return this._m_id;
         };
         /**
-         * This method is called by the MxComponentManager when the component
-         * is attach to an actor. Override this method if you need to initialize
-         * properties, and the init() was already called.
+         * Can be overided. This method is called by the MxComponentManager when the component
+         * is attach to a MxActor. Base method do nothing.
          *
-         * @param _actor
+         * This method is useful if the MxActor had been initialized before, so the
+         * MxComponent can intialized when is attached to the MxActor.
+         *
+         * @param _actor The MxActor to which this MxComponent belongs.
          */
         MxComponent.prototype.onAttach = function (_actor) {
             return;
         };
         /**
-         * This method is called by the MxComponentManager when the component
-         * is dettach to an actor. Override thisi method if you need to do some
-         * stuff before the component is fully removed from his actual actor.
+         * Can be overrided. This method is called by the MxComponentManager when the component
+         * is dettach from the MxActor. Base method do nothing.
          *
          * @param _actor
          */
@@ -1241,7 +1244,8 @@ define("behaviour/mxComponent", ["require", "exports", "gameObjects/mxUObject"],
             return;
         };
         /**
-         * Destroys method.
+         * Can be overrided. This method is called by the MxComponentManager when the MxActor is
+         * destroyed. Base method calls its super.destroy() method.
          */
         MxComponent.prototype.destroy = function () {
             _super.prototype.destroy.call(this);
@@ -1255,9 +1259,7 @@ define("behaviour/components/cmpTransform", ["require", "exports", "behaviour/mx
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
-     * This component defines the position of a MxActor. The
-     * MxActor factory already include a CmpTransform component when it creates a
-     * new one.
+     * This component defines the position of a MxActor.
      */
     var CmpTransform = /** @class */ (function (_super) {
         __extends(CmpTransform, _super);
@@ -1467,6 +1469,15 @@ define("behaviour/mxComponentManager", ["require", "exports", "commons/mxEnums",
 define("behaviour/mxActor", ["require", "exports", "gameObjects/mxUObject", "commons/mxEnums", "behaviour/components/cmpTransform", "behaviour/mxComponentManager"], function (require, exports, mxUObject_4, mxEnums_4, cmpTransform_1, mxComponentManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Architectural pattern wich follows the composition over inheritance principle
+     * that allows greate flexibility in defining entities.
+     *
+     * Every MxActor consists of one or more MxComponent wich contains data or state.
+     * The mix of MxComponents defines the behaviour of the MxActor. Therefore, the
+     * behaviour of a MxActor can be changed during runtime by systems that add,
+     * remove or mutate MxCompoents.
+     */
     var MxActor = /** @class */ (function (_super) {
         __extends(MxActor, _super);
         /****************************************************/
@@ -1483,7 +1494,7 @@ define("behaviour/mxActor", ["require", "exports", "gameObjects/mxUObject", "com
         /* Public                                           */
         /****************************************************/
         /**
-         * Creates the Null Object.
+         * Creates the Null Object of the MxActor class.
          */
         MxActor.Prepare = function () {
             if (MxActor._NULL_OBJECT === undefined
@@ -1498,7 +1509,7 @@ define("behaviour/mxActor", ["require", "exports", "gameObjects/mxUObject", "com
             return;
         };
         /**
-         * Shutdown Null Object.
+         * Destroys the Null Object of the MxActor class.
          */
         MxActor.Shutdown = function () {
             if (typeof MxActor._NULL_OBJECT == 'object') {
@@ -1821,91 +1832,177 @@ define("behaviour/mxState", ["require", "exports"], function (require, exports) 
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
-   * State that can be added to an FSM instance.
-   */
+     * Logic unit used by the MxFSM to define an execution block. The class need to
+     * define its controller type.
+     *
+     * The controller can be used to store a common
+     * object that every MxState from the same MxFSM share, for example an
+     * MxActor.
+     */
     var MxState = /** @class */ (function () {
         /****************************************************/
         /* Public                                           */
         /****************************************************/
+        /**
+         * Creates a new MxState without MxFSM and controller.
+         */
         function MxState() {
             this._m_fsm = null;
+            this._m_controller = null;
             return;
         }
         /**
-         * This method is called when the state is jus been activated.
+         * Can be overrided. This method is called by the mxFSM just after this MxState change
+         * its status from desactive to active. Base method do nothing.
          */
         MxState.prototype.onEnter = function () {
             return;
         };
         /**
-         * This method is called when the states has just been desactived.
+         * Can be overrided. This method is called by the mxFSM just after this MxState change
+         * its status from active to desactive. Base method do nothing.
          */
         MxState.prototype.onExit = function () {
             return;
         };
         /**
-         * Update methdo.
+         * Can be overrided. This method is called by the MxFSM if this MxState is
+         * currently active. Base method do nothing.
+         *
+         * @returns number without a specific use.
          */
         MxState.prototype.update = function () {
             return 0;
         };
         /**
-         * Draw method.
+         * Can be overrided. This method is called by the mxFSM if this MxState is
+         * currently active. Base method do nothing.
+         *
+         * @returns number without a specific use.
          */
         MxState.prototype.draw = function () {
             return 0;
         };
         /**
-         * Sets the FSM of this state.
+         * Set the MxFSM where this MxState belongs. The parameter can be a null type
+         * object. This method should be used only by the MxFSM.
          *
-         * @param _fsm
+         * @param _fsm The MxFSM where this MxState belongs.
          */
-        MxState.prototype.setFSM = function (_fsm) {
+        MxState.prototype.attachToFSM = function (_fsm) {
             this._m_fsm = _fsm;
+            return;
+        };
+        /**
+         * Set the controller object o this MxState. This parameter can be a null type
+         * object. This method should be use only by the MxFSM.
+         *
+         * @param _controller The controller instance.
+         */
+        MxState.prototype.setController = function (_controller) {
+            this._m_controller = _controller;
+            return;
+        };
+        /**
+         * Can be overrided. This method are called by the MxFSM when the MxState is
+         * deleted or the MxFSM is destroyed. Base method do nothing.
+         */
+        MxState.prototype.destroy = function () {
             return;
         };
         return MxState;
     }());
     exports.MxState = MxState;
 });
-define("behaviour/mxFSM", ["require", "exports"], function (require, exports) {
+define("behaviour/mxFSM", ["require", "exports", "commons/mxEnums"], function (require, exports, mxEnums_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Model that can be used to simulate secuential logic, or in other words, to
+     * represent and control execution flow. This class need to define the type of
+     * its controller.
+     *
+     * The controller can be used to store a common
+     * object that every MxState from the same MxFSM share, for example an
+     * MxActor.
+     */
     var MxFSM = /** @class */ (function () {
         /****************************************************/
         /* Public                                           */
         /****************************************************/
         /**
-         *
+         * Creates a new MxFSM with null values. Use the init() method after the MxFSM
+         * is builded, so it can be used.
          */
         function MxFSM() {
-            this._m_states_map = new Map();
-            this.clear();
+            this._m_active_state = null;
+            this._m_states_map = null;
             return;
         }
         /**
+         * Intialize this MxFSM with a controller. This method creates a new
+         * Map for the MxState. This method should be called once and before any
+         * other method.
          *
+         * @param _controller The controller object of this MxFSM.
+         */
+        MxFSM.prototype.init = function (_controller) {
+            this._m_states_map = new Map();
+            this._m_controller = _controller;
+            return;
+        };
+        /**
+         * Calls the update() method of the active MxState. Take care that if there
+         * isn't an active MxState this method will returns -1.
+         *
+         * @returns Result of the update() method of the active MxState. This value allways
+         * will be -1 if ther isn't any active MxState.
          */
         MxFSM.prototype.update = function () {
-            return this._m_active_state.update();
+            if (this._m_active_state != null) {
+                return this._m_active_state.update();
+            }
+            return -1;
         };
         /**
+         * Calls the draw() method of the active MxState. Take care that if there
+         * isn't an active MxState this method will returns -1.
          *
+         * @returns Result of the draw() method of the active MxState. This value allways
+         * will be -1 if ther isn't any active MxState.
          */
         MxFSM.prototype.draw = function () {
-            return this._m_active_state.draw();
+            if (this._m_active_state != null) {
+                return this._m_active_state.draw();
+            }
+            return -1;
         };
         /**
-         *
+         * Removes all the MxState of this MxFSM. This method will not destroy the
+         * MxState. This method will not call the onExit() method of the active
+         * MxState.
          */
         MxFSM.prototype.clear = function () {
+            this._m_states_map.forEach(function (_state) {
+                // detach from this MXFSM
+                _state.attachToFSM(null);
+                _state.setController(null);
+            });
             this._m_states_map.clear();
             this._m_active_state = null;
             return;
         };
         /**
+         * Set the active MxState by its identifier. This method calls the onExit()
+         * callback of the previous MxState (if it exists), later calls the onEnter()
+         * callback of the new active MxState.
          *
-         * @param _idx
+         * This method returns OPRESULT.KObject_doesnt_found if none of the MxState have
+         * the given identifier.
+         *
+         * @param _idx The identifier of the MxState.
+         *
+         * @returns OPRESULT.kOk if the operation was successfull.
          */
         MxFSM.prototype.setActive = function (_idx) {
             if (this._m_states_map.has(_idx)) {
@@ -1916,46 +2013,123 @@ define("behaviour/mxFSM", ["require", "exports"], function (require, exports) {
                 this._m_active_state.onEnter();
             }
             else {
-                console.log("FSM doesn't has state : " + _idx);
-                return -1;
+                return mxEnums_5.OPRESULT.kObject_not_found;
             }
-            return 0;
+            return mxEnums_5.OPRESULT.kOk;
         };
         /**
+         * Adds a new state to this MxFSM. The new MxState needs a number to be identified.
          *
-         * @param _idx
-         * @param _state
+         * This method returns an OPRESULT.kObject_already_exists if there is a MxState
+         * with the same identifier as the given, and the MxState will not be added
+         * to the MxFSM.
+         *
+         * @param _idx The identifier of the given MxState.
+         * @param _state The MxState that will be added to this MxFSM.
+         *
+         * @returns OPRESULT.kOk if the operation was succesfull.
          */
         MxFSM.prototype.addState = function (_idx, _state) {
             if (!this._m_states_map.has(_idx)) {
                 this._m_states_map.set(_idx, _state);
-                _state.setFSM(this);
+                // attach the MxState to this MxFSM
+                _state.attachToFSM(this);
+                _state.setController(this._m_controller);
             }
             else {
-                console.log("FSM already has state : " + _idx);
-                return -1;
+                return mxEnums_5.OPRESULT.kObject_already_exists;
             }
-            return 0;
+            return mxEnums_5.OPRESULT.kOk;
         };
         /**
+         * Removes a MxState by its identifier. If the MxState to be removed is the
+         * active MxState, the onExit() method of the MxState will be called before
+         * removing it.
          *
-         * @param _idx
+         * If you want to destroy the MxState, use the deleteState(number)
+         * method instead.
+         *
+         * Returns OPRESULT:kObject_not_found if none of the MxState have the given
+         * identifier.
+         *
+         * @param _idx The identifier of the MxState to be removed.
+         *
+         * @param OPRESULT.kOk if the operation was succesfull.
          */
         MxFSM.prototype.removeState = function (_idx) {
             if (this._m_states_map.has(_idx)) {
+                // destroy the MxState before be removed.
+                var state = this._m_states_map.get(_idx);
+                // Check if the MxState to be removed is the active MxState. If it is,
+                // call the onExit() method, before removing it.
+                if (state == this._m_active_state) {
+                    this._m_active_state.onExit();
+                    this._m_active_state = null;
+                }
+                // detach from this FSM.
+                state.attachToFSM(null);
+                state.setController(null);
+                // remvoes the MxState from this MxFSM.
                 this._m_states_map.delete(_idx);
             }
             else {
-                console.log("FSM doesn't has state : " + _idx);
-                return -1;
+                return mxEnums_5.OPRESULT.kObject_not_found;
             }
-            return 0;
+            return mxEnums_5.OPRESULT.kOk;
+        };
+        /**
+         * Destroys a MxState by its identifier. This method will call the destroy() method
+         * of  the MxState. If the MxState to be deleted is the active MxState, the
+         * onExit() method of the MxState will be called before removing it.
+         *
+         * If you only want to remove the MxState from this MxFSM, witout
+         * destroying it, use removeState(number) method instead.
+         *
+         * Returns OPRESULT:kObject_not_found if none of the MxState have the given
+         * identifier.
+         *
+         * @param _idx The identifier of the MxState to be deleted.
+         *
+         * @returns OPRESULT.kOk if the operation was succesfull.
+         */
+        MxFSM.prototype.deleteState = function (_idx) {
+            if (this._m_states_map.has(_idx)) {
+                // destroy the MxState before be removed.
+                var state = this._m_states_map.get(_idx);
+                // Check if the MxState to be removed is the active MxState. If it is,
+                // call the onExit() method, before destroying it.
+                if (state == this._m_active_state) {
+                    this._m_active_state.onExit();
+                    this._m_active_state = null;
+                }
+                // destroy the MxState.
+                state.destroy();
+                // remove the MxState from this MxFSM.
+                this._m_states_map.delete(_idx);
+            }
+            else {
+                return mxEnums_5.OPRESULT.kObject_not_found;
+            }
+            return mxEnums_5.OPRESULT.kOk;
+        };
+        /**
+         * Call the destroy() method of each MxState in this MxFSM. Finally clears
+         * the list of MxState. This method will not call the onExit() method of the
+         * active MxState.
+         */
+        MxFSM.prototype.deleteAll = function () {
+            this._m_states_map.forEach(function (_state) {
+                _state.destroy();
+                return;
+            });
+            this._m_states_map.clear();
+            this._m_active_state = null;
         };
         return MxFSM;
     }());
     exports.MxFSM = MxFSM;
 });
-define("behaviour/components/cmpAudioClipsManager", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent"], function (require, exports, mxEnums_5, mxComponent_4) {
+define("behaviour/components/cmpAudioClipsManager", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent"], function (require, exports, mxEnums_6, mxComponent_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var CmpAudioClipsManager = /** @class */ (function (_super) {
@@ -1964,7 +2138,7 @@ define("behaviour/components/cmpAudioClipsManager", ["require", "exports", "comm
         /* Public                                           */
         /****************************************************/
         function CmpAudioClipsManager() {
-            var _this = _super.call(this, mxEnums_5.COMPONENT_ID.kAudioClipsManager) || this;
+            var _this = _super.call(this, mxEnums_6.COMPONENT_ID.kAudioClipsManager) || this;
             _this._m_clipsMap = new Map();
             return _this;
         }
@@ -2259,7 +2433,7 @@ define("behaviour/components/phaserComponentWrapper/mxTintComponentWrapper", ["r
     }());
     exports.MxTintComponentWrapper = MxTintComponentWrapper;
 });
-define("behaviour/components/cmpBitmapText", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent", "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper", "commons/mxMixin", "behaviour/components/phaserComponentWrapper/mxAlphaComponentWrapper", "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper", "behaviour/components/phaserComponentWrapper/mxTintComponentWrapper"], function (require, exports, mxEnums_6, mxComponent_5, mxCommonComponentsWrapper_1, mxMixin_1, mxAlphaComponentWrapper_1, mxOriginComponentWrapper_1, mxTintComponentWrapper_1) {
+define("behaviour/components/cmpBitmapText", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent", "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper", "commons/mxMixin", "behaviour/components/phaserComponentWrapper/mxAlphaComponentWrapper", "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper", "behaviour/components/phaserComponentWrapper/mxTintComponentWrapper"], function (require, exports, mxEnums_7, mxComponent_5, mxCommonComponentsWrapper_1, mxMixin_1, mxAlphaComponentWrapper_1, mxOriginComponentWrapper_1, mxTintComponentWrapper_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var CmpBitmapText = /** @class */ (function (_super) {
@@ -2268,7 +2442,7 @@ define("behaviour/components/cmpBitmapText", ["require", "exports", "commons/mxE
         /* Public                                           */
         /****************************************************/
         function CmpBitmapText() {
-            var _this = _super.call(this, mxEnums_6.COMPONENT_ID.kBitmapText) || this;
+            var _this = _super.call(this, mxEnums_7.COMPONENT_ID.kBitmapText) || this;
             return _this;
         }
         CmpBitmapText.prototype.prepare = function (_bitmapText) {
@@ -2289,12 +2463,12 @@ define("behaviour/components/cmpBitmapText", ["require", "exports", "commons/mxE
             return;
         };
         CmpBitmapText.prototype.receive = function (_id, _data) {
-            if (_id == mxEnums_6.MESSAGE_ID.kOnAgentActive) {
+            if (_id == mxEnums_7.MESSAGE_ID.kOnAgentActive) {
                 this.setVisible(true);
                 this.setActive(true);
                 return;
             }
-            else if (_id == mxEnums_6.MESSAGE_ID.kOnAgentDesactive) {
+            else if (_id == mxEnums_7.MESSAGE_ID.kOnAgentDesactive) {
                 this.setVisible(false);
                 this.setActive(false);
                 return;
@@ -2412,7 +2586,7 @@ define("behaviour/components/phaserComponentWrapper/mxAlphaSingleComponentWrappe
     }());
     exports.MxAlphaSingleComponentWrapper = MxAlphaSingleComponentWrapper;
 });
-define("behaviour/components/cmpGraphics", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent", "commons/mxMixin", "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper", "behaviour/components/phaserComponentWrapper/mxAlphaSingleComponentWrapper"], function (require, exports, mxEnums_7, mxComponent_6, mxMixin_2, mxCommonComponentsWrapper_2, mxAlphaSingleComponentWrapper_1) {
+define("behaviour/components/cmpGraphics", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent", "commons/mxMixin", "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper", "behaviour/components/phaserComponentWrapper/mxAlphaSingleComponentWrapper"], function (require, exports, mxEnums_8, mxComponent_6, mxMixin_2, mxCommonComponentsWrapper_2, mxAlphaSingleComponentWrapper_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var CmpGraphics = /** @class */ (function (_super) {
@@ -2421,7 +2595,7 @@ define("behaviour/components/cmpGraphics", ["require", "exports", "commons/mxEnu
         /* Public                                           */
         /****************************************************/
         function CmpGraphics() {
-            var _this = _super.call(this, mxEnums_7.COMPONENT_ID.kGraphics) || this;
+            var _this = _super.call(this, mxEnums_8.COMPONENT_ID.kGraphics) || this;
             return _this;
         }
         CmpGraphics.prototype.prepare = function (_scene) {
@@ -2431,12 +2605,12 @@ define("behaviour/components/cmpGraphics", ["require", "exports", "commons/mxEnu
             return;
         };
         CmpGraphics.prototype.receive = function (_id, _data) {
-            if (_id == mxEnums_7.MESSAGE_ID.kOnAgentActive) {
+            if (_id == mxEnums_8.MESSAGE_ID.kOnAgentActive) {
                 this.setVisible(true);
                 this.setActive(true);
                 return;
             }
-            else if (_id == mxEnums_7.MESSAGE_ID.kOnAgentDesactive) {
+            else if (_id == mxEnums_8.MESSAGE_ID.kOnAgentDesactive) {
                 this.setVisible(false);
                 this.setActive(false);
                 return;
@@ -2483,7 +2657,7 @@ define("behaviour/components/cmpGraphics", ["require", "exports", "commons/mxEnu
     ;
     mxMixin_2.MxMixin.applyMixins(CmpGraphics, [mxCommonComponentsWrapper_2.MxCommonComponentsWrapper, mxAlphaSingleComponentWrapper_1.MxAlphaSingleComponentWrapper]);
 });
-define("behaviour/components/cmpNineSlice", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent", "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper", "behaviour/components/phaserComponentWrapper/mxAlphaComponentWrapper", "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper", "behaviour/components/phaserComponentWrapper/mxTintComponentWrapper", "commons/mxMixin"], function (require, exports, mxEnums_8, mxComponent_7, mxCommonComponentsWrapper_3, mxAlphaComponentWrapper_2, mxOriginComponentWrapper_2, mxTintComponentWrapper_2, mxMixin_3) {
+define("behaviour/components/cmpNineSlice", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent", "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper", "behaviour/components/phaserComponentWrapper/mxAlphaComponentWrapper", "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper", "behaviour/components/phaserComponentWrapper/mxTintComponentWrapper", "commons/mxMixin"], function (require, exports, mxEnums_9, mxComponent_7, mxCommonComponentsWrapper_3, mxAlphaComponentWrapper_2, mxOriginComponentWrapper_2, mxTintComponentWrapper_2, mxMixin_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var CmpNineSlice = /** @class */ (function (_super) {
@@ -2492,7 +2666,7 @@ define("behaviour/components/cmpNineSlice", ["require", "exports", "commons/mxEn
         /* Public                                           */
         /****************************************************/
         function CmpNineSlice() {
-            var _this = _super.call(this, mxEnums_8.COMPONENT_ID.kNineSlice) || this;
+            var _this = _super.call(this, mxEnums_9.COMPONENT_ID.kNineSlice) || this;
             return _this;
         }
         CmpNineSlice.prototype.prepare = function (_scene, _texture, _frame, _offsets) {
@@ -2515,12 +2689,12 @@ define("behaviour/components/cmpNineSlice", ["require", "exports", "commons/mxEn
             return;
         };
         CmpNineSlice.prototype.receive = function (_id, _data) {
-            if (_id == mxEnums_8.MESSAGE_ID.kOnAgentActive) {
+            if (_id == mxEnums_9.MESSAGE_ID.kOnAgentActive) {
                 this.setVisible(true);
                 this.setActive(true);
                 return;
             }
-            else if (_id == mxEnums_8.MESSAGE_ID.kOnAgentDesactive) {
+            else if (_id == mxEnums_9.MESSAGE_ID.kOnAgentDesactive) {
                 this.setVisible(false);
                 this.setActive(false);
                 return;
@@ -2658,7 +2832,7 @@ define("behaviour/components/phaserComponentWrapper/mxComputedSizeComponentWrapp
     }());
     exports.MxComputedSizeComponentWrapper = MxComputedSizeComponentWrapper;
 });
-define("behaviour/components/cmpShader", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent", "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper", "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper", "commons/mxMixin", "behaviour/components/phaserComponentWrapper/mxComputedSizeComponentWrapper"], function (require, exports, mxEnums_9, mxComponent_8, mxCommonComponentsWrapper_4, mxOriginComponentWrapper_3, mxMixin_4, mxComputedSizeComponentWrapper_1) {
+define("behaviour/components/cmpShader", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent", "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper", "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper", "commons/mxMixin", "behaviour/components/phaserComponentWrapper/mxComputedSizeComponentWrapper", "commons/mxAssert"], function (require, exports, mxEnums_10, mxComponent_8, mxCommonComponentsWrapper_4, mxOriginComponentWrapper_3, mxMixin_4, mxComputedSizeComponentWrapper_1, mxAssert_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var CmpShader = /** @class */ (function (_super) {
@@ -2667,7 +2841,7 @@ define("behaviour/components/cmpShader", ["require", "exports", "commons/mxEnums
         /* Public                                           */
         /****************************************************/
         function CmpShader() {
-            var _this = _super.call(this, mxEnums_9.COMPONENT_ID.kShader) || this;
+            var _this = _super.call(this, mxEnums_10.COMPONENT_ID.kShader) || this;
             return _this;
         }
         CmpShader.prototype.prepare = function (_shader) {
@@ -2682,12 +2856,12 @@ define("behaviour/components/cmpShader", ["require", "exports", "commons/mxEnums
             return;
         };
         CmpShader.prototype.receive = function (_id, _data) {
-            if (_id == mxEnums_9.MESSAGE_ID.kOnAgentActive) {
+            if (_id == mxEnums_10.MESSAGE_ID.kOnAgentActive) {
                 this.setVisible(true);
                 this.setActive(true);
                 return;
             }
-            else if (_id == mxEnums_9.MESSAGE_ID.kOnAgentDesactive) {
+            else if (_id == mxEnums_10.MESSAGE_ID.kOnAgentDesactive) {
                 this.setVisible(false);
                 this.setActive(false);
                 return;
@@ -2726,6 +2900,27 @@ define("behaviour/components/cmpShader", ["require", "exports", "commons/mxEnums
         };
         CmpShader.prototype.setActive = function (_active) {
             this._m_shader.setActive(_active);
+            return;
+        };
+        CmpShader.prototype.initUniform = function (_key) {
+            mxAssert_5.MxAssert.String(_key);
+            mxAssert_5.MxAssert.Object(this._m_shader);
+            var gl = this._m_shader.gl;
+            var renderer = this._m_shader.renderer;
+            var map = renderer.glFuncMap;
+            var program = this._m_shader.program;
+            var uniform = this._m_shader.getUniform(_key);
+            if (uniform == null) {
+                return;
+            }
+            var type = uniform.type;
+            var data = map[type];
+            uniform.uniformLocation = gl.getUniformLocation(program, _key);
+            if (type !== 'sampler2D') {
+                uniform.glMatrix = data.matrix;
+                uniform.glValueLength = data.length;
+                uniform.glFunc = data.func;
+            }
             return;
         };
         CmpShader.prototype.destroy = function () {
@@ -2830,7 +3025,7 @@ define("behaviour/components/phaserComponentWrapper/mxSizeComponenWrappert", ["r
     }());
     exports.MxSizeComponentWrapper = MxSizeComponentWrapper;
 });
-define("behaviour/components/cmpSprite", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent", "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper", "behaviour/components/phaserComponentWrapper/mxAlphaComponentWrapper", "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper", "behaviour/components/phaserComponentWrapper/mxTintComponentWrapper", "behaviour/components/phaserComponentWrapper/mxSizeComponenWrappert", "commons/mxMixin"], function (require, exports, mxEnums_10, mxComponent_9, mxCommonComponentsWrapper_5, mxAlphaComponentWrapper_3, mxOriginComponentWrapper_4, mxTintComponentWrapper_3, mxSizeComponenWrappert_1, mxMixin_5) {
+define("behaviour/components/cmpSprite", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent", "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper", "behaviour/components/phaserComponentWrapper/mxAlphaComponentWrapper", "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper", "behaviour/components/phaserComponentWrapper/mxTintComponentWrapper", "behaviour/components/phaserComponentWrapper/mxSizeComponenWrappert", "commons/mxMixin"], function (require, exports, mxEnums_11, mxComponent_9, mxCommonComponentsWrapper_5, mxAlphaComponentWrapper_3, mxOriginComponentWrapper_4, mxTintComponentWrapper_3, mxSizeComponenWrappert_1, mxMixin_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var CmpSprite = /** @class */ (function (_super) {
@@ -2839,7 +3034,7 @@ define("behaviour/components/cmpSprite", ["require", "exports", "commons/mxEnums
         /* Public                                           */
         /****************************************************/
         function CmpSprite() {
-            var _this = _super.call(this, mxEnums_10.COMPONENT_ID.kSprite) || this;
+            var _this = _super.call(this, mxEnums_11.COMPONENT_ID.kSprite) || this;
             return _this;
         }
         CmpSprite.prototype.prepare = function (_sprite) {
@@ -2856,12 +3051,12 @@ define("behaviour/components/cmpSprite", ["require", "exports", "commons/mxEnums
             return;
         };
         CmpSprite.prototype.receive = function (_id, _data) {
-            if (_id == mxEnums_10.MESSAGE_ID.kOnAgentActive) {
+            if (_id == mxEnums_11.MESSAGE_ID.kOnAgentActive) {
                 this.setVisible(true);
                 this.setActive(true);
                 return;
             }
-            else if (_id == mxEnums_10.MESSAGE_ID.kOnAgentDesactive) {
+            else if (_id == mxEnums_11.MESSAGE_ID.kOnAgentDesactive) {
                 this.setVisible(false);
                 this.setActive(false);
                 return;
@@ -2928,7 +3123,7 @@ define("behaviour/components/cmpSprite", ["require", "exports", "commons/mxEnums
         mxSizeComponenWrappert_1.MxSizeComponentWrapper
     ]);
 });
-define("behaviour/components/cmpText", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent", "commons/mxMixin", "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper", "behaviour/components/phaserComponentWrapper/mxAlphaComponentWrapper", "behaviour/components/phaserComponentWrapper/mxComputedSizeComponentWrapper", "behaviour/components/phaserComponentWrapper/mxTintComponentWrapper", "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper"], function (require, exports, mxEnums_11, mxComponent_10, mxMixin_6, mxCommonComponentsWrapper_6, mxAlphaComponentWrapper_4, mxComputedSizeComponentWrapper_2, mxTintComponentWrapper_4, mxOriginComponentWrapper_5) {
+define("behaviour/components/cmpText", ["require", "exports", "commons/mxEnums", "behaviour/mxComponent", "commons/mxMixin", "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper", "behaviour/components/phaserComponentWrapper/mxAlphaComponentWrapper", "behaviour/components/phaserComponentWrapper/mxComputedSizeComponentWrapper", "behaviour/components/phaserComponentWrapper/mxTintComponentWrapper", "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper"], function (require, exports, mxEnums_12, mxComponent_10, mxMixin_6, mxCommonComponentsWrapper_6, mxAlphaComponentWrapper_4, mxComputedSizeComponentWrapper_2, mxTintComponentWrapper_4, mxOriginComponentWrapper_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var CmpText = /** @class */ (function (_super) {
@@ -2937,7 +3132,7 @@ define("behaviour/components/cmpText", ["require", "exports", "commons/mxEnums",
         /* Public                                           */
         /****************************************************/
         function CmpText() {
-            var _this = _super.call(this, mxEnums_11.COMPONENT_ID.kText) || this;
+            var _this = _super.call(this, mxEnums_12.COMPONENT_ID.kText) || this;
             return _this;
         }
         CmpText.prototype.prepare = function (_scene, _text, _style) {
@@ -2954,12 +3149,12 @@ define("behaviour/components/cmpText", ["require", "exports", "commons/mxEnums",
             return;
         };
         CmpText.prototype.receive = function (_id, _data) {
-            if (_id == mxEnums_11.MESSAGE_ID.kOnAgentActive) {
+            if (_id == mxEnums_12.MESSAGE_ID.kOnAgentActive) {
                 this.setVisible(true);
                 this.setActive(true);
                 return;
             }
-            else if (_id == mxEnums_11.MESSAGE_ID.kOnAgentDesactive) {
+            else if (_id == mxEnums_12.MESSAGE_ID.kOnAgentDesactive) {
                 this.setVisible(false);
                 this.setActive(false);
                 return;
@@ -3056,7 +3251,7 @@ define("behaviour/components/cmpText", ["require", "exports", "commons/mxEnums",
         mxComputedSizeComponentWrapper_2.MxComputedSizeComponentWrapper
     ]);
 });
-define("commons/mxDateTime", ["require", "exports", "commons/mxAssert"], function (require, exports, mxAssert_5) {
+define("commons/mxDateTime", ["require", "exports", "commons/mxAssert"], function (require, exports, mxAssert_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var MxDateTime = /** @class */ (function () {
@@ -3068,7 +3263,7 @@ define("commons/mxDateTime", ["require", "exports", "commons/mxAssert"], functio
          * @param _seconds number on seconds.
          */
         MxDateTime.GetHHMMSS = function (_seconds) {
-            mxAssert_5.MxAssert.Number(_seconds);
+            mxAssert_6.MxAssert.Number(_seconds);
             _seconds = Math.floor(_seconds);
             var hours = Math.floor(_seconds / 3600);
             var minutes = Math.floor((_seconds - (hours * 3600)) / 60);
@@ -3105,7 +3300,7 @@ define("commons/mxDateTime", ["require", "exports", "commons/mxAssert"], functio
          * @param _seconds number on seconds.
          */
         MxDateTime.GetMMSS = function (_seconds) {
-            mxAssert_5.MxAssert.Number(_seconds);
+            mxAssert_6.MxAssert.Number(_seconds);
             _seconds = Math.floor(_seconds);
             var hours = Math.floor(_seconds / 3600);
             var minutes = Math.floor((_seconds - (hours * 3600)) / 60);
@@ -3135,6 +3330,10 @@ define("commons/mxDateTime", ["require", "exports", "commons/mxAssert"], functio
 define("commons/mxInterpolation", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+      * Constructs new data from a range of discrete set of known
+      * data points.
+    */
     var MxInterpolation = /** @class */ (function () {
         function MxInterpolation() {
         }
@@ -3142,7 +3341,7 @@ define("commons/mxInterpolation", ["require", "exports"], function (require, exp
         /* Interpolations                                   */
         /****************************************************/
         /**
-         * Method that constructs new data from a range of discrete set of known
+         * Constructs new data from a range of discrete set of known
          * data points.
          *
          * @param x1 Point 1: x value.
@@ -3418,41 +3617,6 @@ define("commons/mxPerlinNoise", ["require", "exports", "commons/mxInterpolation"
         return MxPerlinNoise;
     }());
     exports.MxPerlinNoise = MxPerlinNoise;
-});
-define("commons/mxShaderUtilities", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var MxShaderUtilties = /** @class */ (function () {
-        function MxShaderUtilties() {
-        }
-        MxShaderUtilties.InitShaderUniform = function (_key, _shader) {
-            if (_key == null || _key === undefined) {
-                return;
-            }
-            if (_shader == null || _shader === undefined) {
-                return;
-            }
-            var gl = _shader.gl;
-            var renderer = _shader.renderer;
-            var map = renderer.glFuncMap;
-            var program = _shader.program;
-            var uniform = _shader.getUniform(_key);
-            if (uniform == null) {
-                return;
-            }
-            var type = uniform.type;
-            var data = map[type];
-            uniform.uniformLocation = gl.getUniformLocation(program, _key);
-            if (type !== 'sampler2D') {
-                uniform.glMatrix = data.matrix;
-                uniform.glValueLength = data.length;
-                uniform.glFunc = data.func;
-            }
-            return;
-        };
-        return MxShaderUtilties;
-    }());
-    exports.MxShaderUtilties = MxShaderUtilties;
 });
 define("ui/mxUI", ["require", "exports"], function (require, exports) {
     "use strict";

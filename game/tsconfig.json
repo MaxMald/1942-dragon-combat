@@ -13,7 +13,7 @@
     "../externals/ts_definitions/matter.d.ts",
     "../externals/ts_definitions/nineslice.d.ts",
     "../externals/ts_definitions/spine-webgl.d.ts",
-    "../externals/ts_definitions/mxUtilities.d.ts"
+    "../externals/mxUtilities/mxUtilities.d.ts"
   ],
 
   "include": [
