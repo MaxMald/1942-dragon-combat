@@ -86,6 +86,8 @@ export class SurfacePainter
    * 
    * @param _scene The scene where the shader will be created. 
    * @param _shaderKey The key of the shader.
+   * @param _texDataWidth The width of the Texture of data.
+   * @param _texDataHeight The height of the Texture of data.
    * 
    * @returns OPRESULT.kOk if the operation was successful.
    */
@@ -115,10 +117,7 @@ export class SurfacePainter
     // set an array with the textures keys.
     let a_textureKeys : string[] = new Array<string>();
     a_textureKeys.push(this._m_terrainColorTexture.key);
-    a_textureKeys.push(this._m_terrainMaps.key);
-    
-    let texWidth : integer = 256;
-    let texHeight : integer = 256;
+    a_textureKeys.push(this._m_terrainMaps.key);    
 
     let pixelLength : integer = 4; // RGBA
 

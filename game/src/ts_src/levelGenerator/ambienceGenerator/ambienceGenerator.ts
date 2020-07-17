@@ -142,6 +142,8 @@ export class AmbienceGenerator
    * 
    * @param _scene The scene used to build the background shader.
    * @param _shaderKey The key of the shader used to draw the background terrain.
+   * @param _texDataWidth The width of the Texture of data.
+   * @param _texDataHeight The height of the Texture of data.
    * 
    * @returns OPRESULT.kOk if the opeartion was successful.
    */
