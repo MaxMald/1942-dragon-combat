@@ -13,6 +13,7 @@
 import { SurfacePainter } from "./surfacePainter";
 import { OPRESULT } from "commons/mxEnums";
 import { HeightMap } from "./heightMap";
+import { AmbienceGeneratorConfig } from "./ambienceGeneratorConfig";
 
 /**
  * The AmbienceGenerator draw the background and place ambience props over
@@ -28,12 +29,79 @@ export class AmbienceGenerator
   /**
    * Create and initalize this AmbienceGenerator's members. This method should 
    * be called once after the creation of this AmbienceGenerator.
+   * 
+   * A configuration object can be used to prepare the AmbienceGenerator.
    */
-  init()
+  init(_scene : Phaser.Scene, _config ?: AmbienceGeneratorConfig)
   : void 
   {
     this._m_surfacePainter = new SurfacePainter();
     this._m_surfacePainter.init();
+
+    if(_config === undefined) {
+      return;
+    }
+
+    ///////////////////////////////////
+    // Textures
+
+    if(_config.colorTextureKey !== undefined) {
+      if(_scene.textures.exists(_config.colorTextureKey)) {
+        this._m_surfacePainter.setTerrainColorTexture
+        (
+          _scene.textures.get(_config.colorTextureKey)
+        );
+      }
+      else {
+        console.error('Texture: ' + _config.colorTextureKey + ' not found.');
+      }
+    }
+
+    if(_config.mapsTextureKey !== undefined) {
+      if(_scene.textures.exists(_config.mapsTextureKey)) {
+        this._m_surfacePainter.setTerrainMap
+        (
+          _scene.textures.get(_config.mapsTextureKey)
+        );
+      }
+      else {
+        console.error('Texture: ' + _config.mapsTextureKey + ' not found. ');
+      }
+    }
+
+    ///////////////////////////////////
+    // Height Map
+    
+    if(_config.noise_height === undefined || _config.noise_width == undefined) {
+      _config.noise_width = 256;
+      _config.noise_height = 256;
+    }
+
+    this.generateTerrainHeightMap
+    (
+      _config.noise_width, 
+      _config.noise_height,
+      _config.noise_amplitude,
+      _scene.game.canvas.width / _scene.game.canvas.height
+    );
+
+    ///////////////////////////////////
+    // Surface Painter Shader
+
+    if(_config.terrainShaderKey !== undefined) {
+      if(_scene.cache.shader.exists(_config.terrainShaderKey)){
+        this.createBackgroundAmbience
+        (
+          _scene,
+          _config.terrainShaderKey,
+          _config.dataTexture_width,
+          _config.dataTexture_height
+        );
+      }
+      else {
+        console.error('Shader: ' + _config.terrainShaderKey + ' not found.');
+      }
+    }
     return;
   }
 
@@ -77,7 +145,13 @@ export class AmbienceGenerator
    * 
    * @returns OPRESULT.kOk if the opeartion was successful.
    */
-  createBackgroundAmbience(_scene : Phaser.Scene, _shaderKey : string)
+  createBackgroundAmbience
+  (
+    _scene : Phaser.Scene, 
+    _shaderKey : string, 
+    _texDataWidth : integer, 
+    _texDataHeight : integer
+  )
   : OPRESULT
   {
     // Check if the height map is ready.
@@ -86,7 +160,13 @@ export class AmbienceGenerator
     }
 
     // Create the ambiencec shader.
-    return this._m_surfacePainter.createAmbiencecShader(_scene, _shaderKey);
+    return this._m_surfacePainter.createAmbiencecShader
+    (
+      _scene, 
+      _shaderKey,
+      _texDataWidth,
+      _texDataHeight
+    );
   }
 
   /**
@@ -107,8 +187,7 @@ export class AmbienceGenerator
   : void
   {
     this._m_surfacePainter.destroy();
-    this._m_surfacePainter = null;
-    
+    this._m_surfacePainter = null;    
     return;
   }
   

@@ -29,7 +29,6 @@ export class LevelGenerator
   : void
   {
     this._m_ambienceGenerator  = new AmbienceGenerator();
-    this._m_ambienceGenerator.init();
     return;
   }
 

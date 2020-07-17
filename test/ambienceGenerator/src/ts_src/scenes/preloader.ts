@@ -11,6 +11,7 @@ export class Preloader extends Phaser.Scene
 
     ///////////////////////////////////
     // Images    
+    
     this.load.image('duke', 'images/inge_logo_02.png');
 
     ///////////////////////////////////

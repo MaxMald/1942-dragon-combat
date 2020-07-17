@@ -1,7 +1,6 @@
 import { LevelGenerator } from "../../../../../game/src/ts_src/levelGenerator/levelGenerator";
 import { AmbienceGenerator } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGenerator";
-import { SurfacePainter } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/surfacePainter";
-import { OPRESULT } from "commons/mxEnums";
+import { AmbienceGeneratorConfig } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGeneratorConfig";
 
 export class Test extends Phaser.Scene
 {
@@ -39,6 +38,12 @@ export class Test extends Phaser.Scene
       'waterNormalMap',
       'images/water_normal.png'
     );
+
+    this.load.text
+    (
+      'ambConfigFile',
+      'configFiles/ambGen_01.json'
+    );
     return;
   }
   
@@ -51,30 +56,10 @@ export class Test extends Phaser.Scene
     let ambienceGenerator : AmbienceGenerator 
       = this._m_levelGenerator.getAmbienceGenerator();
 
-    let surfacePainter : SurfacePainter
-      = ambienceGenerator.getSurfacePainter();
-
-    surfacePainter.setTerrainColorTexture
-    (
-      this.textures.get('colorTerrainTexture')
-    );
-
-    surfacePainter.setTerrainMap
-    (
-      this.textures.get('waterNormalMap')
-    );
-
-    // Create the height map.
-    ambienceGenerator.generateTerrainHeightMap
-    (
-      256,
-      1024,
-      0.015,
-      this.game.canvas.width / this.game.canvas.height
-    );
-
-    let result : OPRESULT =
-      ambienceGenerator.createBackgroundAmbience(this, 'terrain_painter_01');    
+    let config : AmbienceGeneratorConfig 
+      = JSON.parse(this.cache.text.get('ambConfigFile'));
+    
+    ambienceGenerator.init(this, config);
     return;
   }
 

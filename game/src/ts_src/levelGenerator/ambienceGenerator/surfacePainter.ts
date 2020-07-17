@@ -13,6 +13,7 @@ import { OPRESULT } from "commons/mxEnums";
 import { CmpShader } from "behaviour/components/cmpShader";
 import { CustomTextureShader } from "./customTextureShader";
 import { HeightMap } from "./heightMap";
+import { AmbienceGeneratorConfig } from "./ambienceGeneratorConfig";
 
  /**
   * The SurfacePainter draw the background ambience, as well as some effects
@@ -25,9 +26,9 @@ export class SurfacePainter
   /****************************************************/
   
   init()
-  : void
+  : OPRESULT
   {
-    return;
+    return OPRESULT.kOk;
   }
 
   /**
@@ -88,7 +89,13 @@ export class SurfacePainter
    * 
    * @returns OPRESULT.kOk if the operation was successful.
    */
-  createAmbiencecShader(_scene : Phaser.Scene, _shaderKey : string)
+  createAmbiencecShader
+  (
+    _scene : Phaser.Scene, 
+    _shaderKey : string,
+    _texDataWidth : integer,
+    _texDataHeight : integer
+  )
   : OPRESULT
   {
     // Check if the SurfacePainter is ready to create its ambience shader.
@@ -115,7 +122,7 @@ export class SurfacePainter
 
     let pixelLength : integer = 4; // RGBA
 
-    let a_pixels : Uint8Array = new Uint8Array(pixelLength * texWidth * texHeight);
+    let a_pixels : Uint8Array = new Uint8Array(pixelLength * _texDataWidth * _texDataHeight);
 
     let col : integer = 0;
     let row : integer = 0;
@@ -123,18 +130,18 @@ export class SurfacePainter
     let heightValue : integer = 0;
     let layer : integer = 0;
 
-    let rowSize : integer = texWidth * pixelLength;
+    let rowSize : integer = _texDataWidth * pixelLength;
 
     while(layer < 4)  {
 
-      while(row < texHeight) {
+      while(row < _texDataHeight) {
       
-        while(col < texWidth) {       
+        while(col < _texDataWidth) {       
 
           baseIndex = (rowSize * row) + (col * pixelLength);         
             
           if(layer < 3) {
-            heightValue = this._m_heightMap.get(col, row + (texHeight * layer));
+            heightValue = this._m_heightMap.get(col, row + (_texDataHeight * layer));
             a_pixels[baseIndex + layer] = heightValue;            
           }
           else {
@@ -167,7 +174,7 @@ export class SurfacePainter
     _scene.children.add(shader);
     
     let context = _scene.game.context as WebGLRenderingContext;
-    shader.prepare(a_pixels, context.RGBA, texWidth, texHeight, 2);    
+    shader.prepare(a_pixels, context.RGBA, _texDataWidth, _texDataHeight, 2);    
 
     shader.setOrigin(0.0, 0.0);
     shader.setDepth(1000.0);

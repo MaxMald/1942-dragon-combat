@@ -1,0 +1,17 @@
+{
+  "noise_width" : 256,
+  
+  "noise_height" : 1024,
+  
+  "noise_amplitude" : 0.015,
+  
+  "dataTexture_width" : 256,
+  
+  "dataTexture_height" : 256,
+
+  "colorTextureKey" : "colorTerrainTexture",
+  
+  "mapsTextureKey" : "waterNormalMap",
+  
+  "terrainShaderKey" : "terrain_painter_01"
+}
