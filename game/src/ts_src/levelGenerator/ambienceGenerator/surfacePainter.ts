@@ -13,7 +13,6 @@ import { OPRESULT } from "commons/mxEnums";
 import { CmpShader } from "behaviour/components/cmpShader";
 import { CustomTextureShader } from "./customTextureShader";
 import { HeightMap } from "./heightMap";
-import { AmbienceGeneratorConfig } from "./ambienceGeneratorConfig";
 
  /**
   * The SurfacePainter draw the background ambience, as well as some effects
@@ -176,7 +175,7 @@ export class SurfacePainter
     shader.prepare(a_pixels, context.RGBA, _texDataWidth, _texDataHeight, 2);    
 
     shader.setOrigin(0.0, 0.0);
-    shader.setDepth(1000.0);
+    shader.setDepth(-1000.0);
 
     shader.uniforms.d = {type : "1f", value : 0.0};   
 

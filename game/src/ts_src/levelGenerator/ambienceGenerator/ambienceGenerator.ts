@@ -182,6 +182,12 @@ export class AmbienceGenerator
     return this._m_surfacePainter;
   }
 
+  getHeightMap()
+  : HeightMap
+  {
+    return this._m_heightMap;
+  }
+
   /**
    * Call the destroy() method of all members.
    */

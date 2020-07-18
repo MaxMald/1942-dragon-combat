@@ -2117,6 +2117,44 @@ declare module "commons/mxPerlinNoise" {
         private static MAX_LENGHT;
     }
 }
+declare module "pseudoRandom/mxHalton" {
+    /**
+     * HummingFlight Software Technologies - 2020
+     *
+     * @summary Implementation of the Halton Sequence, a low discrepancy and
+     * deterministic algortihm that appear to be random.
+     *
+     * @file mxHalton.ts
+     * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
+     * @since July-17-2020
+     */
+    /**
+     * Implementation of the Halton Sequence, a low discrepancy and deterministic
+     * algortihm that appear to be random.
+     */
+    export class MxHalton {
+        /**
+         * Generates a point set that appear to be random. They will be generated with
+         * the Halton Sequence, wich is a low discrepancy algorithm.
+         *
+         * @param _size Number of points.
+         * @param _baseX Base of the X axis.
+         * @param _baseY Base of tye Y axis.
+         *
+         * @returns An array of generated points with the Halton Sequence.
+         */
+        static GetPointSet(_size: integer, _baseX?: integer, _baseY?: integer): Array<Phaser.Geom.Point>;
+        /**
+         * Halton sequence is a low discrepancy algorithm that appear to tbe random.
+         *
+         * @param _index index.
+         * @param _base base.
+         *
+         * @returns result.
+         */
+        static Halton(_index: integer, _base: integer): number;
+    }
+}
 declare module "ui/mxUI" {
     export class MxUI {
         /****************************************************/

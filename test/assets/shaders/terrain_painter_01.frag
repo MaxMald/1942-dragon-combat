@@ -152,7 +152,7 @@ void main()
 
   vec2 defase;
   defase.x = sin( (uv.y * 16.0) + time) * 0.2;
-  defase.y = d + (time * 0.05);
+  defase.y = d * 4.5 + (time * 0.05);
 
   waterNormalUV = waterNormalUV + (defase * normalSize);
   waterNormalUV = mod(waterNormalUV, normalSize) / normalSize;

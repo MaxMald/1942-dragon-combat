@@ -3618,6 +3618,74 @@ define("commons/mxPerlinNoise", ["require", "exports", "commons/mxInterpolation"
     }());
     exports.MxPerlinNoise = MxPerlinNoise;
 });
+/**
+ * HummingFlight Software Technologies - 2020
+ *
+ * @summary Implementation of the Halton Sequence, a low discrepancy and
+ * deterministic algortihm that appear to be random.
+ *
+ * @file mxHalton.ts
+ * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
+ * @since July-17-2020
+ */
+define("pseudoRandom/mxHalton", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * Implementation of the Halton Sequence, a low discrepancy and deterministic
+     * algortihm that appear to be random.
+     */
+    var MxHalton = /** @class */ (function () {
+        function MxHalton() {
+        }
+        /**
+         * Generates a point set that appear to be random. They will be generated with
+         * the Halton Sequence, wich is a low discrepancy algorithm.
+         *
+         * @param _size Number of points.
+         * @param _baseX Base of the X axis.
+         * @param _baseY Base of tye Y axis.
+         *
+         * @returns An array of generated points with the Halton Sequence.
+         */
+        MxHalton.GetPointSet = function (_size, _baseX, _baseY) {
+            if (_baseX === undefined) {
+                _baseX = 2;
+            }
+            if (_baseY === undefined) {
+                _baseY = 3;
+            }
+            var pointSet = new Array();
+            --_size;
+            while (_size >= 0) {
+                pointSet.push(new Phaser.Geom.Point(MxHalton.Halton(_size, _baseX), MxHalton.Halton(_size, _baseY)));
+                --_size;
+            }
+            return pointSet;
+        };
+        /**
+         * Halton sequence is a low discrepancy algorithm that appear to tbe random.
+         *
+         * @param _index index.
+         * @param _base base.
+         *
+         * @returns result.
+         */
+        MxHalton.Halton = function (_index, _base) {
+            var result = 0;
+            var f = 1.0 / _base;
+            var i = _index;
+            while (i > 0) {
+                result += f * (i % _base);
+                i = Math.floor(i / _base);
+                f = f / _base;
+            }
+            return result;
+        };
+        return MxHalton;
+    }());
+    exports.MxHalton = MxHalton;
+});
 define("ui/mxUI", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

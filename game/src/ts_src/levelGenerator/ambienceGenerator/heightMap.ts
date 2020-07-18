@@ -118,7 +118,11 @@ export class HeightMap
       _y = 1.0;
     }
 
-    return this.get(this._m_width * _x, this._m_height * _y);
+    return this.get
+    (
+      Math.floor(this._m_width * _x), 
+      Math.floor(this._m_height * _y)
+    );
   }
 
   /**
