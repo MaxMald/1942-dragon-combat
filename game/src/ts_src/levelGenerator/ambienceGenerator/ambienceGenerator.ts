@@ -30,7 +30,10 @@ export class AmbienceGenerator
    * Create and initalize this AmbienceGenerator's members. This method should 
    * be called once after the creation of this AmbienceGenerator.
    * 
-   * A configuration object can be used to prepare the AmbienceGenerator.
+   * The AmbienceGenerator can be initialized with a configuration object.
+   * 
+   * @param _scene The phaser scene.
+   * @param _config The configuration object.
    */
   init(_scene : Phaser.Scene, _config ?: AmbienceGeneratorConfig)
   : void 
@@ -113,6 +116,8 @@ export class AmbienceGenerator
    * @param _height Height of the map.
    * @param _amplitude Amplitude.
    * @param _ratio Ratio.
+   * 
+   * @returns OPRESULT
    */
   generateTerrainHeightMap
   (
