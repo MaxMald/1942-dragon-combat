@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig-base.json",  
+  
+  "compilerOptions":
+  {       
+    "outDir": "../lib/playerController",
+    "rootDir": "../../",
+    "outFile": "../lib/playerController/test_playerController.js"  
+  },
+
+  "files" : [
+    "../../externals/ts_definitions/phaser.d.ts",
+    "../../externals/ts_definitions/matter.d.ts",
+    "../../externals/ts_definitions/nineslice.d.ts",
+    "../../externals/ts_definitions/spine-webgl.d.ts",
+    "../../externals/mxUtilities/mxUtilities.d.ts"
+  ],
+
+  "include": [
+    "./src/ts_src/**/*",
+    "../../game/src/ts_src/levelGenerator/**/*",
+	  "../../externals/mxUtilities/*"
+  ]
+}
