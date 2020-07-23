@@ -17,8 +17,14 @@
   ],
 
   "include": [
-    "./src/ts_src/**/*",
-    "../../game/src/ts_src/levelGenerator/**/*",
+    "./src/ts_src/**/*",    
+    "../../game/src/ts_src/playerController/**/*",
+    "../../game/src/ts_src/components/**/*",
 	  "../../externals/mxUtilities/*"
+  ],
+
+  "exclude": 
+  [
+
   ]
 }

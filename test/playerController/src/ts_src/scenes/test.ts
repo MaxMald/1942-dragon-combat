@@ -1,3 +1,8 @@
+import { CmpSprite } from "behaviour/components/cmpSprite";
+import { MxActor } from "behaviour/mxActor";
+import { CmpCharTransform } from "../../../../../game/src/ts_src/components/cmpCharTransform";
+import { PlayerController } from "../../../../../game/src/ts_src/playerController/playerController";
+
 export class Test extends Phaser.Scene
 {
   /****************************************************/
@@ -7,33 +12,7 @@ export class Test extends Phaser.Scene
   preload()
   : void
   {
-    this.load.path = "../assets/";
-    this.load.glsl
-    (
-      {
-        key : 'terrain_painter_01',
-        shaderType : 'fragment',
-        url : 'shaders/terrain_painter_01.frag' 
-      }
-    );
-
-    this.load.image
-    (
-      'colorTerrainTexture',
-      'images/terrain_01.png'
-    );
-
-    this.load.image
-    (
-      'perlinTexture',
-      'images/perlin_256_01.png'
-    );
-
-    this.load.image
-    (
-      'waterNormalMap',
-      'images/water_normal.png'
-    );
+    this.load.path = "../assets/";   
 
     this.load.atlas
     (
@@ -42,10 +21,11 @@ export class Test extends Phaser.Scene
       "atlas/rpg_summer_tileset_props.js"
     );
 
-    this.load.text
+    this.load.atlas
     (
-      'ambConfigFile',
-      'configFiles/ambGen_01.json'
+      "dragon",
+      "atlas/DragonFlight.png",
+      "atlas/DragonFlight.js"
     );
     return;
   }
@@ -53,20 +33,39 @@ export class Test extends Phaser.Scene
   create()
   : void
   {
-    this._m_text 
-      = this.add.text(10, 10, '', { font: '50px Courier', fill: '#000000' });
-
-    this._m_g = this.add.graphics({ lineStyle: { width: 4, color: 0xaa00aa } });
-
-    this._m_line = new Phaser.Geom.Line
-    (
-      this.game.canvas.width * 0.5, 
-      this.game.canvas.height * 0.5, 
-      this.game.canvas.width * 0.5, 
-      this.game.canvas.height * 0.5
-    );
     
-    this._m_p = this.input.activePointer;
+    ///////////////////////////////////
+    // Hero
+
+    let hero : MxActor = MxActor.Create("player");
+
+    hero.clearComponentManager();
+    
+    hero.m_transform = new CmpCharTransform();
+    hero.m_transform.setParent(null); 
+
+    hero.m_transform.m_position.x = 100.0;
+    hero.m_transform.m_position.y = 100.0;
+
+    hero.addComponent(hero.m_transform);
+
+    let sprCmp : CmpSprite = new CmpSprite();
+    sprCmp.prepare
+    (
+      this.add.sprite(0.0, 0.0, 'dragon', 0)
+    );
+    hero.addComponent(sprCmp);
+
+    ///////////////////////////////////
+    // Hero Controller
+
+    let heroController : PlayerController = new PlayerController();
+    
+    heroController.init(this.input.activePointer, hero);
+
+    this._m_hero = hero;
+    this._m_heroController = heroController;
+
     return;
   }
 
@@ -74,29 +73,8 @@ export class Test extends Phaser.Scene
   update(_time : number, _delta : number)
   : void
   {
-    // Get Delta Direction.
-
-    let direction : Phaser.Math.Vector2 = new Phaser.Math.Vector2();
-    if(this._m_p.isDown) {
-      direction.x = this._m_p.position.x - this._m_p.prevPosition.x;
-      direction.y = this._m_p.position.y - this._m_p.prevPosition.y;
-      direction.normalize();
-    }
-
-    // Line
-
-    this._m_line.x2 = this._m_line.x1 + direction.x * 100.0;
-    this._m_line.y2 = this._m_line.y1 + direction.y * 100.0;
-
-    // Draw
-
-    this._m_g.clear();
-    this._m_g.strokeLineShape(this._m_line);
-
-    this._m_text.setText([
-      'dx : ' + direction.x,
-      'dy : ' + direction.y
-    ]);
+    this._m_hero.update();
+    this._m_heroController.update(_delta * 0.001);
     return;
   }
 
@@ -104,11 +82,7 @@ export class Test extends Phaser.Scene
   /* Private                                          */
   /****************************************************/
   
-  private _m_text : Phaser.GameObjects.Text;
+  private _m_hero : MxActor;
 
-  private _m_p : Phaser.Input.Pointer;
-
-  private _m_g : Phaser.GameObjects.Graphics;
-
-  private _m_line : Phaser.Geom.Line;
+  private _m_heroController : PlayerController;
 }

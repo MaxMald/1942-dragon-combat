@@ -1,0 +1,92 @@
+{
+  "anims": [
+    {
+      "key": "Flight",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "DragonFlight",
+          "frame": "Dragon.0001.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "Dragon.0002.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "Dragon.0003.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "Dragon.0004.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "Dragon.0005.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "Dragon.0006.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "Dragon.0007.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "Dragon.0008.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "Dragon.0009.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "Dragon.0010.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "Dragon.0011.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "Dragon.0012.png",
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 12,
+      "duration": 1,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    }
+  ],
+  "globalTimeScale": 1
+}

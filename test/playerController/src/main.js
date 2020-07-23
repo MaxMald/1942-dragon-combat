@@ -17,6 +17,7 @@
         "behaviour/mxActor", 
         "behaviour/components/cmpSprite",
         "behaviour/components/cmpShader",
+        "behaviour/components/cmpTransform",
         "commons/mxEnums",
         "pseudoRandom/mxHalton"
       ]
