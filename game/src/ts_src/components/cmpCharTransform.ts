@@ -16,8 +16,14 @@ export class CmpCharTransform extends CmpTransform
 
         let pointer : Phaser.Input.Pointer = _data as Phaser.Input.Pointer;
 
-        this.m_position.x = pointer.position.x;
-        this.m_position.y = pointer.position.y;
+        this.setPosition(pointer.position.x, pointer.position.y);
+        return;
+      
+      case DC_MESSAGE_ID.kAgentMove:
+
+        let direction : Phaser.Math.Vector3 = _data as Phaser.Math.Vector3;
+
+        this.move(direction.x, direction.y);      
         return;
       default:
         return;

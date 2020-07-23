@@ -1271,6 +1271,7 @@ define("behaviour/components/cmpTransform", ["require", "exports", "behaviour/mx
             _this.m_position = new Phaser.Math.Vector3;
             _this._m_globalPosition = new Phaser.Math.Vector3;
             _this._m_parent = null;
+            _this._m_isDirty = true;
             return _this;
         }
         /**
@@ -1279,18 +1280,15 @@ define("behaviour/components/cmpTransform", ["require", "exports", "behaviour/mx
          * @param _actor
          */
         CmpTransform.prototype.update = function (_actor) {
-            if (this._m_parent != null) {
-                var parentGlobalPosition = this._m_parent.getGlobalPoisition();
-                this._m_globalPosition.x = parentGlobalPosition.x + this.m_position.x;
-                this._m_globalPosition.y = parentGlobalPosition.y + this.m_position.y;
-                this._m_globalPosition.z = parentGlobalPosition.z + this.m_position.z;
-            }
-            else {
-                this._m_globalPosition.x = this.m_position.x;
-                this._m_globalPosition.y = this.m_position.y;
-                this._m_globalPosition.z = this.m_position.z;
-            }
             return;
+        };
+        /**
+         * Get the relative position of this transform.
+         *
+         * @returns The relative position.
+         */
+        CmpTransform.prototype.getPosition = function () {
+            return this.m_position;
         };
         /**
          * Move the local position "n" units at x axis, y axis, and (optional) z axis.
@@ -1305,6 +1303,55 @@ define("behaviour/components/cmpTransform", ["require", "exports", "behaviour/mx
             if (typeof _z == "number") {
                 this.m_position.z += _z;
             }
+            this._m_isDirty = true;
+            return;
+        };
+        /**
+         * Set the transform to a new position.
+         *
+         * @param _x
+         * @param _y
+         * @param _z
+         */
+        CmpTransform.prototype.setPosition = function (_x, _y, _z) {
+            this.m_position.x = _x;
+            if (_y !== undefined) {
+                this.m_position.y = _y;
+            }
+            if (_z !== undefined) {
+                this.m_position.z = _z;
+            }
+            this._m_isDirty = true;
+            return;
+        };
+        /**
+         * Set position in the X axis.
+         *
+         * @param _x
+         */
+        CmpTransform.prototype.setX = function (_x) {
+            this.m_position.x = _x;
+            this._m_isDirty = true;
+            return;
+        };
+        /**
+         * Set position in the Y axis.
+         *
+         * @param _y
+         */
+        CmpTransform.prototype.setY = function (_y) {
+            this.m_position.y = _y;
+            this._m_isDirty = true;
+            return;
+        };
+        /**
+         * Set position in the Z axis.
+         *
+         * @param _z
+         */
+        CmpTransform.prototype.setZ = function (_z) {
+            this.m_position.z = _z;
+            this._m_isDirty = true;
             return;
         };
         /**
@@ -1312,6 +1359,20 @@ define("behaviour/components/cmpTransform", ["require", "exports", "behaviour/mx
          * of the local position an the global position of its parent.
          */
         CmpTransform.prototype.getGlobalPoisition = function () {
+            if (this._m_isDirty) {
+                if (this._m_parent != null) {
+                    var parentGlobalPosition = this._m_parent.getGlobalPoisition();
+                    this._m_globalPosition.x = parentGlobalPosition.x + this.m_position.x;
+                    this._m_globalPosition.y = parentGlobalPosition.y + this.m_position.y;
+                    this._m_globalPosition.z = parentGlobalPosition.z + this.m_position.z;
+                }
+                else {
+                    this._m_globalPosition.x = this.m_position.x;
+                    this._m_globalPosition.y = this.m_position.y;
+                    this._m_globalPosition.z = this.m_position.z;
+                }
+                this._m_isDirty = false;
+            }
             return this._m_globalPosition;
         };
         /**
@@ -1322,6 +1383,7 @@ define("behaviour/components/cmpTransform", ["require", "exports", "behaviour/mx
          */
         CmpTransform.prototype.setParent = function (_transform) {
             this._m_parent = _transform;
+            this._m_isDirty = true;
             return;
         };
         return CmpTransform;

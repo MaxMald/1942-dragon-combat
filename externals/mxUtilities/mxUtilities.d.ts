@@ -810,6 +810,12 @@ declare module "behaviour/components/cmpTransform" {
          */
         update(_actor: MxActor): void;
         /**
+         * Get the relative position of this transform.
+         *
+         * @returns The relative position.
+         */
+        getPosition(): Phaser.Math.Vector3;
+        /**
          * Move the local position "n" units at x axis, y axis, and (optional) z axis.
          *
          * @param _x
@@ -817,6 +823,32 @@ declare module "behaviour/components/cmpTransform" {
          * @param _z
          */
         move(_x: number, _y: number, _z?: number): void;
+        /**
+         * Set the transform to a new position.
+         *
+         * @param _x
+         * @param _y
+         * @param _z
+         */
+        setPosition(_x: number, _y?: number, _z?: number): void;
+        /**
+         * Set position in the X axis.
+         *
+         * @param _x
+         */
+        setX(_x: number): void;
+        /**
+         * Set position in the Y axis.
+         *
+         * @param _y
+         */
+        setY(_y: number): void;
+        /**
+         * Set position in the Z axis.
+         *
+         * @param _z
+         */
+        setZ(_z: number): void;
         /**
          * Gets the MxActor's global position. This position is calculated with the sum
          * of the local position an the global position of its parent.
@@ -829,22 +861,26 @@ declare module "behaviour/components/cmpTransform" {
          * @param _transform Parent transform component.
          */
         setParent(_transform: CmpTransform): void;
+        /****************************************************/
+        /****************************************************/
         /**
          * The MxActor local position.
          */
-        m_position: Phaser.Math.Vector3;
-        /****************************************************/
-        /****************************************************/
+        protected m_position: Phaser.Math.Vector3;
         /**
          * The MxActor global position. This position is calculated with the sum
          * of the local position an the global position of its parent.
          */
-        private _m_globalPosition;
+        protected _m_globalPosition: Phaser.Math.Vector3;
         /**
          * The parent's transform component. Its necesasary to calculate position
          * by hierarchy.
          */
-        private _m_parent;
+        protected _m_parent: CmpTransform;
+        /**
+         * Indicates if the transform has been modified.
+         */
+        protected _m_isDirty: boolean;
     }
 }
 declare module "behaviour/mxComponentManager" {
