@@ -20,7 +20,9 @@
     "./src/ts_src/**/*",    
     "../../game/src/ts_src/playerController/**/*",
     "../../game/src/ts_src/components/**/*",
-	  "../../externals/mxUtilities/*"
+    "../../game/src/ts_src/actors/**/*",
+    "../../game/src/ts_src/message/**/*",
+    "../../externals/mxUtilities/*"
   ],
 
   "exclude": 

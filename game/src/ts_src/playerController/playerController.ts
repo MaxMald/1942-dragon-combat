@@ -1,19 +1,23 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary Controls the input handling and behaviour of the hero.
+ * @summary Create and manage the hero's actor. It provides a friendly interface 
+ * to control the hero.
  *
  * @file playerController.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
  * @since July-22-2020
  */
 
-import { MxActor } from "behaviour/mxActor";
-import { DC_MESSAGE_ID } from "../messages/dcMessageID";
+import { BaseActor } from "../actors/baseActor";
 import { PlayerControllerConfig } from "./playerControllerConfig";
+import { CmpHeroInput } from "../components/cmpHeroInput"
+import { DC_COMPONENT_ID } from "../components/dcComponentID";
+import { CmpMovement } from "../components/cmpMovement";
 
 /**
- * Controls the input handling and behaviour of the hero.
+ * Create and manage the hero's actor. It provides a friendly interface to control
+ * the hero.
  */
 export class PlayerController
 {
@@ -21,60 +25,72 @@ export class PlayerController
   /* Public                                           */
   /****************************************************/
 
-  constructor(_config ?: PlayerControllerConfig)
-  {
-    this._m_v3 = new Phaser.Math.Vector3();
-
-    this._m_player_direction = new Phaser.Math.Vector2();
-
-    if(_config !== undefined) {
-      this._m_player_speed = _config.player_speed;
-
-      switch(_config.control_type) {
-        case "RELATIVE":
-          this._m_movement_fn = this._relativeMovement;
-          break;
-        case "ABSOLUTE":
-          this._m_movement_fn = this._absoluteMovement;
-          break;
-        case "MIXED":
-          this._m_movement_fn = this._mixedMovement;
-          break;
-        default:
-          this._m_movement_fn = this._mixedMovement;
-          break;
-      }
-
-    }
-    else
-    {      
-      this._m_movement_fn = this._mixedMovement;
-
-      this._m_player_speed = 200.0;
-    }
-    return;
-  }
+  constructor()
+  { }
   
   /**
-   * Initialize this PlayerController. This method can receive a pointer that
-   * will be used for the player input, and a reference to the player.
+   * Creates the hero's actor and setup the properties of the hero behaviour with
+   * a configuration object.
    * 
-   * @param _pointer 
-   * @param _player 
+   * @param _scene The phaser scene that will create the hero.
+   * @param _activePointer The pointer used to handle the hero input. The active 
+   * pointer of the scene is used by default.
+   * @param _config The user configuration object.
    */
   public init
   (
-    _pointer ?: Phaser.Input.Pointer, 
-    _player ?: MxActor
+    _scene : Phaser.Scene,
+    _activePointer ?: Phaser.Input.Pointer,
+    _config ?: PlayerControllerConfig
   ) : void
   {
-    if(_pointer !== undefined) {
-      this._m_pointer = _pointer;
+    ///////////////////////////////////
+    // Hero
+
+    // Create the Arcade Sprite
+
+    let heroSprite : Phaser.Physics.Arcade.Sprite 
+      = _scene.physics.add.sprite(0.0, 0.0, 'dragon', 0);
+
+    // Create the Hero Actor
+    
+    let hero : BaseActor<Phaser.Physics.Arcade.Sprite> 
+      = BaseActor.Create(heroSprite, "hero");
+    
+    hero.addComponent(CmpHeroInput.Create()); // Input Controller
+    hero.addComponent(CmpMovement.Create()); // Movement Controller
+    
+    this.setPlayer(hero);
+
+    // Setup the input pointer.
+
+    if(_activePointer !== undefined) {
+      this.setPointer(_activePointer);
+    }
+    else {
+      this.setPointer(_scene.input.activePointer);
     }
 
-    if(_player !== undefined) {
-      this._m_player = _player;
-    }
+    ///////////////////////////////////
+    // User Configuration
+
+    if(_config !== undefined) 
+    {
+      this.setInputMode(_config.control_type);
+      this.setHeroSpeed(_config.player_speed);
+      this.setMovementPadding
+      (
+        _config.movement_rect_p1_x,
+        _config.movement_rect_p1_y,
+        _config.movement_rect_p2_x,
+        _config.movement_rect_p2_y
+      );
+    }   
+    
+    // Initialize the Hero
+    
+    hero.init();
+
     return;
   }
 
@@ -86,6 +102,72 @@ export class PlayerController
   public setPointer(_pointer : Phaser.Input.Pointer)
   : void
   {
+    let input : CmpHeroInput 
+      = this._m_player.getComponent<CmpHeroInput>(DC_COMPONENT_ID.kHeroInput);
+
+    input.setPointer(_pointer);
+    return;
+  }
+
+  /**
+   * Set the input mode to control the hero.
+   * 
+   * ABSOLUTE : The hero moves to the pointer position.
+   * 
+   * RELATIVE : The hero moves the same ammount and direction as the pointer.
+   * 
+   * MIXED : The hero moves moves tho the pointer X position, but relative to
+   * its Y position.
+   * 
+   * @param _mode Input Mode.
+   */
+  public setInputMode(_mode : string)
+  : void
+  {
+    let input : CmpHeroInput 
+      = this._m_player.getComponent<CmpHeroInput>(DC_COMPONENT_ID.kHeroInput);
+
+    input.setMode(_mode);
+    return;
+  }
+
+  /**
+   * Set the maximum speed (pixels per frame) of the hero when it moves to 
+   * the pointer position in a ABSOLUTE or MIXED mode.
+   * 
+   * @param _speed Maximum speed in pixels per frame. 
+   */
+  setHeroSpeed(_speed : number)
+  : void
+  {
+    let input : CmpHeroInput 
+      = this._m_player.getComponent<CmpHeroInput>(DC_COMPONENT_ID.kHeroInput);
+
+    input.setSpeed(_speed);
+    return;
+  }
+
+  /**
+   * Set the hero limit of movement in the world. 
+   * 
+   * @param _p1_x Rect point 1, x value.
+   * @param _p1_y Rect point 1, y value.
+   * @param _p2_x Rect point 2, x value.
+   * @param _p2_y Rect point 2, y value.
+   */
+  setMovementPadding
+  (
+    _p1_x : number, 
+    _p1_y : number, 
+    _p2_x : number, 
+    _p2_y : number
+  )
+  : void
+  {
+    let movement : CmpMovement
+      = this._m_player.getComponent<CmpMovement>(DC_COMPONENT_ID.kMovement);
+    
+    movement.setBounding(_p1_x, _p1_y, _p2_x, _p2_y);
     return;
   }
 
@@ -94,11 +176,20 @@ export class PlayerController
    * 
    * @param _player 
    */
-  public setPlayer(_player : MxActor)
+  public setPlayer(_player : BaseActor<Phaser.Physics.Arcade.Sprite>)
   : void
   {
     this._m_player = _player;
     return;
+  }
+
+  /**
+   * Get the Hero.
+   */
+  public getPlayer()
+  : BaseActor<Phaser.Physics.Arcade.Sprite>
+  {
+    return this._m_player;
   }
 
   /**
@@ -112,11 +203,7 @@ export class PlayerController
   public update(_dt : number)
   : void
   {
-    // Handle the inputs.
-
-    this._handleInput();
-
-    // Update logic.
+    // Update logic
 
     this._m_player.update();
 
@@ -129,24 +216,9 @@ export class PlayerController
   public destroy()
   : void
   {
-    this._m_pointer = null;
-    this._m_player = null;
+    this._m_player.destroy();
     return;
-  }
-
-  /**
-   * Set the player direction vector.
-   * 
-   * @param _x x value. 
-   * @param _y y value.
-   */
-  public setDirection(_x : number, _y : number)
-  : void
-  {
-    this._m_player_direction.x = _x;
-    this._m_player_direction.y = _y;
-    return;
-  }
+  } 
 
   /**
    * Get the player direction vector.
@@ -156,7 +228,10 @@ export class PlayerController
   public getDirection()
   : Phaser.Math.Vector2
   {
-    return this._m_player_direction;
+    let movement : CmpMovement
+      = this._m_player.getComponent<CmpMovement>(DC_COMPONENT_ID.kMovement);
+
+    return movement.getDirection();
   }
 
   /****************************************************/
@@ -164,130 +239,7 @@ export class PlayerController
   /****************************************************/
   
   /**
-   * Handle the pointer input with the defined function: Absolute, relative or
-   * mixed.
-   */
-  private _handleInput()
-  : void
-  {
-    let pointer : Phaser.Input.Pointer = this._m_pointer;
-
-    if(pointer.isDown) {
-      this._m_movement_fn.call(this);
-    }
-    return;
-  }
-
-  /**
-   * Moves the hero to the pointer position in the world.
-   */
-  private _absoluteMovement()
-  : void
-  {
-    let pointer : Phaser.Input.Pointer = this._m_pointer;
-    let heroPosition : Phaser.Math.Vector3 
-      = this._m_player.m_transform.getGlobalPoisition();
-
-    this._m_v3.x = pointer.position.x - heroPosition.x;
-    this._m_v3.y = pointer.position.y - heroPosition.y;
-
-    if(this._m_v3.length() > this._m_player_speed) {
-      
-      this._m_v3.normalize();
-
-      this._m_v3.x *= this._m_player_speed;
-      this._m_v3.y *= this._m_player_speed;
-    }    
-
-    this._m_player.sendMessage(DC_MESSAGE_ID.kAgentMove, this._m_v3);
-    
-    this._m_v3.normalize();
-    this.setDirection(this._m_v3.x, this._m_v3.y);
-
-    return;
-  }
-
-  /**
-   * Relative movement moves the player the same ammount and direction as the
-   * pointer's movement.
-   */
-  private _relativeMovement()
-  : void
-  {
-    let pointer : Phaser.Input.Pointer = this._m_pointer;   
-
-    this._m_v3.x = pointer.position.x - pointer.prevPosition.x;
-    this._m_v3.y = pointer.position.y - pointer.prevPosition.y;    
-
-    this._m_player.sendMessage
-    (
-      DC_MESSAGE_ID.kAgentMove,
-      this._m_v3
-    );
-
-    this._m_v3.normalize();
-    this.setDirection(this._m_v3.x, this._m_v3.y);
-
-    return;
-  }
-
-  /**
-   * Mixed movement set the X position of the player at the X position of the
-   * pointer, but keep a relative position at the Y axis.
-   */
-  private _mixedMovement()
-  : void
-  {
-    let pointer : Phaser.Input.Pointer = this._m_pointer;
-    let heroPosition : Phaser.Math.Vector3 
-      = this._m_player.m_transform.getGlobalPoisition();   
-
-    this._m_v3.x = pointer.position.x - heroPosition.x;
-    if(this._m_v3.x > this._m_player_speed) {
-      this._m_v3.x = this._m_player_speed;
-    }
-
-    this._m_v3.y = pointer.position.y - pointer.prevPosition.y;   
-
-    this._m_player.sendMessage
-    (
-      DC_MESSAGE_ID.kAgentMove,
-      this._m_v3
-    );
-    
-    this._m_v3.normalize();
-    this.setDirection(this._m_v3.x, this._m_v3.y);
-
-    return;
-  }
-
-  /**
-   * The movement method used when the pointer is pressed.
-   */
-  private _m_movement_fn : () => void;
-
-  /**
-   * Cache vector used to send messages.
-   */
-  private _m_v3 : Phaser.Math.Vector3;
-
-  /**
-   * The pointer that is associated with the hero.
-   */
-  private _m_pointer : Phaser.Input.Pointer;
-
-  /**
    * Reference to the Hero.
    */
-  private _m_player : MxActor;
-
-  /**
-   * The maximum speed of the hero.
-   */
-  private _m_player_speed : number;
-
-  /**
-   * The direction vector of the hero.
-   */
-  private _m_player_direction : Phaser.Math.Vector2;
+  private _m_player : BaseActor<Phaser.Physics.Arcade.Sprite>;
 }

@@ -21,7 +21,7 @@ export class PlayerControllerConfig
    * Set the player maximum speed (pixels per frame) when the player moves 
    * towards the pointer position (ABSOLUTE).
    */
-  public player_speed : number;
+  player_speed : number;
 
   /**
    * Set the control behaviour when the pointer is pressed.
@@ -34,5 +34,25 @@ export class PlayerControllerConfig
    * MIXED: Mixed movement set the X position of the player at the X position of 
    * the pointer, but keep a relative position at the Y axis.
    */
-  public control_type : string;
+  control_type : string;
+
+  /**
+   * Movement limit rect point 1, x value.
+   */
+  movement_rect_p1_x : number;
+
+  /**
+   * Movement limit rect point 1, y value.
+   */
+  movement_rect_p1_y : number;
+
+  /**
+   * Movement limit rect point 2, x value.
+   */
+  movement_rect_p2_x : number;
+
+  /**
+   * Movement limit rect point 2, y value.
+   */
+  movement_rect_p2_y : number;
 }

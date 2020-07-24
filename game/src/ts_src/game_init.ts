@@ -21,12 +21,22 @@ class GameInit
         autoCenter: Phaser.Scale.CENTER_BOTH,
         mode: Phaser.Scale.FIT
       },
+      
       width : 1080,
       height : 1920,
+
+      physics: {
+        default: 'arcade',
+        arcade: {            
+            debug: true
+        }
+      },
+
       input:
       {
         gamepad:true
       },
+      
       plugins: {
         global: [ Plugin.DefaultCfg ],
       },   

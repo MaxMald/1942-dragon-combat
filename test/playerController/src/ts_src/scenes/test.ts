@@ -1,6 +1,3 @@
-import { CmpSprite } from "behaviour/components/cmpSprite";
-import { MxActor } from "behaviour/mxActor";
-import { CmpCharTransform } from "../../../../../game/src/ts_src/components/cmpCharTransform";
 import { PlayerController } from "../../../../../game/src/ts_src/playerController/playerController";
 import { PlayerControllerConfig } from "../../../../../game/src/ts_src/playerController/playerControllerConfig";
 
@@ -40,6 +37,8 @@ export class Test extends Phaser.Scene
   create()
   : void
   {
+    // Canvas Size
+
     this._m_canvas_size 
       = new Phaser.Geom.Point(this.game.canvas.width, this.game.canvas.height);
 
@@ -84,37 +83,26 @@ export class Test extends Phaser.Scene
     ); 
     this._m_pt_label.setAlign('left');
     this._m_pt_label.setOrigin(0.0, 0.0);
-
-    ///////////////////////////////////
-    // Hero
-
-    let hero : MxActor = MxActor.Create("player");
-
-    hero.clearComponentManager();
-    
-    hero.m_transform = new CmpCharTransform();
-    hero.m_transform.setParent(null); 
-
-    hero.m_transform.setPosition(100.0, 200.0);
-
-    hero.addComponent(hero.m_transform);
-
-    let sprCmp : CmpSprite = new CmpSprite();
-    sprCmp.prepare
-    (
-      this.add.sprite(0.0, 0.0, 'dragon', 0)
-    );
-    hero.addComponent(sprCmp);
-
+   
     ///////////////////////////////////
     // Player Controller
 
     let pcConfig : PlayerControllerConfig 
       = JSON.parse(this.cache.text.get('playerControllerConfig'));
 
-    let heroController : PlayerController = new PlayerController(pcConfig);
+    // Movement Boundings
+
+    let padding : number = 100;
+
+    pcConfig.movement_rect_p1_x = padding;
+    pcConfig.movement_rect_p1_y = padding;
+
+    pcConfig.movement_rect_p2_x = this._m_canvas_size.x - padding;
+    pcConfig.movement_rect_p2_y = this._m_canvas_size.y - padding;
+
+    let heroController : PlayerController = new PlayerController();
     
-    heroController.init(this.input.activePointer, hero);
+    heroController.init(this, undefined, pcConfig);
 
     // Only for debuggin purpuses.
 
@@ -122,7 +110,6 @@ export class Test extends Phaser.Scene
 
     // Set local properties.
 
-    this._m_hero = hero;
     this._m_heroController = heroController;
 
     return;
@@ -183,8 +170,16 @@ export class Test extends Phaser.Scene
 
     // Display the hero's direction.
 
+    let hero = this._m_heroController.getPlayer();
+    let heroSpr = hero.getWrappedInstance();
+
     let v2 : Phaser.Math.Vector2 = this._m_heroController.getDirection();
-    let heroPos : Phaser.Math.Vector3 = this._m_hero.m_transform.getGlobalPoisition();
+    let heroPos : Phaser.Math.Vector3 = new Phaser.Math.Vector3
+    (
+      heroSpr.x,
+      heroSpr.y,
+      0.0
+    );
 
     v3.x = v2.x;
     v3.y = v2.y;
@@ -240,8 +235,6 @@ export class Test extends Phaser.Scene
   /* Private                                          */
   /****************************************************/
   
-  private _m_hero : MxActor;
-
   private _m_heroController : PlayerController;
 
   ///////////////////////////////////
