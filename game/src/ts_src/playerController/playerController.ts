@@ -14,6 +14,8 @@ import { PlayerControllerConfig } from "./playerControllerConfig";
 import { CmpHeroInput } from "../components/cmpHeroInput"
 import { DC_COMPONENT_ID } from "../components/dcComponentID";
 import { CmpMovement } from "../components/cmpMovement";
+import { CmpAnimation } from "../components/cmpAnimation";
+import { StateHeroIdle } from "../states/stateHeroIdle";
 
 /**
  * Create and manage the hero's actor. It provides a friendly interface to control
@@ -50,7 +52,7 @@ export class PlayerController
     // Create the Arcade Sprite
 
     let heroSprite : Phaser.Physics.Arcade.Sprite 
-      = _scene.physics.add.sprite(0.0, 0.0, 'dragon', 0);
+      = _scene.physics.add.sprite(0.0, 0.0, 'DragonFlight', 0);
 
     // Create the Hero Actor
     
@@ -59,6 +61,7 @@ export class PlayerController
     
     hero.addComponent(CmpHeroInput.Create()); // Input Controller
     hero.addComponent(CmpMovement.Create()); // Movement Controller
+    hero.addComponent(CmpAnimation.Create());
     
     this.setPlayer(hero);
 
@@ -91,6 +94,15 @@ export class PlayerController
     
     hero.init();
 
+    ///////////////////////////////////
+    // Animations
+
+    let anim : CmpAnimation 
+      = hero.getComponent<CmpAnimation>(DC_COMPONENT_ID.kAnimation);
+
+    anim.addState(new StateHeroIdle());
+
+    anim.setActive('Hero_Idle');
     return;
   }
 

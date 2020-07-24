@@ -1,4 +1,4 @@
-import { CmpAnimation } from "../components/cmpHeroAnimation";
+import { CmpAnimation } from "../components/cmpAnimation";
 /**
  * HummingFlight Software Technologies - 2020
  *

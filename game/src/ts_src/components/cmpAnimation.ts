@@ -1,7 +1,8 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary 
+ * @summary Animation component provides a map of states that can be used to handle 
+ * diferents animation states.
  *
  * @file CmpAnimation.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
@@ -15,12 +16,19 @@ import { NullState } from "../states/nullState";
 import { DC_COMPONENT_ID } from "./dcComponentID";
 import { IBaseComponent } from "./iBaseComponent";
 
+/**
+ * Animation component provides a map of states that can be used to handle 
+ * diferents animation states.
+ */
 export class CmpAnimation implements IBaseComponent<Phaser.Physics.Arcade.Sprite>
 {
   /****************************************************/
   /* Public                                           */
   /****************************************************/
   
+  /**
+   * Creates a new animation component with empty states.
+   */
   static Create()
   : CmpAnimation
   {

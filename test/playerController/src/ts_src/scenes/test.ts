@@ -22,9 +22,15 @@ export class Test extends Phaser.Scene
 
     this.load.atlas
     (
-      "dragon",
+      "DragonFlight",
       "atlas/DragonFlight.png",
       "atlas/DragonFlight.js"
+    );
+
+    this.load.animation
+    (
+      "dragon_anim",
+      "atlas/DragonFlight.json"
     );
 
     this.load.text
