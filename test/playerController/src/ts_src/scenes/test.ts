@@ -1,5 +1,6 @@
 import { PlayerController } from "../../../../../game/src/ts_src/playerController/playerController";
 import { PlayerControllerConfig } from "../../../../../game/src/ts_src/playerController/playerControllerConfig";
+import { NullState } from "../../../../../game/src/ts_src/states/nullState";
 
 export class Test extends Phaser.Scene
 {
@@ -37,6 +38,11 @@ export class Test extends Phaser.Scene
   create()
   : void
   {
+    ///////////////////////////////////
+    // Prepare Modules
+
+    NullState.Prepare();
+
     // Canvas Size
 
     this._m_canvas_size 

@@ -22,6 +22,7 @@
     "../../game/src/ts_src/components/**/*",
     "../../game/src/ts_src/actors/**/*",
     "../../game/src/ts_src/message/**/*",
+    "../../game/src/ts_src/states/**/*",
     "../../externals/mxUtilities/*"
   ],
 
