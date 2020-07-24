@@ -13,4 +13,9 @@ export const DC_COMPONENT_ID = Object.freeze
    * CmpHeroInput.
    */
   kHeroInput : 1 as 1,
+
+  /**
+   * CmpAnimation
+   */
+  kAnimation : 2 as 2
 });
