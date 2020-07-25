@@ -3,7 +3,7 @@
  *
  * @summary 
  *
- * @file stateHeroIdle.ts
+ * @file StateHeroFFlight.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
  * @since July-24-2020
  */
@@ -12,9 +12,9 @@ import { CmpAnimation } from "../components/cmpAnimation";
 import { IAnimationState } from "./IAnimationState";
 
 /**
- * Idle animation of the Hero.
+ * Forward fly animation.
  */
-export class StateHeroIdle implements IAnimationState
+export class StateHeroFFlight implements IAnimationState
 {  
   /****************************************************/
   /* Public                                           */
@@ -22,7 +22,7 @@ export class StateHeroIdle implements IAnimationState
 
   constructor()
   {
-    this.m_id = "Hero_Idle";
+    this.m_id = "Hero_Forward_Flight";
     return;
   }
   

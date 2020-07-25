@@ -15,7 +15,8 @@ import { CmpHeroInput } from "../components/cmpHeroInput"
 import { DC_COMPONENT_ID } from "../components/dcComponentID";
 import { CmpMovement } from "../components/cmpMovement";
 import { CmpAnimation } from "../components/cmpAnimation";
-import { StateHeroIdle } from "../states/stateHeroIdle";
+import { StateHeroFFlight } from "../states/stateHeroFFLight";
+import { StateHeroGlide } from "../states/stateHeroGlide";
 
 /**
  * Create and manage the hero's actor. It provides a friendly interface to control
@@ -39,7 +40,7 @@ export class PlayerController
    * pointer of the scene is used by default.
    * @param _config The user configuration object.
    */
-  public init
+  init
   (
     _scene : Phaser.Scene,
     _activePointer ?: Phaser.Input.Pointer,
@@ -61,7 +62,7 @@ export class PlayerController
     
     hero.addComponent(CmpHeroInput.Create()); // Input Controller
     hero.addComponent(CmpMovement.Create()); // Movement Controller
-    hero.addComponent(CmpAnimation.Create());
+    hero.addComponent(CmpAnimation.Create()); // Animation Controller
     
     this.setPlayer(hero);
 
@@ -100,9 +101,10 @@ export class PlayerController
     let anim : CmpAnimation 
       = hero.getComponent<CmpAnimation>(DC_COMPONENT_ID.kAnimation);
 
-    anim.addState(new StateHeroIdle());
+    anim.addState(new StateHeroFFlight());
+    anim.addState(new StateHeroGlide());
 
-    anim.setActive('Hero_Idle');
+    anim.setActive('Hero_Forward_Flight');
     return;
   }
 
@@ -111,7 +113,7 @@ export class PlayerController
    * 
    * @param _pointer Phaser pointer.
    */
-  public setPointer(_pointer : Phaser.Input.Pointer)
+  setPointer(_pointer : Phaser.Input.Pointer)
   : void
   {
     let input : CmpHeroInput 
@@ -133,7 +135,7 @@ export class PlayerController
    * 
    * @param _mode Input Mode.
    */
-  public setInputMode(_mode : string)
+  setInputMode(_mode : string)
   : void
   {
     let input : CmpHeroInput 
@@ -188,7 +190,7 @@ export class PlayerController
    * 
    * @param _player 
    */
-  public setPlayer(_player : BaseActor<Phaser.Physics.Arcade.Sprite>)
+  setPlayer(_player : BaseActor<Phaser.Physics.Arcade.Sprite>)
   : void
   {
     this._m_player = _player;
@@ -198,7 +200,7 @@ export class PlayerController
   /**
    * Get the Hero.
    */
-  public getPlayer()
+  getPlayer()
   : BaseActor<Phaser.Physics.Arcade.Sprite>
   {
     return this._m_player;
@@ -212,7 +214,7 @@ export class PlayerController
    * 
    * @param _dt Delta time. 
    */
-  public update(_dt : number)
+  update(_dt : number)
   : void
   {
     // Update logic
@@ -225,7 +227,7 @@ export class PlayerController
   /**
    * Safely destroys this object.
    */
-  public destroy()
+  destroy()
   : void
   {
     this._m_player.destroy();
@@ -237,7 +239,7 @@ export class PlayerController
    * 
    * @reaturns Phaser Vector2
    */
-  public getDirection()
+  getDirection()
   : Phaser.Math.Vector2
   {
     let movement : CmpMovement
