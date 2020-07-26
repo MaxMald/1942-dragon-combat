@@ -1,14 +1,22 @@
 (function () {
   'use strict';
 
+  let hostname = window.location.hostname;
+  let pre = "";
+
+  if(hostname === "maxmald.github.io")
+  {
+    pre = "/1942-dragon-combat";
+  }
+
   requirejs.config({
-    baseUrl: "./1942-dragon-combat/",
+    baseUrl: "/",
 
     paths: {
-      'phaser':'/externals/phaser/build/phaser.min',
-      'phaser3-nineslice' : '/externals/plugins/nineSlice/nineslice.min',
-      'mxUtilities' : '/externals/mxUtilities/mxUtilities',
-      'test/playerController/src/ts_src/game_init' : '/test/lib/playerController/test_playerController'
+      'phaser': pre + '/externals/phaser/build/phaser.min',
+      'phaser3-nineslice' : pre + '/externals/plugins/nineSlice/nineslice.min',
+      'mxUtilities' : pre + '/externals/mxUtilities/mxUtilities',
+      'test/playerController/src/ts_src/game_init' : pre + '/test/lib/playerController/test_playerController'
     },
 
     bundles: {
