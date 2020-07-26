@@ -30,14 +30,14 @@ export class Test extends Phaser.Scene
     this.load.animation
     (
       "dragon_anim",
-      "atlas/DragonFlight.json"
+      "animations/DragonFlight.json"
     );
 
     this.load.text
     (
       'playerControllerConfig',
       'configFiles/playerControllerConfig.json'
-    )
+    );
     return;
   }
   
