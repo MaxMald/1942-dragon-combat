@@ -13,9 +13,9 @@
     baseUrl: "/",
 
     paths: {
-      'phaser': pre + '../../externals/phaser/build/phaser',
-      'phaser3-nineslice' : pre + '../../externals/plugins/nineSlice/nineslice.min',
-      'mxUtilities' : pre + '../../externals/mxUtilities/mxUtilities',
+      'phaser': pre + 'externals/phaser/build/phaser',
+      'phaser3-nineslice' : pre + 'externals/plugins/nineSlice/nineslice.min',
+      'mxUtilities' : pre + 'externals/mxUtilities/mxUtilities',
       'test/ambienceGenerator/src/ts_src/game_init' : pre + 'test/lib/ambienceGenerator/test_ambienceGenerator'
     },
 
