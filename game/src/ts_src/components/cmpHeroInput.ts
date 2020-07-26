@@ -34,6 +34,7 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
     input._m_v3 = new Phaser.Math.Vector3();
     input._m_player_speed = 200.0;
     input._m_movement_fn = input._mixedMovement;
+    input._m_pointerDown = false;
 
     return input;
   }
@@ -53,6 +54,8 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
   : void
   {
     this._m_pointer = _pointer;
+
+    _pointer.isDown
     return;
   }
 
@@ -100,9 +103,30 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
   update(_actor: BaseActor<Phaser.Physics.Arcade.Sprite>)
   : void 
   {
-    if(this._m_pointer.isDown) {
+    let pointer = this._m_pointer;
+
+    if(pointer.isDown) {
+      
+      // Movement
       this._m_movement_fn.call(this, _actor);
+
+      if(!this._m_pointerDown)
+      {
+        this._m_pointerDown = !this._m_pointerDown;
+
+        _actor.sendMessage(DC_MESSAGE_ID.kPointerPressed, pointer);
+      }
     }
+    else
+    {
+      if(this._m_pointerDown)
+      {
+        this._m_pointerDown = !this._m_pointerDown;
+        
+        _actor.sendMessage(DC_MESSAGE_ID.kPointerReleased, pointer);
+      }
+    }
+
     return;
   }
 
@@ -127,6 +151,13 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
   /****************************************************/
   /* Private                                          */
   /****************************************************/
+
+  private _pointerUp()
+  : void
+  {
+    console.log("pointer up");
+    return;
+  }
 
   /**
    * Moves the hero to the pointer position in the world.
@@ -164,7 +195,7 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
   : void
   {
     let pointer : Phaser.Input.Pointer = this._m_pointer;   
-
+    
     this._m_v3.x = pointer.position.x - pointer.prevPosition.x;
     this._m_v3.y = pointer.position.y - pointer.prevPosition.y;    
 
@@ -222,4 +253,9 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
    * Cache vector used to send messages.
    */
   private _m_v3 : Phaser.Math.Vector3;
+
+  /**
+   * Indicates if the pointer is down.
+   */
+  private _m_pointerDown : boolean;
 }

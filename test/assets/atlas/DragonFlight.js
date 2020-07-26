@@ -1,62 +1,122 @@
 {
 "frames": {
-	"Dragon0001.png": {
-		"frame": {"x":402, "y":201, "w":200, "h":200},
+	"D001_Flight.png": {
+		"frame": {"x":804, "y":402, "w":200, "h":200},
 		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
 		"sourceSize": {"w":200,"h":200}
 	},
-	"Dragon0002.png": {
-		"frame": {"x":402, "y":0, "w":200, "h":200},
+	"D001_Glide.png": {
+		"frame": {"x":804, "y":201, "w":200, "h":200},
 		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
 		"sourceSize": {"w":200,"h":200}
 	},
-	"Dragon0003.png": {
-		"frame": {"x":201, "y":603, "w":200, "h":200},
+	"D002_Flight.png": {
+		"frame": {"x":804, "y":0, "w":200, "h":200},
 		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
 		"sourceSize": {"w":200,"h":200}
 	},
-	"Dragon0004.png": {
-		"frame": {"x":201, "y":402, "w":200, "h":200},
+	"D002_Glide.png": {
+		"frame": {"x":603, "y":804, "w":200, "h":200},
 		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
 		"sourceSize": {"w":200,"h":200}
 	},
-	"Dragon0005.png": {
+	"D003_Flight.png": {
+		"frame": {"x":603, "y":603, "w":200, "h":200},
+		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+		"sourceSize": {"w":200,"h":200}
+	},
+	"D003_Glide.png": {
+		"frame": {"x":603, "y":402, "w":200, "h":200},
+		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+		"sourceSize": {"w":200,"h":200}
+	},
+	"D004_Flight.png": {
+		"frame": {"x":603, "y":201, "w":200, "h":200},
+		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+		"sourceSize": {"w":200,"h":200}
+	},
+	"D004_Glide.png": {
+		"frame": {"x":603, "y":0, "w":200, "h":200},
+		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+		"sourceSize": {"w":200,"h":200}
+	},
+	"D005_Flight.png": {
+		"frame": {"x":402, "y":804, "w":200, "h":200},
+		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+		"sourceSize": {"w":200,"h":200}
+	},
+	"D005_Glide.png": {
 		"frame": {"x":402, "y":603, "w":200, "h":200},
 		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
 		"sourceSize": {"w":200,"h":200}
 	},
-	"Dragon0006.png": {
-		"frame": {"x":201, "y":0, "w":200, "h":200},
+	"D006_Flight.png": {
+		"frame": {"x":402, "y":402, "w":200, "h":200},
 		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
 		"sourceSize": {"w":200,"h":200}
 	},
-	"Dragon0007.png": {
-		"frame": {"x":0, "y":603, "w":200, "h":200},
+	"D006_Glide.png": {
+		"frame": {"x":804, "y":603, "w":200, "h":200},
 		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
 		"sourceSize": {"w":200,"h":200}
 	},
-	"Dragon0008.png": {
-		"frame": {"x":0, "y":402, "w":200, "h":200},
+	"D007_Flight.png": {
+		"frame": {"x":402, "y":0, "w":200, "h":200},
 		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
 		"sourceSize": {"w":200,"h":200}
 	},
-	"Dragon0009.png": {
-		"frame": {"x":0, "y":201, "w":200, "h":200},
+	"D007_Glide.png": {
+		"frame": {"x":201, "y":804, "w":200, "h":200},
 		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
 		"sourceSize": {"w":200,"h":200}
 	},
-	"Dragon0010.png": {
-		"frame": {"x":0, "y":0, "w":200, "h":200},
+	"D008_Flight.png": {
+		"frame": {"x":201, "y":603, "w":200, "h":200},
 		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
 		"sourceSize": {"w":200,"h":200}
 	},
-	"Dragon0011.png": {
+	"D008_Glide.png": {
+		"frame": {"x":201, "y":402, "w":200, "h":200},
+		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+		"sourceSize": {"w":200,"h":200}
+	},
+	"D009_Flight.png": {
 		"frame": {"x":201, "y":201, "w":200, "h":200},
 		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
 		"sourceSize": {"w":200,"h":200}
 	},
-	"Dragon0012.png": {
-		"frame": {"x":402, "y":402, "w":200, "h":200},
+	"D009_Glide.png": {
+		"frame": {"x":201, "y":0, "w":200, "h":200},
+		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+		"sourceSize": {"w":200,"h":200}
+	},
+	"D010_Flight.png": {
+		"frame": {"x":0, "y":804, "w":200, "h":200},
+		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+		"sourceSize": {"w":200,"h":200}
+	},
+	"D010_Glide.png": {
+		"frame": {"x":0, "y":603, "w":200, "h":200},
+		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+		"sourceSize": {"w":200,"h":200}
+	},
+	"D011_Flight.png": {
+		"frame": {"x":0, "y":402, "w":200, "h":200},
+		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+		"sourceSize": {"w":200,"h":200}
+	},
+	"D011_Glide.png": {
+		"frame": {"x":0, "y":201, "w":200, "h":200},
+		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+		"sourceSize": {"w":200,"h":200}
+	},
+	"D012_Flight.png": {
+		"frame": {"x":0, "y":0, "w":200, "h":200},
+		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+		"sourceSize": {"w":200,"h":200}
+	},
+	"D012_Glide.png": {
+		"frame": {"x":402, "y":201, "w":200, "h":200},
 		"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
 		"sourceSize": {"w":200,"h":200}
 	}
@@ -64,7 +124,7 @@
 },
 "meta": {
 	"image": "DragonFlight.png",
-	"size": {"w": 603, "h": 804},
+	"size": {"w": 1005, "h": 1005},
 	"scale": "1"
 }
 }

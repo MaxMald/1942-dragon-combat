@@ -1,78 +1,165 @@
 {
   "anims": [
     {
-      "key": "Flight",
+      "key": "D001_Flight",
       "type": "frame",
       "frames": [
         {
           "key": "DragonFlight",
-          "frame": "Dragon0001.png",
+          "frame": "D001_Flight.png",
           "duration": 0,
           "visible": false
         },
         {
           "key": "DragonFlight",
-          "frame": "Dragon0002.png",
+          "frame": "D002_Flight.png",
           "duration": 0,
           "visible": false
         },
         {
           "key": "DragonFlight",
-          "frame": "Dragon0003.png",
+          "frame": "D003_Flight.png",
           "duration": 0,
           "visible": false
         },
         {
           "key": "DragonFlight",
-          "frame": "Dragon0004.png",
+          "frame": "D004_Flight.png",
           "duration": 0,
           "visible": false
         },
         {
           "key": "DragonFlight",
-          "frame": "Dragon0005.png",
+          "frame": "D005_Flight.png",
           "duration": 0,
           "visible": false
         },
         {
           "key": "DragonFlight",
-          "frame": "Dragon0006.png",
+          "frame": "D006_Flight.png",
           "duration": 0,
           "visible": false
         },
         {
           "key": "DragonFlight",
-          "frame": "Dragon0007.png",
+          "frame": "D007_Flight.png",
           "duration": 0,
           "visible": false
         },
         {
           "key": "DragonFlight",
-          "frame": "Dragon0008.png",
+          "frame": "D008_Flight.png",
           "duration": 0,
           "visible": false
         },
         {
           "key": "DragonFlight",
-          "frame": "Dragon0009.png",
+          "frame": "D009_Flight.png",
           "duration": 0,
           "visible": false
         },
         {
           "key": "DragonFlight",
-          "frame": "Dragon0010.png",
+          "frame": "D010_Flight.png",
           "duration": 0,
           "visible": false
         },
         {
           "key": "DragonFlight",
-          "frame": "Dragon0011.png",
+          "frame": "D011_Flight.png",
           "duration": 0,
           "visible": false
         },
         {
           "key": "DragonFlight",
-          "frame": "Dragon0012.png",
+          "frame": "D012_Flight.png",
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 12,
+      "duration": 1,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "D001_Glide",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "DragonFlight",
+          "frame": "D001_Glide.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "D002_Glide.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "D003_Glide.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "D004_Glide.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "D005_Glide.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "D006_Glide.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "D007_Glide.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "D008_Glide.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "D009_Glide.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "D010_Glide.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "D011_Glide.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "DragonFlight",
+          "frame": "D012_Glide.png",
           "duration": 0,
           "visible": false
         }

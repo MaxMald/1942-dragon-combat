@@ -24,4 +24,18 @@ export const DC_MESSAGE_ID = Object.freeze
    * msg : Phaser.Math.Vector3.
    */
   kToPosition : 502 as 502,
+
+  /**
+   * The pointer had been released.
+   * 
+   * msg : Phaser.Input.Pointer
+   */
+  kPointerReleased : 503 as 503,
+
+  /**
+   * The pointer had been pressed.
+   * 
+   * msg : Phaser.Input.Pointer
+   */
+  kPointerPressed : 504 as 504
 });

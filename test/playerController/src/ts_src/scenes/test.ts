@@ -140,7 +140,7 @@ export class Test extends Phaser.Scene
 
     // Clear the pointer previous position.
 
-    let pointer = this.game.input.activePointer;
+    let pointer = this.input.activePointer;
 
     pointer.prevPosition.x = pointer.position.x;
     pointer.prevPosition.y = pointer.position.y;
@@ -163,7 +163,7 @@ export class Test extends Phaser.Scene
 
     // Display the pointer direction.
 
-    let pointer : Phaser.Input.Pointer = this.game.input.activePointer;
+    let pointer : Phaser.Input.Pointer = this.input.activePointer;
 
     let v3 : Phaser.Math.Vector3 = new Phaser.Math.Vector3
     (

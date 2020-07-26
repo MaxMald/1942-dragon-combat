@@ -7,18 +7,7 @@ export class Preloader extends Phaser.Scene
   preload()
   : void
   {
-    this.load.path = "../assets/"
-
-    ///////////////////////////////////
-    // Images    
-    
-    this.load.image('duke', 'images/inge_logo_02.png');
-
-    ///////////////////////////////////
-    // Shaders
-    
-
-    return;
+  
   }
 
   create()

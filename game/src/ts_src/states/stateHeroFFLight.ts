@@ -10,6 +10,7 @@
 
 import { CmpAnimation } from "../components/cmpAnimation";
 import { IAnimationState } from "./IAnimationState";
+import { DC_MESSAGE_ID } from "../messages/dcMessageID";
 
 /**
  * Forward fly animation.
@@ -23,6 +24,7 @@ export class StateHeroFFlight implements IAnimationState
   constructor()
   {
     this.m_id = "Hero_Forward_Flight";
+    this._m_isMoving = false;
     return;
   }
   
@@ -30,7 +32,10 @@ export class StateHeroFFlight implements IAnimationState
   : void 
   { 
     let sprite = this.m_component.getSprite();
-    sprite.play('Flight');
+    sprite.play('D001_Flight');
+    
+    sprite.anims.currentAnim.once('repeat', this._onRepeat, this);
+
     return;
   }
   
@@ -40,7 +45,22 @@ export class StateHeroFFlight implements IAnimationState
 
   receive(_id: number, _obj: any)
   : void 
-  { }
+  { 
+    switch(_id)
+    {
+      case DC_MESSAGE_ID.kPointerPressed:
+        this._m_isMoving = true;
+      return;
+
+      case DC_MESSAGE_ID.kPointerReleased:
+        this._m_isMoving = false;
+      return;
+
+      default:
+        
+      return;
+    }
+  }
 
   update()
   : void 
@@ -53,4 +73,25 @@ export class StateHeroFFlight implements IAnimationState
   m_id: string;
   
   m_component: CmpAnimation;
+
+  /****************************************************/
+  /* Private                                          */
+  /****************************************************/
+  
+  private _onRepeat()
+  : void
+  {    
+    if(this._m_isMoving) 
+    {
+      let sprite = this.m_component.getSprite();
+      sprite.anims.currentAnim.once('repeat', this._onRepeat, this);
+    }
+    else
+    {
+      this.m_component.setActive('Hero_Glide');
+    }    
+    return;
+  }
+
+  private _m_isMoving : boolean;
 }

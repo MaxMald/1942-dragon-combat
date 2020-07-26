@@ -53,7 +53,13 @@ export class PlayerController
     // Create the Arcade Sprite
 
     let heroSprite : Phaser.Physics.Arcade.Sprite 
-      = _scene.physics.add.sprite(0.0, 0.0, 'DragonFlight', 0);
+      = _scene.physics.add.sprite
+      (
+        _scene.game.canvas.width * 0.5, 
+        _scene.game.canvas.height * 0.5, 
+        'DragonFlight', 
+        0
+      );
 
     // Create the Hero Actor
     
@@ -71,8 +77,21 @@ export class PlayerController
     if(_activePointer !== undefined) {
       this.setPointer(_activePointer);
     }
-    else {
-      this.setPointer(_scene.input.activePointer);
+    else 
+    {
+      if(_scene.game.device.input.touch) 
+      {
+        if(_scene.input.pointer1 === undefined)
+        {
+          _scene.input.addPointer();
+        }
+
+        this.setPointer(_scene.input.pointer1);
+      }
+      else
+      {
+        this.setPointer(_scene.input.activePointer);
+      }
     }
 
     ///////////////////////////////////

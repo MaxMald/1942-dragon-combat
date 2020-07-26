@@ -5,21 +5,16 @@
     baseUrl: "/",
 
     paths: {
-      'phaser':'../../externals/phaser/build/phaser',
-      'phaser3-nineslice' : '../../externals/plugins/nineSlice/nineslice.min',
-      'mxUtilities' : '../../externals/mxUtilities/mxUtilities',
+      'phaser':'externals/phaser/build/phaser.min',
+      'phaser3-nineslice' : 'externals/plugins/nineSlice/nineslice.min',
+      'mxUtilities' : 'externals/mxUtilities/mxUtilities',
       'test/playerController/src/ts_src/game_init' : 'test/lib/playerController/test_playerController'
     },
 
     bundles: {
       'mxUtilities' : [
-        "mxUtilitites", 
-        "behaviour/mxActor", 
-        "behaviour/components/cmpSprite",
-        "behaviour/components/cmpShader",
-        "behaviour/components/cmpTransform",
-        "commons/mxEnums",
-        "pseudoRandom/mxHalton"
+        "mxUtilitites",
+        "commons/mxEnums"
       ]
     },
 

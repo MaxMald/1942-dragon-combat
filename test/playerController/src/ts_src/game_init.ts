@@ -1,6 +1,5 @@
 import { MxUtilities } from "mxUtilities";
 import { Plugin } from "phaser3-nineslice";
-import { MxHalton } from "pseudoRandom/mxHalton";
 import { Boot } from "./scenes/boot";
 import { Preloader } from "./scenes/preloader";
 import { Test } from "./scenes/test";

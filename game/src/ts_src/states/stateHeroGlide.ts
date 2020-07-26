@@ -30,7 +30,7 @@ export class StateHeroGlide implements IAnimationState
   : void 
   { 
     let sprite = this.m_component.getSprite();
-    sprite.play('Flight');
+    sprite.play('D001_Glide');
     return;
   }
   

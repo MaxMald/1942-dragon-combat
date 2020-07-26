@@ -129,13 +129,11 @@ export class CmpAnimation implements IBaseComponent<Phaser.Physics.Arcade.Sprite
     {
       state = this.getState(_id);
     }
-
-    let active : IBaseState = this._m_activeState;
-
-    active.onExit();
-    active = state;
-    active.onEnter(); 
-
+    
+    this._m_activeState.onExit();
+    this._m_activeState = state;
+    this._m_activeState.onEnter();
+    
     return;
   }
 
