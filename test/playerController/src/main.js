@@ -5,10 +5,10 @@
     baseUrl: "/",
 
     paths: {
-      'phaser':'externals/phaser/build/phaser.min',
-      'phaser3-nineslice' : 'externals/plugins/nineSlice/nineslice.min',
-      'mxUtilities' : 'externals/mxUtilities/mxUtilities',
-      'test/playerController/src/ts_src/game_init' : 'test/lib/playerController/test_playerController'
+      'phaser':'1942-dragon-combat/externals/phaser/build/phaser.min',
+      'phaser3-nineslice' : '1942-dragon-combat/externals/plugins/nineSlice/nineslice.min',
+      'mxUtilities' : '1942-dragon-combat/externals/mxUtilities/mxUtilities',
+      'test/playerController/src/ts_src/game_init' : '1942-dragon-combat/test/lib/playerController/test_playerController'
     },
 
     bundles: {
