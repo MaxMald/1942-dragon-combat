@@ -33,9 +33,11 @@ export class StateHeroFFlight implements IAnimationState
   { 
     let sprite = this.m_component.getSprite();
     sprite.play('D001_Flight');
+
+    this._m_isMoving = true;
     
     sprite.anims.currentAnim.once('repeat', this._onRepeat, this);
-
+    
     return;
   }
   

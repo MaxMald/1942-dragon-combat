@@ -9,6 +9,9 @@
  */
 
 import { CmpAnimation } from "../components/cmpAnimation";
+import { DC_ANIMATION_ID } from "../components/dcAnimationID";
+import { DC_COMPONENT_ID } from "../components/dcComponentID";
+import { DC_MESSAGE_ID } from "../messages/dcMessageID";
 import { IAnimationState } from "./IAnimationState";
 
 /**
@@ -40,7 +43,18 @@ export class StateHeroGlide implements IAnimationState
 
   receive(_id: number, _obj: any)
   : void 
-  { }
+  { 
+    switch(_id)
+    {
+      case DC_MESSAGE_ID.kPointerPressed:
+        this.m_component.setActive("Hero_Forward_Flight");
+      return;
+
+      default:
+        
+      return;
+    }
+  }
 
   update()
   : void 

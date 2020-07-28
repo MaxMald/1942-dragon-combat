@@ -532,6 +532,7 @@ define("game/src/ts_src/states/stateHeroFFLight", ["require", "exports", "game/s
         StateHeroFFlight.prototype.onEnter = function () {
             var sprite = this.m_component.getSprite();
             sprite.play('D001_Flight');
+            this._m_isMoving = true;
             sprite.anims.currentAnim.once('repeat', this._onRepeat, this);
             return;
         };
@@ -564,7 +565,19 @@ define("game/src/ts_src/states/stateHeroFFLight", ["require", "exports", "game/s
     }());
     exports.StateHeroFFlight = StateHeroFFlight;
 });
-define("game/src/ts_src/states/stateHeroGlide", ["require", "exports"], function (require, exports) {
+define("game/src/ts_src/components/dcAnimationID", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.DC_ANIMATION_ID = void 0;
+    exports.DC_ANIMATION_ID = Object.freeze({
+        kForward: 0,
+        kBack: 1,
+        kRight: 2,
+        kLeft: 3,
+        kIdle: 4
+    });
+});
+define("game/src/ts_src/states/stateHeroGlide", ["require", "exports", "game/src/ts_src/messages/dcMessageID"], function (require, exports, dcMessageID_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.StateHeroGlide = void 0;
@@ -579,7 +592,15 @@ define("game/src/ts_src/states/stateHeroGlide", ["require", "exports"], function
             return;
         };
         StateHeroGlide.prototype.onExit = function () { };
-        StateHeroGlide.prototype.receive = function (_id, _obj) { };
+        StateHeroGlide.prototype.receive = function (_id, _obj) {
+            switch (_id) {
+                case dcMessageID_4.DC_MESSAGE_ID.kPointerPressed:
+                    this.m_component.setActive("Hero_Forward_Flight");
+                    return;
+                default:
+                    return;
+            }
+        };
         StateHeroGlide.prototype.update = function () { };
         StateHeroGlide.prototype.destroy = function () { };
         return StateHeroGlide;
@@ -820,17 +841,5 @@ define("test/playerController/src/ts_src/game_init", ["require", "exports", "mxU
         return GameInit;
     }());
     return GameInit;
-});
-define("game/src/ts_src/components/dcAnimationID", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.DC_ANIMATION_ID = void 0;
-    exports.DC_ANIMATION_ID = Object.freeze({
-        kForward: 0,
-        kBack: 1,
-        kRight: 2,
-        kLeft: 3,
-        kIdle: 4
-    });
 });
 //# sourceMappingURL=test_playerController.js.map
