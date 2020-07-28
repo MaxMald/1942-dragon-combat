@@ -5,15 +5,17 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "chrome",
+      "type": "firefox",
       "request": "launch",
-      "name": "Launch Chrome against localhost",
-
+      "name": "1942 Launch",
       "url": "http://127.0.0.1:8080/test/playerController",
-      //"url": "http://127.0.0.1:8080/test/ambienceGenerator",
-      //"url": "http://127.0.0.1:8080/game",
-      
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}",
+      "pathMappings": [
+        {
+          "url": "http://127.0.0.1:8080/test",
+          "path": "${workspaceFolder}/test"
+        }
+      ]
     }
   ]
 }

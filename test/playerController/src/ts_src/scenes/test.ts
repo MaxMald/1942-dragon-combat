@@ -38,6 +38,12 @@ export class Test extends Phaser.Scene
       'playerControllerConfig',
       'configFiles/playerControllerConfig.json'
     );
+
+    this.load.image
+    (
+      'button',
+      'images/button.png'
+    );
     return;
   }
   
@@ -95,7 +101,50 @@ export class Test extends Phaser.Scene
     ); 
     this._m_pt_label.setAlign('left');
     this._m_pt_label.setOrigin(0.0, 0.0);
-   
+
+    // Show the input mode.
+
+    this._m_inputMode = this.add.text
+    (
+      250,
+      1600,
+      '',
+      { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' }
+    ); 
+    this._m_pt_label.setAlign('left');
+    this._m_pt_label.setOrigin(0.0, 0.0);
+
+    // input mode buttons.    
+
+    let y = 1550;
+    
+    this._createButton
+    (
+      950,
+      y ,
+      'Relative',
+      this._onClick_relative,
+      this
+    );
+
+    this._createButton
+    (
+      950,
+      y += 100,
+      'Absolute',
+      this._onClick_absolute,
+      this
+    );
+
+    this._createButton
+    (
+      950,
+      y += 100,
+      'Mixed',
+      this._onClick_mixed,
+      this
+    );
+
     ///////////////////////////////////
     // Player Controller
 
@@ -140,7 +189,7 @@ export class Test extends Phaser.Scene
 
     // Clear the pointer previous position.
 
-    let pointer = this.input.activePointer;
+    let pointer = this._m_heroController.getPointer();
 
     pointer.prevPosition.x = pointer.position.x;
     pointer.prevPosition.y = pointer.position.y;
@@ -160,6 +209,11 @@ export class Test extends Phaser.Scene
     
     this._m_graph_box.clear();
     this._m_graph_box.fillRectShape(this._m_rect_box);
+
+    // Display the innput mode.
+
+    this._m_inputMode.text = 
+      "Mode: " + this._m_heroController.getInputMode();
 
     // Display the pointer direction.
 
@@ -241,12 +295,71 @@ export class Test extends Phaser.Scene
       )
     );
     return;
-  }
+  }  
 
   /****************************************************/
   /* Private                                          */
-  /****************************************************/
-  
+  /****************************************************/  
+
+  private _createButton
+  (
+    _x : number,
+    _y : number,
+    _label : string,
+    _fn : Function,
+    _context : any
+  )
+  : void
+  {
+    MxTools.UI.MxButtonTinted.Create
+    (
+      this,
+      _x,
+      _y,
+      'button',
+      0,
+      _fn,
+      _context,
+      0xffffff,
+      0xb3b3b3,
+      0x000000,
+      0xffffff
+    );
+
+    let text =
+    this.add.text
+    (
+      _x - 20,
+      _y - 20,
+      _label,
+      { fontFamily: 'Arial', fontSize: 30, color: '#000000' }
+    );
+
+    text.setAlign('center');
+    return;
+  }
+
+  private _onClick_mixed()
+  : void
+  {
+    this._m_heroController.setInputMode("MIXED");
+    return;
+  }
+
+  private _onClick_absolute()
+  : void
+  {
+    this._m_heroController.setInputMode("ABSOLUTE");
+    return;
+  }
+
+  private _onClick_relative()
+  : void
+  {
+    this._m_heroController.setInputMode("RELATIVE");
+    return;
+  }
+
   private _m_heroController : PlayerController;
 
   ///////////////////////////////////
@@ -269,4 +382,9 @@ export class Test extends Phaser.Scene
   private _m_pt_label : Phaser.GameObjects.Text;
 
   private _m_canvas_size : Phaser.Geom.Point;
+
+  ///////////////////////////////////
+  // Labels
+
+  private _m_inputMode : Phaser.GameObjects.Text;
 }

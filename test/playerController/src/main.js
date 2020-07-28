@@ -22,7 +22,8 @@
     bundles: {
       'mxUtilities' : [
         "mxUtilitites",
-        "commons/mxEnums"
+        "commons/mxEnums",
+        "MxTools"
       ]
     },
 
@@ -33,7 +34,7 @@
     }
   });
 
-  define(["require", "test/playerController/src/ts_src/game_init", "phaser"],function(require, GameInit, Phaser) {   
+  define(["require", "test/playerController/src/ts_src/game_init", "phaser", "mxUtilities"],function(require, GameInit, Phaser) {   
     var game_init = new GameInit();
     game_init.start();
     return;

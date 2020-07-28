@@ -143,6 +143,18 @@ export class PlayerController
   }
 
   /**
+   * Get the pointer that is associated to the player input.
+   */
+  getPointer()
+  : Phaser.Input.Pointer
+  {
+    let input : CmpHeroInput 
+      = this._m_player.getComponent<CmpHeroInput>(DC_COMPONENT_ID.kHeroInput);
+
+    return input.getPointer();
+  }
+
+  /**
    * Set the input mode to control the hero.
    * 
    * ABSOLUTE : The hero moves to the pointer position.
@@ -162,6 +174,15 @@ export class PlayerController
 
     input.setMode(_mode);
     return;
+  }
+
+  getInputMode()
+  : string
+  {
+    let input : CmpHeroInput 
+      = this._m_player.getComponent<CmpHeroInput>(DC_COMPONENT_ID.kHeroInput);
+
+    return input.getMode();
   }
 
   /**

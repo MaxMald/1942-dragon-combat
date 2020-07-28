@@ -32,8 +32,12 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
 
     input.m_id = DC_COMPONENT_ID.kHeroInput;    
     input._m_v3 = new Phaser.Math.Vector3();
+    
     input._m_player_speed = 200.0;
+
     input._m_movement_fn = input._mixedMovement;
+    input._m_mode = "MIXED";
+    
     input._m_pointerDown = false;
 
     return input;
@@ -60,6 +64,15 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
   }
 
   /**
+   * Get the input pointer of this component.
+   */
+  getPointer()
+  : Phaser.Input.Pointer
+  {
+    return this._m_pointer;
+  }
+
+  /**
    * Set the input mode of this Hero. 
    * 
    * @param _mode "RELATIVE", "ABSOLUTE", "MIXED" 
@@ -69,18 +82,28 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
   {
     switch(_mode) {
       case "RELATIVE":
+        this._m_mode = "RELATIVE";
         this._m_movement_fn = this._relativeMovement;
         break;
       case "ABSOLUTE":
+        this._m_mode = "ABSOLUTE";
         this._m_movement_fn = this._absoluteMovement;
         break;
       case "MIXED":
+        this._m_mode = "MIXED";
         this._m_movement_fn = this._mixedMovement;
         break;
       default:
+        this._m_mode ="MIXED";
         this._m_movement_fn = this._mixedMovement;
         break;
     }
+  }
+
+  getMode()
+  : string
+  {
+    return this._m_mode;
   }
 
   /**
@@ -105,16 +128,22 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
   {
     let pointer = this._m_pointer;
 
-    if(pointer.isDown) {
-      
-      // Movement
-      this._m_movement_fn.call(this, _actor);
+    if(pointer.isDown) {      
 
       if(!this._m_pointerDown)
       {
         this._m_pointerDown = !this._m_pointerDown;
 
+        pointer.prevPosition.x = pointer.position.x;
+        pointer.prevPosition.y = pointer.position.y;
+
+        this._m_movement_fn.call(this, _actor);
+
         _actor.sendMessage(DC_MESSAGE_ID.kPointerPressed, pointer);
+      }
+      else
+      {
+        this._m_movement_fn.call(this, _actor);
       }
     }
     else
@@ -258,4 +287,9 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
    * Indicates if the pointer is down.
    */
   private _m_pointerDown : boolean;
+
+  /**
+   * Input mode.
+   */
+  private _m_mode : string;
 }

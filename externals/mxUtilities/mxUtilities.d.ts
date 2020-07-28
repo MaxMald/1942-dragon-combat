@@ -2191,64 +2191,128 @@ declare module "pseudoRandom/mxHalton" {
         static Halton(_index: integer, _base: integer): number;
     }
 }
-declare module "ui/mxUI" {
-    export class MxUI {
+/**
+ * HummingFlight Software Technologies - 2020
+ *
+ * @summary Provides a class that immitates the Phaser CE's button.
+ *
+ * @file mxButton.ts
+ * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
+ * @since July-27-2020
+ */
+/**
+ *
+ */
+declare module MxTools.UI {
+    /**
+     * Provides a class that immitates the Phaser CE's button.
+     */
+    class MxButton {
         /****************************************************/
         /****************************************************/
-        protected _m_size: Phaser.Geom.Point;
-        /****************************************************/
-        /****************************************************/
-        constructor();
-        update(_dt: number): void;
-        setPosition(_x: number, _y: number): void;
-        move(_x: number, _y: number): void;
         /**
-        * Safely destroys the object.
-        */
+         * Creates a new interactive Phaser.GameObject.Image.
+         *
+         * @param _scene The scene to create the Phaser image.
+         * @param _x Position in the x axis.
+         * @param _y Position in the y axis.
+         * @param _texture Name of the button texture.
+         * @param _frame Texture's frame used to draw the button. Default is 0.
+         * @param _callback Button's callback function.
+         * @param _callbackContext Buttons's callback context.
+         * @param _over_key Texture's frame when the pointer is over the button.
+         * Default is frame value.
+         * @param _out_key Texture's frame whe the pointer is out the button.
+         * Default is the frame value.
+         * @param _down_key Texture's frame when the pointer is down the button.
+         * Default is the frame value.
+         * @param _up_key Texture's frame when the pointer is up the button.
+         * Default is the frame value.
+         */
+        static Create(_scene: Phaser.Scene, _x: number, _y: number, _texture: string, _frame?: number | string, _callback?: Function, _callbackContext?: any, _over_key?: number | string, _out_key?: number | string, _down_key?: number | string, _up_key?: number | string): MxButton;
+        /**
+         * Get the phaser image.
+         */
+        getImage(): Phaser.GameObjects.Image;
+        /**
+         * Destroys this Game Object removing it from the Display List and Update
+         * List and severing all ties to parent resources.
+         */
         destroy(): void;
         /****************************************************/
         /****************************************************/
-        protected _getSprite_box(_scene: Phaser.Scene): Phaser.GameObjects.Sprite;
-        protected _getSprite_circle16(_scene: Phaser.Scene): Phaser.GameObjects.Sprite;
-        protected _get_text(_scene: Phaser.Scene): Phaser.GameObjects.Text;
+        protected _onOver(): void;
+        protected _onOut(): void;
+        protected _onDown(): void;
+        protected _onUp(): void;
+        protected _m_up_key: number | string;
+        protected _m_down_key: number | string;
+        protected _m_over_key: number | string;
+        protected _m_out_key: number | string;
+        protected _m_image: Phaser.GameObjects.Image;
     }
 }
-declare module "ui/mxSlider" {
-    import { MxUI } from "ui/mxUI";
-    export class MxSlider extends MxUI {
+/**
+ * HummingFlight Software Technologies - 2020
+ *
+ * @summary Provides a class that immitates the Phaser CE's button. This button
+ * tint the texture's frame instead of change the frame index when the pointer
+ * is over, out, down or up.
+ *
+ * @file mxButtonTinted.ts
+ * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
+ * @since July-27-2020
+ */
+declare module MxTools.UI {
+    /**
+    * Provides a class that immitates the Phaser CE's button. This button tint the
+    * texture's frame instead of change the frame index when the pointer is over,
+    * out, down or up.
+    */
+    class MxButtonTinted {
         /****************************************************/
         /****************************************************/
-        private _m_bck;
-        private _m_fill;
-        private _m_button;
-        private _m_norm_value;
-        private _m_value;
-        private _m_min_value;
-        private _m_max_value;
-        private _m_delta_value;
-        private _m_dragging;
-        private _m_text;
-        private _m_title;
-        private _m_pointer;
-        private _m_group;
-        /****************************************************/
-        /****************************************************/
-        constructor(_scene: Phaser.Scene, _x: number, _y: number, _title?: string);
-        setValues(_min: number, _max: number): void;
-        update(_dt: number): void;
-        setPosition(_x: number, _y: number): void;
-        move(_x: number, _y: number): void;
-        getValue(): number;
-        getFracValue(): number;
-        setValue(_value: number): number;
-        setFracValue(_value: number): void;
+        /**
+         * Creates a new interactive Phaser.GameObject.Image.
+         *
+         * @param _scene The scene to create the Phaser image.
+         * @param _x Position in the x axis.
+         * @param _y Position in the y axis.
+         * @param _texture Name of the button texture.
+         * @param _frame Texture's frame used to draw the button. Default is 0.
+         * @param _callback Button's callback function.
+         * @param _callbackContext Buttons's callback context.
+         * @param _over_key Texture's frame when the pointer is over the button.
+         * Default is frame value.
+         * @param _out_color Texture's frame whe the pointer is out the button.
+         * Default is the frame value.
+         * @param _down_key Texture's frame when the pointer is down the button.
+         * Default is the frame value.
+         * @param _up_color Texture's frame when the pointer is up the button.
+         * Default is the frame value.
+         */
+        static Create(_scene: Phaser.Scene, _x: number, _y: number, _texture: string, _frame?: number | string, _callback?: Function, _callbackContext?: any, _over_color?: number, _out_color?: number, _down_color?: number, _up_color?: number): MxButtonTinted;
+        /**
+         * Get the phaser image.
+         */
+        getImage(): Phaser.GameObjects.Image;
+        /**
+         * Destroys this Game Object removing it from the Display List and Update List
+         * and severing all ties to parent resources.
+         */
         destroy(): void;
         /****************************************************/
         /****************************************************/
-        private _resize_fill;
-        private _onDown_slider;
-        private _onDrag;
-        private _truncate;
+        protected constructor();
+        protected _onOver(): void;
+        protected _onOut(): void;
+        protected _onDown(): void;
+        protected _onUp(): void;
+        protected _m_up_color: number;
+        protected _m_down_color: number;
+        protected _m_over_color: number;
+        protected _m_out_color: number;
+        protected _m_image: Phaser.GameObjects.Image;
     }
 }
 //# sourceMappingURL=mxUtilities.d.ts.map

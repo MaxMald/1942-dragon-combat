@@ -3748,207 +3748,257 @@ define("pseudoRandom/mxHalton", ["require", "exports"], function (require, expor
     }());
     exports.MxHalton = MxHalton;
 });
-define("ui/mxUI", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var MxUI = /** @class */ (function () {
-        /****************************************************/
-        /* Public                                           */
-        /****************************************************/
-        function MxUI() {
-            this._m_size = new Phaser.Geom.Point(0, 0);
-            return;
-        }
-        MxUI.prototype.update = function (_dt) {
-            return;
-        };
-        MxUI.prototype.setPosition = function (_x, _y) {
-            return;
-        };
-        MxUI.prototype.move = function (_x, _y) {
-            return;
-        };
+/**
+ * HummingFlight Software Technologies - 2020
+ *
+ * @summary Provides a class that immitates the Phaser CE's button.
+ *
+ * @file mxButton.ts
+ * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
+ * @since July-27-2020
+ */
+/**
+ *
+ */
+var MxTools;
+(function (MxTools) {
+    var UI;
+    (function (UI) {
         /**
-        * Safely destroys the object.
-        */
-        MxUI.prototype.destroy = function () {
-            this._m_size = null;
-            return;
-        };
-        /****************************************************/
-        /* Protected                                        */
-        /****************************************************/
-        MxUI.prototype._getSprite_box = function (_scene) {
-            var sprite;
-            if (!_scene.textures.exists('_mx_ui_box')) {
-                var texture = void 0;
-                texture = _scene.add.graphics();
-                texture.fillStyle(0xffffff);
-                texture.fillRect(0, 0, 16, 16);
-                texture.generateTexture('_mx_ui_box', 16, 16);
-                texture.destroy();
+         * Provides a class that immitates the Phaser CE's button.
+         */
+        var MxButton = /** @class */ (function () {
+            function MxButton() {
             }
-            sprite = _scene.add.sprite(0, 0, '_mx_ui_box');
-            return sprite;
-        };
-        MxUI.prototype._getSprite_circle16 = function (_scene) {
-            var sprite;
-            if (!_scene.textures.exists('_mx_ui_circle_16')) {
-                var texture = void 0;
-                texture = _scene.add.graphics();
-                texture.fillStyle(0xffffff);
-                texture.fillCircle(0, 0, 16);
-                texture.generateTexture('_mx_ui_circle_16');
-                texture.destroy();
-            }
-            sprite = _scene.add.sprite(0, 0, '_mx_ui_circle_16');
-            return sprite;
-        };
-        MxUI.prototype._get_text = function (_scene) {
-            var text;
-            text = _scene.add.text(0, 0, "text", { fontFamily: '"Roboto Condensed"' });
-            text.setFontSize(24);
-            text.setColor('white');
-            return text;
-        };
-        return MxUI;
-    }());
-    exports.MxUI = MxUI;
-});
-define("ui/mxSlider", ["require", "exports", "ui/mxUI"], function (require, exports, mxUI_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var MxSlider = /** @class */ (function (_super) {
-        __extends(MxSlider, _super);
-        /****************************************************/
-        /* Public                                           */
-        /****************************************************/
-        function MxSlider(_scene, _x, _y, _title) {
-            if (_title === void 0) { _title = "Slider"; }
-            var _this = _super.call(this) || this;
-            _this._m_group = _scene.add.group();
-            // Slider Background
-            _this._m_bck = _this._getSprite_box(_scene);
-            _this._m_bck.setScale(20, 2);
-            _this._m_bck.setTint(0x000000);
-            _this._m_bck.setAlpha(0.5);
-            _this._m_bck.setInteractive();
-            _this._m_bck.on('pointerdown', _this._onDown_slider, _this);
-            _this._m_bck.setOrigin(0, 0);
-            // Slider Size
-            _this._m_size.x = _this._m_bck.width * _this._m_bck.scaleX;
-            _this._m_size.y = _this._m_bck.height * _this._m_bck.scaleY;
-            // Slider Fill
-            _this._m_fill = _this._getSprite_box(_scene);
-            _this._m_fill.setScale(0, 2);
-            _this._m_fill.setTint(0xffa100);
-            _this._m_fill.setOrigin(0, 0);
-            // Slider Text
-            _this._m_text = _this._get_text(_scene);
-            _this._m_text.text = "100";
-            _this._m_text.setOrigin(0.5, 0.5);
-            _this._m_text.setPosition(_this._m_bck.x + _this._m_size.x * 0.5, _this._m_bck.y + _this._m_size.y * 0.5);
-            // Slider Title
-            _this._m_title = _this._get_text(_scene);
-            _this._m_title.text = _title;
-            _this._m_title.setOrigin(0, 1);
-            _this._m_title.setPosition(_this._m_bck.x, _this._m_bck.y - 10);
-            // Add group members
-            _this._m_group.add(_this._m_title);
-            _this._m_group.add(_this._m_text);
-            _this._m_group.add(_this._m_bck);
-            _this._m_group.add(_this._m_fill);
-            _this.setValues(-1, 1);
-            _this._resize_fill(0.5);
-            _this.setPosition(_x, _y);
-            _this._m_dragging = false;
-            return _this;
-        }
-        MxSlider.prototype.setValues = function (_min, _max) {
-            if (_max > _min) {
-                this._m_min_value = _min;
-                this._m_max_value = _max;
-                this._m_delta_value = _max - _min;
-            }
-            return;
-        };
-        MxSlider.prototype.update = function (_dt) {
-            if (this._m_dragging) {
-                if (!this._m_pointer.isDown) {
-                    this._m_dragging = !this._m_dragging;
+            /****************************************************/
+            /* Public                                           */
+            /****************************************************/
+            /**
+             * Creates a new interactive Phaser.GameObject.Image.
+             *
+             * @param _scene The scene to create the Phaser image.
+             * @param _x Position in the x axis.
+             * @param _y Position in the y axis.
+             * @param _texture Name of the button texture.
+             * @param _frame Texture's frame used to draw the button. Default is 0.
+             * @param _callback Button's callback function.
+             * @param _callbackContext Buttons's callback context.
+             * @param _over_key Texture's frame when the pointer is over the button.
+             * Default is frame value.
+             * @param _out_key Texture's frame whe the pointer is out the button.
+             * Default is the frame value.
+             * @param _down_key Texture's frame when the pointer is down the button.
+             * Default is the frame value.
+             * @param _up_key Texture's frame when the pointer is up the button.
+             * Default is the frame value.
+             */
+            MxButton.Create = function (_scene, _x, _y, _texture, _frame, _callback, _callbackContext, _over_key, _out_key, _down_key, _up_key) {
+                var frame = 0;
+                if (frame !== undefined) {
+                    frame = _frame;
                 }
-                this._onDrag(this._m_pointer);
+                var button = new MxButton();
+                button._m_image = _scene.add.image(_x, _y, _texture, _frame);
+                button._m_image.setInteractive();
+                if (_over_key !== undefined) {
+                    button._m_over_key = _over_key;
+                }
+                else {
+                    button._m_over_key = frame;
+                }
+                if (_down_key !== undefined) {
+                    button._m_down_key = _down_key;
+                }
+                else {
+                    button._m_down_key = frame;
+                }
+                if (_out_key !== undefined) {
+                    button._m_out_key = _out_key;
+                }
+                else {
+                    button._m_out_key = frame;
+                }
+                if (_up_key !== undefined) {
+                    button._m_up_key = _up_key;
+                }
+                else {
+                    button._m_up_key = frame;
+                }
+                // Callbacks
+                if (_callback !== undefined) {
+                    button._m_image.on('pointerdown', _callback, _callbackContext);
+                }
+                button._m_image.on('pointerover', button._onOver, button);
+                button._m_image.on('pointerout', button._onOut, button);
+                button._m_image.on('pointerdown', button._onDown, button);
+                button._m_image.on('pointerup', button._onUp, button);
+                button._m_image.setFrame(button._m_out_key);
+                return button;
+            };
+            /**
+             * Get the phaser image.
+             */
+            MxButton.prototype.getImage = function () {
+                return this._m_image;
+            };
+            /**
+             * Destroys this Game Object removing it from the Display List and Update
+             * List and severing all ties to parent resources.
+             */
+            MxButton.prototype.destroy = function () {
+                this._m_image.destroy();
+                this._m_image = null;
+                return;
+            };
+            /****************************************************/
+            /* Protected                                        */
+            /****************************************************/
+            MxButton.prototype._onOver = function () {
+                this._m_image.setFrame(this._m_over_key);
+                return;
+            };
+            MxButton.prototype._onOut = function () {
+                this._m_image.setFrame(this._m_out_key);
+                return;
+            };
+            MxButton.prototype._onDown = function () {
+                this._m_image.setFrame(this._m_down_key);
+                return;
+            };
+            MxButton.prototype._onUp = function () {
+                this._m_image.setFrame(this._m_up_key);
+                return;
+            };
+            return MxButton;
+        }());
+        UI.MxButton = MxButton;
+    })(UI = MxTools.UI || (MxTools.UI = {}));
+})(MxTools || (MxTools = {}));
+/**
+ * HummingFlight Software Technologies - 2020
+ *
+ * @summary Provides a class that immitates the Phaser CE's button. This button
+ * tint the texture's frame instead of change the frame index when the pointer
+ * is over, out, down or up.
+ *
+ * @file mxButtonTinted.ts
+ * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
+ * @since July-27-2020
+ */
+var MxTools;
+(function (MxTools) {
+    var UI;
+    (function (UI) {
+        /**
+        * Provides a class that immitates the Phaser CE's button. This button tint the
+        * texture's frame instead of change the frame index when the pointer is over,
+        * out, down or up.
+        */
+        var MxButtonTinted = /** @class */ (function () {
+            /****************************************************/
+            /* Protected                                        */
+            /****************************************************/
+            function MxButtonTinted() {
             }
-            return;
-        };
-        MxSlider.prototype.setPosition = function (_x, _y) {
-            this.move(_x - this._m_bck.x, _y - this._m_bck.y);
-            return;
-        };
-        MxSlider.prototype.move = function (_x, _y) {
-            this._m_group.incXY(_x, _y);
-            return;
-        };
-        MxSlider.prototype.getValue = function () {
-            return this._m_value;
-        };
-        MxSlider.prototype.getFracValue = function () {
-            return this._m_norm_value;
-        };
-        MxSlider.prototype.setValue = function (_value) {
-            if (this._m_min_value <= _value && _value <= this._m_max_value) {
-                var dt_value = (_value - this._m_min_value) / this._m_delta_value;
-                this._resize_fill(dt_value);
-            }
-            return 0;
-        };
-        MxSlider.prototype.setFracValue = function (_value) {
-            if (0 <= _value && _value <= 1) {
-                this._resize_fill(_value);
-            }
-            return;
-        };
-        MxSlider.prototype.destroy = function () {
-            _super.prototype.destroy.call(this);
-            this._m_bck = null;
-            this._m_fill = null;
-            return;
-        };
-        /****************************************************/
-        /* Private                                          */
-        /****************************************************/
-        MxSlider.prototype._resize_fill = function (_value) {
-            this._m_fill.scaleX = _value * this._m_bck.scaleX;
-            this._m_norm_value = _value;
-            this._m_value
-                = this._m_min_value + (this._m_norm_value * this._m_delta_value);
-            this._m_text.text = this._m_value.toString();
-            return;
-        };
-        MxSlider.prototype._onDown_slider = function (_pointer) {
-            this._m_pointer = _pointer;
-            this._m_dragging = true;
-            this._onDrag(_pointer);
-            return;
-        };
-        MxSlider.prototype._onDrag = function (_pointer) {
-            var x = this._truncate(_pointer.x, this._m_bck.x, this._m_bck.x + this._m_size.x);
-            x -= this._m_bck.x;
-            x /= this._m_size.x;
-            this._resize_fill(x);
-            return;
-        };
-        MxSlider.prototype._truncate = function (_value, _min, _max) {
-            if (_value > _max) {
-                _value = _max;
-            }
-            else if (_value < _min) {
-                _value = _min;
-            }
-            return _value;
-        };
-        return MxSlider;
-    }(mxUI_1.MxUI));
-    exports.MxSlider = MxSlider;
-});
+            /****************************************************/
+            /* Public                                           */
+            /****************************************************/
+            /**
+             * Creates a new interactive Phaser.GameObject.Image.
+             *
+             * @param _scene The scene to create the Phaser image.
+             * @param _x Position in the x axis.
+             * @param _y Position in the y axis.
+             * @param _texture Name of the button texture.
+             * @param _frame Texture's frame used to draw the button. Default is 0.
+             * @param _callback Button's callback function.
+             * @param _callbackContext Buttons's callback context.
+             * @param _over_key Texture's frame when the pointer is over the button.
+             * Default is frame value.
+             * @param _out_color Texture's frame whe the pointer is out the button.
+             * Default is the frame value.
+             * @param _down_key Texture's frame when the pointer is down the button.
+             * Default is the frame value.
+             * @param _up_color Texture's frame when the pointer is up the button.
+             * Default is the frame value.
+             */
+            MxButtonTinted.Create = function (_scene, _x, _y, _texture, _frame, _callback, _callbackContext, _over_color, _out_color, _down_color, _up_color) {
+                var frame = 0;
+                if (frame !== undefined) {
+                    frame = _frame;
+                }
+                var button = new MxButtonTinted();
+                button._m_image = _scene.add.image(_x, _y, _texture, frame);
+                button._m_image.setInteractive();
+                if (_over_color !== undefined) {
+                    button._m_over_color = _over_color;
+                }
+                else {
+                    button._m_over_color = 0xffffff;
+                }
+                if (_down_color !== undefined) {
+                    button._m_down_color = _down_color;
+                }
+                else {
+                    button._m_down_color = 0xffffff;
+                }
+                if (_out_color !== undefined) {
+                    button._m_out_color = _out_color;
+                }
+                else {
+                    button._m_out_color = 0xffffff;
+                }
+                if (_up_color !== undefined) {
+                    button._m_up_color = _up_color;
+                }
+                else {
+                    button._m_up_color = 0xffffff;
+                }
+                // Callbacks
+                if (_callback !== undefined) {
+                    button._m_image.on('pointerdown', _callback, _callbackContext);
+                }
+                button._m_image.on('pointerover', button._onOver, button);
+                button._m_image.on('pointerout', button._onOut, button);
+                button._m_image.on('pointerdown', button._onDown, button);
+                button._m_image.on('pointerup', button._onUp, button);
+                button._m_image.setTint(button._m_out_color);
+                return button;
+            };
+            /**
+             * Get the phaser image.
+             */
+            MxButtonTinted.prototype.getImage = function () {
+                return this._m_image;
+            };
+            /**
+             * Destroys this Game Object removing it from the Display List and Update List
+             * and severing all ties to parent resources.
+             */
+            MxButtonTinted.prototype.destroy = function () {
+                this._m_image.destroy();
+                this._m_image = null;
+                return;
+            };
+            MxButtonTinted.prototype._onOver = function () {
+                this._m_image.setTint(this._m_over_color);
+                return;
+            };
+            MxButtonTinted.prototype._onOut = function () {
+                this._m_image.setTint(this._m_out_color);
+                return;
+            };
+            MxButtonTinted.prototype._onDown = function () {
+                this._m_image.setTint(this._m_down_color);
+                return;
+            };
+            MxButtonTinted.prototype._onUp = function () {
+                this._m_image.setTint(this._m_up_color);
+                return;
+            };
+            return MxButtonTinted;
+        }());
+        UI.MxButtonTinted = MxButtonTinted;
+    })(UI = MxTools.UI || (MxTools.UI = {}));
+})(MxTools || (MxTools = {}));
 //# sourceMappingURL=mxUtilities.js.map

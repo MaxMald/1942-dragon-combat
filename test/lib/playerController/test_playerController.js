@@ -198,6 +198,7 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
             input._m_v3 = new Phaser.Math.Vector3();
             input._m_player_speed = 200.0;
             input._m_movement_fn = input._mixedMovement;
+            input._m_mode = "MIXED";
             input._m_pointerDown = false;
             return input;
         };
@@ -209,21 +210,31 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
             _pointer.isDown;
             return;
         };
+        CmpHeroInput.prototype.getPointer = function () {
+            return this._m_pointer;
+        };
         CmpHeroInput.prototype.setMode = function (_mode) {
             switch (_mode) {
                 case "RELATIVE":
+                    this._m_mode = "RELATIVE";
                     this._m_movement_fn = this._relativeMovement;
                     break;
                 case "ABSOLUTE":
+                    this._m_mode = "ABSOLUTE";
                     this._m_movement_fn = this._absoluteMovement;
                     break;
                 case "MIXED":
+                    this._m_mode = "MIXED";
                     this._m_movement_fn = this._mixedMovement;
                     break;
                 default:
+                    this._m_mode = "MIXED";
                     this._m_movement_fn = this._mixedMovement;
                     break;
             }
+        };
+        CmpHeroInput.prototype.getMode = function () {
+            return this._m_mode;
         };
         CmpHeroInput.prototype.setSpeed = function (_speed) {
             this._m_player_speed = _speed;
@@ -231,10 +242,15 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
         CmpHeroInput.prototype.update = function (_actor) {
             var pointer = this._m_pointer;
             if (pointer.isDown) {
-                this._m_movement_fn.call(this, _actor);
                 if (!this._m_pointerDown) {
                     this._m_pointerDown = !this._m_pointerDown;
+                    pointer.prevPosition.x = pointer.position.x;
+                    pointer.prevPosition.y = pointer.position.y;
+                    this._m_movement_fn.call(this, _actor);
                     _actor.sendMessage(dcMessageID_1.DC_MESSAGE_ID.kPointerPressed, pointer);
+                }
+                else {
+                    this._m_movement_fn.call(this, _actor);
                 }
             }
             else {
@@ -615,10 +631,18 @@ define("game/src/ts_src/playerController/playerController", ["require", "exports
             input.setPointer(_pointer);
             return;
         };
+        PlayerController.prototype.getPointer = function () {
+            var input = this._m_player.getComponent(dcComponentID_4.DC_COMPONENT_ID.kHeroInput);
+            return input.getPointer();
+        };
         PlayerController.prototype.setInputMode = function (_mode) {
             var input = this._m_player.getComponent(dcComponentID_4.DC_COMPONENT_ID.kHeroInput);
             input.setMode(_mode);
             return;
+        };
+        PlayerController.prototype.getInputMode = function () {
+            var input = this._m_player.getComponent(dcComponentID_4.DC_COMPONENT_ID.kHeroInput);
+            return input.getMode();
         };
         PlayerController.prototype.setHeroSpeed = function (_speed) {
             var input = this._m_player.getComponent(dcComponentID_4.DC_COMPONENT_ID.kHeroInput);
@@ -668,6 +692,7 @@ define("test/playerController/src/ts_src/scenes/test", ["require", "exports", "g
             this.load.atlas("DragonFlight", "atlas/DragonFlight.png", "atlas/DragonFlight.js");
             this.load.animation("dragon_anim", "animations/DragonFlight.json");
             this.load.text('playerControllerConfig', 'configFiles/playerControllerConfig.json');
+            this.load.image('button', 'images/button.png');
             return;
         };
         Test.prototype.create = function () {
@@ -681,6 +706,13 @@ define("test/playerController/src/ts_src/scenes/test", ["require", "exports", "g
             this._m_pt_label = this.add.text(250, 1550, '', { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' });
             this._m_pt_label.setAlign('left');
             this._m_pt_label.setOrigin(0.0, 0.0);
+            this._m_inputMode = this.add.text(250, 1600, '', { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' });
+            this._m_pt_label.setAlign('left');
+            this._m_pt_label.setOrigin(0.0, 0.0);
+            var y = 1550;
+            this._createButton(950, y, 'Relative', this._onClick_relative, this);
+            this._createButton(950, y += 100, 'Absolute', this._onClick_absolute, this);
+            this._createButton(950, y += 100, 'Mixed', this._onClick_mixed, this);
             var pcConfig = JSON.parse(this.cache.text.get('playerControllerConfig'));
             var padding = 100;
             pcConfig.movement_rect_p1_x = padding;
@@ -696,7 +728,7 @@ define("test/playerController/src/ts_src/scenes/test", ["require", "exports", "g
         Test.prototype.update = function (_time, _delta) {
             this._m_heroController.update(_delta * 0.001);
             this.debugGraphics();
-            var pointer = this.input.activePointer;
+            var pointer = this._m_heroController.getPointer();
             pointer.prevPosition.x = pointer.position.x;
             pointer.prevPosition.y = pointer.position.y;
             return;
@@ -706,6 +738,8 @@ define("test/playerController/src/ts_src/scenes/test", ["require", "exports", "g
             this._m_graph_red.clear();
             this._m_graph_box.clear();
             this._m_graph_box.fillRectShape(this._m_rect_box);
+            this._m_inputMode.text =
+                "Mode: " + this._m_heroController.getInputMode();
             var pointer = this.input.activePointer;
             var v3 = new Phaser.Math.Vector3(pointer.position.x - pointer.prevPosition.x, pointer.position.y - pointer.prevPosition.y);
             v3.normalize();
@@ -722,6 +756,24 @@ define("test/playerController/src/ts_src/scenes/test", ["require", "exports", "g
         Test.prototype.debugDirection = function (_x, _y, _radius, _direction) {
             this._m_graph_green.strokeCircle(_x, _y, _radius);
             this._m_graph_red.strokeLineShape(new Phaser.Geom.Line(_x, _y, _x + _direction.x * _radius, _y + _direction.y * _radius));
+            return;
+        };
+        Test.prototype._createButton = function (_x, _y, _label, _fn, _context) {
+            MxTools.UI.MxButtonTinted.Create(this, _x, _y, 'button', 0, _fn, _context, 0xffffff, 0xb3b3b3, 0x000000, 0xffffff);
+            var text = this.add.text(_x - 20, _y - 20, _label, { fontFamily: 'Arial', fontSize: 30, color: '#000000' });
+            text.setAlign('center');
+            return;
+        };
+        Test.prototype._onClick_mixed = function () {
+            this._m_heroController.setInputMode("MIXED");
+            return;
+        };
+        Test.prototype._onClick_absolute = function () {
+            this._m_heroController.setInputMode("ABSOLUTE");
+            return;
+        };
+        Test.prototype._onClick_relative = function () {
+            this._m_heroController.setInputMode("RELATIVE");
             return;
         };
         return Test;
