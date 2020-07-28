@@ -724,6 +724,7 @@ define("test/playerController/src/ts_src/scenes/test", ["require", "exports", "g
             this._m_graph_green = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 }, fillStyle: { color: 0x00ff00 } });
             this._m_graph_red = this.add.graphics({ lineStyle: { width: 4, color: 0xff0000 }, fillStyle: { color: 0xff0000 } });
             this._m_rect_box = new Phaser.Geom.Rectangle(0, 1500, this._m_canvas_size.x, this._m_canvas_size.y - 1500);
+            this._m_pointer_debug = this.add.text(50, 1750, '', { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' });
             this._m_pt_label = this.add.text(250, 1550, '', { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' });
             this._m_pt_label.setAlign('left');
             this._m_pt_label.setOrigin(0.0, 0.0);
@@ -761,10 +762,14 @@ define("test/playerController/src/ts_src/scenes/test", ["require", "exports", "g
             this._m_graph_box.fillRectShape(this._m_rect_box);
             this._m_inputMode.text =
                 "Mode: " + this._m_heroController.getInputMode();
-            var pointer = this.input.activePointer;
+            var pointer = this._m_heroController.getPointer();
             var v3 = new Phaser.Math.Vector3(pointer.position.x - pointer.prevPosition.x, pointer.position.y - pointer.prevPosition.y);
             v3.normalize();
             this.debugDirection(this._m_rect_box.x + 120, this._m_rect_box.y + 120, 100, v3);
+            this._m_pointer_debug.text = "Pointer Data: \n"
+                + "\nPosition : ( " + pointer.position.x.toFixed(2) + " , " + pointer.position.y.toFixed(2) + " )"
+                + "\nWorld : ( " + pointer.worldX.toFixed(2) + " , " + pointer.worldY.toFixed(2) + " )"
+                + "\nPrevious : ( " + pointer.worldX.toFixed(2) + " , " + pointer.worldY.toFixed(2) + " )";
             var hero = this._m_heroController.getPlayer();
             var heroSpr = hero.getWrappedInstance();
             var v2 = this._m_heroController.getDirection();

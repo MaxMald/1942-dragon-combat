@@ -90,6 +90,16 @@ export class Test extends Phaser.Scene
       this._m_canvas_size.y - 1500
     );
 
+    // Pointer debug text
+
+    this._m_pointer_debug = this.add.text
+    (
+      50,
+      1750,
+      '',
+      { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' }
+    ); 
+
     // Shows the speed of the hero.
 
     this._m_pt_label = this.add.text
@@ -217,7 +227,7 @@ export class Test extends Phaser.Scene
 
     // Display the pointer direction.
 
-    let pointer : Phaser.Input.Pointer = this.input.activePointer;
+    let pointer : Phaser.Input.Pointer = this._m_heroController.getPointer();
 
     let v3 : Phaser.Math.Vector3 = new Phaser.Math.Vector3
     (
@@ -233,6 +243,13 @@ export class Test extends Phaser.Scene
       100,
       v3
     );
+
+    // Pointer
+
+    this._m_pointer_debug.text = "Pointer Data: \n"
+      + "\nPosition : ( " + pointer.position.x.toFixed(2) + " , " + pointer.position.y.toFixed(2) + " )"
+      + "\nWorld : ( " + pointer.worldX.toFixed(2) + " , " + pointer.worldY.toFixed(2) + " )"
+      + "\nPrevious : ( " + pointer.worldX.toFixed(2) + " , " + pointer.worldY.toFixed(2) + " )";
 
     // Display the hero's direction.
 
@@ -380,6 +397,8 @@ export class Test extends Phaser.Scene
   // Pointer Direction
 
   private _m_pt_label : Phaser.GameObjects.Text;
+
+  private _m_pointer_debug : Phaser.GameObjects.Text;
 
   private _m_canvas_size : Phaser.Geom.Point;
 
