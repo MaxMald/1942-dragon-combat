@@ -3,6 +3,7 @@ import { PlayerControllerConfig } from "../../../../../game/src/ts_src/playerCon
 import { NullState } from "../../../../../game/src/ts_src/states/nullState";
 import { BulletManager } from "../../../../../game/src/ts_src/bulletManager/bulletManager";
 import { BulletManagerConfig } from "../../../../../game/src/ts_src/bulletManager/bulletManagerConfig";
+import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
 
 export class Test extends Phaser.Scene
 {
@@ -108,6 +109,13 @@ export class Test extends Phaser.Scene
     ); 
 
     ///////////////////////////////////
+    // Game Manager
+
+    GameManager.Prepare();
+
+    let gameManager : GameManager = GameManager.GetInstance();
+
+    ///////////////////////////////////
     // Bullet Controller
 
     let bulletManager : BulletManager = BulletManager.Create();
@@ -118,6 +126,8 @@ export class Test extends Phaser.Scene
     bulletManager.init(this, bmConfig);
 
     this._m_bulletManager = bulletManager;
+
+    gameManager.setBulletManager(bulletManager);
     
     ///////////////////////////////////
     // Player Controller
@@ -140,6 +150,8 @@ export class Test extends Phaser.Scene
     heroController.init(this, undefined, pcConfig);     
 
     this._m_heroController = heroController;
+
+    gameManager.setPlayerController(heroController);
 
     return;
   }

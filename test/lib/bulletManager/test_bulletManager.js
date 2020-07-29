@@ -761,7 +761,55 @@ define("game/src/ts_src/bulletManager/bulletManager", ["require", "exports", "op
     }());
     exports.BulletManager = BulletManager;
 });
-define("test/bulletManager/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/playerController/playerController", "game/src/ts_src/states/nullState", "game/src/ts_src/bulletManager/bulletManager"], function (require, exports, playerController_1, nullState_2, bulletManager_1) {
+define("game/src/ts_src/gameManager/gameManager", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.GameManager = void 0;
+    var GameManager = (function () {
+        function GameManager() {
+        }
+        GameManager.Prepare = function () {
+            if (GameManager._INSTANCE == null) {
+                GameManager._INSTANCE = new GameManager();
+                GameManager._INSTANCE._onPrepare();
+            }
+            return;
+        };
+        GameManager.Shutdown = function () {
+            if (GameManager._INSTANCE != null) {
+                GameManager._INSTANCE._onShutdown();
+                GameManager._INSTANCE = null;
+            }
+            return;
+        };
+        GameManager.GetInstance = function () {
+            return GameManager._INSTANCE;
+        };
+        GameManager.prototype.setBulletManager = function (_bulletManager) {
+            this._m_bulletManager = _bulletManager;
+            return;
+        };
+        GameManager.prototype.getBulletManager = function () {
+            return this._m_bulletManager;
+        };
+        GameManager.prototype.setPlayerController = function (_playerController) {
+            this._m_playerController = _playerController;
+            return;
+        };
+        GameManager.prototype.getPlayerController = function () {
+            return this._m_playerController;
+        };
+        GameManager.prototype._onPrepare = function () {
+            return;
+        };
+        GameManager.prototype._onShutdown = function () {
+            return;
+        };
+        return GameManager;
+    }());
+    exports.GameManager = GameManager;
+});
+define("test/bulletManager/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/playerController/playerController", "game/src/ts_src/states/nullState", "game/src/ts_src/bulletManager/bulletManager", "game/src/ts_src/gameManager/gameManager"], function (require, exports, playerController_1, nullState_2, bulletManager_1, gameManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Test = void 0;
@@ -789,10 +837,13 @@ define("test/bulletManager/src/ts_src/scenes/test", ["require", "exports", "game
             this._m_graph_red = this.add.graphics({ lineStyle: { width: 4, color: 0xff0000 }, fillStyle: { color: 0xff0000 } });
             this._m_rect_box = new Phaser.Geom.Rectangle(0, 1500, this._m_canvas_size.x, this._m_canvas_size.y - 1500);
             this._m_pool_data = this.add.text(50, 1520, '', { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' });
+            gameManager_1.GameManager.Prepare();
+            var gameManager = gameManager_1.GameManager.GetInstance();
             var bulletManager = bulletManager_1.BulletManager.Create();
             var bmConfig = JSON.parse(this.cache.text.get('bulletManagerConfig'));
             bulletManager.init(this, bmConfig);
             this._m_bulletManager = bulletManager;
+            gameManager.setBulletManager(bulletManager);
             var pcConfig = JSON.parse(this.cache.text.get('playerControllerConfig'));
             var padding = 100;
             pcConfig.movement_rect_p1_x = padding;
@@ -802,6 +853,7 @@ define("test/bulletManager/src/ts_src/scenes/test", ["require", "exports", "game
             var heroController = new playerController_1.PlayerController();
             heroController.init(this, undefined, pcConfig);
             this._m_heroController = heroController;
+            gameManager.setPlayerController(heroController);
             return;
         };
         Test.prototype.update = function (_time, _delta) {
@@ -819,7 +871,7 @@ define("test/bulletManager/src/ts_src/scenes/test", ["require", "exports", "game
             this._m_graph_box.fillRectShape(this._m_rect_box);
             var pool = this._m_bulletManager.getPool();
             this._m_pool_data.text
-                = "Pool : \n"
+                = "** POOL **\n"
                     + "\nSize : " + pool.getSize().toString()
                     + "\nActive : " + pool.getActiveSize().toString()
                     + "\nDesactive : " + pool.getDesactiveSize().toString();
