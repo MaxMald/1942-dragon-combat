@@ -1,0 +1,34 @@
+{
+  "extends": "../../tsconfig-base.json",  
+  
+  "compilerOptions":
+  {       
+    "outDir": "../lib/bulletManager",
+    "rootDir": "../../",
+    "outFile": "../lib/bulletManager/test_bulletManager.js"  
+  },
+
+  "files" : [
+    "../../externals/ts_definitions/phaser.d.ts",
+    "../../externals/ts_definitions/matter.d.ts",
+    "../../externals/ts_definitions/nineslice.d.ts",
+    "../../externals/ts_definitions/spine-webgl.d.ts",
+    "../../externals/mxUtilities/mxUtilities.d.ts"
+  ],
+
+  "include": [
+    "./src/ts_src/**/*",    
+    "../../game/src/ts_src/playerController/**/*",
+    "../../game/src/ts_src/components/**/*",
+    "../../game/src/ts_src/actors/**/*",
+    "../../game/src/ts_src/message/**/*",
+    "../../game/src/ts_src/states/**/*",
+    "../../game/src/ts_src/bulletManager/**/*",
+    "../../externals/mxUtilities/*"
+  ],
+
+  "exclude": 
+  [
+
+  ]
+}

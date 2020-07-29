@@ -1,14 +1,11 @@
-export class Boot extends Phaser.Scene
+export class BulletManagerConfig 
 {
   /****************************************************/
   /* Public                                           */
   /****************************************************/
   
-  create()
-  : void
-  { 
-    // next scene
-    this.scene.start('preloader');
-    return;
-  }
+  /**
+   * Number of bullets.
+   */
+  size : number;
 }

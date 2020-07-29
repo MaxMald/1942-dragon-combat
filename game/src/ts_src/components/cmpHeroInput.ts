@@ -101,6 +101,9 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
     }
   }
 
+  /**
+   * 
+   */
   getMode()
   : string
   {
@@ -186,13 +189,6 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
   /****************************************************/
   /* Private                                          */
   /****************************************************/
-
-  private _pointerUp()
-  : void
-  {
-    console.log("pointer up");
-    return;
-  }
 
   /**
    * Moves the hero to the pointer position in the world.
