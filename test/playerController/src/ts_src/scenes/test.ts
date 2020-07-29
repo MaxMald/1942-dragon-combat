@@ -246,10 +246,20 @@ export class Test extends Phaser.Scene
 
     // Pointer
 
+    let dragX : number = 0.0; 
+    let dragY : number = 0.0;
+    
+    if(pointer.isDown)
+    {
+      dragX = pointer.position.x - pointer.downX;
+      dragY = pointer.position.y - pointer.downY;
+    }   
+
     this._m_pointer_debug.text = "Pointer Data: \n"
       + "\nPosition : ( " + pointer.position.x.toFixed(2) + " , " + pointer.position.y.toFixed(2) + " )"
       + "\nWorld : ( " + pointer.worldX.toFixed(2) + " , " + pointer.worldY.toFixed(2) + " )"
-      + "\nPrevious : ( " + pointer.worldX.toFixed(2) + " , " + pointer.worldY.toFixed(2) + " )";
+      + "\nPrevious : ( " + pointer.worldX.toFixed(2) + " , " + pointer.worldY.toFixed(2) + " )"
+      + "\nDrag : ( " + dragX.toFixed(2) + " , " + dragY.toFixed(2) + " )";
 
     // Display the hero's direction.
 

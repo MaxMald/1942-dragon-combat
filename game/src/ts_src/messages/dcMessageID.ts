@@ -37,5 +37,14 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : Phaser.Input.Pointer
    */
-  kPointerPressed : 504 as 504
+  kPointerPressed : 504 as 504,
+
+  /**
+   * X is treated as kToPosition.
+   * 
+   * Y is treated as kAgentMove.
+   * 
+   * msg: Phaser.Math.Vector3.
+   */
+  kMixedMovement : 505 as 505
 });

@@ -125,6 +125,26 @@ export class CmpMovement implements IBaseComponent<Phaser.Physics.Arcade.Sprite>
 
         return;
 
+      case DC_MESSAGE_ID.kToPosition: // Agent moves to the pointer position.
+
+        {
+          let positon = _obj as Phaser.Math.Vector3;
+          
+          this.setPosition(positon.x, positon.y);
+        }
+        
+        return;
+
+      case DC_MESSAGE_ID.kMixedMovement: // Agent moves to the pointer position.
+
+        {
+          let positon = _obj as Phaser.Math.Vector3;
+          
+          this.setPosition(this._m_sprite.x + positon.x, positon.y);
+        }
+        
+        return;
+
       default: // Do nothing LOL.
         return;
     }

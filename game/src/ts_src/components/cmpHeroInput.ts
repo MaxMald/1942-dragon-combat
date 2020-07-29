@@ -32,6 +32,7 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
 
     input.m_id = DC_COMPONENT_ID.kHeroInput;    
     input._m_v3 = new Phaser.Math.Vector3();
+    input._m_downPosition = new Phaser.Geom.Point();
     
     input._m_player_speed = 200.0;
 
@@ -134,6 +135,11 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
       {
         this._m_pointerDown = !this._m_pointerDown;
 
+        let sprite = _actor.getWrappedInstance();
+
+        this._m_downPosition.x = sprite.x;
+        this._m_downPosition.y = sprite.y;
+
         pointer.prevPosition.x = pointer.position.x;
         pointer.prevPosition.y = pointer.position.y;
 
@@ -225,10 +231,10 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
   {
     let pointer : Phaser.Input.Pointer = this._m_pointer;   
     
-    this._m_v3.x = pointer.position.x - pointer.prevPosition.x;
-    this._m_v3.y = pointer.position.y - pointer.prevPosition.y;    
-
-    _actor.sendMessage(DC_MESSAGE_ID.kAgentMove,this._m_v3);
+    this._m_v3.x = this._m_downPosition.x + (pointer.position.x - pointer.downX);
+    this._m_v3.y = this._m_downPosition.y + (pointer.position.y - pointer.downY); 
+    
+    _actor.sendMessage(DC_MESSAGE_ID.kToPosition, this._m_v3);
 
     return;
   }
@@ -252,11 +258,11 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
       this._m_v3.x = this._m_player_speed;
     }
 
-    this._m_v3.y = pointer.position.y - pointer.prevPosition.y;   
+    this._m_v3.y = this._m_downPosition.y + (pointer.position.y - pointer.downY);   
 
     _actor.sendMessage
     (
-      DC_MESSAGE_ID.kAgentMove,
+      DC_MESSAGE_ID.kMixedMovement,
       this._m_v3
     );
 
@@ -287,6 +293,11 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
    * Indicates if the pointer is down.
    */
   private _m_pointerDown : boolean;
+
+  /**
+   * The position when the pointer had just been pressed.
+   */
+  private _m_downPosition : Phaser.Geom.Point;
 
   /**
    * Input mode.

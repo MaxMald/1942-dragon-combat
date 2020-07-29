@@ -172,7 +172,8 @@ define("game/src/ts_src/messages/dcMessageID", ["require", "exports"], function 
         kPointerMoved: 501,
         kToPosition: 502,
         kPointerReleased: 503,
-        kPointerPressed: 504
+        kPointerPressed: 504,
+        kMixedMovement: 505
     });
 });
 define("game/src/ts_src/components/dcComponentID", ["require", "exports"], function (require, exports) {
@@ -196,6 +197,7 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
             var input = new CmpHeroInput();
             input.m_id = dcComponentID_1.DC_COMPONENT_ID.kHeroInput;
             input._m_v3 = new Phaser.Math.Vector3();
+            input._m_downPosition = new Phaser.Geom.Point();
             input._m_player_speed = 200.0;
             input._m_movement_fn = input._mixedMovement;
             input._m_mode = "MIXED";
@@ -244,6 +246,9 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
             if (pointer.isDown) {
                 if (!this._m_pointerDown) {
                     this._m_pointerDown = !this._m_pointerDown;
+                    var sprite = _actor.getWrappedInstance();
+                    this._m_downPosition.x = sprite.x;
+                    this._m_downPosition.y = sprite.y;
                     pointer.prevPosition.x = pointer.position.x;
                     pointer.prevPosition.y = pointer.position.y;
                     this._m_movement_fn.call(this, _actor);
@@ -288,9 +293,9 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
         };
         CmpHeroInput.prototype._relativeMovement = function (_actor) {
             var pointer = this._m_pointer;
-            this._m_v3.x = pointer.position.x - pointer.prevPosition.x;
-            this._m_v3.y = pointer.position.y - pointer.prevPosition.y;
-            _actor.sendMessage(dcMessageID_1.DC_MESSAGE_ID.kAgentMove, this._m_v3);
+            this._m_v3.x = this._m_downPosition.x + (pointer.position.x - pointer.downX);
+            this._m_v3.y = this._m_downPosition.y + (pointer.position.y - pointer.downY);
+            _actor.sendMessage(dcMessageID_1.DC_MESSAGE_ID.kToPosition, this._m_v3);
             return;
         };
         CmpHeroInput.prototype._mixedMovement = function (_actor) {
@@ -301,8 +306,8 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
             if (this._m_v3.x > this._m_player_speed) {
                 this._m_v3.x = this._m_player_speed;
             }
-            this._m_v3.y = pointer.position.y - pointer.prevPosition.y;
-            _actor.sendMessage(dcMessageID_1.DC_MESSAGE_ID.kAgentMove, this._m_v3);
+            this._m_v3.y = this._m_downPosition.y + (pointer.position.y - pointer.downY);
+            _actor.sendMessage(dcMessageID_1.DC_MESSAGE_ID.kMixedMovement, this._m_v3);
             return;
         };
         return CmpHeroInput;
@@ -358,6 +363,18 @@ define("game/src/ts_src/components/cmpMovement", ["require", "exports", "game/sr
                         var movement = _obj;
                         var sprite = this._m_sprite;
                         this.setPosition(sprite.x + movement.x, sprite.y + movement.y);
+                    }
+                    return;
+                case dcMessageID_2.DC_MESSAGE_ID.kToPosition:
+                    {
+                        var positon = _obj;
+                        this.setPosition(positon.x, positon.y);
+                    }
+                    return;
+                case dcMessageID_2.DC_MESSAGE_ID.kMixedMovement:
+                    {
+                        var positon = _obj;
+                        this.setPosition(this._m_sprite.x + positon.x, positon.y);
                     }
                     return;
                 default:
@@ -766,10 +783,17 @@ define("test/playerController/src/ts_src/scenes/test", ["require", "exports", "g
             var v3 = new Phaser.Math.Vector3(pointer.position.x - pointer.prevPosition.x, pointer.position.y - pointer.prevPosition.y);
             v3.normalize();
             this.debugDirection(this._m_rect_box.x + 120, this._m_rect_box.y + 120, 100, v3);
+            var dragX = 0.0;
+            var dragY = 0.0;
+            if (pointer.isDown) {
+                dragX = pointer.position.x - pointer.downX;
+                dragY = pointer.position.y - pointer.downY;
+            }
             this._m_pointer_debug.text = "Pointer Data: \n"
                 + "\nPosition : ( " + pointer.position.x.toFixed(2) + " , " + pointer.position.y.toFixed(2) + " )"
                 + "\nWorld : ( " + pointer.worldX.toFixed(2) + " , " + pointer.worldY.toFixed(2) + " )"
-                + "\nPrevious : ( " + pointer.worldX.toFixed(2) + " , " + pointer.worldY.toFixed(2) + " )";
+                + "\nPrevious : ( " + pointer.worldX.toFixed(2) + " , " + pointer.worldY.toFixed(2) + " )"
+                + "\nDrag : ( " + dragX.toFixed(2) + " , " + dragY.toFixed(2) + " )";
             var hero = this._m_heroController.getPlayer();
             var heroSpr = hero.getWrappedInstance();
             var v2 = this._m_heroController.getDirection();
