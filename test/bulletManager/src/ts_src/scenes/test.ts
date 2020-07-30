@@ -4,6 +4,10 @@ import { NullState } from "../../../../../game/src/ts_src/states/nullState";
 import { BulletManager } from "../../../../../game/src/ts_src/bulletManager/bulletManager";
 import { BulletManagerConfig } from "../../../../../game/src/ts_src/bulletManager/bulletManagerConfig";
 import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
+import { CmpHeroBulletController } from "../../../../../game/src/ts_src/components/cmpHeroBulletController";
+import { CmpMovementBullet } from "../../../../../game/src/ts_src/components/cmpMovementBullet";
+import { DC_COMPONENT_ID } from "../../../../../game/src/ts_src/components/dcComponentID";
+import { BaseActor } from "../../../../../game/src/ts_src/actors/baseActor";
 
 export class Test extends Phaser.Scene
 {
@@ -108,6 +112,14 @@ export class Test extends Phaser.Scene
       { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' }
     ); 
 
+    this._m_heroBulletCntrl_data = this.add.text
+    (
+      300,
+      1520,
+      '',
+      { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' }
+    ); 
+
     ///////////////////////////////////
     // Game Manager
 
@@ -158,10 +170,14 @@ export class Test extends Phaser.Scene
 
   update(_time : number, _delta : number)
   : void
-  {    
+  {  
+    let dt : number = _delta * 0.001;
+    
+    GameManager.GetInstance().update(dt);
+
     // Updates the hero controller.
 
-    this._m_heroController.update(_delta * 0.001);
+    this._m_heroController.update(dt);
 
     // Only for debugging purposes.
 
@@ -192,13 +208,26 @@ export class Test extends Phaser.Scene
 
     // Debug Pool Data:
 
+    let bulletManager : BulletManager = this._m_bulletManager;
     let pool = this._m_bulletManager.getPool();
 
+
     this._m_pool_data.text 
-      = "** POOL **\n"
+      = "-- Hero Bullet Mng --\n"
+      + "\n Bullet speed : " + bulletManager.getBulletSpeed() + " px./s.\n"
+      + "\n** Pool **\n"
       + "\nSize : " + pool.getSize().toString()
       + "\nActive : " + pool.getActiveSize().toString()
       + "\nDesactive : " + pool.getDesactiveSize().toString();
+
+    let hero = this._m_heroController.getPlayer(); 
+
+    let heroBulletCntrl : CmpHeroBulletController 
+      = hero.getComponent<CmpHeroBulletController>(DC_COMPONENT_ID.kHeroBulletController);
+
+    this._m_heroBulletCntrl_data.text
+      = "-- Hero Bullet Controller --\n"
+      + "\n Fire rate : " + (1.0 / heroBulletCntrl.getFireRate()).toString() + " bullets/s."; 
     
     return;    
   }
@@ -304,4 +333,6 @@ export class Test extends Phaser.Scene
   // POOL
 
   private _m_pool_data : Phaser.GameObjects.Text;
+
+  private _m_heroBulletCntrl_data : Phaser.GameObjects.Text;
 }

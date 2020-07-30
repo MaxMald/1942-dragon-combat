@@ -40,12 +40,7 @@ class GameInit
         global: [ Plugin.DefaultCfg ],
       },   
       backgroundColor: 0x6ab4d4        
-    }
-
-    ///////////////////////////////////
-    // Init MxTools
-
-    MxUtilities.Prepare();
+    }   
 
     ///////////////////////////////////
     // Init Game

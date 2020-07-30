@@ -11,15 +11,17 @@
 import { MxObjectPool } from "optimization/mxObjectPool";
 import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
-import { CmpMovement } from "../components/cmpMovement";
+import { CmpMovementBullet } from "../components/cmpMovementBullet";
+import { DC_MESSAGE_ID } from "../messages/dcMessageID";
 import { BulletManagerConfig } from "./bulletManagerConfig";
+import { IBulletManager } from "./iBulletManager";
 
 type Bullet = BaseActor<Phaser.Physics.Arcade.Sprite>;
 
 /**
  * 
  */
-export class BulletManager
+export class BulletManager implements IBulletManager
 {
   /****************************************************/
   /* Public                                           */
@@ -53,6 +55,14 @@ export class BulletManager
     
     bulletMng._m_pool = pool;
 
+    bulletMng._m_v3 = new Phaser.Math.Vector3();
+
+    bulletMng._m_playZone_p1 = new Phaser.Geom.Point();
+    bulletMng._m_playZone_p2 = new Phaser.Geom.Point();
+
+    bulletMng._m_dt = 0.0;
+    bulletMng._m_bulletSpeed = 50.0;
+
     return bulletMng;
   }
 
@@ -61,8 +71,13 @@ export class BulletManager
    * 
    * @param _scene Scene where the bullets are going to be build.
    * @param _config Configuration file.
+   * be desactivated.
    */
-  init(_scene : Phaser.Scene, _config : BulletManagerConfig)
+  init
+  (
+    _scene : Phaser.Scene, 
+    _config : BulletManagerConfig
+  )
   : void
   {
     let size = _config.size;
@@ -86,7 +101,9 @@ export class BulletManager
 
       bullet = BaseActor.Create(sprite, "Bullet_" + size.toString());
 
-      bullet.addComponent(new CmpMovement());
+      bullet.addComponent(CmpMovementBullet.Create());
+
+      bullet.init();
 
       a_bullets.push(bullet);
 
@@ -94,7 +111,51 @@ export class BulletManager
     }
 
     this._m_pool.init(a_bullets);
+
+    // Define the playzone area.
+
+    this._m_playZone_p1.setTo
+    (
+      -_config.playZone_padding, 
+      -_config.playZone_padding
+    );
+
+    this._m_playZone_p2.setTo
+    (
+      _scene.game.canvas.width + _config.playZone_padding,
+      _scene.game.canvas.height + _config.playZone_padding
+    ); 
+
+    this._m_bulletSpeed = _config.speed;
+
     return;
+  }
+
+  /**
+   * Update each active bullet.
+   */
+  update(_dt : number)
+  : void 
+  {    
+    this._m_dt = _dt;
+    this._m_v3.y = -_dt * this._m_bulletSpeed;
+
+    this._m_pool.forEachActive
+    (
+      this._updateBullet,
+      this
+    );
+
+    return;
+  }
+
+  /**
+   * Get the speed of the bullets in pixels per second.
+   */
+  getBulletSpeed()
+  : number
+  {
+    return this._m_bulletSpeed;
   }
 
   /**
@@ -170,6 +231,26 @@ export class BulletManager
   { }
 
   /**
+   * Called at every game loop.
+   * 
+   * @param _bullet Bullet.
+   */
+  private _updateBullet(_bullet : Bullet)
+  : void
+  {
+    _bullet.sendMessage(DC_MESSAGE_ID.kAgentMove, this._m_v3);
+
+    let sprite = _bullet.getWrappedInstance();
+    
+    if(!this._isPlayzone(sprite.x, sprite.y))
+    {
+      this._m_pool.desactive(_bullet);
+    }
+
+    return;
+  }
+
+  /**
    * Called by the pool when an element had been activated.
    * 
    * @param _pool Pool.
@@ -215,8 +296,42 @@ export class BulletManager
     return;
   }
 
+  private _isPlayzone(_x : number, _y : number)
+  : boolean
+  {
+    let p1 : Phaser.Geom.Point = this._m_playZone_p1;
+    let p2 : Phaser.Geom.Point = this._m_playZone_p2;
+
+    return (_y > p1.y && _y < p2.y);
+  }
+
   /**
    * Object pool of Phaser Sprites (bullets).
    */
   private _m_pool : MxObjectPool<Bullet>;
+
+  /**
+   * Delta time.
+   */
+  private _m_dt : number;
+
+  /**
+   * Vector 3.
+   */
+  private _m_v3 : Phaser.Math.Vector3;
+
+  /**
+   * Playzone limits point 1.
+   */
+  private _m_playZone_p1 : Phaser.Geom.Point;
+
+  /**
+   * Playzone limits point 2.
+   */
+  private _m_playZone_p2 : Phaser.Geom.Point;
+
+  /**
+   * Speed of the bullets in pixels per second.
+   */
+  private _m_bulletSpeed : number;
 }

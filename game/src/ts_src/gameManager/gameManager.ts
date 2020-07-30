@@ -8,7 +8,8 @@
  * @since July-29-2020
  */
 
-import { BulletManager } from "../bulletManager/bulletManager";
+import { IBulletManager } from "../bulletManager/iBulletManager";
+import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { PlayerController } from "../playerController/playerController";
 
 export class GameManager
@@ -23,7 +24,8 @@ export class GameManager
   static Prepare()
   : void
   {
-    if(GameManager._INSTANCE == null) {
+    if(GameManager._INSTANCE == null) 
+    {
       GameManager._INSTANCE = new GameManager();
       GameManager._INSTANCE._onPrepare();
     }
@@ -36,7 +38,8 @@ export class GameManager
   static Shutdown()
   : void
   {
-    if(GameManager._INSTANCE != null) {
+    if(GameManager._INSTANCE != null) 
+    {
       GameManager._INSTANCE._onShutdown();
       GameManager._INSTANCE = null;
     }
@@ -52,14 +55,29 @@ export class GameManager
     return GameManager._INSTANCE;
   }
 
+  update(_dt : number)
+  : void
+  {
+    this.m_dt = _dt;
+    
+    this._m_bulletManager.update(_dt);
+    return;
+  }
+
   /**
-   * Set the reference to the BulletManager.
+   * Set the reference to the BulletManager. If a BulletManager exists it will 
+   * be destroyed.
    * 
    * @param _bulletManager BulletManager. 
    */
-  setBulletManager(_bulletManager : BulletManager)
+  setBulletManager(_bulletManager : IBulletManager)
   : void
   {
+    if(this._m_bulletManager != null) 
+    {
+      this._m_bulletManager.destroy();
+    }
+
     this._m_bulletManager = _bulletManager;
     return;
   }
@@ -70,7 +88,7 @@ export class GameManager
    * @returns Reference to the BulletManager.
    */
   getBulletManager()
-  : BulletManager
+  : IBulletManager
   {
     return this._m_bulletManager;
   }
@@ -98,6 +116,11 @@ export class GameManager
     return this._m_playerController;
   }
 
+  /**
+   * Delta time.
+   */
+  m_dt : number;
+
   /****************************************************/
   /* Private                                          */
   /****************************************************/
@@ -108,6 +131,9 @@ export class GameManager
   private _onPrepare()
   : void
   {
+    this.m_dt = 0.0;
+
+    this._m_bulletManager = new NullBulletManager();
     return;
   }
 
@@ -117,6 +143,10 @@ export class GameManager
   private _onShutdown()
   : void
   {
+    if(this._m_bulletManager != null)
+    {
+      this._m_bulletManager.destroy();
+    }    
     return;
   }
 
@@ -134,7 +164,7 @@ export class GameManager
   /**
    * Reference to the BulletManager.
    */
-  private _m_bulletManager : BulletManager;
+  private _m_bulletManager : IBulletManager;
 
   /**
    * Reference to the PlayerController.

@@ -1,3 +1,4 @@
+import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
 import { PlayerController } from "../../../../../game/src/ts_src/playerController/playerController";
 import { PlayerControllerConfig } from "../../../../../game/src/ts_src/playerController/playerControllerConfig";
 import { NullState } from "../../../../../game/src/ts_src/states/nullState";
@@ -154,6 +155,13 @@ export class Test extends Phaser.Scene
       this._onClick_mixed,
       this
     );
+
+    ///////////////////////////////////
+    // Game Manager
+
+    GameManager.Prepare();
+
+    let gameManager : GameManager = GameManager.GetInstance();
 
     ///////////////////////////////////
     // Player Controller
