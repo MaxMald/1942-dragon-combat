@@ -15,7 +15,17 @@ export const DC_COMPONENT_ID = Object.freeze
   kHeroInput : 1 as 1,
 
   /**
-   * CmpAnimation
+   * CmpAnimation.
    */
-  kAnimation : 2 as 2
+  kAnimation : 2 as 2,
+
+  /**
+   * CmpHeroBulletController.
+   */
+  kHeroBulletController : 3 as 3,
+
+  /**
+   * CmpMovementBullet.
+   */
+  kMovementBullet : 4 as 4
 });

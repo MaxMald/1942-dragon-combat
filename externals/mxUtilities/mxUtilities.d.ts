@@ -354,352 +354,6 @@ declare module "commons/mxEnums" {
         kDynamic: 1;
     }>;
 }
-declare module "listeners/mxListener" {
-    /**
-     * This class contains a Function and may have an object as the Function's context.
-     * The "S" type can be defined as the type of the sender object (who calls this Listener),
-     * and the "A" type can be defined as the type of the object who has the arguments.
-     */
-    export class MxListener<S, A> {
-        /****************************************************/
-        /****************************************************/
-        /**
-         * The MxListener needs a Function, and may have a context.
-         *
-         * @param _listener
-         * @param _context
-         */
-        constructor(_listener: (_sender: S, _args: A) => void, _context?: any);
-        /**
-         * Calls the Function of this MxListener.
-         *
-         * @param _sender Sender object. The object who calls this listener.
-         * @param _args Agument object.
-         */
-        call(_sender: S, _args: A): void;
-        /**
-         * Safely destroys this MxListener.
-         */
-        destroy(): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * The function of this MxListener.
-         */
-        private m_listener;
-        /**
-         * The context of the Function of this MxListener.
-         */
-        private m_context;
-    }
-}
-declare module "listeners/mxListenerGroup" {
-    import { MxListener } from "listeners/mxListener";
-    /**
-     * This class has a Map of MxListeners, identified by a string key, also called
-     * the username. The username helps the MxListenerGroup to indentify and destroy
-     * a MxListener with the unsuscribe(string) method.
-     */
-    export class MxListenerGroup<S, A> {
-        /****************************************************/
-        /****************************************************/
-        constructor();
-        call(_sender: S, _args: A): void;
-        /**
-         * Adds a new listener to this MxListenerGroup. If a MxListener already exists
-         * with the given username, it will be overrided.
-         *
-         * @param _username an identifier of the given MxListener.
-         * @param _listener the MxListener to be added.
-         */
-        suscribe(_username: string, _listener: MxListener<S, A>): void;
-        /**
-         * Destroys the MxListener with the given username, and removes it from this
-         * MxListenerGroup.
-         *
-         * @param _username the identifier of the MxListener.
-         */
-        unsuscribe(_username: string): void;
-        /**
-         * Removes all the MxListeners attached to this MxListenerGroup. This methods
-         * calls the destroy method of each MxListener before remove them.
-         */
-        clear(): void;
-        /**
-         * Calls the destroy method of each MxListener in this MxListenerGroup.
-         */
-        destroy(): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Map of funtions that belongs to this group. The first types "string" is
-         * the key to identify its MxListener, also called as the "username".
-         */
-        private _m_listenersMap;
-    }
-}
-declare module "listeners/mxListenerManager" {
-    import { MxListener } from "listeners/mxListener";
-    /**
-     * This class manage a group of MxListenerGroup, or "events". By this object
-     * an MxListener can suscribe or unsuscribe to an event.
-     */
-    export class MxListenerManager<S, A> {
-        /****************************************************/
-        /****************************************************/
-        constructor();
-        /**
-         * Adds a new event (MxListenerGroup) to this MxListnerManager. If an event
-         * with the same key exists, it will be destroyed and replaced.
-         *
-         * @param _event the event key.
-         */
-        addEvent(_event: string): void;
-        /**
-         * Call the MxListener attached to an event.
-         *
-         * @param _event The key of the event to be called.
-         * @param _sender The sender object of this event.
-         * @param _args The arguments obejct of this event.
-         */
-        call(_event: string, _sender: S, _args: A): void;
-        /**
-         * Suscribe a new MxListener to the given event. This method also needs the
-         * username to identify the MxListener. If a MxListener already exists in the
-         * event, that MxListener will be replaced.
-         *
-         * @param _event The string key of the event to add the given MxListener.
-         * @param _username the string key to the identify the given MxListener.
-         * @param _listener the MxListener that will be added to the event.
-         */
-        suscribe(_event: string, _username: string, _listener: MxListener<S, A>): void;
-        /**
-         * Destroys the MxListener with the given username and removes it from the
-         * event.
-         *
-         * @param _event the string key of the event.
-         * @param _username the string key of the MxListener that will be removed.
-         */
-        unsuscribe(_event: string, _username: string): void;
-        /**
-         * Removes all the MxListeners from an event. This method call the clear method
-         * of the MxListenerGroup indentified by the event name.
-         *
-         * @param _event The string identifier of the MxListenerGroup.
-         */
-        clearEvent(_event: string): void;
-        /**
-         * Calls the destroy method of each MxListenerGroup and removes them from this
-         * MxListenerManager. This MxListenerManager will be empty.
-         */
-        clear(): void;
-        /**
-        * Calls the destroy method of each MxListenerGroup and removes them from this
-        * MxListenerManager.
-        */
-        destroy(): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * A map of MxListeners, also called as "events". The key (string) is used to
-         * identify the event.
-        */
-        private _m_eventsMap;
-    }
-}
-declare module "optimization/mxPoolArgs" {
-    /**
-     * This class contains the arguments delivered when an event of a MxObjecPool
-     * is triggered.
-     */
-    export class mxPoolArgs<T> {
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Reference to the element just been modified.
-         */
-        element: T;
-    }
-}
-declare module "optimization/mxObjectPool" {
-    import { OBJECT_POOL_TYPE, OPRESULT } from "commons/mxEnums";
-    import { mxPoolArgs } from "optimization/mxPoolArgs";
-    export interface IObjectPool {
-        m_mx_active: boolean;
-        mxActive(): void;
-        mxDesactive(): void;
-        destroy(): void;
-    }
-    /**
-     * Creational design pattern that uses a set of initalized objects kept ready
-     * to use rather than allocating and destroying them on demand.
-     */
-    export class MxObjectPool<T extends IObjectPool> {
-        /****************************************************/
-        /****************************************************/
-        /**
-         * A dynamic MxObjectPool creates elements on the fly. This means that this pool
-         * will create a new element if it doesnt't has any avaliable. This pool grows
-         * according to the use that is given. The maximum number of elements define
-         * the limit that this MxObjectPool can grow.
-         *
-         * @param _max Maximum number of elements that this MxObjectPool can store.
-         * @param _create_fn Fuction used to create a new element, this should return an element.
-         */
-        static CreateDynamic<U extends IObjectPool>(_max: number, _create_fn: (_obj_pool: MxObjectPool<U>) => U, _context?: any): MxObjectPool<U>;
-        /**
-         * Creates an MxObjectPool that already has the elements needed.
-         * The user need to give an array of elements. Use the the init fn to set
-         * the element's MxObjectPool, if it is needed.
-         *
-         * @param _a_elements Array of elements that belong to thes MxObjectPool.
-         * @param _init_fn This function to initalize the element.
-         * @param _context The init fucntion context.
-         */
-        static CreateStatic<U extends IObjectPool>(_a_elements: Array<U>, _init_fn?: (_obj: U, _obj_pool: MxObjectPool<U>) => void, _context?: any): MxObjectPool<U>;
-        /**
-         *
-         * @param _fn
-         * @param _context
-         */
-        forEach(_fn: (_element: T) => void, _context?: any): void;
-        /**
-         *
-         * @param _fn
-         * @param _context
-         */
-        forEachActive(_fn: (_element: T) => void, _context?: any): void;
-        /**
-         *
-         * @param _fn
-         * @param _context
-         */
-        forEachDesactive(_fn: (_element: T) => void, _context?: any): void;
-        /**
-         * Events:
-         *
-         * I) elementActive : trigger when an element had just been actived.
-         *
-         * II) elementDesactive : trigger when an element had just been desactived.
-         *
-         * @param _event
-         * @param _username
-         * @param _fn
-         * @param _context
-         */
-        suscribe(_event: string, _username: string, _fn: (_sender: MxObjectPool<T>, _args: mxPoolArgs<T>) => void, _context?: any): void;
-        /**
-         *
-         * @param _event
-         * @param _username
-         */
-        unsuscribe(_event: string, _username: string): void;
-        /**
-         * Get an available element from this MxObjectPool. Be careful, if this MxObjectPool
-         * doesn't has any availble element and is full, this method will returns a null type object.
-         *
-         * @retuns An available element of this MxObjectPool. If the MxObjectPool doesn't
-         * has any available element and is full, it will returns a null type object.
-         */
-        get(): T;
-        /**
-         * Desactive the given element. This method call the mxDesactive() method of
-         * the given element, and set the m_mx_active property to false. The
-         * "elementDesactive" event will be triggered.
-         *
-         * @param _element The element to desactive.
-         *
-         * @returns OPRESULT.kObject_not_found when the element doesn't was found in
-         * this MxObjectPool, otherwise returns an OPRESULT.kOk.
-         */
-        desactive(_element: T): OPRESULT;
-        /**
-         * Creates elements until reaching the maximum number of elements allowed.
-         */
-        fill(): void;
-        /**
-         * Check if this MxObjectPool has any element available.
-         *
-         * @returns True if there are at least one element available.
-         */
-        hasDesactive(): boolean;
-        /**
-         * Check if this MxObjectPool has reached the maximum number of elements
-         * allowed.
-         *
-         * @returns True if the MxObjectPool has reached the maximum number or elements.
-         */
-        isFull(): boolean;
-        /**
-         * Get the number of elements of this MxObjectPool.
-         *
-         * @returns The number of elements in this MxObjectPool.
-         */
-        getSize(): number;
-        /**
-         * Ge the maximum number of elements allowed to this MxObjectPool.
-         *
-         * @retunrs The Maximum number o elements allowed to this MxObjectPool.
-         */
-        getMaxSize(): number;
-        /**
-         * Get the type of pool of this MxObjectPool.
-         *
-         * @returns The type of MxObjectPool.
-         */
-        getType(): OBJECT_POOL_TYPE;
-        /**
-        * Safely destroys the object. Calls the destroy method of each element in this
-        * MxObjectPool (active and desactive). Finally this will destroy the
-        * MxListenerManager.
-        */
-        destroy(): void;
-        /****************************************************/
-        /****************************************************/
-        private _active;
-        /**
-         * Creates a new element for this MxObjectPool, this also increment the
-         * size of this MxObjectPool.
-         */
-        private _create_element;
-        /**
-         * ID that identify the type of MxObjectPool.
-         */
-        private _m_type;
-        /**
-         * Number of elements that this MxObjectPool contains.
-         */
-        private _m_size;
-        /**
-         * Maximum number of elements allowed to this MxObjectPool.
-         */
-        private _m_max_size;
-        /**
-         * List of active elements.
-         */
-        private _m_a_active;
-        /**
-         * List of desactive elements.
-         */
-        private _m_a_desactive;
-        /**
-         * Fuction used to create a new element.
-         */
-        private _m_create_fn;
-        /**
-         * Function context.
-         */
-        private _m_fn_create_context;
-        /**
-         * Handle the "elementActive" and "elementDesactive" events.
-         */
-        private _m_listenerManager;
-        /**
-         * Private constructor. Object Pool must be created with Factories.
-         */
-        private constructor();
-    }
-}
 declare module "behaviour/mxComponent" {
     import { MxUObject } from "gameObjects/mxUObject";
     import { MxActor } from "behaviour/mxActor";
@@ -793,96 +447,6 @@ declare module "behaviour/mxComponent" {
         private static _NULL_OBJECT;
     }
 }
-declare module "behaviour/components/cmpTransform" {
-    import { MxComponent } from "behaviour/mxComponent";
-    import { MxActor } from "behaviour/mxActor";
-    /**
-     * This component defines the position of a MxActor.
-     */
-    export class CmpTransform extends MxComponent {
-        /****************************************************/
-        /****************************************************/
-        constructor();
-        /**
-         * Calculates the new global position.
-         *
-         * @param _actor
-         */
-        update(_actor: MxActor): void;
-        /**
-         * Get the relative position of this transform.
-         *
-         * @returns The relative position.
-         */
-        getPosition(): Phaser.Math.Vector3;
-        /**
-         * Move the local position "n" units at x axis, y axis, and (optional) z axis.
-         *
-         * @param _x
-         * @param _y
-         * @param _z
-         */
-        move(_x: number, _y: number, _z?: number): void;
-        /**
-         * Set the transform to a new position.
-         *
-         * @param _x
-         * @param _y
-         * @param _z
-         */
-        setPosition(_x: number, _y?: number, _z?: number): void;
-        /**
-         * Set position in the X axis.
-         *
-         * @param _x
-         */
-        setX(_x: number): void;
-        /**
-         * Set position in the Y axis.
-         *
-         * @param _y
-         */
-        setY(_y: number): void;
-        /**
-         * Set position in the Z axis.
-         *
-         * @param _z
-         */
-        setZ(_z: number): void;
-        /**
-         * Gets the MxActor's global position. This position is calculated with the sum
-         * of the local position an the global position of its parent.
-         */
-        getGlobalPoisition(): Phaser.Math.Vector3;
-        /**
-         * Sets the parent of this transform. This method is exclusive for the MxActor
-         * factories. If preferable that the developer don't use this method to avoid
-         * errors.
-         * @param _transform Parent transform component.
-         */
-        setParent(_transform: CmpTransform): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * The MxActor local position.
-         */
-        protected m_position: Phaser.Math.Vector3;
-        /**
-         * The MxActor global position. This position is calculated with the sum
-         * of the local position an the global position of its parent.
-         */
-        protected _m_globalPosition: Phaser.Math.Vector3;
-        /**
-         * The parent's transform component. Its necesasary to calculate position
-         * by hierarchy.
-         */
-        protected _m_parent: CmpTransform;
-        /**
-         * Indicates if the transform has been modified.
-         */
-        protected _m_isDirty: boolean;
-    }
-}
 declare module "behaviour/mxComponentManager" {
     import { OPRESULT } from "commons/mxEnums";
     import { MxActor } from "behaviour/mxActor";
@@ -972,10 +536,8 @@ declare module "behaviour/mxComponentManager" {
 }
 declare module "behaviour/mxActor" {
     import { MxUObject } from "gameObjects/mxUObject";
-    import { MxObjectPool } from "optimization/mxObjectPool";
     import { OPRESULT } from "commons/mxEnums";
     import { MxComponent } from "behaviour/mxComponent";
-    import { CmpTransform } from "behaviour/components/cmpTransform";
     import { MxComponentManager } from "behaviour/mxComponentManager";
     /**
      * Architectural pattern wich follows the composition over inheritance principle
@@ -1124,14 +686,6 @@ declare module "behaviour/mxActor" {
          *
          */
         m_mx_active: boolean;
-        /**
-         * Reference to the ObjecPool of this MxActor. This can be null.
-         */
-        m_obj_pool: MxObjectPool<MxActor>;
-        /**
-         * Reference to the Actor's transform component.
-         */
-        m_transform: CmpTransform;
         /****************************************************/
         /****************************************************/
         protected constructor();
@@ -1379,669 +933,6 @@ declare module "behaviour/mxFSM" {
         protected _m_controller: T;
     }
 }
-declare module "behaviour/components/cmpAudioClipsManager" {
-    import { MxComponent } from "behaviour/mxComponent";
-    export class CmpAudioClipsManager extends MxComponent {
-        /****************************************************/
-        /****************************************************/
-        constructor();
-        prepare(_baseSoundManager: Phaser.Sound.BaseSoundManager): void;
-        add(_sound: string, _config?: Phaser.Types.Sound.SoundConfig): void;
-        play(_sound: string, _extra?: Phaser.Types.Sound.SoundConfig | Phaser.Types.Sound.SoundMarker): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         *
-         */
-        private _m_baseSoundManager;
-        /**
-         *
-         */
-        private _m_clipsMap;
-    }
-}
-declare module "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper" {
-    import { MxActor } from "behaviour/mxActor";
-    export class MxCommonComponentsWrapper {
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Updates the position of the Phaser Gameobject.
-         * @param _actor
-         */
-        updatePosition(_actor: MxActor): void;
-        /**
-         * Sets the scale of the Phaser GameObject.
-         * @param _x
-         * @param _y
-         */
-        setScale(_x: number, _y: number): void;
-        /**
-         * Get the Phaser GameObject Scale.
-         */
-        getScale(): Phaser.Math.Vector2;
-        /**
-         * Sets the angle of the Phaser GameObject in degrees.
-         *
-         * @param _degrees
-         */
-        setAngle(_degrees: number): void;
-        /**
-         * The angle of this Game Object as expressed in degrees.
-         * Phaser uses a right-hand clockwise rotation system, where 0 is right, 90 is down, 180/-180 is left and -90 is up.
-         * If you prefer to work in radians, see the rotation property instead.
-         */
-        getAngle(): number;
-        /**
-         * Sets the angle of the Phaser GameObject in radians.
-         *
-         * @param _radians
-         */
-        setRotation(_radians: number): void;
-        /**
-         * The angle of this Game Object in radians.
-         * Phaser uses a right-hand clockwise rotation system, where 0 is right, 90 is down, 180/-180 is left and -90 is up.
-         * If you prefer to work in degrees, see the angle property instead.
-         */
-        getRotation(): number;
-        /**
-         * Gets the phaser's position. In theory this position has the same value
-         * as the cmpTransform component.
-         */
-        getPosition(): Phaser.Math.Vector3;
-        /**
-         * Sets the position of this Game Object to be a random position within the confines of the given area.
-         * If no area is specified a random position between 0 x 0 and the game width x height is used instead.
-         * The position does not factor in the size of this Game Object, meaning that only the origin is guaranteed to be within the area.
-         *
-         * @param _x — The x position of the top-left of the random area. Default 0.
-         * @param _y — The y position of the top-left of the random area. Default 0.
-         * @param _width — The width of the random area.
-         * @param _height — The height of the random area.
-         */
-        setRandomPosition(_x: number, _y: number, _width: number, _height: number): void;
-        /**
-         * Sets the visibility of the Phaser GameObject.
-         */
-        setVisible(_visible: boolean): void;
-        /**
-         * The visible state fo the Phaser GameObject.
-         */
-        isVisible(): boolean;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Reference to the Transform component of the Phaser GameObject instance.
-         * Remember to assign a Phaser GameObject to this property in the subclass.
-         */
-        protected _m_goComponents_base: Phaser.GameObjects.Components.Transform & Phaser.GameObjects.Components.Visible;
-    }
-}
-declare module "commons/mxMixin" {
-    export class MxMixin {
-        static applyMixins(derivedCtor: any, baseCtors: any[]): void;
-    }
-}
-declare module "behaviour/components/phaserComponentWrapper/mxAlphaComponentWrapper" {
-    export class MxAlphaComponentWrapper {
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Set the Alpha level of this Game Object. The alpha controls the opacity of the Game Object as it renders. Alpha values are provided as a float between 0, fully * transparent, and 1, fully opaque.
-         * If your game is running under WebGL you can optionally specify four different alpha values, each of which correspond to the four corners of the Game Object.
-         * Under Canvas only the topLeft value given is used.
-         *
-         * @param _topLeft — The alpha value used for the top-left of the Game Object. If this is the only value given it's applied across the whole Game Object.
-         * @param _topRight — The alpha value used for the top-right of the Game Object. WebGL only.
-         * @param _bottomLeft — The alpha value used for the bottom-left of the Game Object. WebGL only.
-         * @param _bottomRight — The alpha value used for the bottom-right of the Game Object. WebGL only.
-         */
-        setAlpha(_topLeft?: number, _topRight?: number, _bottomLeft?: number, _bottomRight?: number): void;
-        /**
-         * The alpha value of the Game Object.
-         * This is a global value, impacting the entire Game Object, not just a region of it.
-         */
-        getAlpha(): number;
-        /**
-         * Clears all alpha values associated with this Game Object.
-         * Immediately sets the alpha levels back to 1 (fully opaque).
-         */
-        clearAlpha(): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Reference to the Alpha Component of the Phaser Gameobject.
-         */
-        protected _m_goComponent_alpha: Phaser.GameObjects.Components.Alpha;
-    }
-}
-declare module "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper" {
-    export class MxOriginComponentWrapper {
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Sets the origin of the Phaser GameObject.
-         * @param _x
-         * @param _y
-         */
-        setOrigin(_x: number, _y: number): void;
-        /**
-         * Sets the origin of this Game Object based on the Pivot values in its Frame.
-         */
-        setOriginFromFrame(): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Reference to the Origin Component of the phaser object.
-         */
-        protected _m_goComponent_origin: Phaser.GameObjects.Components.Origin;
-    }
-}
-declare module "behaviour/components/phaserComponentWrapper/mxTintComponentWrapper" {
-    export class MxTintComponentWrapper {
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Does this Game Object have a tint applied to it or not?
-         */
-        isTinted(): boolean;
-        /**
-         * Clears all tint values associated with this Game Object.
-         * Immediately sets the color values back to 0xffffff and the tint type to 'additive', which results in no visible change to the texture.
-         */
-        clearTint(): void;
-        /**
-         * Sets an additive tint on this Game Object.
-         * The tint works by taking the pixel color values from the Game Objects texture, and then multiplying it by the color value of the tint. You can provide either
-         * one color value, in which case the whole Game Object will be tinted in that color. Or you can provide a color per corner. The colors are blended together
-         * across the extent of the Game Object.
-         *
-         * To modify the tint color once set, either call this method again with new values or use the tint property to set all colors at once. Or, use the properties
-         * tintTopLeft, tintTopRight,tintBottomLeftandtintBottomRight` to set the corner color values independently.
-         *
-         * To remove a tint call clearTint.
-         *
-         * To swap this from being an additive tint to a fill based tint set the property tintFill to true.
-         *
-         * @param topLeft — The tint being applied to the top-left of the Game Object. If no other values are given this value is applied evenly, tinting the whole
-         * GameObject. Default 0xffffff.
-         *
-         * @param topRight — The tint being applied to the top-right of the Game Object.
-         * @param bottomLeft — The tint being applied to the bottom-left of the Game Object.
-         * @param bottomRight — The tint being applied to the bottom-right of the Game Object.
-         */
-        setTint(_topLeft?: number, _topRight?: number, _bottomLeft?: number, _bottomRight?: number): void;
-        /**
-         * Sets a fill-based tint on this Game Object.
-         *
-         * Unlike an additive tint, a fill-tint literally replaces the pixel colors from the texture with those in the tint. You can use this for effects such as making a
-         * player flash 'white' if hit by something. You can provide either one color value, in which case the whole Game Object will be rendered in that color. Or you
-         * can provide a color per corner. The colors are blended together across the extent of the Game Object.
-         *
-         * To modify the tint color once set, either call this method again with new values or use the tint property to set all colors at once. Or, use the properties
-         * tintTopLeft, tintTopRight,tintBottomLeftandtintBottomRight` to set the corner color values independently.
-         *
-         * To remove a tint call clearTint.
-         * To swap this from being a fill-tint to an additive tint set the property tintFill to false.
-         *
-         * @param topLeft — The tint being applied to the top-left of the Game Object. If not other values are given this value is applied evenly, tinting the whole Game
-         * Object. Default 0xffffff.
-         * @param topRight — The tint being applied to the top-right of the Game Object.
-         * @param bottomLeft — The tint being applied to the bottom-left of the Game Object.
-         * @param bottomRight — The tint being applied to the bottom-right of the Game Object.
-         */
-        setTintFill(_topLeft?: number, _topRight?: number, _bottomLeft?: number, _bottomRight?: number): void;
-        /**
-         * The tint value being applied to the whole of the Game Object.
-         * This property is a setter-only. Use the properties tintTopLeft etc to
-         * read the current tint value.
-         */
-        getTint(): number;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Reference to the Tint Component of the Phaser GameObject.
-         */
-        protected _m_goComponent_tint: Phaser.GameObjects.Components.Tint;
-    }
-}
-declare module "behaviour/components/cmpBitmapText" {
-    import { MxActor } from "behaviour/mxActor";
-    import { MxComponent } from "behaviour/mxComponent";
-    import { MxCommonComponentsWrapper } from "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper";
-    import { MxAlphaComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxAlphaComponentWrapper";
-    import { MxOriginComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper";
-    import { MxTintComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxTintComponentWrapper";
-    export class CmpBitmapText extends MxComponent {
-        /****************************************************/
-        /****************************************************/
-        constructor();
-        prepare(_bitmapText: Phaser.GameObjects.BitmapText): void;
-        /**
-         * Updates the position of the Phaser GameObject.
-         *
-         * @param _actor
-         */
-        update(_actor: MxActor): void;
-        receive(_id: number, _data: unknown): void;
-        /**
-         *
-         * @param _size
-         */
-        setFontSize(_size: number): void;
-        setLeftAlign(): void;
-        setRightAlign(): void;
-        setCenterAlign(): void;
-        /**
-         *
-         * @param _text
-         */
-        setText(_text: string): void;
-        setBitmapTextObject(_text: Phaser.GameObjects.BitmapText): void;
-        getBitmapTextObject(): Phaser.GameObjects.BitmapText;
-        /**
-        * Sets the maximum display width of this BitmapText in pixels.
-        *
-        * If BitmapText.text is longer than maxWidth then the lines will be automatically wrapped based on the previous whitespace character found in the line.
-        *
-        * If no whitespace was found then no wrapping will take place and consequently the maxWidth value will not be honored.
-        *
-        * Disable maxWidth by setting the value to 0.
-        */
-        setMaxWidth(_width: number): void;
-        setActive(_active: boolean): void;
-        destroy(): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Reference to Phaser Gameobject.
-         */
-        _m_bitmap_text: Phaser.GameObjects.BitmapText;
-    }
-    export interface CmpBitmapText extends MxCommonComponentsWrapper, MxAlphaComponentWrapper, MxOriginComponentWrapper, MxTintComponentWrapper {
-    }
-}
-declare module "behaviour/components/phaserComponentWrapper/mxAlphaSingleComponentWrapper" {
-    export class MxAlphaSingleComponentWrapper {
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Set the Alpha level of this Game Object. The alpha controls the opacity of
-         * the Game Object as it renders. Alpha values are provided as a float between 0,
-         * fully transparent, and 1, fully opaque.
-         *
-         * @param value — The alpha value applied across the whole Game Object. Default 1.
-         */
-        setAlpha(_value: number): void;
-        /**
-         * The alpha value of the Game Object.
-         * This is a global value, impacting the entire Game Object, not just a region of it.
-         */
-        getAlpha(): number;
-        /**
-         * Clears all alpha values associated with this Game Object.
-         * Immediately sets the alpha levels back to 1 (fully opaque).
-         */
-        clearAlpha(): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Reference to the Alpha Component of the Phaser Gameobject.
-         */
-        protected _m_goComponent_alphaSingle: Phaser.GameObjects.Components.AlphaSingle;
-    }
-}
-declare module "behaviour/components/cmpGraphics" {
-    import { MxComponent } from "behaviour/mxComponent";
-    import { MxCommonComponentsWrapper } from "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper";
-    import { MxAlphaSingleComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxAlphaSingleComponentWrapper";
-    export class CmpGraphics extends MxComponent {
-        /****************************************************/
-        /****************************************************/
-        constructor();
-        prepare(_scene: Phaser.Scene): void;
-        receive(_id: number, _data: unknown): void;
-        getGraphic(): Phaser.GameObjects.Graphics;
-        setTexture(_texture_key: string): void;
-        /**
-         *
-         */
-        setInteractive(): void;
-        /**
-         *
-         * @param _event
-         * @param _fn
-         * @param _context
-         */
-        on(_event: string, _fn: Function, _context: any): void;
-        setActive(_active: boolean): void;
-        destroy(): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Phaser Sprite Gameobject.
-         */
-        private _m_graphic;
-    }
-    export interface CmpGraphics extends MxCommonComponentsWrapper, MxAlphaSingleComponentWrapper {
-    }
-}
-declare module "behaviour/components/cmpNineSlice" {
-    import { MxActor } from "behaviour/mxActor";
-    import { MxComponent } from "behaviour/mxComponent";
-    import { MxCommonComponentsWrapper } from "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper";
-    import { MxAlphaComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxAlphaComponentWrapper";
-    import { MxOriginComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper";
-    import { MxTintComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxTintComponentWrapper";
-    export class CmpNineSlice extends MxComponent {
-        /****************************************************/
-        /****************************************************/
-        constructor();
-        prepare(_scene: Phaser.Scene, _texture: string, _frame: string, _offsets: number[]): void;
-        update(_actor: MxActor): void;
-        receive(_id: number, _data: unknown): void;
-        setInteractive(): void;
-        on(_event: string, _fn: () => void, _context: any): void;
-        resize(_width: number, _height: number): void;
-        getMinSize(): Phaser.Geom.Point;
-        setTexture(_texture_key: string): void;
-        setFrame(_frame: number | string): void;
-        getTexture(): Phaser.GameObjects.RenderTexture;
-        setActive(_active: boolean): void;
-        destroy(): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Phaser Sprite Gameobject.
-         */
-        _m_texture: Phaser.GameObjects.RenderTexture;
-        /**
-         *
-         */
-        _m_min_width: number;
-        /**
-         *
-         */
-        _m_min_height: number;
-    }
-    export interface CmpNineSlice extends MxCommonComponentsWrapper, MxAlphaComponentWrapper, MxOriginComponentWrapper, MxTintComponentWrapper {
-    }
-}
-declare module "behaviour/components/phaserComponentWrapper/mxComputedSizeComponentWrapper" {
-    export class MxComputedSizeComponentWrapper {
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Sets the internal size of this Game Object, as used for frame or physics body creation.
-         *
-         * This will not change the size that the Game Object is rendered in-game. For that you need to either set the scale of the Game Object (setScale) or call the
-         * setDisplaySize method, which is the same thing as changing the scale but allows you to do so by giving pixel values.
-         *
-         * If you have enabled this Game Object for input, changing the size will not change the size of the hit area. To do this you should adjust the input.hitArea.
-         * object directly.
-         *
-         * @param _width — The width of this Game Object.
-         */
-        setSize(_width: number, _height: number): void;
-        /**
-         * Sets the display size of this Game Object.
-         * Calling this will adjust the scale.
-         *
-         * @param _width — The width of this Game Object.
-         * @param _height — The height of this Game Object.
-         */
-        setDisplaySize(_widht: number, _height: number): void;
-        /**
-         * The native (un-scaled) height of this Game Object.
-         * Changing this value will not change the size that the Game Object is rendered in-game. For that you need to either set the scale of the Game Object (setScale)
-         * or use the displayHeight property.
-         */
-        getHeight(): number;
-        /**
-         * The native (un-scaled) width of this Game Object.
-         * Changing this value will not change the size that the Game Object is rendered in-game. For that you need to either set the scale of the Game Object (setScale)
-         * or use the displayHeight property.
-         */
-        getWidth(): number;
-        /**
-         * The displayed height of this Game Object.
-         * This value takes into account the scale factor.
-         * Setting this value will adjust the Game Object's scale property.
-         */
-        getDisplayHeight(): number;
-        /**
-         * The displayed width of this Game Object.
-         * This value takes into account the scale factor.
-         * Setting this value will adjust the Game Object's scale property.
-         */
-        getDisplayWidth(): number;
-        /**
-         * The native (un-scaled) size of this Game Object.
-         */
-        getSize(): Phaser.Math.Vector2;
-        /**
-         * The displayed size of this Game Object.
-         * This value takes into account the scale factor.
-         * */
-        getDisplaySize(): Phaser.Math.Vector2;
-        /****************************************************/
-        /****************************************************/
-        protected _m_goComponent_computedSize: Phaser.GameObjects.Components.ComputedSize;
-    }
-}
-declare module "behaviour/components/cmpShader" {
-    import { MxComponent } from "behaviour/mxComponent";
-    import { MxCommonComponentsWrapper } from "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper";
-    import { MxOriginComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper";
-    import { MxComputedSizeComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxComputedSizeComponentWrapper";
-    import { MxActor } from "behaviour/mxActor";
-    export class CmpShader extends MxComponent {
-        /****************************************************/
-        /****************************************************/
-        constructor();
-        prepare(_shader: Phaser.GameObjects.Shader): void;
-        update(_actor: MxActor): void;
-        receive(_id: number, _data: unknown): void;
-        setUniform(_uniform: string, _value: any): void;
-        setMask(_mask: Phaser.Display.Masks.BitmapMask): void;
-        createMask(): Phaser.Display.Masks.BitmapMask;
-        getShader(): Phaser.GameObjects.Shader;
-        /**
-         *
-         */
-        setInteractive(): void;
-        /**
-         *
-         * @param _event
-         * @param _fn
-         * @param _context
-         */
-        on(_event: string, _fn: Function, _context: any): void;
-        setActive(_active: boolean): void;
-        initUniform(_key: string): void;
-        destroy(): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Phaser Sprite Gameobject.
-         */
-        _m_shader: Phaser.GameObjects.Shader;
-    }
-    export interface CmpShader extends MxCommonComponentsWrapper, MxOriginComponentWrapper, MxComputedSizeComponentWrapper {
-    }
-}
-declare module "behaviour/components/phaserComponentWrapper/mxSizeComponenWrappert" {
-    export class MxSizeComponentWrapper {
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Sets the internal size of this Game Object, as used for frame or physics body creation.
-         *
-         * This will not change the size that the Game Object is rendered in-game. For that you need to either set the scale of the Game Object (setScale) or call the
-         * setDisplaySize method, which is the same thing as changing the scale but allows you to do so by giving pixel values.
-         *
-         * If you have enabled this Game Object for input, changing the size will not change the size of the hit area. To do this you should adjust the input.hitArea.
-         * object directly.
-         *
-         * @param _width — The width of this Game Object.
-         */
-        setSize(_width: number, _height: number): void;
-        /**
-         * Sets the display size of this Game Object.
-         * Calling this will adjust the scale.
-         *
-         * @param _width — The width of this Game Object.
-         * @param _height — The height of this Game Object.
-         */
-        setDisplaySize(_widht: number, _height: number): void;
-        /**
-         * The native (un-scaled) height of this Game Object.
-         * Changing this value will not change the size that the Game Object is rendered in-game. For that you need to either set the scale of the Game Object (setScale)
-         * or use the displayHeight property.
-         */
-        getHeight(): number;
-        /**
-         * The native (un-scaled) width of this Game Object.
-         * Changing this value will not change the size that the Game Object is rendered in-game. For that you need to either set the scale of the Game Object (setScale)
-         * or use the displayHeight property.
-         */
-        getWidth(): number;
-        /**
-         * The displayed height of this Game Object.
-         * This value takes into account the scale factor.
-         * Setting this value will adjust the Game Object's scale property.
-         */
-        getDisplayHeight(): number;
-        /**
-         * The displayed width of this Game Object.
-         * This value takes into account the scale factor.
-         * Setting this value will adjust the Game Object's scale property.
-         */
-        getDisplayWidth(): number;
-        /**
-         * The native (un-scaled) size of this Game Object.
-         */
-        getSize(): Phaser.Math.Vector2;
-        /**
-         * The displayed size of this Game Object.
-         * This value takes into account the scale factor.
-         * */
-        getDisplaySize(): Phaser.Math.Vector2;
-        /****************************************************/
-        /****************************************************/
-        protected _m_goComponent_size: Phaser.GameObjects.Components.Size;
-    }
-}
-declare module "behaviour/components/cmpSprite" {
-    import { MxComponent } from "behaviour/mxComponent";
-    import { MxCommonComponentsWrapper } from "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper";
-    import { MxAlphaComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxAlphaComponentWrapper";
-    import { MxOriginComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper";
-    import { MxTintComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxTintComponentWrapper";
-    import { MxSizeComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxSizeComponenWrappert";
-    import { MxActor } from "behaviour/mxActor";
-    export class CmpSprite extends MxComponent {
-        /****************************************************/
-        /****************************************************/
-        constructor();
-        prepare(_sprite: Phaser.GameObjects.Sprite): void;
-        update(_actor: MxActor): void;
-        receive(_id: number, _data: unknown): void;
-        setTexture(_texture_key: string): void;
-        setFrame(_frame: number | string): void;
-        setMask(_mask: Phaser.Display.Masks.BitmapMask): void;
-        createMask(): Phaser.Display.Masks.BitmapMask;
-        getSprite(): Phaser.GameObjects.Sprite;
-        /**
-         *
-         */
-        setInteractive(): void;
-        /**
-         *
-         * @param _event
-         * @param _fn
-         * @param _context
-         */
-        on(_event: string, _fn: Function, _context: any): void;
-        setActive(_active: boolean): void;
-        destroy(): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Phaser Sprite Gameobject.
-         */
-        _m_sprite: Phaser.GameObjects.Sprite;
-    }
-    export interface CmpSprite extends MxCommonComponentsWrapper, MxAlphaComponentWrapper, MxOriginComponentWrapper, MxTintComponentWrapper, MxSizeComponentWrapper {
-    }
-}
-declare module "behaviour/components/cmpText" {
-    import { MxComponent } from "behaviour/mxComponent";
-    import { MxCommonComponentsWrapper } from "behaviour/components/phaserComponentWrapper/mxCommonComponentsWrapper";
-    import { MxAlphaComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxAlphaComponentWrapper";
-    import { MxComputedSizeComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxComputedSizeComponentWrapper";
-    import { MxTintComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxTintComponentWrapper";
-    import { MxOriginComponentWrapper } from "behaviour/components/phaserComponentWrapper/mxOriginComponentWrapper";
-    import { MxActor } from "behaviour/mxActor";
-    export class CmpText extends MxComponent {
-        /****************************************************/
-        /****************************************************/
-        constructor();
-        prepare(_scene: Phaser.Scene, _text: string, _style: object): void;
-        update(_actor: MxActor): void;
-        receive(_id: number, _data: unknown): void;
-        /**
-         *
-         * @param _size
-         */
-        setFontSize(_size: number): void;
-        /**
-         *
-         * @param _color
-         */
-        setFontColor(_color: string): void;
-        /**
-         *
-         * @param _color
-         */
-        setTint(_color: number): void;
-        /**
-         * Set the alignment of the text in this Text object.
-        * The argument can be one of: left, right, center or justify.
-        * Alignment only works if the Text object has more than one line of text.
-        *
-        * @param align — The text alignment for multi-line text. Default 'left'.
-         */
-        setAlign(_align?: string): void;
-        /**
-         *
-         * @param _text
-         */
-        setText(_text: string): void;
-        setTextObject(_text: Phaser.GameObjects.Text): void;
-        getTextObject(): Phaser.GameObjects.Text;
-        /**
-        * Set the width (in pixels) to use for wrapping lines. Pass in null to remove wrapping by width.
-        *
-        * @param _width — The maximum width of a line in pixels. Set to null to remove wrapping.
-        *
-        * @param _useAdvancedWrap — Whether or not to use the advanced wrapping algorithm.
-        * If true, spaces are collapsed and whitespace is trimmed from lines. If false,
-        * spaces and whitespace are left as is. Default false.
-        */
-        setWordWrapWidth(_width: number, _useAdvanceWrap?: boolean): void;
-        setActive(_active: boolean): void;
-        destroy(): void;
-        /****************************************************/
-        /****************************************************/
-        /**
-         * Phaser Text Gameobject.
-         */
-        _m_text: Phaser.GameObjects.Text;
-    }
-    export interface CmpText extends MxCommonComponentsWrapper, MxAlphaComponentWrapper, MxOriginComponentWrapper, MxTintComponentWrapper, MxComputedSizeComponentWrapper {
-    }
-}
 declare module "commons/mxDateTime" {
     export class MxDateTime {
         /**
@@ -2129,6 +1020,11 @@ declare module "commons/mxMath" {
         static TruncateByRange(_value: number, _min: number, _max: number): number;
     }
 }
+declare module "commons/mxMixin" {
+    export class MxMixin {
+        static applyMixins(derivedCtor: any, baseCtors: any[]): void;
+    }
+}
 declare module "commons/mxPerlinNoise" {
     export class MxPerlinNoise {
         /****************************************************/
@@ -2153,22 +1049,342 @@ declare module "commons/mxPerlinNoise" {
         private static MAX_LENGHT;
     }
 }
-declare module "pseudoRandom/mxHalton" {
+declare module "listeners/mxListener" {
+    /**
+     * This class contains a Function and may have an object as the Function's context.
+     * The "S" type can be defined as the type of the sender object (who calls this Listener),
+     * and the "A" type can be defined as the type of the object who has the arguments.
+     */
+    export class MxListener<S, A> {
+        /****************************************************/
+        /****************************************************/
+        /**
+         * The MxListener needs a Function, and may have a context.
+         *
+         * @param _listener
+         * @param _context
+         */
+        constructor(_listener: (_sender: S, _args: A) => void, _context?: any);
+        /**
+         * Calls the Function of this MxListener.
+         *
+         * @param _sender Sender object. The object who calls this listener.
+         * @param _args Agument object.
+         */
+        call(_sender: S, _args: A): void;
+        /**
+         * Safely destroys this MxListener.
+         */
+        destroy(): void;
+        /****************************************************/
+        /****************************************************/
+        /**
+         * The function of this MxListener.
+         */
+        private m_listener;
+        /**
+         * The context of the Function of this MxListener.
+         */
+        private m_context;
+    }
+}
+declare module "listeners/mxListenerGroup" {
+    import { MxListener } from "listeners/mxListener";
+    /**
+     * This class has a Map of MxListeners, identified by a string key, also called
+     * the username. The username helps the MxListenerGroup to indentify and destroy
+     * a MxListener with the unsuscribe(string) method.
+     */
+    export class MxListenerGroup<S, A> {
+        /****************************************************/
+        /****************************************************/
+        constructor();
+        call(_sender: S, _args: A): void;
+        /**
+         * Adds a new listener to this MxListenerGroup. If a MxListener already exists
+         * with the given username, it will be overrided.
+         *
+         * @param _username an identifier of the given MxListener.
+         * @param _listener the MxListener to be added.
+         */
+        suscribe(_username: string, _listener: MxListener<S, A>): void;
+        /**
+         * Destroys the MxListener with the given username, and removes it from this
+         * MxListenerGroup.
+         *
+         * @param _username the identifier of the MxListener.
+         */
+        unsuscribe(_username: string): void;
+        /**
+         * Removes all the MxListeners attached to this MxListenerGroup. This methods
+         * calls the destroy method of each MxListener before remove them.
+         */
+        clear(): void;
+        /**
+         * Calls the destroy method of each MxListener in this MxListenerGroup.
+         */
+        destroy(): void;
+        /****************************************************/
+        /****************************************************/
+        /**
+         * Map of funtions that belongs to this group. The first types "string" is
+         * the key to identify its MxListener, also called as the "username".
+         */
+        private _m_listenersMap;
+    }
+}
+declare module "listeners/mxListenerManager" {
+    import { MxListener } from "listeners/mxListener";
+    /**
+     * This class manage a group of MxListenerGroup, or "events". By this object
+     * an MxListener can suscribe or unsuscribe to an event.
+     */
+    export class MxListenerManager<S, A> {
+        /****************************************************/
+        /****************************************************/
+        constructor();
+        /**
+         * Adds a new event (MxListenerGroup) to this MxListnerManager. If an event
+         * with the same key exists, it will be destroyed and replaced.
+         *
+         * @param _event the event key.
+         */
+        addEvent(_event: string): void;
+        /**
+         * Call the MxListener attached to an event.
+         *
+         * @param _event The key of the event to be called.
+         * @param _sender The sender object of this event.
+         * @param _args The arguments obejct of this event.
+         */
+        call(_event: string, _sender: S, _args: A): void;
+        /**
+         * Suscribe a new MxListener to the given event. This method also needs the
+         * username to identify the MxListener. If a MxListener already exists in the
+         * event, that MxListener will be replaced.
+         *
+         * @param _event The string key of the event to add the given MxListener.
+         * @param _username the string key to the identify the given MxListener.
+         * @param _listener the MxListener that will be added to the event.
+         */
+        suscribe(_event: string, _username: string, _listener: MxListener<S, A>): void;
+        /**
+         * Destroys the MxListener with the given username and removes it from the
+         * event.
+         *
+         * @param _event the string key of the event.
+         * @param _username the string key of the MxListener that will be removed.
+         */
+        unsuscribe(_event: string, _username: string): void;
+        /**
+         * Removes all the MxListeners from an event. This method call the clear method
+         * of the MxListenerGroup indentified by the event name.
+         *
+         * @param _event The string identifier of the MxListenerGroup.
+         */
+        clearEvent(_event: string): void;
+        /**
+         * Calls the destroy method of each MxListenerGroup and removes them from this
+         * MxListenerManager. This MxListenerManager will be empty.
+         */
+        clear(): void;
+        /**
+        * Calls the destroy method of each MxListenerGroup and removes them from this
+        * MxListenerManager.
+        */
+        destroy(): void;
+        /****************************************************/
+        /****************************************************/
+        /**
+         * A map of MxListeners, also called as "events". The key (string) is used to
+         * identify the event.
+        */
+        private _m_eventsMap;
+    }
+}
+declare module "optimization/mxPoolArgs" {
+    /**
+     * This class contains the arguments delivered when an event of a MxObjecPool
+     * is triggered.
+     */
+    export class MxPoolArgs<T> {
+        /****************************************************/
+        /****************************************************/
+        /**
+         * Reference to the element just been modified.
+         */
+        element: T;
+    }
+}
+declare module "optimization/mxObjectPool" {
     /**
      * HummingFlight Software Technologies - 2020
      *
-     * @summary Implementation of the Halton Sequence, a low discrepancy and
-     * deterministic algortihm that appear to be random.
+     * @summary Creational design pattern that uses a set of initalized objects kept
+     * ready to use rather than allocating and destroying them on demand.
      *
-     * @file mxHalton.ts
+     * @file mxObjectPool.ts
      * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
-     * @since July-17-2020
+     * @since July-29-2020
      */
+    import { OPRESULT } from "commons/mxEnums";
+    import { MxPoolArgs } from "optimization/mxPoolArgs";
+    /**
+     * Creational design pattern that uses a set of initalized objects kept ready
+     * to use rather than allocating and destroying them on demand.
+     */
+    export class MxObjectPool<T> {
+        /****************************************************/
+        /****************************************************/
+        /**
+         * Create a new empty pool.
+         */
+        static Create<U>(): MxObjectPool<U>;
+        /**
+         * Setup the elements of this pool.
+         *
+         * @param _a_element Array of elements.
+         */
+        init(_a_element: Array<T>): void;
+        /**
+         * Call a function once for each active and desactive elements in an array
+         * order.
+         *
+         * @param _fn Function
+         * @param _context Context.
+         */
+        forEach(_fn: (_element: T) => void, _context?: any): void;
+        /**
+         * Call a function once for each active element in an array order.
+         *
+         * @param _fn Function.
+         * @param _context Context.
+         */
+        forEachActive(_fn: (_element: T) => void, _context?: any): void;
+        /**
+         * Call a function once for each desactive element in an array order.
+         *
+         * @param _fn Function.
+         * @param _context Context.
+         */
+        forEachDesactive(_fn: (_element: T) => void, _context?: any): void;
+        /**
+         * Suscribe to one of this pool events. Events:
+         *
+         * I) elementActive : trigger when an element had just been actived.
+         *
+         * II) elementDesactive : trigger when an element had just been desactived.
+         *
+         * @param _event The name of the event.
+         * @param _username An identifier for the suscriber.
+         * @param _fn The callback.
+         * @param _context The callback context.
+         */
+        suscribe(_event: string, _username: string, _fn: (_sender: MxObjectPool<T>, _args: MxPoolArgs<T>) => void, _context?: any): void;
+        /**
+         * Unsuscribe to one of this pool events. Envents:
+         *
+         * I) elementActive : trigger when an element had just been actived.
+         *
+         * II) elementDesactive : trigger when an element had just been desactived.
+         *
+         * @param _event The name of the event.
+         * @param _username The identifier of the suscriber.
+         */
+        unsuscribe(_event: string, _username: string): void;
+        /**
+         * Get an available element from this MxObjectPool. Be careful, if this
+         * MxObjectPool doesn't has any availble element and is full, this method
+         * will returns a null type object.
+         *
+         * @retuns An available element of this MxObjectPool. If the MxObjectPool
+         * doesn't has any available element and is full, it will returns a null
+         * type object.
+         */
+        get(): T;
+        /**
+         * Desactive the given element. The "elementDesactive" event will be
+         * triggered.
+         *
+         * @param _element The element to desactive.
+         *
+         * @returns OPRESULT.kObject_not_found when the element doesn't was found in
+         * this MxObjectPool, otherwise returns an OPRESULT.kOk.
+         */
+        desactive(_element: T): OPRESULT;
+        /**
+         * Check if this MxObjectPool has any element available.
+         *
+         * @returns True if there are at least one element available.
+         */
+        hasDesactive(): boolean;
+        /**
+         * Get the number of elements of this MxObjectPool.
+         *
+         * @returns The number of elements in this MxObjectPool.
+         */
+        getSize(): number;
+        /**
+         * Get the number of active elements.
+         *
+         * @returns Number of active elements.
+         */
+        getActiveSize(): number;
+        /**
+         * Get the number of desactive elements.
+         *
+         * @returns Number of desactive elements.
+         */
+        getDesactiveSize(): number;
+        /**
+        * Remove the active and desactive elements of this pool.
+        */
+        clear(): void;
+        /**
+        * Safely destroys the object.
+        */
+        destroy(): void;
+        /****************************************************/
+        /****************************************************/
+        private _active;
+        /**
+         * Number of elements that this MxObjectPool contains.
+         */
+        private _m_size;
+        /**
+         * List of active elements.
+         */
+        private _m_a_active;
+        /**
+         * List of desactive elements.
+         */
+        private _m_a_desactive;
+        /**
+         * Handle the "elementActive" and "elementDesactive" events.
+         */
+        private _m_listenerManager;
+        /**
+         * Private constructor. Object Pool must be created with Factories.
+         */
+        private constructor();
+    }
+}
+/**
+ * HummingFlight Software Technologies - 2020
+ *
+ * @summary Implementation of the Halton Sequence, a low discrepancy and
+ * deterministic algortihm that appears to be random.
+ *
+ * @file mxHalton.ts
+ * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
+ * @since July-17-2020
+ */
+declare module MxTools.PseudoRandom {
     /**
      * Implementation of the Halton Sequence, a low discrepancy and deterministic
      * algortihm that appear to be random.
      */
-    export class MxHalton {
+    class MxHalton {
         /**
          * Generates a point set that appear to be random. They will be generated with
          * the Halton Sequence, wich is a low discrepancy algorithm.
@@ -2191,6 +1407,25 @@ declare module "pseudoRandom/mxHalton" {
         static Halton(_index: integer, _base: integer): number;
     }
 }
+declare module "shaders/mxShader" {
+    export class MxShader {
+        /****************************************************/
+        /****************************************************/
+        constructor();
+        init(_shader: Phaser.GameObjects.Shader): void;
+        setUniform(_uniform: string, _value: any): void;
+        setMask(_mask: Phaser.Display.Masks.BitmapMask): void;
+        getShader(): Phaser.GameObjects.Shader;
+        initUniform(_key: string): void;
+        destroy(): void;
+        /****************************************************/
+        /****************************************************/
+        /**
+         * Phaser Sprite Gameobject.
+         */
+        _m_shader: Phaser.GameObjects.Shader;
+    }
+}
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -2200,12 +1435,10 @@ declare module "pseudoRandom/mxHalton" {
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
  * @since July-27-2020
  */
-/**
- *
- */
 declare module MxTools.UI {
     /**
-     * Provides a class that immitates the Phaser CE's button.
+     * Provides a class that immitates the Phaser CE's button. The buttes is build
+     * using a Phaser.Gameobject.Image.
      */
     class MxButton {
         /****************************************************/
@@ -2231,7 +1464,7 @@ declare module MxTools.UI {
          */
         static Create(_scene: Phaser.Scene, _x: number, _y: number, _texture: string, _frame?: number | string, _callback?: Function, _callbackContext?: any, _over_key?: number | string, _out_key?: number | string, _down_key?: number | string, _up_key?: number | string): MxButton;
         /**
-         * Get the phaser image.
+         * Get the Phaser GameObject image.
          */
         getImage(): Phaser.GameObjects.Image;
         /**
@@ -2241,9 +1474,21 @@ declare module MxTools.UI {
         destroy(): void;
         /****************************************************/
         /****************************************************/
+        /**
+         * Called when a pointer is over the image.
+         */
         protected _onOver(): void;
+        /**
+         * Called when a pointer is out of the image.
+         */
         protected _onOut(): void;
+        /**
+         * Called when a pointer is been pressed over the image.
+         */
         protected _onDown(): void;
+        /**
+         * Called when a pointer had been released over the image.
+         */
         protected _onUp(): void;
         protected _m_up_key: number | string;
         protected _m_down_key: number | string;
@@ -2293,7 +1538,7 @@ declare module MxTools.UI {
          */
         static Create(_scene: Phaser.Scene, _x: number, _y: number, _texture: string, _frame?: number | string, _callback?: Function, _callbackContext?: any, _over_color?: number, _out_color?: number, _down_color?: number, _up_color?: number): MxButtonTinted;
         /**
-         * Get the phaser image.
+         * Get the Phaser GameObject image.
          */
         getImage(): Phaser.GameObjects.Image;
         /**
@@ -2304,9 +1549,21 @@ declare module MxTools.UI {
         /****************************************************/
         /****************************************************/
         protected constructor();
+        /**
+         * Called when a pointer is over the image.
+         */
         protected _onOver(): void;
+        /**
+         * Called when a pointer is out of the image.
+         */
         protected _onOut(): void;
+        /**
+         * Called when a pointer is been pressed over the image.
+         */
         protected _onDown(): void;
+        /**
+         * Called when a pointer had been released over the image.
+         */
         protected _onUp(): void;
         protected _m_up_color: number;
         protected _m_down_color: number;

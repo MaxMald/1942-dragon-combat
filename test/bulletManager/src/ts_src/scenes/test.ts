@@ -1,7 +1,13 @@
-import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
 import { PlayerController } from "../../../../../game/src/ts_src/playerController/playerController";
 import { PlayerControllerConfig } from "../../../../../game/src/ts_src/playerController/playerControllerConfig";
 import { NullState } from "../../../../../game/src/ts_src/states/nullState";
+import { BulletManager } from "../../../../../game/src/ts_src/bulletManager/bulletManager";
+import { BulletManagerConfig } from "../../../../../game/src/ts_src/bulletManager/bulletManagerConfig";
+import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
+import { CmpHeroBulletController } from "../../../../../game/src/ts_src/components/cmpHeroBulletController";
+import { CmpMovementBullet } from "../../../../../game/src/ts_src/components/cmpMovementBullet";
+import { DC_COMPONENT_ID } from "../../../../../game/src/ts_src/components/dcComponentID";
+import { BaseActor } from "../../../../../game/src/ts_src/actors/baseActor";
 
 export class Test extends Phaser.Scene
 {
@@ -12,14 +18,7 @@ export class Test extends Phaser.Scene
   preload()
   : void
   {
-    this.load.path = "../assets/";   
-
-    this.load.atlas
-    (
-      "summer_props",
-      "atlas/rpg_summer_tileset_props.png",
-      "atlas/rpg_summer_tileset_props.js"
-    );
+    this.load.path = "../assets/";
 
     this.load.atlas
     (
@@ -40,10 +39,22 @@ export class Test extends Phaser.Scene
       'configFiles/playerControllerConfig.json'
     );
 
+    this.load.text
+    (
+      'bulletManagerConfig',
+      'configFiles/bulletManagerConfig.json'
+    );
+
     this.load.image
     (
       'button',
       'images/button.png'
+    );
+
+    this.load.image
+    (
+      'fireball',
+      'images/fireball.png'
     );
     return;
   }
@@ -91,70 +102,23 @@ export class Test extends Phaser.Scene
       this._m_canvas_size.y - 1500
     );
 
-    // Pointer debug text
+    // POOL Debug text.
 
-    this._m_pointer_debug = this.add.text
+    this._m_pool_data = this.add.text
     (
       50,
-      1750,
+      1520,
       '',
       { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' }
     ); 
 
-    // Shows the speed of the hero.
-
-    this._m_pt_label = this.add.text
+    this._m_heroBulletCntrl_data = this.add.text
     (
-      250,
-      1550,
+      300,
+      1520,
       '',
       { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' }
     ); 
-    this._m_pt_label.setAlign('left');
-    this._m_pt_label.setOrigin(0.0, 0.0);
-
-    // Show the input mode.
-
-    this._m_inputMode = this.add.text
-    (
-      250,
-      1600,
-      '',
-      { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' }
-    ); 
-    this._m_pt_label.setAlign('left');
-    this._m_pt_label.setOrigin(0.0, 0.0);
-
-    // input mode buttons.    
-
-    let y = 1550;
-    
-    this._createButton
-    (
-      950,
-      y ,
-      'Relative',
-      this._onClick_relative,
-      this
-    );
-
-    this._createButton
-    (
-      950,
-      y += 100,
-      'Absolute',
-      this._onClick_absolute,
-      this
-    );
-
-    this._createButton
-    (
-      950,
-      y += 100,
-      'Mixed',
-      this._onClick_mixed,
-      this
-    );
 
     ///////////////////////////////////
     // Game Manager
@@ -163,6 +127,20 @@ export class Test extends Phaser.Scene
 
     let gameManager : GameManager = GameManager.GetInstance();
 
+    ///////////////////////////////////
+    // Bullet Controller
+
+    let bulletManager : BulletManager = BulletManager.Create();
+
+    let bmConfig : BulletManagerConfig 
+      = JSON.parse(this.cache.text.get('bulletManagerConfig'));
+
+    bulletManager.init(this, bmConfig);
+
+    this._m_bulletManager = bulletManager;
+
+    gameManager.setBulletManager(bulletManager);
+    
     ///////////////////////////////////
     // Player Controller
 
@@ -181,25 +159,25 @@ export class Test extends Phaser.Scene
 
     let heroController : PlayerController = new PlayerController();
     
-    heroController.init(this, undefined, pcConfig);
-
-    // Only for debuggin purpuses.
-
-    this._m_pt_label.text = 'Speed : ' + pcConfig.player_speed.toString();
-
-    // Set local properties.
+    heroController.init(this, undefined, pcConfig);     
 
     this._m_heroController = heroController;
+
+    gameManager.setPlayerController(heroController);
 
     return;
   }
 
   update(_time : number, _delta : number)
   : void
-  {    
+  {  
+    let dt : number = _delta * 0.001;
+    
+    GameManager.GetInstance().update(dt);
+
     // Updates the hero controller.
 
-    this._m_heroController.update(_delta * 0.001);
+    this._m_heroController.update(dt);
 
     // Only for debugging purposes.
 
@@ -226,72 +204,30 @@ export class Test extends Phaser.Scene
     // Draw the bacground box.
     
     this._m_graph_box.clear();
-    this._m_graph_box.fillRectShape(this._m_rect_box);
+    this._m_graph_box.fillRectShape(this._m_rect_box);   
 
-    // Display the innput mode.
+    // Debug Pool Data:
 
-    this._m_inputMode.text = 
-      "Mode: " + this._m_heroController.getInputMode();
+    let bulletManager : BulletManager = this._m_bulletManager;
+    let pool = this._m_bulletManager.getPool();
 
-    // Display the pointer direction.
 
-    let pointer : Phaser.Input.Pointer = this._m_heroController.getPointer();
+    this._m_pool_data.text 
+      = "-- Hero Bullet Mng --\n"
+      + "\n Bullet speed : " + bulletManager.getBulletSpeed() + " px./s.\n"
+      + "\n** Pool **\n"
+      + "\nSize : " + pool.getSize().toString()
+      + "\nActive : " + pool.getActiveSize().toString()
+      + "\nDesactive : " + pool.getDesactiveSize().toString();
 
-    let v3 : Phaser.Math.Vector3 = new Phaser.Math.Vector3
-    (
-      pointer.position.x - pointer.prevPosition.x,
-      pointer.position.y - pointer.prevPosition.y
-    );
-    v3.normalize();
+    let hero = this._m_heroController.getPlayer(); 
 
-    this.debugDirection
-    (
-      this._m_rect_box.x + 120,
-      this._m_rect_box.y + 120,
-      100,
-      v3
-    );
+    let heroBulletCntrl : CmpHeroBulletController 
+      = hero.getComponent<CmpHeroBulletController>(DC_COMPONENT_ID.kHeroBulletController);
 
-    // Pointer
-
-    let dragX : number = 0.0; 
-    let dragY : number = 0.0;
-    
-    if(pointer.isDown)
-    {
-      dragX = pointer.position.x - pointer.downX;
-      dragY = pointer.position.y - pointer.downY;
-    }   
-
-    this._m_pointer_debug.text = "Pointer Data: \n"
-      + "\nPosition : ( " + pointer.position.x.toFixed(2) + " , " + pointer.position.y.toFixed(2) + " )"
-      + "\nWorld : ( " + pointer.worldX.toFixed(2) + " , " + pointer.worldY.toFixed(2) + " )"
-      + "\nPrevious : ( " + pointer.worldX.toFixed(2) + " , " + pointer.worldY.toFixed(2) + " )"
-      + "\nDrag : ( " + dragX.toFixed(2) + " , " + dragY.toFixed(2) + " )";
-
-    // Display the hero's direction.
-
-    let hero = this._m_heroController.getPlayer();
-    let heroSpr = hero.getWrappedInstance();
-
-    let v2 : Phaser.Math.Vector2 = this._m_heroController.getDirection();
-    let heroPos : Phaser.Math.Vector3 = new Phaser.Math.Vector3
-    (
-      heroSpr.x,
-      heroSpr.y,
-      0.0
-    );
-
-    v3.x = v2.x;
-    v3.y = v2.y;
-
-    this.debugDirection
-    (
-      heroPos.x,
-      heroPos.y,
-      200,
-      v3
-    );
+    this._m_heroBulletCntrl_data.text
+      = "-- Hero Bullet Controller --\n"
+      + "\n Fire rate : " + (1.0 / heroBulletCntrl.getFireRate()).toString() + " bullets/s."; 
     
     return;    
   }
@@ -374,28 +310,9 @@ export class Test extends Phaser.Scene
     return;
   }
 
-  private _onClick_mixed()
-  : void
-  {
-    this._m_heroController.setInputMode("MIXED");
-    return;
-  }
-
-  private _onClick_absolute()
-  : void
-  {
-    this._m_heroController.setInputMode("ABSOLUTE");
-    return;
-  }
-
-  private _onClick_relative()
-  : void
-  {
-    this._m_heroController.setInputMode("RELATIVE");
-    return;
-  }
-
   private _m_heroController : PlayerController;
+
+  private _m_bulletManager : BulletManager;
 
   ///////////////////////////////////
   // Graphics
@@ -411,17 +328,11 @@ export class Test extends Phaser.Scene
 
   private _m_rect_box : Phaser.Geom.Rectangle;
 
-  ///////////////////////////////////
-  // Pointer Direction
-
-  private _m_pt_label : Phaser.GameObjects.Text;
-
-  private _m_pointer_debug : Phaser.GameObjects.Text;
-
   private _m_canvas_size : Phaser.Geom.Point;
 
-  ///////////////////////////////////
-  // Labels
+  // POOL
 
-  private _m_inputMode : Phaser.GameObjects.Text;
+  private _m_pool_data : Phaser.GameObjects.Text;
+
+  private _m_heroBulletCntrl_data : Phaser.GameObjects.Text;
 }

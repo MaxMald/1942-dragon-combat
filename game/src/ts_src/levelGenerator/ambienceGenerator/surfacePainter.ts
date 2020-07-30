@@ -10,7 +10,7 @@
  */
 
 import { OPRESULT } from "commons/mxEnums";
-import { CmpShader } from "behaviour/components/cmpShader";
+import { MxShader } from "shaders/mxShader";
 import { CustomTextureShader } from "./customTextureShader";
 import { HeightMap } from "./heightMap";
 
@@ -180,8 +180,8 @@ export class SurfacePainter
     shader.uniforms.d = {type : "1f", value : 0.0};   
 
     // Create the Shader Component.
-    this._m_surfaceShader = new CmpShader();
-    this._m_surfaceShader.prepare(shader);
+    this._m_surfaceShader = new MxShader();
+    this._m_surfaceShader.init(shader);
 
     this._m_surfaceShader.initUniform('d');
 
@@ -236,7 +236,7 @@ export class SurfacePainter
    * have available the iChannel0 and iChannel1. The first one is used for the
    * perlin noise texture, the second one for the terrain color texture.
    */
-  private _m_surfaceShader : CmpShader;
+  private _m_surfaceShader : MxShader;
 
   /**
    * Height map.

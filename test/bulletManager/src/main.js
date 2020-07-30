@@ -13,18 +13,19 @@
     baseUrl: "/",
 
     paths: {
-      'phaser': pre + '/externals/phaser/build/phaser',
+      'phaser': pre + '/externals/phaser/build/phaser.min',
       'phaser3-nineslice' : pre + '/externals/plugins/nineSlice/nineslice.min',
       'mxUtilities' : pre + '/externals/mxUtilities/mxUtilities',
-      'test/ambienceGenerator/src/ts_src/game_init' : pre + '/test/lib/ambienceGenerator/test_ambienceGenerator'
+      'test/bulletManager/src/ts_src/game_init' : pre + '/test/lib/bulletManager/test_bulletManager'
     },
 
     bundles: {
       'mxUtilities' : [
         "mxUtilitites",
-        "shaders/mxShader",
         "commons/mxEnums",
-        "pseudoRandom/mxHalton"
+        "optimization/mxObjectPool",
+        "optimization/mxPoolArgs",
+        "MxTools"
       ]
     },
 
@@ -35,7 +36,7 @@
     }
   });
 
-  define(["require", "test/ambienceGenerator/src/ts_src/game_init", "phaser"],function(require, GameInit, Phaser) {   
+  define(["require", "test/bulletManager/src/ts_src/game_init", "phaser", "mxUtilities"],function(require, GameInit, Phaser) {   
     var game_init = new GameInit();
     game_init.start();
     return;

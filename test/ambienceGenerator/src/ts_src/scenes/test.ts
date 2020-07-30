@@ -1,7 +1,6 @@
 import { LevelGenerator } from "../../../../../game/src/ts_src/levelGenerator/levelGenerator";
 import { AmbienceGenerator } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGenerator";
 import { AmbienceGeneratorConfig } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGeneratorConfig";
-import { MxHalton } from "pseudoRandom/mxHalton";
 import { HeightMap } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/heightMap";
 import { SurfacePainter } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/surfacePainter";
 
@@ -81,7 +80,7 @@ export class Test extends Phaser.Scene
   vegetation(_hMap : HeightMap)
   : void
   {
-    let pointSet : Array<Phaser.Geom.Point> = MxHalton.GetPointSet(300);
+    let pointSet : Array<Phaser.Geom.Point> = MxTools.PseudoRandom.MxHalton.GetPointSet(300);
 
     pointSet.sort
     (

@@ -17,6 +17,9 @@ import { CmpMovement } from "../components/cmpMovement";
 import { CmpAnimation } from "../components/cmpAnimation";
 import { StateHeroFFlight } from "../states/stateHeroFFLight";
 import { StateHeroGlide } from "../states/stateHeroGlide";
+import { CmpHeroBulletController } from "../components/cmpHeroBulletController";
+import { GameManager } from "../gameManager/gameManager";
+import { IBulletManager } from "../bulletManager/iBulletManager";
 
 /**
  * Create and manage the hero's actor. It provides a friendly interface to control
@@ -63,12 +66,16 @@ export class PlayerController
 
     // Create the Hero Actor
     
+    let bulletManager : IBulletManager 
+      = GameManager.GetInstance().getBulletManager();
+
     let hero : BaseActor<Phaser.Physics.Arcade.Sprite> 
       = BaseActor.Create(heroSprite, "hero");
     
     hero.addComponent(CmpHeroInput.Create()); // Input Controller
     hero.addComponent(CmpMovement.Create()); // Movement Controller
     hero.addComponent(CmpAnimation.Create()); // Animation Controller
+    hero.addComponent(CmpHeroBulletController.Create(bulletManager)); // Bullet Controller
     
     this.setPlayer(hero);
 
@@ -108,7 +115,12 @@ export class PlayerController
         _config.movement_rect_p2_x,
         _config.movement_rect_p2_y
       );
-    }   
+      this.setHeroFireRate(_config.player_fireRate);
+    }
+    else
+    {
+      this.setHeroFireRate(2);
+    }
     
     // Initialize the Hero
     
@@ -176,6 +188,9 @@ export class PlayerController
     return;
   }
 
+  /**
+   * 
+   */
   getInputMode()
   : string
   {
@@ -199,6 +214,35 @@ export class PlayerController
 
     input.setSpeed(_speed);
     return;
+  }
+
+  /**
+   * Set the Hero's fire rate in bullets per second.
+   * 
+   * @param _fireRate Number of bullets spawned per second. 
+   */
+  setHeroFireRate(_fireRate : number)
+  : void
+  {
+    let bulletController : CmpHeroBulletController
+      = this._m_player.getComponent<CmpHeroBulletController>(DC_COMPONENT_ID.kHeroBulletController);
+
+    bulletController.setFireRate(_fireRate);
+    return;
+  }
+
+  /**
+   * Get the hero's fire rate in bullets per second.
+   * 
+   * @returns Number of bullets spawned per second. 
+   */
+  getHeroFireRate()
+  : number
+  {
+    let bulletController : CmpHeroBulletController
+      = this._m_player.getComponent<CmpHeroBulletController>(DC_COMPONENT_ID.kHeroBulletController);
+
+    return bulletController.getFireRate();
   }
 
   /**

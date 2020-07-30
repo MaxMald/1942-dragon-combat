@@ -3817,7 +3817,7 @@ define("game/src/ts_src/levelGenerator/ambienceGenerator/heightMap", ["require",
     }());
     exports.HeightMap = HeightMap;
 });
-define("game/src/ts_src/levelGenerator/ambienceGenerator/surfacePainter", ["require", "exports", "commons/mxEnums", "behaviour/components/cmpShader", "game/src/ts_src/levelGenerator/ambienceGenerator/customTextureShader"], function (require, exports, mxEnums_1, cmpShader_1, customTextureShader_1) {
+define("game/src/ts_src/levelGenerator/ambienceGenerator/surfacePainter", ["require", "exports", "commons/mxEnums", "shaders/mxShader", "game/src/ts_src/levelGenerator/ambienceGenerator/customTextureShader"], function (require, exports, mxEnums_1, mxShader_1, customTextureShader_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.SurfacePainter = void 0;
@@ -3886,8 +3886,8 @@ define("game/src/ts_src/levelGenerator/ambienceGenerator/surfacePainter", ["requ
             shader.setOrigin(0.0, 0.0);
             shader.setDepth(-1000.0);
             shader.uniforms.d = { type: "1f", value: 0.0 };
-            this._m_surfaceShader = new cmpShader_1.CmpShader();
-            this._m_surfaceShader.prepare(shader);
+            this._m_surfaceShader = new mxShader_1.MxShader();
+            this._m_surfaceShader.init(shader);
             this._m_surfaceShader.initUniform('d');
             return mxEnums_1.OPRESULT.kOk;
         };
@@ -4015,7 +4015,7 @@ define("game/src/ts_src/levelGenerator/levelGenerator", ["require", "exports", "
     }());
     exports.LevelGenerator = LevelGenerator;
 });
-define("test/ambienceGenerator/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/levelGenerator/levelGenerator", "pseudoRandom/mxHalton"], function (require, exports, levelGenerator_1, mxHalton_1) {
+define("test/ambienceGenerator/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/levelGenerator/levelGenerator"], function (require, exports, levelGenerator_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Test = void 0;
@@ -4050,7 +4050,7 @@ define("test/ambienceGenerator/src/ts_src/scenes/test", ["require", "exports", "
             return;
         };
         Test.prototype.vegetation = function (_hMap) {
-            var pointSet = mxHalton_1.MxHalton.GetPointSet(300);
+            var pointSet = MxTools.PseudoRandom.MxHalton.GetPointSet(300);
             pointSet.sort(function (_a, _b) {
                 return _a.y - _b.y;
             });

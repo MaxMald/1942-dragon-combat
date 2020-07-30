@@ -24,6 +24,11 @@ export class PlayerControllerConfig
   player_speed : number;
 
   /**
+   * Number of bullets spawned per second.
+   */
+  player_fireRate : number;
+
+  /**
    * Set the control behaviour when the pointer is pressed.
    * 
    * RELATIVE: Relative movement moves the player the same ammount and direction 

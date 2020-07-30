@@ -3,9 +3,9 @@
   
   "compilerOptions":
   {       
-    "outDir": "../lib/playerController",
+    "outDir": "../lib/bulletManager",
     "rootDir": "../../",
-    "outFile": "../lib/playerController/test_playerController.js"  
+    "outFile": "../lib/bulletManager/test_bulletManager.js"  
   },
 
   "files" : [
@@ -23,6 +23,7 @@
     "../../game/src/ts_src/actors/**/*",
     "../../game/src/ts_src/message/**/*",
     "../../game/src/ts_src/states/**/*",
+    "../../game/src/ts_src/bulletManager/**/*",
     "../../game/src/ts_src/gameManager/**/*",
     "../../externals/mxUtilities/*"
   ],
