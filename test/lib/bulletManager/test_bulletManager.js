@@ -616,7 +616,6 @@ define("game/src/ts_src/bulletManager/nullBulletManager", ["require", "exports",
         };
         NullBulletManager.prototype.destroy = function () {
             this._m_pool.destroy();
-            console.log("NullBulletManager : destroy.");
             return;
         };
         return NullBulletManager;
@@ -938,12 +937,21 @@ define("game/src/ts_src/bulletManager/bulletManager", ["require", "exports", "op
             return bulletMng;
         };
         BulletManager.prototype.init = function (_scene, _config) {
+            var bodiesGroup = this._m_bodiesGroup;
+            if (bodiesGroup != null) {
+                bodiesGroup.destroy();
+            }
+            bodiesGroup = _scene.physics.add.group();
+            var pool = this._m_pool;
+            if (pool.getSize()) {
+                pool.clear();
+            }
             var size = _config.size;
             var bullet;
             var a_bullets = new Array();
             var sprite;
             while (size > 0) {
-                sprite = _scene.physics.add.sprite(0.0, 0.0, 'fireball');
+                sprite = bodiesGroup.create(0.0, 0.0, 'fireball');
                 sprite.active = false;
                 sprite.visible = false;
                 bullet = baseActor_2.BaseActor.Create(sprite, "Bullet_" + size.toString());
@@ -987,6 +995,9 @@ define("game/src/ts_src/bulletManager/bulletManager", ["require", "exports", "op
             });
             this._m_pool.clear();
             return;
+        };
+        BulletManager.prototype.getBodiesGroup = function () {
+            return this._m_bodiesGroup;
         };
         BulletManager.prototype.destroy = function () {
             this._m_pool.destroy();

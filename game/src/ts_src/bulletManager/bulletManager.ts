@@ -80,6 +80,28 @@ export class BulletManager implements IBulletManager
   )
   : void
   {
+    // Create the bodies group.
+
+    let bodiesGroup = this._m_bodiesGroup;
+
+    if(bodiesGroup != null)
+    {
+      bodiesGroup.destroy();
+    }
+
+    bodiesGroup = _scene.physics.add.group();
+
+    // Clear the object pool.
+
+    let pool = this._m_pool;
+
+    if(pool.getSize())
+    {
+      pool.clear();
+    }
+
+    // Create the bullets.
+
     let size = _config.size;
     
     let bullet : Bullet;
@@ -89,7 +111,7 @@ export class BulletManager implements IBulletManager
 
     while(size > 0)
     {
-      sprite = _scene.physics.add.sprite
+      sprite = bodiesGroup.create
       (
         0.0,
         0.0,
@@ -110,6 +132,8 @@ export class BulletManager implements IBulletManager
       --size;
     }
 
+    // Add bullets to the pool.
+
     this._m_pool.init(a_bullets);
 
     // Define the playzone area.
@@ -124,7 +148,9 @@ export class BulletManager implements IBulletManager
     (
       _scene.game.canvas.width + _config.playZone_padding,
       _scene.game.canvas.height + _config.playZone_padding
-    ); 
+    );
+
+    // Set bullet properties.
 
     this._m_bulletSpeed = _config.speed;
 
@@ -208,6 +234,17 @@ export class BulletManager implements IBulletManager
 
     this._m_pool.clear();
     return;
+  }
+
+  /**
+   * Get the bodies group of this bullet manager.
+   * 
+   * @returns Phaser physics group.
+   */
+  getBodiesGroup()
+  : Phaser.Physics.Arcade.Group
+  {
+    return this._m_bodiesGroup;
   }
 
   /**
@@ -334,4 +371,9 @@ export class BulletManager implements IBulletManager
    * Speed of the bullets in pixels per second.
    */
   private _m_bulletSpeed : number;
+
+  /**
+   * The physic bodies of the bullets.
+   */
+  private _m_bodiesGroup : Phaser.Physics.Arcade.Group;
 }

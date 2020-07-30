@@ -14,6 +14,9 @@ import { GameManager } from "../gameManager/gameManager";
 import { DC_COMPONENT_ID } from "./dcComponentID";
 import { IBaseComponent } from "./iBaseComponent";
 
+/**
+ * Spwan bullets relative to the hero position. It needs a BulletManager.
+ */
 export class CmpHeroBulletController implements IBaseComponent<Phaser.Physics.Arcade.Sprite>
 {
   /****************************************************/
@@ -49,6 +52,11 @@ export class CmpHeroBulletController implements IBaseComponent<Phaser.Physics.Ar
     return;
   }
 
+  /**
+   * Spawn bullets.
+   * 
+   * @param _actor 
+   */
   update(_actor: BaseActor<Phaser.Physics.Arcade.Sprite>)
   : void 
   {
@@ -69,6 +77,11 @@ export class CmpHeroBulletController implements IBaseComponent<Phaser.Physics.Ar
     return;
   }
 
+  /**
+   * 
+   * @param _id 
+   * @param _obj 
+   */
   receive(_id: number, _obj: any)
   : void 
   {

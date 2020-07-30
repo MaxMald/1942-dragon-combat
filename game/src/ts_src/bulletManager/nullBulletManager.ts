@@ -69,8 +69,6 @@ export class NullBulletManager implements IBulletManager
   destroy() : void 
   { 
     this._m_pool.destroy();
-
-    console.log("NullBulletManager : destroy.");
     return;
   }
 
