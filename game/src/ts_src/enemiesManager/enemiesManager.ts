@@ -11,6 +11,8 @@
 import { MxObjectPool } from "optimization/mxObjectPool";
 import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
+import { DC_COMPONENT_ID } from "../components/dcComponentID";
+import { ICmpCollisionController } from "../components/iCmpCollisionController";
 import { EnemiesManagerConfig } from "./enemiesManagerConfig";
 import { IEnemiesManager } from "./iEnemiesManager";
 
@@ -99,6 +101,8 @@ export class EnemiesManager implements IEnemiesManager
       actor = BaseActor.Create(sprite, "Enemy_" + size.toString());
       a_actors.push(actor);
 
+      sprite.setData('actor', actor);
+
       --size;
     }
 
@@ -120,6 +124,39 @@ export class EnemiesManager implements IEnemiesManager
   }
 
   /**
+   * Get the group of physics bodies.
+   */
+  getBodiesGroup()
+  : Phaser.Physics.Arcade.Group
+  {
+    return this._m_bodiesGroup;
+  }
+
+  /**
+   * Add a collision detection against a group.
+   * 
+   * @param _scene The scene wich the physic engine.
+   * @param _bodies The bodies group.
+   */
+  collisionVsGroup
+  (
+    _scene : Phaser.Scene, 
+    _bodies : Phaser.Physics.Arcade.Group
+  )
+  : void
+  {
+    _scene.physics.add.collider
+    (
+      _bodies,
+      this._m_bodiesGroup,
+      this._onCollision, 
+      undefined, 
+      this
+    );
+    return;
+  }
+
+  /**
    * Safely destroys this object.
    */
   destroy()
@@ -133,6 +170,34 @@ export class EnemiesManager implements IEnemiesManager
   /****************************************************/
   /* Private                                          */
   /****************************************************/
+
+   /**
+   * Called when an actor has a collision with another body.
+   * 
+   * @param _other the other body. 
+   * @param _bullet the actor's sprite body.
+   */
+  private _onCollision
+  (
+    _other : Phaser.Physics.Arcade.Sprite,
+    _sprite : Phaser.Physics.Arcade.Sprite
+  )
+  : void
+  {
+    let baseActor : BaseActor<Phaser.Physics.Arcade.Sprite> 
+      = _sprite.getData("actor");
+
+    let controller 
+      = baseActor.getComponent<ICmpCollisionController>
+      (
+        DC_COMPONENT_ID.kCollisionController
+      );
+
+    controller.onCollision(baseActor, _other.getData('actor'));
+
+    console.log("Collision!");
+    return;
+  }
 
   /**
    * Called by the pool when an element had been activated.
@@ -153,6 +218,7 @@ export class EnemiesManager implements IEnemiesManager
 
     sprite.visible = true;
     sprite.active = true;
+    sprite.body.enable = true;
 
     return;
   }
@@ -176,6 +242,7 @@ export class EnemiesManager implements IEnemiesManager
 
     sprite.visible = false;
     sprite.active = false;
+    sprite.body.enable = false;
 
     return;
   }

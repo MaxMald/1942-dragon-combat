@@ -11,7 +11,10 @@
 import { MxObjectPool } from "optimization/mxObjectPool";
 import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
+import { CmpBulletCollisionController } from "../components/cmpBulletCollisionController";
 import { CmpMovementBullet } from "../components/cmpMovementBullet";
+import { DC_COMPONENT_ID } from "../components/dcComponentID";
+import { ICmpCollisionController } from "../components/iCmpCollisionController";
 import { DC_MESSAGE_ID } from "../messages/dcMessageID";
 import { BulletManagerConfig } from "./bulletManagerConfig";
 import { IBulletManager } from "./iBulletManager";
@@ -124,7 +127,10 @@ export class BulletManager implements IBulletManager
 
       bullet = BaseActor.Create(sprite, "Bullet_" + size.toString());
 
+      sprite.setData('actor', bullet);
+
       bullet.addComponent(CmpMovementBullet.Create());
+      bullet.addComponent(CmpBulletCollisionController.Create());
 
       bullet.init();
 
@@ -249,6 +255,29 @@ export class BulletManager implements IBulletManager
   }
 
   /**
+   * Add a collision detection against a group.
+   * 
+   * @param _scene The scene wich the physic engine.
+   * @param _bodies The bodies group.
+   */
+  collisionVsGroup
+  (
+    _scene : Phaser.Scene, 
+    _bodies : Phaser.Physics.Arcade.Group
+  )
+  : void
+  {
+    _scene.physics.add.collider
+    (
+      _bodies,
+      this._m_bodiesGroup,
+      this._onCollision, 
+      undefined, 
+      this
+    )
+  }
+
+  /**
    * Safely destroys this Bullet Manager.
    */
   destroy()
@@ -268,6 +297,51 @@ export class BulletManager implements IBulletManager
    */
   private constructor()
   { }
+
+  /**
+   * Called when a bullet has a collisio with another body.
+   * 
+   * @param _other the other body. 
+   * @param _bullet the bullet body.
+   */
+  private _onCollision
+  (
+    _other : Phaser.Physics.Arcade.Sprite,
+    _bullet : Phaser.Physics.Arcade.Sprite
+  )
+  : void
+  {
+    // Call onCollision method of the bullet.
+
+    let bulletActor : Bullet = _bullet.getData("actor");
+
+    let bulletController 
+      = bulletActor.getComponent<ICmpCollisionController>
+      (
+        DC_COMPONENT_ID.kCollisionController
+      );
+
+    let otherActor : BaseActor<Phaser.Physics.Arcade.Sprite>
+      = _other.getData('actor');
+
+    bulletController.onCollision(otherActor, bulletActor);
+
+    // Call onCollision method of the other object.
+    
+    let otherController 
+      = otherActor.getComponent<ICmpCollisionController>
+      (
+        DC_COMPONENT_ID.kCollisionController
+      );
+    
+    otherController.onCollision(bulletActor, otherActor);
+
+    // Desactive bullet.
+
+    this._m_pool.desactive(bulletActor);
+
+    return;
+  }
 
   /**
    * Called at every game loop.
@@ -308,6 +382,7 @@ export class BulletManager implements IBulletManager
 
     sprite.visible = true;
     sprite.active = true;
+    sprite.body.enable = true;
 
     return;
   }
@@ -331,6 +406,7 @@ export class BulletManager implements IBulletManager
 
     sprite.visible = false;
     sprite.active = false;
+    sprite.body.enable = false;
 
     return;
   }

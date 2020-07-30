@@ -27,5 +27,10 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpMovementBullet.
    */
-  kMovementBullet : 4 as 4
+  kMovementBullet : 4 as 4,
+
+  /**
+   * CmpCollisionController.
+   */
+  kCollisionController : 5 as 5
 });

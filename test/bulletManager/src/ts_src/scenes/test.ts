@@ -9,6 +9,7 @@ import { CmpHeroBulletController } from "../../../../../game/src/ts_src/componen
 import { DC_COMPONENT_ID } from "../../../../../game/src/ts_src/components/dcComponentID";
 import { EnemiesManagerConfig } from "../../../../../game/src/ts_src/enemiesManager/enemiesManagerConfig";
 import { BaseActor } from "../../../../../game/src/ts_src/actors/baseActor";
+import { CmpTargetController } from "../../../../../game/src/ts_src/components/cmpTargetController";
 
 
 export class Test extends Phaser.Scene
@@ -157,6 +158,10 @@ export class Test extends Phaser.Scene
 
     gameManager.setEnemiesManager(enemiesManager);
 
+    // Collision:
+
+    bulletManager.collisionVsGroup(this, enemiesManager.getBodiesGroup());
+
     ///////////////////////////////////
     // Targets
 
@@ -173,6 +178,9 @@ export class Test extends Phaser.Scene
 
       if(actor != null)
       {
+        actor.addComponent(CmpTargetController.Create());
+        actor.init();
+
         sprite = actor.getWrappedInstance();
 
         sprite.x = off * target_size;
@@ -208,8 +216,6 @@ export class Test extends Phaser.Scene
 
     ///////////////////////////////////
     // Targets
-
-
 
     return;
   }
