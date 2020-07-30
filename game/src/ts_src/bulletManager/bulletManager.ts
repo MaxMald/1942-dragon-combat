@@ -1,7 +1,8 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary 
+ * @summary Create, manage and provides bullets. The BulletManager storage a group of 
+ * bullets in an object pool and saves its physics body in an array.
  *
  * @file bulletManager.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
@@ -22,7 +23,8 @@ import { IBulletManager } from "./iBulletManager";
 type Bullet = BaseActor<Phaser.Physics.Arcade.Sprite>;
 
 /**
- * 
+ * Create, manage and provides bullets. The BulletManager storage a group of 
+ * bullets in an object pool and saves its physics body in an array.
  */
 export class BulletManager implements IBulletManager
 {
@@ -74,7 +76,6 @@ export class BulletManager implements IBulletManager
    * 
    * @param _scene Scene where the bullets are going to be build.
    * @param _config Configuration file.
-   * be desactivated.
    */
   init
   (
@@ -299,7 +300,11 @@ export class BulletManager implements IBulletManager
   { }
 
   /**
-   * Called when a bullet has a collisio with another body.
+   * Called when a bullet has a collision with another body. This method calls
+   * the onCollision method of the bullet and the other body.
+   * 
+   * The bullet and the other object must have an implementation of the 
+   * ICmpCollisionController in one of theirs components.
    * 
    * @param _other the other body. 
    * @param _bullet the bullet body.
@@ -411,6 +416,16 @@ export class BulletManager implements IBulletManager
     return;
   }
 
+  /**
+   * Check if the position is inside the playzone area. The playzone area defines
+   * the zone where a bullet can live, if it get out of this zone it must be
+   * desactivated.
+   * 
+   * @param _x position in x axis. 
+   * @param _y position in y axis.
+   * 
+   * @returns true if the given position is inside the playzone area.
+   */
   private _isPlayzone(_x : number, _y : number)
   : boolean
   {

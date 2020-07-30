@@ -1,7 +1,12 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary 
+ * @summary The EnemiesManager create, manage and provides Actors for enemy usage. This
+ * class have a pool of actors with a fixed size, that can be defined with 
+ * the configuration object.
+ * 
+ * It also has the list of physics bodies of each BaseActor, useful to handle
+ * collisions with the enemies.
  *
  * @file enemiesManager.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
@@ -18,6 +23,14 @@ import { IEnemiesManager } from "./iEnemiesManager";
 
 type EnemyActor = BaseActor<Phaser.Physics.Arcade.Sprite>;
 
+/**
+ * The EnemiesManager create, manage and provides Actors for enemy usage. This
+ * class have a pool of actors with a fixed size, that can be defined with 
+ * the configuration object.
+ * 
+ * It also has the list of physics bodies of each BaseActor, useful to handle
+ * collisions with the enemies.
+ */
 export class EnemiesManager implements IEnemiesManager
 {
   /****************************************************/

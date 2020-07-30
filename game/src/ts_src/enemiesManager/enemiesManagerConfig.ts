@@ -14,7 +14,13 @@ export class EnemiesManagerConfig
   /* Public                                           */
   /****************************************************/
   
+  /**
+   * Number of BaseActor that he EnemiesManager will have.
+   */
   pool_size : number;
 
+  /**
+   * The sprite's texture key of each BaseActor.
+   */
   texture_key : string;
 }

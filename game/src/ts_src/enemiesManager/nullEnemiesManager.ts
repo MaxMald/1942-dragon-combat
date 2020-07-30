@@ -1,4 +1,3 @@
-import { BaseActor } from "../actors/baseActor";
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -10,7 +9,11 @@ import { BaseActor } from "../actors/baseActor";
  */
 
 import { IEnemiesManager } from "./iEnemiesManager";
+import { BaseActor } from "../actors/baseActor";
 
+/**
+ * This class is used when the GameManager had not receive any EnemiesManager.
+ */
 export class NullEnemiesManager implements IEnemiesManager
 {
   /****************************************************/
