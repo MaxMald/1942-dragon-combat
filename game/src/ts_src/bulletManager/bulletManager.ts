@@ -90,6 +90,7 @@ export class BulletManager implements IBulletManager
     }
 
     bodiesGroup = _scene.physics.add.group();
+    this._m_bodiesGroup = bodiesGroup;
 
     // Clear the object pool.
 
@@ -254,6 +255,7 @@ export class BulletManager implements IBulletManager
   : void
   {
     this._m_pool.destroy();
+    this._m_bodiesGroup.destroy();
     return;
   }
 

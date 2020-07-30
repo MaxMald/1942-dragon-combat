@@ -25,6 +25,7 @@
     "../../game/src/ts_src/states/**/*",
     "../../game/src/ts_src/bulletManager/**/*",
     "../../game/src/ts_src/gameManager/**/*",
+    "../../game/src/ts_src/enemiesManager/**/*",
     "../../externals/mxUtilities/*"
   ],
 

@@ -4,10 +4,12 @@ import { NullState } from "../../../../../game/src/ts_src/states/nullState";
 import { BulletManager } from "../../../../../game/src/ts_src/bulletManager/bulletManager";
 import { BulletManagerConfig } from "../../../../../game/src/ts_src/bulletManager/bulletManagerConfig";
 import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
+import { EnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/enemiesManager";
 import { CmpHeroBulletController } from "../../../../../game/src/ts_src/components/cmpHeroBulletController";
-import { CmpMovementBullet } from "../../../../../game/src/ts_src/components/cmpMovementBullet";
 import { DC_COMPONENT_ID } from "../../../../../game/src/ts_src/components/dcComponentID";
+import { EnemiesManagerConfig } from "../../../../../game/src/ts_src/enemiesManager/enemiesManagerConfig";
 import { BaseActor } from "../../../../../game/src/ts_src/actors/baseActor";
+
 
 export class Test extends Phaser.Scene
 {
@@ -47,8 +49,8 @@ export class Test extends Phaser.Scene
 
     this.load.image
     (
-      'button',
-      'images/button.png'
+      'target',
+      'images/target.png'
     );
 
     this.load.image
@@ -140,6 +142,45 @@ export class Test extends Phaser.Scene
     this._m_bulletManager = bulletManager;
 
     gameManager.setBulletManager(bulletManager);
+
+    ///////////////////////////////////
+    // Enemies Manager
+
+    let enemiesManager : EnemiesManager = EnemiesManager.Create();
+
+    let enemiesManagerConfig = new EnemiesManagerConfig();
+
+    enemiesManagerConfig.pool_size = 3;
+    enemiesManagerConfig.texture_key = "target";
+
+    enemiesManager.init(this, enemiesManagerConfig);
+
+    gameManager.setEnemiesManager(enemiesManager);
+
+    ///////////////////////////////////
+    // Targets
+
+    let target_size = 3;
+    let off = this._m_canvas_size.x * 0.25;
+    
+    let actor : BaseActor<Phaser.Physics.Arcade.Sprite>;
+    let sprite : Phaser.Physics.Arcade.Sprite;
+
+    while(target_size > 0)
+    {
+
+      actor = enemiesManager.getActor();
+
+      if(actor != null)
+      {
+        sprite = actor.getWrappedInstance();
+
+        sprite.x = off * target_size;
+        sprite.y = 200.0;
+      }
+      
+      --target_size;
+    }
     
     ///////////////////////////////////
     // Player Controller
@@ -164,6 +205,11 @@ export class Test extends Phaser.Scene
     this._m_heroController = heroController;
 
     gameManager.setPlayerController(heroController);
+
+    ///////////////////////////////////
+    // Targets
+
+
 
     return;
   }

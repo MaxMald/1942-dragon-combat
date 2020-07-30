@@ -10,6 +10,8 @@
 
 import { IBulletManager } from "../bulletManager/iBulletManager";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
+import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
+import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
 import { PlayerController } from "../playerController/playerController";
 
 export class GameManager
@@ -117,6 +119,44 @@ export class GameManager
   }
 
   /**
+   * Set the Enemies Manager.
+   * 
+   * @param _enemiesManager Referencec to the IEnemiesManager. 
+   */
+  setEnemiesManager(_enemiesManager : IEnemiesManager)
+  : void
+  {
+    if(this._m_enemiesManager != null)
+    {
+      this._m_enemiesManager.destroy();
+    }
+
+    this._m_enemiesManager = _enemiesManager;
+    return;
+  }
+
+  /**
+   * Get the Enemeis Manager.
+   */
+  getEnemiesManager()
+  : IEnemiesManager
+  {
+    return this._m_enemiesManager;
+  }
+
+  /**
+  * Safely destroys the object.
+  */
+  destroy()
+  : void 
+  {
+    this._m_bulletManager.destroy();
+    this._m_playerController.destroy();
+    this._m_enemiesManager.destroy();
+    return;
+  }
+
+  /**
    * Delta time.
    */
   m_dt : number;
@@ -134,6 +174,7 @@ export class GameManager
     this.m_dt = 0.0;
 
     this._m_bulletManager = new NullBulletManager();
+    this._m_enemiesManager = new NullEnemiesManager();
     return;
   }
 
@@ -165,6 +206,11 @@ export class GameManager
    * Reference to the BulletManager.
    */
   private _m_bulletManager : IBulletManager;
+
+  /**
+   * Reference to the IEnemiesManager.
+   */
+  private _m_enemiesManager : IEnemiesManager;
 
   /**
    * Reference to the PlayerController.

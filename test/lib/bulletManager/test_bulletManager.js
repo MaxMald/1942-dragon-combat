@@ -622,7 +622,27 @@ define("game/src/ts_src/bulletManager/nullBulletManager", ["require", "exports",
     }());
     exports.NullBulletManager = NullBulletManager;
 });
-define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "game/src/ts_src/bulletManager/nullBulletManager"], function (require, exports, nullBulletManager_1) {
+define("game/src/ts_src/enemiesManager/iEnemiesManager", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/enemiesManager/nullEnemiesManager", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullEnemiesManager = void 0;
+    var NullEnemiesManager = (function () {
+        function NullEnemiesManager() {
+        }
+        NullEnemiesManager.prototype.getActor = function () {
+            console.log("NullEnemiesManager : getActor. ");
+            return null;
+        };
+        NullEnemiesManager.prototype.destroy = function () { };
+        return NullEnemiesManager;
+    }());
+    exports.NullEnemiesManager = NullEnemiesManager;
+});
+define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "game/src/ts_src/bulletManager/nullBulletManager", "game/src/ts_src/enemiesManager/nullEnemiesManager"], function (require, exports, nullBulletManager_1, nullEnemiesManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.GameManager = void 0;
@@ -668,9 +688,26 @@ define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "game/s
         GameManager.prototype.getPlayerController = function () {
             return this._m_playerController;
         };
+        GameManager.prototype.setEnemiesManager = function (_enemiesManager) {
+            if (this._m_enemiesManager != null) {
+                this._m_enemiesManager.destroy();
+            }
+            this._m_enemiesManager = _enemiesManager;
+            return;
+        };
+        GameManager.prototype.getEnemiesManager = function () {
+            return this._m_enemiesManager;
+        };
+        GameManager.prototype.destroy = function () {
+            this._m_bulletManager.destroy();
+            this._m_playerController.destroy();
+            this._m_enemiesManager.destroy();
+            return;
+        };
         GameManager.prototype._onPrepare = function () {
             this.m_dt = 0.0;
             this._m_bulletManager = new nullBulletManager_1.NullBulletManager();
+            this._m_enemiesManager = new nullEnemiesManager_1.NullEnemiesManager();
             return;
         };
         GameManager.prototype._onShutdown = function () {
@@ -942,6 +979,7 @@ define("game/src/ts_src/bulletManager/bulletManager", ["require", "exports", "op
                 bodiesGroup.destroy();
             }
             bodiesGroup = _scene.physics.add.group();
+            this._m_bodiesGroup = bodiesGroup;
             var pool = this._m_pool;
             if (pool.getSize()) {
                 pool.clear();
@@ -1001,6 +1039,7 @@ define("game/src/ts_src/bulletManager/bulletManager", ["require", "exports", "op
         };
         BulletManager.prototype.destroy = function () {
             this._m_pool.destroy();
+            this._m_bodiesGroup.destroy();
             return;
         };
         BulletManager.prototype._updateBullet = function (_bullet) {
@@ -1034,7 +1073,83 @@ define("game/src/ts_src/bulletManager/bulletManager", ["require", "exports", "op
     }());
     exports.BulletManager = BulletManager;
 });
-define("test/bulletManager/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/playerController/playerController", "game/src/ts_src/states/nullState", "game/src/ts_src/bulletManager/bulletManager", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/components/dcComponentID"], function (require, exports, playerController_1, nullState_2, bulletManager_1, gameManager_3, dcComponentID_7) {
+define("game/src/ts_src/enemiesManager/enemiesManagerConfig", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.EnemiesManagerConfig = void 0;
+    var EnemiesManagerConfig = (function () {
+        function EnemiesManagerConfig() {
+        }
+        return EnemiesManagerConfig;
+    }());
+    exports.EnemiesManagerConfig = EnemiesManagerConfig;
+});
+define("game/src/ts_src/enemiesManager/enemiesManager", ["require", "exports", "optimization/mxObjectPool", "game/src/ts_src/actors/baseActor"], function (require, exports, mxObjectPool_3, baseActor_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.EnemiesManager = void 0;
+    var EnemiesManager = (function () {
+        function EnemiesManager() {
+        }
+        EnemiesManager.Create = function () {
+            var manager = new EnemiesManager();
+            var pool = mxObjectPool_3.MxObjectPool.Create();
+            manager._m_actorPool = pool;
+            pool.suscribe('elementActive', 'EnemiesManager', manager._onActive, manager);
+            pool.suscribe('elementDesactive', 'EnemiesManager', manager._onDesactive, manager);
+            return manager;
+        };
+        EnemiesManager.prototype.init = function (_scene, _config) {
+            var bodiesGroup = this._m_bodiesGroup;
+            if (bodiesGroup != null) {
+                bodiesGroup.destroy();
+            }
+            bodiesGroup = _scene.physics.add.group();
+            this._m_bodiesGroup = bodiesGroup;
+            var actorPool = this._m_actorPool;
+            actorPool.clear();
+            var size = _config.pool_size;
+            var actor;
+            var sprite;
+            var a_actors = new Array();
+            while (size > 0) {
+                sprite = bodiesGroup.create(0.0, 0.0, _config.texture_key);
+                sprite.visible = false;
+                sprite.active = false;
+                actor = baseActor_3.BaseActor.Create(sprite, "Enemy_" + size.toString());
+                a_actors.push(actor);
+                --size;
+            }
+            actorPool.init(a_actors);
+            return;
+        };
+        EnemiesManager.prototype.getActor = function () {
+            return this._m_actorPool.get();
+        };
+        EnemiesManager.prototype.destroy = function () {
+            this._m_bodiesGroup.destroy();
+            this._m_actorPool.destroy();
+            return;
+        };
+        EnemiesManager.prototype._onActive = function (_pool, _args) {
+            var actor = _args.element;
+            var sprite = actor.getWrappedInstance();
+            sprite.visible = true;
+            sprite.active = true;
+            return;
+        };
+        EnemiesManager.prototype._onDesactive = function (_pool, _args) {
+            var actor = _args.element;
+            var sprite = actor.getWrappedInstance();
+            sprite.visible = false;
+            sprite.active = false;
+            return;
+        };
+        return EnemiesManager;
+    }());
+    exports.EnemiesManager = EnemiesManager;
+});
+define("test/bulletManager/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/playerController/playerController", "game/src/ts_src/states/nullState", "game/src/ts_src/bulletManager/bulletManager", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/enemiesManager/enemiesManager", "game/src/ts_src/components/dcComponentID", "game/src/ts_src/enemiesManager/enemiesManagerConfig"], function (require, exports, playerController_1, nullState_2, bulletManager_1, gameManager_3, enemiesManager_1, dcComponentID_7, enemiesManagerConfig_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Test = void 0;
@@ -1049,7 +1164,7 @@ define("test/bulletManager/src/ts_src/scenes/test", ["require", "exports", "game
             this.load.animation("dragon_anim", "animations/DragonFlight.json");
             this.load.text('playerControllerConfig', 'configFiles/playerControllerConfig.json');
             this.load.text('bulletManagerConfig', 'configFiles/bulletManagerConfig.json');
-            this.load.image('button', 'images/button.png');
+            this.load.image('target', 'images/target.png');
             this.load.image('fireball', 'images/fireball.png');
             return;
         };
@@ -1070,6 +1185,25 @@ define("test/bulletManager/src/ts_src/scenes/test", ["require", "exports", "game
             bulletManager.init(this, bmConfig);
             this._m_bulletManager = bulletManager;
             gameManager.setBulletManager(bulletManager);
+            var enemiesManager = enemiesManager_1.EnemiesManager.Create();
+            var enemiesManagerConfig = new enemiesManagerConfig_1.EnemiesManagerConfig();
+            enemiesManagerConfig.pool_size = 3;
+            enemiesManagerConfig.texture_key = "target";
+            enemiesManager.init(this, enemiesManagerConfig);
+            gameManager.setEnemiesManager(enemiesManager);
+            var target_size = 3;
+            var off = this._m_canvas_size.x * 0.25;
+            var actor;
+            var sprite;
+            while (target_size > 0) {
+                actor = enemiesManager.getActor();
+                if (actor != null) {
+                    sprite = actor.getWrappedInstance();
+                    sprite.x = off * target_size;
+                    sprite.y = 200.0;
+                }
+                --target_size;
+            }
             var pcConfig = JSON.parse(this.cache.text.get('playerControllerConfig'));
             var padding = 100;
             pcConfig.movement_rect_p1_x = padding;
