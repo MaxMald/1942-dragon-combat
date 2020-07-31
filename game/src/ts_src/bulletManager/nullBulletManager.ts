@@ -1,7 +1,8 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary Null object implementation for the BulletManager. 
+ * @summary This class has no implementations, it is used by the GameManager
+ * when no implementation of the IBulletManager was given.
  *
  * @file nullBulletManager.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
@@ -9,20 +10,24 @@
  */
 
 import { MxObjectPool } from "optimization/mxObjectPool";
-import { BaseActor } from "../actors/baseActor";
+import { Ty_physicsActor } from "../commons/1942types";
 import { IBulletManager } from "./iBulletManager";
 
-type Bullet = BaseActor<Phaser.Physics.Arcade.Sprite>;
-
 /**
- * Null object implementation for the BulletManager.
+ * This class has no implementations, it is used by the GameManager when no 
+ * implementation of the IBulletManager was given.
  */
 export class NullBulletManager implements IBulletManager
 { 
+
+  /**
+   * Creates a BulletManager with no implementations. It will have an empty
+   * pool.
+   */
   constructor()
   { 
     this._m_pool = MxObjectPool.Create();
-    this._m_pool.init(new Array<Bullet>());
+    this._m_pool.init(new Array<Ty_physicsActor>());
     return;
   }
 
@@ -30,12 +35,17 @@ export class NullBulletManager implements IBulletManager
   /* Public                                           */
   /****************************************************/ 
 
+  /**
+   * No implementation.
+   * 
+   * @param _dt 
+   */
   update(_dt : number) 
   : void
   { }
 
   /**
-   * Spawn a bullet in the world.
+   * No implementation.
    */
   spawn(_x : number, _y : number) : void 
   {
@@ -44,18 +54,18 @@ export class NullBulletManager implements IBulletManager
   };
 
   /**
-   * Get the object pool of this Bullet Manager.
+   * Returns an empty pool.
    * 
-   * @returns ObjectPool.
+   * @returns empty pool.
    */
-  getPool() : MxObjectPool<Bullet> 
+  getPool() : MxObjectPool<Ty_physicsActor> 
   {
     console.log("NullBulletManager : get pool.");
     return this._m_pool; 
   }
 
   /**
-   * Destroy all the bullets of this BulletManager and clear the pool.
+   * No implementation.
    */
   clear() : void 
   {
@@ -64,7 +74,7 @@ export class NullBulletManager implements IBulletManager
   }
 
   /**
-   * Safely destroys this Bullet Manager.
+   * Destroys its empty pool.
    */
   destroy() : void 
   { 
@@ -77,7 +87,7 @@ export class NullBulletManager implements IBulletManager
   /****************************************************/
 
   /**
-   * Object pool of Phaser Sprites (bullets).
+   * Empty pool.
    */
-  private _m_pool : MxObjectPool<Bullet>;
+  private _m_pool : MxObjectPool<Ty_physicsActor>;
 }

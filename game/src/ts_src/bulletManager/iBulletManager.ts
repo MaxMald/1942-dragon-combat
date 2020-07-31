@@ -1,7 +1,10 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary 
+ * @summary A BulletManager creates, manage and provides bullets of an especific
+ * type.
+ *
+ * It has a fixed pool of actors, that behave as bullets.
  *
  * @file iBulletManager.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
@@ -9,12 +12,12 @@
  */
 
 import { MxObjectPool } from "optimization/mxObjectPool";
-import { BaseActor } from "../actors/baseActor";
-
-type Bullet = BaseActor<Phaser.Physics.Arcade.Sprite>;
+import { Ty_physicsActor } from "../commons/1942types";
 
 /**
- * Base interface of a Bullet Manager.
+ * A BulletManager creates, manage and provides bullets of an especific type.
+ * 
+ * It has a fixed pool of actors, that behave as bullets.
  */
 export interface IBulletManager
 {
@@ -39,7 +42,7 @@ export interface IBulletManager
    * 
    * @returns ObjectPool.
    */
-  getPool() : MxObjectPool<Bullet>;
+  getPool() : MxObjectPool<Ty_physicsActor>;
 
   /**
    * Destroy all the bullets of this BulletManager and clear the pool.

@@ -1,8 +1,8 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary Create, manage and provides bullets. The BulletManager storage a group of 
- * bullets in an object pool and saves its physics body in an array.
+ * @summary Create, manage and provides bullets. The BulletManager storage a
+ * group of bullets in an object pool and saves its physics body in an array.
  *
  * @file bulletManager.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
@@ -12,6 +12,7 @@
 import { MxObjectPool } from "optimization/mxObjectPool";
 import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
+import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
 import { CmpBulletCollisionController } from "../components/cmpBulletCollisionController";
 import { CmpMovementBullet } from "../components/cmpMovementBullet";
 import { DC_COMPONENT_ID } from "../components/dcComponentID";
@@ -19,8 +20,6 @@ import { ICmpCollisionController } from "../components/iCmpCollisionController";
 import { DC_MESSAGE_ID } from "../messages/dcMessageID";
 import { BulletManagerConfig } from "./bulletManagerConfig";
 import { IBulletManager } from "./iBulletManager";
-
-type Bullet = BaseActor<Phaser.Physics.Arcade.Sprite>;
 
 /**
  * Create, manage and provides bullets. The BulletManager storage a group of 
@@ -40,7 +39,7 @@ export class BulletManager implements IBulletManager
   {
     let bulletMng : BulletManager = new BulletManager();
 
-    let pool : MxObjectPool<Bullet> = MxObjectPool.Create<Bullet>();
+    let pool : MxObjectPool<Ty_physicsActor> = MxObjectPool.Create<Ty_physicsActor>();
 
     pool.suscribe
     (
@@ -72,7 +71,7 @@ export class BulletManager implements IBulletManager
   }
 
   /**
-   * Intialize this Bullet manager with a configuration file.
+   * Intialize this Ty_physicsActor manager with a configuration file.
    * 
    * @param _scene Scene where the bullets are going to be build.
    * @param _config Configuration file.
@@ -109,10 +108,10 @@ export class BulletManager implements IBulletManager
 
     let size = _config.size;
     
-    let bullet : Bullet;
-    let a_bullets : Bullet[] = new Array<Bullet>();
+    let bullet : Ty_physicsActor;
+    let a_bullets : Ty_physicsActor[] = new Array<Ty_physicsActor>();
 
-    let sprite : Phaser.Physics.Arcade.Sprite;
+    let sprite : Ty_physicsSprite;
 
     while(size > 0)
     {
@@ -198,7 +197,7 @@ export class BulletManager implements IBulletManager
   spawn(_x : number, _y : number)
   : void
   {
-    let bullet : Bullet = this._m_pool.get();
+    let bullet : Ty_physicsActor = this._m_pool.get();
 
     if(bullet !== null) 
     {
@@ -212,12 +211,12 @@ export class BulletManager implements IBulletManager
   }
 
   /**
-   * Get the object pool of this Bullet Manager.
+   * Get the object pool of this Ty_physicsActor Manager.
    * 
    * @returns ObjectPool.
    */
   getPool()
-  : MxObjectPool<Bullet>
+  : MxObjectPool<Ty_physicsActor>
   {
     return this._m_pool;
   }
@@ -232,7 +231,7 @@ export class BulletManager implements IBulletManager
 
     pool.forEach
     (
-      function(_bullet : Bullet)
+      function(_bullet : Ty_physicsActor)
       : void
       {
         _bullet.destroy();
@@ -250,7 +249,7 @@ export class BulletManager implements IBulletManager
    * @returns Phaser physics group.
    */
   getBodiesGroup()
-  : Phaser.Physics.Arcade.Group
+  : Ty_physicsGroup
   {
     return this._m_bodiesGroup;
   }
@@ -264,7 +263,7 @@ export class BulletManager implements IBulletManager
   collisionVsGroup
   (
     _scene : Phaser.Scene, 
-    _bodies : Phaser.Physics.Arcade.Group
+    _bodies : Ty_physicsGroup
   )
   : void
   {
@@ -279,7 +278,7 @@ export class BulletManager implements IBulletManager
   }
 
   /**
-   * Safely destroys this Bullet Manager.
+   * Safely destroys this Ty_physicsActor Manager.
    */
   destroy()
   : void
@@ -311,14 +310,14 @@ export class BulletManager implements IBulletManager
    */
   private _onCollision
   (
-    _other : Phaser.Physics.Arcade.Sprite,
-    _bullet : Phaser.Physics.Arcade.Sprite
+    _other : Ty_physicsSprite,
+    _bullet : Ty_physicsSprite
   )
   : void
   {
     // Call onCollision method of the bullet.
 
-    let bulletActor : Bullet = _bullet.getData("actor");
+    let bulletActor : Ty_physicsActor = _bullet.getData("actor");
 
     let bulletController 
       = bulletActor.getComponent<ICmpCollisionController>
@@ -326,7 +325,7 @@ export class BulletManager implements IBulletManager
         DC_COMPONENT_ID.kCollisionController
       );
 
-    let otherActor : BaseActor<Phaser.Physics.Arcade.Sprite>
+    let otherActor : BaseActor<Ty_physicsSprite>
       = _other.getData('actor');
 
     bulletController.onCollision(otherActor, bulletActor);
@@ -351,9 +350,9 @@ export class BulletManager implements IBulletManager
   /**
    * Called at every game loop.
    * 
-   * @param _bullet Bullet.
+   * @param _bullet Ty_physicsActor.
    */
-  private _updateBullet(_bullet : Bullet)
+  private _updateBullet(_bullet : Ty_physicsActor)
   : void
   {
     _bullet.sendMessage(DC_MESSAGE_ID.kAgentMove, this._m_v3);
@@ -376,14 +375,14 @@ export class BulletManager implements IBulletManager
    */
   private _onActive
   (
-    _pool : MxObjectPool<Bullet>,
-    _args : MxPoolArgs<Bullet>
+    _pool : MxObjectPool<Ty_physicsActor>,
+    _args : MxPoolArgs<Ty_physicsActor>
   )
   : void
   {
 
-    let bullet : Bullet = _args.element;
-    let sprite : Phaser.Physics.Arcade.Sprite = bullet.getWrappedInstance();
+    let bullet : Ty_physicsActor = _args.element;
+    let sprite : Ty_physicsSprite = bullet.getWrappedInstance();
 
     sprite.visible = true;
     sprite.active = true;
@@ -400,14 +399,14 @@ export class BulletManager implements IBulletManager
    */
   private _onDesactive
   (
-    _pool : MxObjectPool<Bullet>,
-    _args : MxPoolArgs<Bullet>
+    _pool : MxObjectPool<Ty_physicsActor>,
+    _args : MxPoolArgs<Ty_physicsActor>
   )
   : void
   {
 
-    let bullet : Bullet = _args.element;
-    let sprite : Phaser.Physics.Arcade.Sprite = bullet.getWrappedInstance();
+    let bullet : Ty_physicsActor = _args.element;
+    let sprite : Ty_physicsSprite = bullet.getWrappedInstance();
 
     sprite.visible = false;
     sprite.active = false;
@@ -438,7 +437,7 @@ export class BulletManager implements IBulletManager
   /**
    * Object pool of Phaser Sprites (bullets).
    */
-  private _m_pool : MxObjectPool<Bullet>;
+  private _m_pool : MxObjectPool<Ty_physicsActor>;
 
   /**
    * Delta time.
@@ -468,5 +467,5 @@ export class BulletManager implements IBulletManager
   /**
    * The physic bodies of the bullets.
    */
-  private _m_bodiesGroup : Phaser.Physics.Arcade.Group;
+  private _m_bodiesGroup : Ty_physicsGroup;
 }

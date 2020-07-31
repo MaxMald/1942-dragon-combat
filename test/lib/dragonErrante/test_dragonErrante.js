@@ -587,6 +587,10 @@ define("game/src/ts_src/states/stateHeroGlide", ["require", "exports", "game/src
     }());
     exports.StateHeroGlide = StateHeroGlide;
 });
+define("game/src/ts_src/commons/1942types", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
 define("game/src/ts_src/bulletManager/iBulletManager", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -622,10 +626,6 @@ define("game/src/ts_src/bulletManager/nullBulletManager", ["require", "exports",
         return NullBulletManager;
     }());
     exports.NullBulletManager = NullBulletManager;
-});
-define("game/src/ts_src/commons/1942types", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("game/src/ts_src/enemiesManager/iEnemiesManager", ["require", "exports"], function (require, exports) {
     "use strict";
