@@ -11,42 +11,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define("test/playerController/src/ts_src/scenes/boot", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Boot = void 0;
-    var Boot = (function (_super) {
-        __extends(Boot, _super);
-        function Boot() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        Boot.prototype.create = function () {
-            this.scene.start('preloader');
-            return;
-        };
-        return Boot;
-    }(Phaser.Scene));
-    exports.Boot = Boot;
-});
-define("test/playerController/src/ts_src/scenes/preloader", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Preloader = void 0;
-    var Preloader = (function (_super) {
-        __extends(Preloader, _super);
-        function Preloader() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        Preloader.prototype.preload = function () {
-        };
-        Preloader.prototype.create = function () {
-            this.scene.start('test');
-            return;
-        };
-        return Preloader;
-    }(Phaser.Scene));
-    exports.Preloader = Preloader;
-});
 define("game/src/ts_src/components/iBaseComponent", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -152,6 +116,76 @@ define("game/src/ts_src/actors/baseActor", ["require", "exports"], function (req
     }());
     exports.BaseActor = BaseActor;
 });
+define("game/src/ts_src/bulletManager/iBulletManager", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/bulletManager/nullBulletManager", ["require", "exports", "optimization/mxObjectPool"], function (require, exports, mxObjectPool_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullBulletManager = void 0;
+    var NullBulletManager = (function () {
+        function NullBulletManager() {
+            this._m_pool = mxObjectPool_1.MxObjectPool.Create();
+            this._m_pool.init(new Array());
+            return;
+        }
+        NullBulletManager.prototype.update = function (_dt) { };
+        NullBulletManager.prototype.spawn = function (_x, _y) {
+            console.log("NullBulletManager : spawn.");
+            return;
+        };
+        ;
+        NullBulletManager.prototype.getPool = function () {
+            console.log("NullBulletManager : get pool.");
+            return this._m_pool;
+        };
+        NullBulletManager.prototype.clear = function () {
+            console.log("NullBulletManager : clear.");
+            return;
+        };
+        NullBulletManager.prototype.destroy = function () {
+            this._m_pool.destroy();
+            return;
+        };
+        return NullBulletManager;
+    }());
+    exports.NullBulletManager = NullBulletManager;
+});
+define("game/src/ts_src/commons/1942types", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/enemiesManager/iEnemiesManager", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/enemiesManager/nullEnemiesManager", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullEnemiesManager = void 0;
+    var NullEnemiesManager = (function () {
+        function NullEnemiesManager() {
+        }
+        NullEnemiesManager.prototype.getActor = function () {
+            console.log("NullEnemiesManager : getActor. ");
+            return null;
+        };
+        NullEnemiesManager.prototype.update = function (_dt) {
+            console.log("NullEnemiesManager : update. ");
+            return;
+        };
+        NullEnemiesManager.prototype.spawn = function (_x, _y, _type) {
+            console.log("NullEnemiesManager : spawn. ");
+            return;
+        };
+        NullEnemiesManager.prototype.destroy = function () {
+            return;
+        };
+        return NullEnemiesManager;
+    }());
+    exports.NullEnemiesManager = NullEnemiesManager;
+});
 define("game/src/ts_src/playerController/playerControllerConfig", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -183,7 +217,10 @@ define("game/src/ts_src/components/dcComponentID", ["require", "exports"], funct
     exports.DC_COMPONENT_ID = Object.freeze({
         kMovement: 0,
         kHeroInput: 1,
-        kAnimation: 2
+        kAnimation: 2,
+        kHeroBulletController: 3,
+        kMovementBullet: 4,
+        kCollisionController: 5
     });
 });
 define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/src/ts_src/messages/dcMessageID", "game/src/ts_src/components/dcComponentID"], function (require, exports, dcMessageID_1, dcComponentID_1) {
@@ -271,10 +308,6 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
             this._m_pointer = null;
             this._m_movement_fn = null;
             this._m_v3 = null;
-            return;
-        };
-        CmpHeroInput.prototype._pointerUp = function () {
-            console.log("pointer up");
             return;
         };
         CmpHeroInput.prototype._absoluteMovement = function (_actor) {
@@ -624,7 +657,60 @@ define("game/src/ts_src/states/stateHeroGlide", ["require", "exports", "game/src
     }());
     exports.StateHeroGlide = StateHeroGlide;
 });
-define("game/src/ts_src/playerController/playerController", ["require", "exports", "game/src/ts_src/actors/baseActor", "game/src/ts_src/components/cmpHeroInput", "game/src/ts_src/components/dcComponentID", "game/src/ts_src/components/cmpMovement", "game/src/ts_src/components/cmpAnimation", "game/src/ts_src/states/stateHeroFFLight", "game/src/ts_src/states/stateHeroGlide"], function (require, exports, baseActor_1, cmpHeroInput_1, dcComponentID_4, cmpMovement_1, cmpAnimation_1, stateHeroFFLight_1, stateHeroGlide_1) {
+define("game/src/ts_src/components/cmpHeroBulletController", ["require", "exports", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/components/dcComponentID"], function (require, exports, gameManager_1, dcComponentID_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpHeroBulletController = void 0;
+    var CmpHeroBulletController = (function () {
+        function CmpHeroBulletController() {
+        }
+        CmpHeroBulletController.Create = function (_bulletManager) {
+            var bulletController = new CmpHeroBulletController();
+            bulletController.m_id = dcComponentID_4.DC_COMPONENT_ID.kHeroBulletController;
+            bulletController._m_bulletManager = _bulletManager;
+            return bulletController;
+        };
+        CmpHeroBulletController.prototype.init = function (_actor) {
+            this._m_gameManager = gameManager_1.GameManager.GetInstance();
+            this._m_loadingTime = 0.0;
+            return;
+        };
+        CmpHeroBulletController.prototype.update = function (_actor) {
+            var loading = this._m_loadingTime;
+            loading += this._m_gameManager.m_dt;
+            if (loading >= this._m_frecuency) {
+                var sprite = _actor.getWrappedInstance();
+                this._m_bulletManager.spawn(sprite.x, sprite.y - 110.0);
+                loading = 0.0;
+            }
+            this._m_loadingTime = loading;
+            return;
+        };
+        CmpHeroBulletController.prototype.receive = function (_id, _obj) {
+            return;
+        };
+        CmpHeroBulletController.prototype.setFireRate = function (_fireRate) {
+            if (_fireRate == 0.0) {
+                this._m_frecuency = 10000.0;
+            }
+            else {
+                this._m_frecuency = 1.0 / _fireRate;
+            }
+            return;
+        };
+        CmpHeroBulletController.prototype.getFireRate = function () {
+            return this._m_frecuency;
+        };
+        CmpHeroBulletController.prototype.destroy = function () {
+            this._m_bulletManager = null;
+            this._m_gameManager = null;
+            return;
+        };
+        return CmpHeroBulletController;
+    }());
+    exports.CmpHeroBulletController = CmpHeroBulletController;
+});
+define("game/src/ts_src/playerController/playerController", ["require", "exports", "game/src/ts_src/actors/baseActor", "game/src/ts_src/components/cmpHeroInput", "game/src/ts_src/components/dcComponentID", "game/src/ts_src/components/cmpMovement", "game/src/ts_src/components/cmpAnimation", "game/src/ts_src/states/stateHeroFFLight", "game/src/ts_src/states/stateHeroGlide", "game/src/ts_src/components/cmpHeroBulletController", "game/src/ts_src/gameManager/gameManager"], function (require, exports, baseActor_1, cmpHeroInput_1, dcComponentID_5, cmpMovement_1, cmpAnimation_1, stateHeroFFLight_1, stateHeroGlide_1, cmpHeroBulletController_1, gameManager_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.PlayerController = void 0;
@@ -633,10 +719,12 @@ define("game/src/ts_src/playerController/playerController", ["require", "exports
         }
         PlayerController.prototype.init = function (_scene, _activePointer, _config) {
             var heroSprite = _scene.physics.add.sprite(_scene.game.canvas.width * 0.5, _scene.game.canvas.height * 0.5, 'DragonFlight', 0);
+            var bulletManager = gameManager_2.GameManager.GetInstance().getBulletManager();
             var hero = baseActor_1.BaseActor.Create(heroSprite, "hero");
             hero.addComponent(cmpHeroInput_1.CmpHeroInput.Create());
             hero.addComponent(cmpMovement_1.CmpMovement.Create());
             hero.addComponent(cmpAnimation_1.CmpAnimation.Create());
+            hero.addComponent(cmpHeroBulletController_1.CmpHeroBulletController.Create(bulletManager));
             this.setPlayer(hero);
             if (_activePointer !== undefined) {
                 this.setPointer(_activePointer);
@@ -656,39 +744,52 @@ define("game/src/ts_src/playerController/playerController", ["require", "exports
                 this.setInputMode(_config.control_type);
                 this.setHeroSpeed(_config.player_speed);
                 this.setMovementPadding(_config.movement_rect_p1_x, _config.movement_rect_p1_y, _config.movement_rect_p2_x, _config.movement_rect_p2_y);
+                this.setHeroFireRate(_config.player_fireRate);
+            }
+            else {
+                this.setHeroFireRate(2);
             }
             hero.init();
-            var anim = hero.getComponent(dcComponentID_4.DC_COMPONENT_ID.kAnimation);
+            var anim = hero.getComponent(dcComponentID_5.DC_COMPONENT_ID.kAnimation);
             anim.addState(new stateHeroFFLight_1.StateHeroFFlight());
             anim.addState(new stateHeroGlide_1.StateHeroGlide());
             anim.setActive('Hero_Forward_Flight');
             return;
         };
         PlayerController.prototype.setPointer = function (_pointer) {
-            var input = this._m_player.getComponent(dcComponentID_4.DC_COMPONENT_ID.kHeroInput);
+            var input = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroInput);
             input.setPointer(_pointer);
             return;
         };
         PlayerController.prototype.getPointer = function () {
-            var input = this._m_player.getComponent(dcComponentID_4.DC_COMPONENT_ID.kHeroInput);
+            var input = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroInput);
             return input.getPointer();
         };
         PlayerController.prototype.setInputMode = function (_mode) {
-            var input = this._m_player.getComponent(dcComponentID_4.DC_COMPONENT_ID.kHeroInput);
+            var input = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroInput);
             input.setMode(_mode);
             return;
         };
         PlayerController.prototype.getInputMode = function () {
-            var input = this._m_player.getComponent(dcComponentID_4.DC_COMPONENT_ID.kHeroInput);
+            var input = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroInput);
             return input.getMode();
         };
         PlayerController.prototype.setHeroSpeed = function (_speed) {
-            var input = this._m_player.getComponent(dcComponentID_4.DC_COMPONENT_ID.kHeroInput);
+            var input = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroInput);
             input.setSpeed(_speed);
             return;
         };
+        PlayerController.prototype.setHeroFireRate = function (_fireRate) {
+            var bulletController = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroBulletController);
+            bulletController.setFireRate(_fireRate);
+            return;
+        };
+        PlayerController.prototype.getHeroFireRate = function () {
+            var bulletController = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroBulletController);
+            return bulletController.getFireRate();
+        };
         PlayerController.prototype.setMovementPadding = function (_p1_x, _p1_y, _p2_x, _p2_y) {
-            var movement = this._m_player.getComponent(dcComponentID_4.DC_COMPONENT_ID.kMovement);
+            var movement = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kMovement);
             movement.setBounding(_p1_x, _p1_y, _p2_x, _p2_y);
             return;
         };
@@ -708,14 +809,92 @@ define("game/src/ts_src/playerController/playerController", ["require", "exports
             return;
         };
         PlayerController.prototype.getDirection = function () {
-            var movement = this._m_player.getComponent(dcComponentID_4.DC_COMPONENT_ID.kMovement);
+            var movement = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kMovement);
             return movement.getDirection();
         };
         return PlayerController;
     }());
     exports.PlayerController = PlayerController;
 });
-define("test/playerController/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/playerController/playerController", "game/src/ts_src/states/nullState"], function (require, exports, playerController_1, nullState_2) {
+define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "game/src/ts_src/bulletManager/nullBulletManager", "game/src/ts_src/enemiesManager/nullEnemiesManager"], function (require, exports, nullBulletManager_1, nullEnemiesManager_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.GameManager = void 0;
+    var GameManager = (function () {
+        function GameManager() {
+        }
+        GameManager.Prepare = function () {
+            if (GameManager._INSTANCE == null) {
+                GameManager._INSTANCE = new GameManager();
+                GameManager._INSTANCE._onPrepare();
+            }
+            return;
+        };
+        GameManager.Shutdown = function () {
+            if (GameManager._INSTANCE != null) {
+                GameManager._INSTANCE._onShutdown();
+                GameManager._INSTANCE = null;
+            }
+            return;
+        };
+        GameManager.GetInstance = function () {
+            return GameManager._INSTANCE;
+        };
+        GameManager.prototype.update = function (_dt) {
+            this.m_dt = _dt;
+            this._m_bulletManager.update(_dt);
+            return;
+        };
+        GameManager.prototype.setBulletManager = function (_bulletManager) {
+            if (this._m_bulletManager != null) {
+                this._m_bulletManager.destroy();
+            }
+            this._m_bulletManager = _bulletManager;
+            return;
+        };
+        GameManager.prototype.getBulletManager = function () {
+            return this._m_bulletManager;
+        };
+        GameManager.prototype.setPlayerController = function (_playerController) {
+            this._m_playerController = _playerController;
+            return;
+        };
+        GameManager.prototype.getPlayerController = function () {
+            return this._m_playerController;
+        };
+        GameManager.prototype.setEnemiesManager = function (_enemiesManager) {
+            if (this._m_enemiesManager != null) {
+                this._m_enemiesManager.destroy();
+            }
+            this._m_enemiesManager = _enemiesManager;
+            return;
+        };
+        GameManager.prototype.getEnemiesManager = function () {
+            return this._m_enemiesManager;
+        };
+        GameManager.prototype.destroy = function () {
+            this._m_bulletManager.destroy();
+            this._m_playerController.destroy();
+            this._m_enemiesManager.destroy();
+            return;
+        };
+        GameManager.prototype._onPrepare = function () {
+            this.m_dt = 0.0;
+            this._m_bulletManager = new nullBulletManager_1.NullBulletManager();
+            this._m_enemiesManager = new nullEnemiesManager_1.NullEnemiesManager();
+            return;
+        };
+        GameManager.prototype._onShutdown = function () {
+            if (this._m_bulletManager != null) {
+                this._m_bulletManager.destroy();
+            }
+            return;
+        };
+        return GameManager;
+    }());
+    exports.GameManager = GameManager;
+});
+define("test/playerController/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/playerController/playerController", "game/src/ts_src/states/nullState"], function (require, exports, gameManager_3, playerController_1, nullState_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Test = void 0;
@@ -752,6 +931,8 @@ define("test/playerController/src/ts_src/scenes/test", ["require", "exports", "g
             this._createButton(950, y, 'Relative', this._onClick_relative, this);
             this._createButton(950, y += 100, 'Absolute', this._onClick_absolute, this);
             this._createButton(950, y += 100, 'Mixed', this._onClick_mixed, this);
+            gameManager_3.GameManager.Prepare();
+            var gameManager = gameManager_3.GameManager.GetInstance();
             var pcConfig = JSON.parse(this.cache.text.get('playerControllerConfig'));
             var padding = 100;
             pcConfig.movement_rect_p1_x = padding;
@@ -830,7 +1011,7 @@ define("test/playerController/src/ts_src/scenes/test", ["require", "exports", "g
     }(Phaser.Scene));
     exports.Test = Test;
 });
-define("test/playerController/src/ts_src/game_init", ["require", "exports", "mxUtilities", "phaser3-nineslice", "test/playerController/src/ts_src/scenes/boot", "test/playerController/src/ts_src/scenes/preloader", "test/playerController/src/ts_src/scenes/test"], function (require, exports, mxUtilities_1, phaser3_nineslice_1, boot_1, preloader_1, test_1) {
+define("test/playerController/src/ts_src/game_init", ["require", "exports", "mxUtilities", "phaser3-nineslice", "test/playerController/src/ts_src/scenes/test"], function (require, exports, mxUtilities_1, phaser3_nineslice_1, test_1) {
     "use strict";
     var GameInit = (function () {
         function GameInit() {
@@ -861,14 +1042,137 @@ define("test/playerController/src/ts_src/game_init", ["require", "exports", "mxU
             };
             mxUtilities_1.MxUtilities.Prepare();
             this.m_game = new Phaser.Game(config);
-            this.m_game.scene.add('boot', boot_1.Boot);
-            this.m_game.scene.add('preloader', preloader_1.Preloader);
             this.m_game.scene.add('test', test_1.Test);
-            this.m_game.scene.start('boot');
+            this.m_game.scene.start('test');
             return;
         };
         return GameInit;
     }());
     return GameInit;
+});
+define("game/src/ts_src/components/iCmpCollisionController", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/components/cmpBulletCollisionController", ["require", "exports", "game/src/ts_src/components/dcComponentID"], function (require, exports, dcComponentID_6) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpBulletCollisionController = void 0;
+    var CmpBulletCollisionController = (function () {
+        function CmpBulletCollisionController() {
+        }
+        CmpBulletCollisionController.Create = function () {
+            var controller = new CmpBulletCollisionController();
+            controller.m_id = dcComponentID_6.DC_COMPONENT_ID.kCollisionController;
+            return controller;
+        };
+        CmpBulletCollisionController.prototype.onCollision = function (_other, _this) {
+            return;
+        };
+        CmpBulletCollisionController.prototype.init = function (_actor) {
+            return;
+        };
+        CmpBulletCollisionController.prototype.update = function (_actor) {
+            return;
+        };
+        CmpBulletCollisionController.prototype.receive = function (_id, _obj) {
+            return;
+        };
+        CmpBulletCollisionController.prototype.destroy = function () {
+            return;
+        };
+        return CmpBulletCollisionController;
+    }());
+    exports.CmpBulletCollisionController = CmpBulletCollisionController;
+});
+define("game/src/ts_src/components/cmpMovementBullet", ["require", "exports", "game/src/ts_src/messages/dcMessageID", "game/src/ts_src/components/dcComponentID"], function (require, exports, dcMessageID_5, dcComponentID_7) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpMovementBullet = void 0;
+    var CmpMovementBullet = (function () {
+        function CmpMovementBullet() {
+        }
+        CmpMovementBullet.Create = function () {
+            var movement = new CmpMovementBullet();
+            movement.m_id = dcComponentID_7.DC_COMPONENT_ID.kMovementBullet;
+            movement._m_prevPosition = new Phaser.Geom.Point(0.0, 0.0);
+            movement._m_direction = new Phaser.Math.Vector2(1.0, 0.0);
+            movement._m_isDirty = true;
+            return movement;
+        };
+        CmpMovementBullet.prototype.init = function (_actor) {
+            this._m_sprite = _actor.getWrappedInstance();
+            return;
+        };
+        CmpMovementBullet.prototype.update = function (_actor) { };
+        CmpMovementBullet.prototype.receive = function (_id, _obj) {
+            switch (_id) {
+                case dcMessageID_5.DC_MESSAGE_ID.kAgentMove:
+                    {
+                        var movement = _obj;
+                        this.move(movement.x, movement.y);
+                    }
+                    return;
+                default:
+                    return;
+            }
+        };
+        CmpMovementBullet.prototype.setPosition = function (_x, _y) {
+            var sprite = this._m_sprite;
+            this._m_prevPosition.setTo(sprite.x, sprite.y);
+            sprite.setPosition(_x, _y);
+            this._m_isDirty = true;
+            return;
+        };
+        CmpMovementBullet.prototype.move = function (_x, _y) {
+            var sprite = this._m_sprite;
+            this._m_prevPosition.setTo(sprite.x, sprite.y);
+            sprite.setPosition(sprite.x + _x, sprite.y + _y);
+            this._m_isDirty = true;
+        };
+        CmpMovementBullet.prototype.getDirection = function () {
+            if (this._m_isDirty) {
+                var sprite = this._m_sprite;
+                var prevPos = this._m_prevPosition;
+                this._m_direction.setTo(sprite.x - prevPos.x, sprite.y - prevPos.y);
+                this._m_direction.normalize();
+                this._m_isDirty = false;
+            }
+            return this._m_direction;
+        };
+        CmpMovementBullet.prototype.destroy = function () {
+            this._m_sprite = null;
+            return;
+        };
+        return CmpMovementBullet;
+    }());
+    exports.CmpMovementBullet = CmpMovementBullet;
+});
+define("game/src/ts_src/components/cmpTargetController", ["require", "exports", "game/src/ts_src/components/dcComponentID"], function (require, exports, dcComponentID_8) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpTargetController = void 0;
+    var CmpTargetController = (function () {
+        function CmpTargetController() {
+        }
+        CmpTargetController.Create = function () {
+            var controller = new CmpTargetController();
+            controller.m_id = dcComponentID_8.DC_COMPONENT_ID.kCollisionController;
+            return controller;
+        };
+        CmpTargetController.prototype.init = function (_actor) {
+            this.m_color = new Phaser.Display.Color();
+        };
+        CmpTargetController.prototype.update = function (_actor) { };
+        CmpTargetController.prototype.receive = function (_id, _obj) { };
+        CmpTargetController.prototype.destroy = function () { };
+        CmpTargetController.prototype.onCollision = function (_other, _this) {
+            var sprite = _this.getWrappedInstance();
+            sprite.setTint(this.m_color.random().color);
+            return;
+        };
+        return CmpTargetController;
+    }());
+    exports.CmpTargetController = CmpTargetController;
 });
 //# sourceMappingURL=test_playerController.js.map

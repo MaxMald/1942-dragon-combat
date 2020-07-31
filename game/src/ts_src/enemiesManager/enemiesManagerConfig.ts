@@ -1,13 +1,18 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary 
+ * @summary This object is used to configure a class that implements the
+ * IEnemiesManager interface.
  *
  * @file enemiesManagerConfig.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
  * @since July-30-2020
  */
 
+ /**
+  * This object is used to configure a class that implements the IEnemiesManager
+  * interface.
+  */
 export class EnemiesManagerConfig
 {
   /****************************************************/
@@ -15,7 +20,7 @@ export class EnemiesManagerConfig
   /****************************************************/
   
   /**
-   * Number of BaseActor that he EnemiesManager will have.
+   * Number of BaseActor in the pool.
    */
   pool_size : number;
 

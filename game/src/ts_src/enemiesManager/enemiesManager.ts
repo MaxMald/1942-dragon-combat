@@ -1,12 +1,12 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary The EnemiesManager create, manage and provides Actors for enemy usage. This
- * class have a pool of actors with a fixed size, that can be defined with 
- * the configuration object.
+ * @summary The EnemiesManager create, manage and provides Actors for enemy
+ * usage. This class have a pool of actors with a fixed size, that can be
+ * defined with the configuration object.
  * 
  * It also has the list of physics bodies of each BaseActor, useful to handle
- * collisions with the enemies.
+ * collisions between the actors and other objects.
  *
  * @file enemiesManager.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
@@ -16,12 +16,11 @@
 import { MxObjectPool } from "optimization/mxObjectPool";
 import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
+import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
 import { DC_COMPONENT_ID } from "../components/dcComponentID";
 import { ICmpCollisionController } from "../components/iCmpCollisionController";
 import { EnemiesManagerConfig } from "./enemiesManagerConfig";
 import { IEnemiesManager } from "./iEnemiesManager";
-
-type EnemyActor = BaseActor<Phaser.Physics.Arcade.Sprite>;
 
 /**
  * The EnemiesManager create, manage and provides Actors for enemy usage. This
@@ -29,7 +28,7 @@ type EnemyActor = BaseActor<Phaser.Physics.Arcade.Sprite>;
  * the configuration object.
  * 
  * It also has the list of physics bodies of each BaseActor, useful to handle
- * collisions with the enemies.
+ * collisions between the actors and other objects.
  */
 export class EnemiesManager implements IEnemiesManager
 {
@@ -38,15 +37,19 @@ export class EnemiesManager implements IEnemiesManager
   /****************************************************/
   
   /**
-   * Creates an empty Enemies Manager.
+   * Creates an empty EnemiesManager.
    */
   static Create()
   : EnemiesManager
   {
     let manager : EnemiesManager = new EnemiesManager();
 
-    let pool : MxObjectPool<EnemyActor> = MxObjectPool.Create<EnemyActor>();
+    // Create the pool object.
+
+    let pool : MxObjectPool<Ty_physicsActor> = MxObjectPool.Create<Ty_physicsActor>();
     manager._m_actorPool = pool;
+
+    // Pool suscriptions.
 
     pool.suscribe
     (
@@ -68,7 +71,8 @@ export class EnemiesManager implements IEnemiesManager
   }
 
   /**
-   * Initialize the Enemies manager.
+   * Initialize the EnemiesManager. This method needs a configuration object to
+   * initialize this manager.
    */
   init(_scene : Phaser.Scene, _config : EnemiesManagerConfig)
   : void
@@ -94,10 +98,10 @@ export class EnemiesManager implements IEnemiesManager
     // Create Actors.
 
     let size = _config.pool_size;
-    let actor : EnemyActor;
+    let actor : Ty_physicsActor;
     let sprite : Phaser.Physics.Arcade.Sprite;
 
-    let a_actors : EnemyActor[] = new Array<EnemyActor>();
+    let a_actors : Ty_physicsActor[] = new Array<Ty_physicsActor>();
 
     while(size > 0)
     {
@@ -125,13 +129,40 @@ export class EnemiesManager implements IEnemiesManager
   }
 
   /**
-   * Get an Enemy Actor, if there is not an actor avaliable, it will returns
-   * null.
+   * Updates each EnemySpawner in this this EnemiesManager.
    * 
-   * @retunrs An avaliable enemy actor. Null if there isn't any avaliable actor. 
+   * @param _dt delta time. 
+   */
+  update(_dt: number)
+  : void 
+  {
+    // TODO.
+
+    return;
+  }
+
+  /**
+   * Spawn an enemy in the world.
+   * 
+   * @param _x position in x axis.
+   * @param _y position in y axis.
+   * @param _type enemy type.
+   */
+  spawn(_x: number, _y: number, _type: number)
+  : void 
+  {
+    // TODO.
+
+    return;
+  }
+
+  /**
+   * Get an availabe Actor, if there isn't, it will returns null.
+   * 
+   * @retunrs An available Actor. null if there isn't any available Actor. 
    */
   getActor()
-  : EnemyActor
+  : Ty_physicsActor
   {
     return this._m_actorPool.get();
   }
@@ -140,7 +171,7 @@ export class EnemiesManager implements IEnemiesManager
    * Get the group of physics bodies.
    */
   getBodiesGroup()
-  : Phaser.Physics.Arcade.Group
+  : Ty_physicsGroup
   {
     return this._m_bodiesGroup;
   }
@@ -154,7 +185,7 @@ export class EnemiesManager implements IEnemiesManager
   collisionVsGroup
   (
     _scene : Phaser.Scene, 
-    _bodies : Phaser.Physics.Arcade.Group
+    _bodies : Ty_physicsGroup
   )
   : void
   {
@@ -192,13 +223,12 @@ export class EnemiesManager implements IEnemiesManager
    */
   private _onCollision
   (
-    _other : Phaser.Physics.Arcade.Sprite,
-    _sprite : Phaser.Physics.Arcade.Sprite
+    _other : Ty_physicsSprite,
+    _sprite : Ty_physicsSprite
   )
   : void
   {
-    let baseActor : BaseActor<Phaser.Physics.Arcade.Sprite> 
-      = _sprite.getData("actor");
+    let baseActor : Ty_physicsActor = _sprite.getData("actor");
 
     let controller 
       = baseActor.getComponent<ICmpCollisionController>
@@ -220,14 +250,14 @@ export class EnemiesManager implements IEnemiesManager
    */
   private _onActive
   (
-    _pool : MxObjectPool<EnemyActor>,
-    _args : MxPoolArgs<EnemyActor>
+    _pool : MxObjectPool<Ty_physicsActor>,
+    _args : MxPoolArgs<Ty_physicsActor>
   )
   : void
   {
 
-    let actor : EnemyActor = _args.element;
-    let sprite : Phaser.Physics.Arcade.Sprite = actor.getWrappedInstance();
+    let actor : Ty_physicsActor = _args.element;
+    let sprite : Ty_physicsSprite = actor.getWrappedInstance();
 
     sprite.visible = true;
     sprite.active = true;
@@ -244,14 +274,14 @@ export class EnemiesManager implements IEnemiesManager
    */
   private _onDesactive
   (
-    _pool : MxObjectPool<EnemyActor>,
-    _args : MxPoolArgs<EnemyActor>
+    _pool : MxObjectPool<Ty_physicsActor>,
+    _args : MxPoolArgs<Ty_physicsActor>
   )
   : void
   {
 
-    let actor : EnemyActor = _args.element;
-    let sprite : Phaser.Physics.Arcade.Sprite = actor.getWrappedInstance();
+    let actor : Ty_physicsActor = _args.element;
+    let sprite : Ty_physicsSprite = actor.getWrappedInstance();
 
     sprite.visible = false;
     sprite.active = false;
@@ -264,12 +294,12 @@ export class EnemiesManager implements IEnemiesManager
    * Private constructor.
    */
   private constructor()
-  { }
+  { }  
 
   /**
    * Pool of actor for enemies usage.
    */
-  private _m_actorPool : MxObjectPool<EnemyActor>;
+  private _m_actorPool : MxObjectPool<Ty_physicsActor>;
 
   /**
    * Group of physics bodies.
