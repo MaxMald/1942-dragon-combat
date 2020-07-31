@@ -1,3 +1,4 @@
+import { DC_MESSAGE_ID } from "../commons/1942enums";
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -9,9 +10,6 @@
  */
 
 import { CmpAnimation } from "../components/cmpAnimation";
-import { DC_ANIMATION_ID } from "../components/dcAnimationID";
-import { DC_COMPONENT_ID } from "../components/dcComponentID";
-import { DC_MESSAGE_ID } from "../messages/dcMessageID";
 import { IAnimationState } from "./IAnimationState";
 
 /**

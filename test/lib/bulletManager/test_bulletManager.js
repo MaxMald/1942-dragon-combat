@@ -127,23 +127,18 @@ define("game/src/ts_src/playerController/playerControllerConfig", ["require", "e
     }());
     exports.PlayerControllerConfig = PlayerControllerConfig;
 });
-define("game/src/ts_src/messages/dcMessageID", ["require", "exports"], function (require, exports) {
+define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.DC_MESSAGE_ID = void 0;
-    exports.DC_MESSAGE_ID = Object.freeze({
-        kAgentMove: 500,
-        kPointerMoved: 501,
-        kToPosition: 502,
-        kPointerReleased: 503,
-        kPointerPressed: 504,
-        kMixedMovement: 505
+    exports.DC_ANIMATION_ID = exports.DC_MESSAGE_ID = exports.DC_COMPONENT_ID = exports.DC_BOSS_ID = exports.DC_ENEMY_TYPE = void 0;
+    exports.DC_ENEMY_TYPE = Object.freeze({
+        kErrante: 0,
+        kSonico: 1,
+        kRanger: 2
     });
-});
-define("game/src/ts_src/components/dcComponentID", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.DC_COMPONENT_ID = void 0;
+    exports.DC_BOSS_ID = Object.freeze({
+        kBalsaru: 0
+    });
     exports.DC_COMPONENT_ID = Object.freeze({
         kMovement: 0,
         kHeroInput: 1,
@@ -152,8 +147,23 @@ define("game/src/ts_src/components/dcComponentID", ["require", "exports"], funct
         kMovementBullet: 4,
         kCollisionController: 5
     });
+    exports.DC_MESSAGE_ID = Object.freeze({
+        kAgentMove: 500,
+        kPointerMoved: 501,
+        kToPosition: 502,
+        kPointerReleased: 503,
+        kPointerPressed: 504,
+        kMixedMovement: 505
+    });
+    exports.DC_ANIMATION_ID = Object.freeze({
+        kForward: 0,
+        kBack: 1,
+        kRight: 2,
+        kLeft: 3,
+        kIdle: 4
+    });
 });
-define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/src/ts_src/messages/dcMessageID", "game/src/ts_src/components/dcComponentID"], function (require, exports, dcMessageID_1, dcComponentID_1) {
+define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CmpHeroInput = void 0;
@@ -162,7 +172,7 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
         }
         CmpHeroInput.Create = function () {
             var input = new CmpHeroInput();
-            input.m_id = dcComponentID_1.DC_COMPONENT_ID.kHeroInput;
+            input.m_id = _1942enums_1.DC_COMPONENT_ID.kHeroInput;
             input._m_v3 = new Phaser.Math.Vector3();
             input._m_downPosition = new Phaser.Geom.Point();
             input._m_player_speed = 200.0;
@@ -219,7 +229,7 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
                     pointer.prevPosition.x = pointer.position.x;
                     pointer.prevPosition.y = pointer.position.y;
                     this._m_movement_fn.call(this, _actor);
-                    _actor.sendMessage(dcMessageID_1.DC_MESSAGE_ID.kPointerPressed, pointer);
+                    _actor.sendMessage(_1942enums_1.DC_MESSAGE_ID.kPointerPressed, pointer);
                 }
                 else {
                     this._m_movement_fn.call(this, _actor);
@@ -228,7 +238,7 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
             else {
                 if (this._m_pointerDown) {
                     this._m_pointerDown = !this._m_pointerDown;
-                    _actor.sendMessage(dcMessageID_1.DC_MESSAGE_ID.kPointerReleased, pointer);
+                    _actor.sendMessage(_1942enums_1.DC_MESSAGE_ID.kPointerReleased, pointer);
                 }
             }
             return;
@@ -251,14 +261,14 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
                 this._m_v3.x *= this._m_player_speed;
                 this._m_v3.y *= this._m_player_speed;
             }
-            _actor.sendMessage(dcMessageID_1.DC_MESSAGE_ID.kAgentMove, this._m_v3);
+            _actor.sendMessage(_1942enums_1.DC_MESSAGE_ID.kAgentMove, this._m_v3);
             return;
         };
         CmpHeroInput.prototype._relativeMovement = function (_actor) {
             var pointer = this._m_pointer;
             this._m_v3.x = this._m_downPosition.x + (pointer.position.x - pointer.downX);
             this._m_v3.y = this._m_downPosition.y + (pointer.position.y - pointer.downY);
-            _actor.sendMessage(dcMessageID_1.DC_MESSAGE_ID.kToPosition, this._m_v3);
+            _actor.sendMessage(_1942enums_1.DC_MESSAGE_ID.kToPosition, this._m_v3);
             return;
         };
         CmpHeroInput.prototype._mixedMovement = function (_actor) {
@@ -270,14 +280,14 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
                 this._m_v3.x = this._m_player_speed;
             }
             this._m_v3.y = this._m_downPosition.y + (pointer.position.y - pointer.downY);
-            _actor.sendMessage(dcMessageID_1.DC_MESSAGE_ID.kMixedMovement, this._m_v3);
+            _actor.sendMessage(_1942enums_1.DC_MESSAGE_ID.kMixedMovement, this._m_v3);
             return;
         };
         return CmpHeroInput;
     }());
     exports.CmpHeroInput = CmpHeroInput;
 });
-define("game/src/ts_src/components/cmpMovement", ["require", "exports", "game/src/ts_src/messages/dcMessageID", "game/src/ts_src/components/dcComponentID"], function (require, exports, dcMessageID_2, dcComponentID_2) {
+define("game/src/ts_src/components/cmpMovement", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CmpMovement = void 0;
@@ -286,7 +296,7 @@ define("game/src/ts_src/components/cmpMovement", ["require", "exports", "game/sr
         }
         CmpMovement.Create = function () {
             var movement = new CmpMovement();
-            movement.m_id = dcComponentID_2.DC_COMPONENT_ID.kMovement;
+            movement.m_id = _1942enums_2.DC_COMPONENT_ID.kMovement;
             movement._limit_p1 = new Phaser.Geom.Point(0.0, 0.0);
             movement._limit_p2 = new Phaser.Geom.Point(500.0, 500.0);
             movement._m_prevPosition = new Phaser.Geom.Point(0.0, 0.0);
@@ -308,33 +318,33 @@ define("game/src/ts_src/components/cmpMovement", ["require", "exports", "game/sr
         CmpMovement.prototype.update = function (_actor) { };
         CmpMovement.prototype.receive = function (_id, _obj) {
             switch (_id) {
-                case dcMessageID_2.DC_MESSAGE_ID.kPointerMoved:
+                case _1942enums_2.DC_MESSAGE_ID.kPointerMoved:
                     {
                         var pointer = _obj;
                         this.setPosition(pointer.position.x, pointer.position.y);
                     }
                     return;
-                case dcMessageID_2.DC_MESSAGE_ID.kAgentMove:
+                case _1942enums_2.DC_MESSAGE_ID.kAgentMove:
                     {
                         var movement = _obj;
                         var sprite = this._m_sprite;
                         this.setPosition(sprite.x + movement.x, sprite.y + movement.y);
                     }
                     return;
-                case dcMessageID_2.DC_MESSAGE_ID.kAgentMove:
+                case _1942enums_2.DC_MESSAGE_ID.kAgentMove:
                     {
                         var movement = _obj;
                         var sprite = this._m_sprite;
                         this.setPosition(sprite.x + movement.x, sprite.y + movement.y);
                     }
                     return;
-                case dcMessageID_2.DC_MESSAGE_ID.kToPosition:
+                case _1942enums_2.DC_MESSAGE_ID.kToPosition:
                     {
                         var positon = _obj;
                         this.setPosition(positon.x, positon.y);
                     }
                     return;
-                case dcMessageID_2.DC_MESSAGE_ID.kMixedMovement:
+                case _1942enums_2.DC_MESSAGE_ID.kMixedMovement:
                     {
                         var positon = _obj;
                         this.setPosition(this._m_sprite.x + positon.x, positon.y);
@@ -424,7 +434,7 @@ define("game/src/ts_src/states/nullState", ["require", "exports"], function (req
     }());
     exports.NullState = NullState;
 });
-define("game/src/ts_src/components/cmpAnimation", ["require", "exports", "game/src/ts_src/states/nullState", "game/src/ts_src/components/dcComponentID"], function (require, exports, nullState_1, dcComponentID_3) {
+define("game/src/ts_src/components/cmpAnimation", ["require", "exports", "game/src/ts_src/commons/1942enums", "game/src/ts_src/states/nullState"], function (require, exports, _1942enums_3, nullState_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CmpAnimation = void 0;
@@ -433,7 +443,7 @@ define("game/src/ts_src/components/cmpAnimation", ["require", "exports", "game/s
         }
         CmpAnimation.Create = function () {
             var anim = new CmpAnimation();
-            anim.m_id = dcComponentID_3.DC_COMPONENT_ID.kAnimation;
+            anim.m_id = _1942enums_3.DC_COMPONENT_ID.kAnimation;
             anim._m_states = new Map();
             anim._m_activeState = nullState_1.NullState.GetInstance();
             return anim;
@@ -499,7 +509,7 @@ define("game/src/ts_src/components/cmpAnimation", ["require", "exports", "game/s
     }());
     exports.CmpAnimation = CmpAnimation;
 });
-define("game/src/ts_src/states/stateHeroFFLight", ["require", "exports", "game/src/ts_src/messages/dcMessageID"], function (require, exports, dcMessageID_3) {
+define("game/src/ts_src/states/stateHeroFFLight", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.StateHeroFFlight = void 0;
@@ -519,10 +529,10 @@ define("game/src/ts_src/states/stateHeroFFLight", ["require", "exports", "game/s
         StateHeroFFlight.prototype.onExit = function () { };
         StateHeroFFlight.prototype.receive = function (_id, _obj) {
             switch (_id) {
-                case dcMessageID_3.DC_MESSAGE_ID.kPointerPressed:
+                case _1942enums_4.DC_MESSAGE_ID.kPointerPressed:
                     this._m_isMoving = true;
                     return;
-                case dcMessageID_3.DC_MESSAGE_ID.kPointerReleased:
+                case _1942enums_4.DC_MESSAGE_ID.kPointerReleased:
                     this._m_isMoving = false;
                     return;
                 default:
@@ -545,19 +555,7 @@ define("game/src/ts_src/states/stateHeroFFLight", ["require", "exports", "game/s
     }());
     exports.StateHeroFFlight = StateHeroFFlight;
 });
-define("game/src/ts_src/components/dcAnimationID", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.DC_ANIMATION_ID = void 0;
-    exports.DC_ANIMATION_ID = Object.freeze({
-        kForward: 0,
-        kBack: 1,
-        kRight: 2,
-        kLeft: 3,
-        kIdle: 4
-    });
-});
-define("game/src/ts_src/states/stateHeroGlide", ["require", "exports", "game/src/ts_src/messages/dcMessageID"], function (require, exports, dcMessageID_4) {
+define("game/src/ts_src/states/stateHeroGlide", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.StateHeroGlide = void 0;
@@ -574,7 +572,7 @@ define("game/src/ts_src/states/stateHeroGlide", ["require", "exports", "game/src
         StateHeroGlide.prototype.onExit = function () { };
         StateHeroGlide.prototype.receive = function (_id, _obj) {
             switch (_id) {
-                case dcMessageID_4.DC_MESSAGE_ID.kPointerPressed:
+                case _1942enums_5.DC_MESSAGE_ID.kPointerPressed:
                     this.m_component.setActive("Hero_Forward_Flight");
                     return;
                 default:
@@ -735,7 +733,7 @@ define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "game/s
     }());
     exports.GameManager = GameManager;
 });
-define("game/src/ts_src/components/cmpHeroBulletController", ["require", "exports", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/components/dcComponentID"], function (require, exports, gameManager_1, dcComponentID_4) {
+define("game/src/ts_src/components/cmpHeroBulletController", ["require", "exports", "game/src/ts_src/commons/1942enums", "game/src/ts_src/gameManager/gameManager"], function (require, exports, _1942enums_6, gameManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CmpHeroBulletController = void 0;
@@ -744,7 +742,7 @@ define("game/src/ts_src/components/cmpHeroBulletController", ["require", "export
         }
         CmpHeroBulletController.Create = function (_bulletManager) {
             var bulletController = new CmpHeroBulletController();
-            bulletController.m_id = dcComponentID_4.DC_COMPONENT_ID.kHeroBulletController;
+            bulletController.m_id = _1942enums_6.DC_COMPONENT_ID.kHeroBulletController;
             bulletController._m_bulletManager = _bulletManager;
             return bulletController;
         };
@@ -788,7 +786,7 @@ define("game/src/ts_src/components/cmpHeroBulletController", ["require", "export
     }());
     exports.CmpHeroBulletController = CmpHeroBulletController;
 });
-define("game/src/ts_src/playerController/playerController", ["require", "exports", "game/src/ts_src/actors/baseActor", "game/src/ts_src/components/cmpHeroInput", "game/src/ts_src/components/dcComponentID", "game/src/ts_src/components/cmpMovement", "game/src/ts_src/components/cmpAnimation", "game/src/ts_src/states/stateHeroFFLight", "game/src/ts_src/states/stateHeroGlide", "game/src/ts_src/components/cmpHeroBulletController", "game/src/ts_src/gameManager/gameManager"], function (require, exports, baseActor_1, cmpHeroInput_1, dcComponentID_5, cmpMovement_1, cmpAnimation_1, stateHeroFFLight_1, stateHeroGlide_1, cmpHeroBulletController_1, gameManager_2) {
+define("game/src/ts_src/playerController/playerController", ["require", "exports", "game/src/ts_src/actors/baseActor", "game/src/ts_src/components/cmpHeroInput", "game/src/ts_src/components/cmpMovement", "game/src/ts_src/components/cmpAnimation", "game/src/ts_src/states/stateHeroFFLight", "game/src/ts_src/states/stateHeroGlide", "game/src/ts_src/components/cmpHeroBulletController", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/commons/1942enums"], function (require, exports, baseActor_1, cmpHeroInput_1, cmpMovement_1, cmpAnimation_1, stateHeroFFLight_1, stateHeroGlide_1, cmpHeroBulletController_1, gameManager_2, _1942enums_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.PlayerController = void 0;
@@ -828,46 +826,46 @@ define("game/src/ts_src/playerController/playerController", ["require", "exports
                 this.setHeroFireRate(2);
             }
             hero.init();
-            var anim = hero.getComponent(dcComponentID_5.DC_COMPONENT_ID.kAnimation);
+            var anim = hero.getComponent(_1942enums_7.DC_COMPONENT_ID.kAnimation);
             anim.addState(new stateHeroFFLight_1.StateHeroFFlight());
             anim.addState(new stateHeroGlide_1.StateHeroGlide());
             anim.setActive('Hero_Forward_Flight');
             return;
         };
         PlayerController.prototype.setPointer = function (_pointer) {
-            var input = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroInput);
+            var input = this._m_player.getComponent(_1942enums_7.DC_COMPONENT_ID.kHeroInput);
             input.setPointer(_pointer);
             return;
         };
         PlayerController.prototype.getPointer = function () {
-            var input = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroInput);
+            var input = this._m_player.getComponent(_1942enums_7.DC_COMPONENT_ID.kHeroInput);
             return input.getPointer();
         };
         PlayerController.prototype.setInputMode = function (_mode) {
-            var input = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroInput);
+            var input = this._m_player.getComponent(_1942enums_7.DC_COMPONENT_ID.kHeroInput);
             input.setMode(_mode);
             return;
         };
         PlayerController.prototype.getInputMode = function () {
-            var input = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroInput);
+            var input = this._m_player.getComponent(_1942enums_7.DC_COMPONENT_ID.kHeroInput);
             return input.getMode();
         };
         PlayerController.prototype.setHeroSpeed = function (_speed) {
-            var input = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroInput);
+            var input = this._m_player.getComponent(_1942enums_7.DC_COMPONENT_ID.kHeroInput);
             input.setSpeed(_speed);
             return;
         };
         PlayerController.prototype.setHeroFireRate = function (_fireRate) {
-            var bulletController = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroBulletController);
+            var bulletController = this._m_player.getComponent(_1942enums_7.DC_COMPONENT_ID.kHeroBulletController);
             bulletController.setFireRate(_fireRate);
             return;
         };
         PlayerController.prototype.getHeroFireRate = function () {
-            var bulletController = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kHeroBulletController);
+            var bulletController = this._m_player.getComponent(_1942enums_7.DC_COMPONENT_ID.kHeroBulletController);
             return bulletController.getFireRate();
         };
         PlayerController.prototype.setMovementPadding = function (_p1_x, _p1_y, _p2_x, _p2_y) {
-            var movement = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kMovement);
+            var movement = this._m_player.getComponent(_1942enums_7.DC_COMPONENT_ID.kMovement);
             movement.setBounding(_p1_x, _p1_y, _p2_x, _p2_y);
             return;
         };
@@ -887,7 +885,7 @@ define("game/src/ts_src/playerController/playerController", ["require", "exports
             return;
         };
         PlayerController.prototype.getDirection = function () {
-            var movement = this._m_player.getComponent(dcComponentID_5.DC_COMPONENT_ID.kMovement);
+            var movement = this._m_player.getComponent(_1942enums_7.DC_COMPONENT_ID.kMovement);
             return movement.getDirection();
         };
         return PlayerController;
@@ -898,7 +896,7 @@ define("game/src/ts_src/components/iCmpCollisionController", ["require", "export
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
 });
-define("game/src/ts_src/components/cmpBulletCollisionController", ["require", "exports", "game/src/ts_src/components/dcComponentID"], function (require, exports, dcComponentID_6) {
+define("game/src/ts_src/components/cmpBulletCollisionController", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CmpBulletCollisionController = void 0;
@@ -907,7 +905,7 @@ define("game/src/ts_src/components/cmpBulletCollisionController", ["require", "e
         }
         CmpBulletCollisionController.Create = function () {
             var controller = new CmpBulletCollisionController();
-            controller.m_id = dcComponentID_6.DC_COMPONENT_ID.kCollisionController;
+            controller.m_id = _1942enums_8.DC_COMPONENT_ID.kCollisionController;
             return controller;
         };
         CmpBulletCollisionController.prototype.onCollision = function (_other, _this) {
@@ -929,7 +927,7 @@ define("game/src/ts_src/components/cmpBulletCollisionController", ["require", "e
     }());
     exports.CmpBulletCollisionController = CmpBulletCollisionController;
 });
-define("game/src/ts_src/components/cmpMovementBullet", ["require", "exports", "game/src/ts_src/messages/dcMessageID", "game/src/ts_src/components/dcComponentID"], function (require, exports, dcMessageID_5, dcComponentID_7) {
+define("game/src/ts_src/components/cmpMovementBullet", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CmpMovementBullet = void 0;
@@ -938,7 +936,7 @@ define("game/src/ts_src/components/cmpMovementBullet", ["require", "exports", "g
         }
         CmpMovementBullet.Create = function () {
             var movement = new CmpMovementBullet();
-            movement.m_id = dcComponentID_7.DC_COMPONENT_ID.kMovementBullet;
+            movement.m_id = _1942enums_9.DC_COMPONENT_ID.kMovementBullet;
             movement._m_prevPosition = new Phaser.Geom.Point(0.0, 0.0);
             movement._m_direction = new Phaser.Math.Vector2(1.0, 0.0);
             movement._m_isDirty = true;
@@ -951,7 +949,7 @@ define("game/src/ts_src/components/cmpMovementBullet", ["require", "exports", "g
         CmpMovementBullet.prototype.update = function (_actor) { };
         CmpMovementBullet.prototype.receive = function (_id, _obj) {
             switch (_id) {
-                case dcMessageID_5.DC_MESSAGE_ID.kAgentMove:
+                case _1942enums_9.DC_MESSAGE_ID.kAgentMove:
                     {
                         var movement = _obj;
                         this.move(movement.x, movement.y);
@@ -1003,7 +1001,7 @@ define("game/src/ts_src/bulletManager/bulletManagerConfig", ["require", "exports
     }());
     exports.BulletManagerConfig = BulletManagerConfig;
 });
-define("game/src/ts_src/bulletManager/bulletManager", ["require", "exports", "optimization/mxObjectPool", "game/src/ts_src/actors/baseActor", "game/src/ts_src/components/cmpBulletCollisionController", "game/src/ts_src/components/cmpMovementBullet", "game/src/ts_src/components/dcComponentID", "game/src/ts_src/messages/dcMessageID"], function (require, exports, mxObjectPool_2, baseActor_2, cmpBulletCollisionController_1, cmpMovementBullet_1, dcComponentID_8, dcMessageID_6) {
+define("game/src/ts_src/bulletManager/bulletManager", ["require", "exports", "optimization/mxObjectPool", "game/src/ts_src/actors/baseActor", "game/src/ts_src/commons/1942enums", "game/src/ts_src/components/cmpBulletCollisionController", "game/src/ts_src/components/cmpMovementBullet"], function (require, exports, mxObjectPool_2, baseActor_2, _1942enums_10, cmpBulletCollisionController_1, cmpMovementBullet_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BulletManager = void 0;
@@ -1099,16 +1097,16 @@ define("game/src/ts_src/bulletManager/bulletManager", ["require", "exports", "op
         };
         BulletManager.prototype._onCollision = function (_other, _bullet) {
             var bulletActor = _bullet.getData("actor");
-            var bulletController = bulletActor.getComponent(dcComponentID_8.DC_COMPONENT_ID.kCollisionController);
+            var bulletController = bulletActor.getComponent(_1942enums_10.DC_COMPONENT_ID.kCollisionController);
             var otherActor = _other.getData('actor');
             bulletController.onCollision(otherActor, bulletActor);
-            var otherController = otherActor.getComponent(dcComponentID_8.DC_COMPONENT_ID.kCollisionController);
+            var otherController = otherActor.getComponent(_1942enums_10.DC_COMPONENT_ID.kCollisionController);
             otherController.onCollision(bulletActor, otherActor);
             this._m_pool.desactive(bulletActor);
             return;
         };
         BulletManager.prototype._updateBullet = function (_bullet) {
-            _bullet.sendMessage(dcMessageID_6.DC_MESSAGE_ID.kAgentMove, this._m_v3);
+            _bullet.sendMessage(_1942enums_10.DC_MESSAGE_ID.kAgentMove, this._m_v3);
             var sprite = _bullet.getWrappedInstance();
             if (!this._isPlayzone(sprite.x, sprite.y)) {
                 this._m_pool.desactive(_bullet);
@@ -1151,7 +1149,7 @@ define("game/src/ts_src/enemiesManager/enemiesManagerConfig", ["require", "expor
     }());
     exports.EnemiesManagerConfig = EnemiesManagerConfig;
 });
-define("game/src/ts_src/enemiesManager/enemiesManager", ["require", "exports", "optimization/mxObjectPool", "game/src/ts_src/actors/baseActor", "game/src/ts_src/components/dcComponentID"], function (require, exports, mxObjectPool_3, baseActor_3, dcComponentID_9) {
+define("game/src/ts_src/enemiesManager/enemiesManager", ["require", "exports", "optimization/mxObjectPool", "game/src/ts_src/actors/baseActor", "game/src/ts_src/commons/1942enums"], function (require, exports, mxObjectPool_3, baseActor_3, _1942enums_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.EnemiesManager = void 0;
@@ -1214,7 +1212,7 @@ define("game/src/ts_src/enemiesManager/enemiesManager", ["require", "exports", "
         };
         EnemiesManager.prototype._onCollision = function (_other, _sprite) {
             var baseActor = _sprite.getData("actor");
-            var controller = baseActor.getComponent(dcComponentID_9.DC_COMPONENT_ID.kCollisionController);
+            var controller = baseActor.getComponent(_1942enums_11.DC_COMPONENT_ID.kCollisionController);
             controller.onCollision(baseActor, _other.getData('actor'));
             console.log("Collision!");
             return;
@@ -1239,7 +1237,7 @@ define("game/src/ts_src/enemiesManager/enemiesManager", ["require", "exports", "
     }());
     exports.EnemiesManager = EnemiesManager;
 });
-define("game/src/ts_src/components/cmpTargetController", ["require", "exports", "game/src/ts_src/components/dcComponentID"], function (require, exports, dcComponentID_10) {
+define("game/src/ts_src/components/cmpTargetController", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_12) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CmpTargetController = void 0;
@@ -1248,7 +1246,7 @@ define("game/src/ts_src/components/cmpTargetController", ["require", "exports", 
         }
         CmpTargetController.Create = function () {
             var controller = new CmpTargetController();
-            controller.m_id = dcComponentID_10.DC_COMPONENT_ID.kCollisionController;
+            controller.m_id = _1942enums_12.DC_COMPONENT_ID.kCollisionController;
             return controller;
         };
         CmpTargetController.prototype.init = function (_actor) {
@@ -1266,7 +1264,7 @@ define("game/src/ts_src/components/cmpTargetController", ["require", "exports", 
     }());
     exports.CmpTargetController = CmpTargetController;
 });
-define("test/bulletManager/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/playerController/playerController", "game/src/ts_src/states/nullState", "game/src/ts_src/bulletManager/bulletManager", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/enemiesManager/enemiesManager", "game/src/ts_src/components/dcComponentID", "game/src/ts_src/enemiesManager/enemiesManagerConfig", "game/src/ts_src/components/cmpTargetController"], function (require, exports, playerController_1, nullState_2, bulletManager_1, gameManager_3, enemiesManager_1, dcComponentID_11, enemiesManagerConfig_1, cmpTargetController_1) {
+define("test/bulletManager/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/playerController/playerController", "game/src/ts_src/states/nullState", "game/src/ts_src/bulletManager/bulletManager", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/enemiesManager/enemiesManager", "game/src/ts_src/enemiesManager/enemiesManagerConfig", "game/src/ts_src/components/cmpTargetController", "game/src/ts_src/commons/1942enums"], function (require, exports, playerController_1, nullState_2, bulletManager_1, gameManager_3, enemiesManager_1, enemiesManagerConfig_1, cmpTargetController_1, _1942enums_13) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Test = void 0;
@@ -1361,7 +1359,7 @@ define("test/bulletManager/src/ts_src/scenes/test", ["require", "exports", "game
                     + "\nActive : " + pool.getActiveSize().toString()
                     + "\nDesactive : " + pool.getDesactiveSize().toString();
             var hero = this._m_heroController.getPlayer();
-            var heroBulletCntrl = hero.getComponent(dcComponentID_11.DC_COMPONENT_ID.kHeroBulletController);
+            var heroBulletCntrl = hero.getComponent(_1942enums_13.DC_COMPONENT_ID.kHeroBulletController);
             this._m_heroBulletCntrl_data.text
                 = "-- Hero Bullet Controller --\n"
                     + "\n Fire rate : " + (1.0 / heroBulletCntrl.getFireRate()).toString() + " bullets/s.";

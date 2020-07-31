@@ -19,6 +19,7 @@
   "include": [
     "./src/ts_src/**/*",
     "../../game/src/ts_src/levelGenerator/**/*",
-	  "../../externals/mxUtilities/*"
+    "../../externals/mxUtilities/*",
+    "../../game/src/ts_src/commons/**/*"
   ]
 }

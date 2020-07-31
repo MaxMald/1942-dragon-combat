@@ -6,10 +6,10 @@ import { BulletManagerConfig } from "../../../../../game/src/ts_src/bulletManage
 import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
 import { EnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/enemiesManager";
 import { CmpHeroBulletController } from "../../../../../game/src/ts_src/components/cmpHeroBulletController";
-import { DC_COMPONENT_ID } from "../../../../../game/src/ts_src/components/dcComponentID";
 import { EnemiesManagerConfig } from "../../../../../game/src/ts_src/enemiesManager/enemiesManagerConfig";
 import { BaseActor } from "../../../../../game/src/ts_src/actors/baseActor";
 import { CmpTargetController } from "../../../../../game/src/ts_src/components/cmpTargetController";
+import { DC_COMPONENT_ID } from "../../../../../game/src/ts_src/commons/1942enums";
 
 
 export class Test extends Phaser.Scene

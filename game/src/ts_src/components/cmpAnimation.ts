@@ -10,10 +10,10 @@
  */
 
 import { BaseActor } from "../actors/baseActor";
+import { DC_COMPONENT_ID } from "../commons/1942enums";
 import { IAnimationState } from "../states/IAnimationState";
 import { IBaseState } from "../states/IBaseState";
 import { NullState } from "../states/nullState";
-import { DC_COMPONENT_ID } from "./dcComponentID";
 import { IBaseComponent } from "./iBaseComponent";
 
 /**

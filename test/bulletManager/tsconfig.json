@@ -26,7 +26,8 @@
     "../../game/src/ts_src/bulletManager/**/*",
     "../../game/src/ts_src/gameManager/**/*",
     "../../game/src/ts_src/enemiesManager/**/*",
-    "../../externals/mxUtilities/*"
+    "../../externals/mxUtilities/*",
+    "../../game/src/ts_src/commons/**/*"
   ],
 
   "exclude": 

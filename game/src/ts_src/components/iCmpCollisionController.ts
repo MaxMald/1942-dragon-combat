@@ -12,7 +12,7 @@ import { BaseActor } from "../actors/baseActor";
 import { IBaseComponent } from "./iBaseComponent";
 
 /**
- * Provides common methods to handle a collision between objects
+ * Provides common methods to handle a collision between objects.
  */
 export interface ICmpCollisionController
   extends IBaseComponent<Phaser.Physics.Arcade.Sprite>
@@ -21,6 +21,13 @@ export interface ICmpCollisionController
   /* Public                                           */
   /****************************************************/
   
+  /**
+   * This method is called once when a collision occurs between the actor and
+   * other object.
+   * 
+   * @param _other other object. 
+   * @param _this self.
+   */
   onCollision
   (
     _other : BaseActor<Phaser.Physics.Arcade.Sprite>, 

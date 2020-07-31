@@ -4109,4 +4109,149 @@ define("test/ambienceGenerator/src/ts_src/game_init", ["require", "exports", "ph
     }());
     return GameInit;
 });
+define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.DC_ANIMATION_ID = exports.DC_MESSAGE_ID = exports.DC_COMPONENT_ID = exports.DC_BOSS_ID = exports.DC_ENEMY_TYPE = void 0;
+    exports.DC_ENEMY_TYPE = Object.freeze({
+        kErrante: 0,
+        kSonico: 1,
+        kRanger: 2
+    });
+    exports.DC_BOSS_ID = Object.freeze({
+        kBalsaru: 0
+    });
+    exports.DC_COMPONENT_ID = Object.freeze({
+        kMovement: 0,
+        kHeroInput: 1,
+        kAnimation: 2,
+        kHeroBulletController: 3,
+        kMovementBullet: 4,
+        kCollisionController: 5
+    });
+    exports.DC_MESSAGE_ID = Object.freeze({
+        kAgentMove: 500,
+        kPointerMoved: 501,
+        kToPosition: 502,
+        kPointerReleased: 503,
+        kPointerPressed: 504,
+        kMixedMovement: 505
+    });
+    exports.DC_ANIMATION_ID = Object.freeze({
+        kForward: 0,
+        kBack: 1,
+        kRight: 2,
+        kLeft: 3,
+        kIdle: 4
+    });
+});
+define("game/src/ts_src/components/iBaseComponent", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/actors/baseActor", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.BaseActor = void 0;
+    var BaseActor = (function () {
+        function BaseActor() {
+        }
+        BaseActor.Create = function (_instance, _name) {
+            var actor = new BaseActor();
+            actor._m_components = new Array();
+            actor._m_instance = _instance;
+            actor.m_name = _name;
+            return actor;
+        };
+        BaseActor.prototype.init = function () {
+            var index = 0;
+            var components = this._m_components;
+            var length = components.length;
+            while (index < length) {
+                components[index].init(this);
+                ++index;
+            }
+            return;
+        };
+        BaseActor.prototype.update = function () {
+            var index = 0;
+            var components = this._m_components;
+            var length = components.length;
+            while (index < length) {
+                components[index].update(this);
+                ++index;
+            }
+            return;
+        };
+        BaseActor.prototype.sendMessage = function (_id, _obj) {
+            var index = 0;
+            var components = this._m_components;
+            var length = components.length;
+            while (index < length) {
+                components[index].receive(_id, _obj);
+                ++index;
+            }
+            return;
+        };
+        BaseActor.prototype.getWrappedInstance = function () {
+            return this._m_instance;
+        };
+        BaseActor.prototype.addComponent = function (_component) {
+            if (this.hasComponent(_component.m_id)) {
+                this.removeComponent(_component.m_id);
+            }
+            this._m_components.push(_component);
+            return;
+        };
+        BaseActor.prototype.getComponent = function (_id) {
+            var index = 0;
+            var length = this._m_components.length;
+            while (index < length) {
+                if (this._m_components[index].m_id == _id) {
+                    return this._m_components[index];
+                }
+                ++index;
+            }
+            throw new Error("Component of index : "
+                + _id.toString()
+                + " not founded");
+        };
+        BaseActor.prototype.removeComponent = function (_id) {
+            var index = 0;
+            var length = this._m_components.length;
+            while (index < length) {
+                if (this._m_components[index].m_id == _id) {
+                    this._m_components.splice(index, 1);
+                }
+                ++index;
+            }
+            return;
+        };
+        BaseActor.prototype.hasComponent = function (_id) {
+            var index = 0;
+            var length = this._m_components.length;
+            while (index < length) {
+                if (this._m_components[index].m_id == _id) {
+                    return true;
+                }
+                ++index;
+            }
+            return false;
+        };
+        BaseActor.prototype.destroy = function () {
+            var component;
+            while (this._m_components.length) {
+                component = this._m_components.pop();
+                component.destroy();
+            }
+            return;
+        };
+        return BaseActor;
+    }());
+    exports.BaseActor = BaseActor;
+});
+define("game/src/ts_src/commons/1942types", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
 //# sourceMappingURL=test_ambienceGenerator.js.map

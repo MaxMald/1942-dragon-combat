@@ -16,8 +16,8 @@
 import { MxObjectPool } from "optimization/mxObjectPool";
 import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
+import { DC_COMPONENT_ID } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
-import { DC_COMPONENT_ID } from "../components/dcComponentID";
 import { ICmpCollisionController } from "../components/iCmpCollisionController";
 import { EnemiesManagerConfig } from "./enemiesManagerConfig";
 import { IEnemiesManager } from "./iEnemiesManager";

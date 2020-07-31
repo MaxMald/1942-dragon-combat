@@ -24,7 +24,8 @@
     "../../game/src/ts_src/message/**/*",
     "../../game/src/ts_src/states/**/*",
     "../../game/src/ts_src/gameManager/**/*",
-    "../../externals/mxUtilities/*"
+    "../../externals/mxUtilities/*",
+    "../../game/src/ts_src/commons/**/*"
   ],
 
   "exclude": 

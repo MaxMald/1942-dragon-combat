@@ -1,5 +1,5 @@
 import { BaseActor } from "../actors/baseActor";
-import { DC_COMPONENT_ID } from "./dcComponentID";
+import { DC_COMPONENT_ID } from "../commons/1942enums";
 /**
  * HummingFlight Software Technologies - 2020
  *

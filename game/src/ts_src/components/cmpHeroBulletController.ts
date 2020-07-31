@@ -10,8 +10,8 @@
 
 import { BaseActor } from "../actors/baseActor";
 import { IBulletManager } from "../bulletManager/iBulletManager";
+import { DC_COMPONENT_ID } from "../commons/1942enums";
 import { GameManager } from "../gameManager/gameManager";
-import { DC_COMPONENT_ID } from "./dcComponentID";
 import { IBaseComponent } from "./iBaseComponent";
 
 /**

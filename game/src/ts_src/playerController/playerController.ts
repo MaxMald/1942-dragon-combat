@@ -12,7 +12,6 @@
 import { BaseActor } from "../actors/baseActor";
 import { PlayerControllerConfig } from "./playerControllerConfig";
 import { CmpHeroInput } from "../components/cmpHeroInput"
-import { DC_COMPONENT_ID } from "../components/dcComponentID";
 import { CmpMovement } from "../components/cmpMovement";
 import { CmpAnimation } from "../components/cmpAnimation";
 import { StateHeroFFlight } from "../states/stateHeroFFLight";
@@ -20,6 +19,7 @@ import { StateHeroGlide } from "../states/stateHeroGlide";
 import { CmpHeroBulletController } from "../components/cmpHeroBulletController";
 import { GameManager } from "../gameManager/gameManager";
 import { IBulletManager } from "../bulletManager/iBulletManager";
+import { DC_COMPONENT_ID } from "../commons/1942enums";
 
 /**
  * Create and manage the hero's actor. It provides a friendly interface to control

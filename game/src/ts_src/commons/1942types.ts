@@ -30,3 +30,8 @@ export type Ty_physicsGroup = Phaser.Physics.Arcade.Group;
  * @type BaseActor<Ty_Sprite>
  */
 export type Ty_physicsActor = BaseActor<Ty_physicsSprite>;
+
+/**
+ * Used for the enumerator pattern.
+ */
+export type EnumLiteralsOf<T extends object> = T[keyof T];

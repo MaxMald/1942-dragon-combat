@@ -9,7 +9,7 @@
  */
 
 import { BaseActor } from "../actors/baseActor";
-import { DC_COMPONENT_ID } from "./dcComponentID";
+import { DC_COMPONENT_ID } from "../commons/1942enums";
 import { ICmpCollisionController } from "./iCmpCollisionController";
 
 export class CmpTargetController implements ICmpCollisionController

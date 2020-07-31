@@ -10,8 +10,7 @@
 
 import { IBaseComponent } from "./iBaseComponent";
 import { BaseActor } from "../actors/baseActor";
-import { DC_MESSAGE_ID } from "../messages/dcMessageID";
-import { DC_COMPONENT_ID } from "./dcComponentID";
+import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 
 /**
  * Provides Message receivers to move the position of the Arcade Sprite.

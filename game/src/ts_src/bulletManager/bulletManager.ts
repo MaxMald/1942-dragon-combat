@@ -12,12 +12,11 @@
 import { MxObjectPool } from "optimization/mxObjectPool";
 import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
+import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
 import { CmpBulletCollisionController } from "../components/cmpBulletCollisionController";
 import { CmpMovementBullet } from "../components/cmpMovementBullet";
-import { DC_COMPONENT_ID } from "../components/dcComponentID";
 import { ICmpCollisionController } from "../components/iCmpCollisionController";
-import { DC_MESSAGE_ID } from "../messages/dcMessageID";
 import { BulletManagerConfig } from "./bulletManagerConfig";
 import { IBulletManager } from "./iBulletManager";
 
