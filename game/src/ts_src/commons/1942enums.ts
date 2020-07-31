@@ -23,6 +23,8 @@ export type DC_ENEMY_TYPE = EnumLiteralsOf<typeof DC_ENEMY_TYPE>;
 
 export const DC_ENEMY_TYPE = Object.freeze
 ({
+  kUndefined : -1 as -1,
+
   /**
    * Dragón errante.
    */

@@ -1,5 +1,3 @@
-import { BaseActor } from "../actors/baseActor";
-import { DC_COMPONENT_ID } from "../commons/1942enums";
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -10,6 +8,8 @@ import { DC_COMPONENT_ID } from "../commons/1942enums";
  * @since July-30-2020
  */
 
+import { BaseActor } from "../actors/baseActor";
+import { DC_COMPONENT_ID } from "../commons/1942enums";
 import { ICmpCollisionController } from "./iCmpCollisionController";
 
 /**

@@ -16,10 +16,12 @@
 import { MxObjectPool } from "optimization/mxObjectPool";
 import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
-import { DC_COMPONENT_ID } from "../commons/1942enums";
+import { DC_COMPONENT_ID, DC_ENEMY_TYPE } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
 import { ICmpCollisionController } from "../components/iCmpCollisionController";
 import { EnemiesManagerConfig } from "./enemiesManagerConfig";
+import { IEnemySpawner } from "./enemySpawner/iEnemySpawner";
+import { NullEnemySpwaner } from "./enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "./iEnemiesManager";
 
 /**
@@ -67,6 +69,10 @@ export class EnemiesManager implements IEnemiesManager
       manager
     );
 
+    // Enemy spawners map.
+
+    manager._m_hSpawner = new Map<DC_ENEMY_TYPE, IEnemySpawner>();
+
     return manager;
   }
 
@@ -77,23 +83,16 @@ export class EnemiesManager implements IEnemiesManager
   init(_scene : Phaser.Scene, _config : EnemiesManagerConfig)
   : void
   {
-    // Clear the group of physics bodies.
+    // Clear this enemy manager.
+
+    this.clear();
+
+    // Create the physics bodies group.
 
     let bodiesGroup = this._m_bodiesGroup;
 
-    if(bodiesGroup != null)
-    {
-      bodiesGroup.destroy();
-    }
-
     bodiesGroup = _scene.physics.add.group();
     this._m_bodiesGroup = bodiesGroup;
-
-    // Clear actors pool
-
-    let actorPool = this._m_actorPool;
-
-    actorPool.clear();
 
     // Create Actors.
 
@@ -123,9 +122,53 @@ export class EnemiesManager implements IEnemiesManager
       --size;
     }
 
-    actorPool.init(a_actors);
+    this._m_actorPool.init(a_actors);
 
     return;
+  }
+
+  /**
+   * Adds an EnemySpawner to this EnemiesManager. If exists an EnemySpawner with
+   * the same ID, it will be destroyed and replaced by the new one.
+   * 
+   * @param _spawner EnemySpawner.
+   */
+  addSpawner(_spawner : IEnemySpawner)
+  : void
+  {
+    let hSpawner = this._m_hSpawner;
+    let id = _spawner.getID();
+
+    if(hSpawner.has(id))
+    {
+      hSpawner.get(id).destroy();
+    }
+
+    hSpawner.set(id, _spawner);
+
+    return;
+  }
+
+  /**
+   * Get an EnemySpawner of this EnemiesManager.
+   * 
+   * @param _id EnemySpawner identifier.
+   * 
+   * @returns The EnemySpawner. If the EnemySpawner was not found, it will
+   * returns the NullEnemySpawner object. 
+   */
+  getSpawner(_id : DC_ENEMY_TYPE)
+  : IEnemySpawner
+  {
+    let hSpawner = this._m_hSpawner;
+
+    if(hSpawner.has(_id))
+    {
+      return hSpawner.get(_id);
+    }
+
+    console.warn("Enemy Spawner not found!");
+    return new NullEnemySpwaner();
   }
 
   /**
@@ -136,7 +179,13 @@ export class EnemiesManager implements IEnemiesManager
   update(_dt: number)
   : void 
   {
-    // TODO.
+    this._m_dt = _dt;
+    
+    this._m_hSpawner.forEach
+    (
+      this._updateSpawner,
+      this
+    );
 
     return;
   }
@@ -148,10 +197,26 @@ export class EnemiesManager implements IEnemiesManager
    * @param _y position in y axis.
    * @param _type enemy type.
    */
-  spawn(_x: number, _y: number, _type: number)
+  spawn(_x: number, _y: number, _type: DC_ENEMY_TYPE)
   : void 
   {
-    // TODO.
+    
+    let hSpawner = this._m_hSpawner;
+
+    if(hSpawner.has(_type))
+    {
+
+      let actor = this.getActor();
+
+      if(actor != null)
+      {
+        hSpawner.get(_type).spawn(actor, _x, _y);
+      }      
+    }
+    else
+    {
+      console.warn("Enemy spawner didn't found.");
+    }
 
     return;
   }
@@ -201,6 +266,44 @@ export class EnemiesManager implements IEnemiesManager
   }
 
   /**
+   * Clears this EnemyManager. Destroy the list of bodies group. Clear the pool.
+   * Destroy and clear the map of spawners.
+   */
+  clear()
+  : void
+  {
+    // Clear the group of physics bodies.
+
+    let bodiesGroup = this._m_bodiesGroup;
+
+    if(bodiesGroup != null)
+    {
+      bodiesGroup.destroy();
+    }
+
+    this._m_bodiesGroup = null;
+
+    // Clear actors pool
+
+    this._m_actorPool.clear();
+
+    // Clear the Map of spawners.
+
+    let hSpawner = this._m_hSpawner;
+
+    hSpawner.forEach
+    (
+      function(_spawner : IEnemySpawner)
+      {
+        _spawner.destroy();
+      }
+    );
+    hSpawner.clear();
+
+    return;
+  }
+
+  /**
    * Safely destroys this object.
    */
   destroy()
@@ -214,6 +317,13 @@ export class EnemiesManager implements IEnemiesManager
   /****************************************************/
   /* Private                                          */
   /****************************************************/
+
+  private _updateSpawner(_spawner : IEnemySpawner)
+  : void
+  {
+    _spawner.update(this._m_dt);
+    return;
+  }
 
    /**
    * Called when an actor has a collision with another body.
@@ -305,4 +415,14 @@ export class EnemiesManager implements IEnemiesManager
    * Group of physics bodies.
    */
   private _m_bodiesGroup : Phaser.Physics.Arcade.Group;
+
+  /**
+   * Map of enemy spawners.
+   */
+  private _m_hSpawner : Map<DC_ENEMY_TYPE, IEnemySpawner>;
+
+  /**
+   * delta time.
+   */
+  private _m_dt : number;
 }

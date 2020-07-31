@@ -11,17 +11,46 @@
 
 import { IEnemiesManager } from "./iEnemiesManager";
 import { Ty_physicsActor } from "../commons/1942types";
+import { DC_ENEMY_TYPE } from "../commons/1942enums";
+import { EnumLiteralsOf } from "commons/mxEnums";
+import { IEnemySpawner } from "./enemySpawner/iEnemySpawner";
+import { NullEnemySpwaner } from "./enemySpawner/nullEnemySpawner";
 
 /**
  * This class has no implementations, it is used by the GameManager when no 
  * implementation of the IEnemiesManager was given.
  */
 export class NullEnemiesManager implements IEnemiesManager
-{ 
+{  
   /****************************************************/
   /* Public                                           */
   /****************************************************/
   
+  /**
+   * No implementation.
+   * 
+   * @param _spawner 
+   */
+  addSpawner(_spawner: IEnemySpawner)
+  : void 
+  { 
+    console.log("NullEnemiesManager : addSpawner. ");
+    return;
+  }
+
+  /**
+   * No implementation.
+   * 
+   * @param _id 
+   */
+  getSpawner(_id: DC_ENEMY_TYPE)
+  : IEnemySpawner 
+  {
+    console.log("NullEnemiesManager : getSpawner. ");
+
+   return new NullEnemySpwaner(); 
+  } 
+
   /**
    * Allways returns null.
    * 
@@ -53,7 +82,7 @@ export class NullEnemiesManager implements IEnemiesManager
    * @param _y 
    * @param _type 
    */
-  spawn(_x: number, _y: number, _type: number)
+  spawn(_x: number, _y: number, _type: DC_ENEMY_TYPE)
   : void 
   {
     console.log("NullEnemiesManager : spawn. ");
