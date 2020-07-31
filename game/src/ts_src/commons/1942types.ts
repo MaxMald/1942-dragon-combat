@@ -35,3 +35,24 @@ export type Ty_physicsActor = BaseActor<Ty_physicsSprite>;
  * Used for the enumerator pattern.
  */
 export type EnumLiteralsOf<T extends object> = T[keyof T];
+
+/**
+ * Vector 3D
+ * 
+ * @type Phaser.Math.Vector3
+ */
+export type V3 = Phaser.Math.Vector3;
+
+/**
+ * Vector 2D
+ * 
+ * @type Phaser.Math.Vector2
+ */
+export type V2 = Phaser.Math.Vector2;
+
+/**
+ * Point.
+ * 
+ * @type Phaser.Geom.Point
+ */
+export type Point = Phaser.Geom.Point;

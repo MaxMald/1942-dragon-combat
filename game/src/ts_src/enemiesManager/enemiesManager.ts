@@ -18,6 +18,7 @@ import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
 import { DC_COMPONENT_ID, DC_ENEMY_TYPE } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
+import { CmpMovementEnemy } from "../components/cmpMovementEnemy";
 import { ICmpCollisionController } from "../components/iCmpCollisionController";
 import { EnemiesManagerConfig } from "./enemiesManagerConfig";
 import { IEnemySpawner } from "./enemySpawner/iEnemySpawner";
@@ -111,13 +112,32 @@ export class EnemiesManager implements IEnemiesManager
         _config.texture_key
       );
 
+      // Set default sprite state.
+
       sprite.visible = false;
       sprite.active = false;
+      sprite.body.enable = false;
+      sprite.body.immovable = true;
+
+      // Create the actor.
 
       actor = BaseActor.Create(sprite, "Enemy_" + size.toString());
-      a_actors.push(actor);
+
+      // Add common components
+
+      actor.addComponent(CmpMovementEnemy.Create());
+
+      // Initialize the actor.
+
+      actor.init();
+
+      // Set data.
 
       sprite.setData('actor', actor);
+
+      // Add actor to the list.
+
+      a_actors.push(actor);      
 
       --size;
     }
@@ -172,7 +192,7 @@ export class EnemiesManager implements IEnemiesManager
   }
 
   /**
-   * Updates each EnemySpawner in this this EnemiesManager.
+   * Updates active actors and enemySpawners.
    * 
    * @param _dt delta time. 
    */
@@ -181,11 +201,13 @@ export class EnemiesManager implements IEnemiesManager
   {
     this._m_dt = _dt;
     
-    this._m_hSpawner.forEach
-    (
-      this._updateSpawner,
-      this
-    );
+    // Update spawners.
+    
+    this._m_hSpawner.forEach(this._updateSpawner, this);
+
+    // Update actors.
+
+    this._m_actorPool.forEachActive(this._updateActor, this);
 
     return;
   }
@@ -318,6 +340,23 @@ export class EnemiesManager implements IEnemiesManager
   /* Private                                          */
   /****************************************************/
 
+  /**
+   * Called once for each active actor in the pool during the game loop.
+   * 
+   * @param _actor 
+   */
+  private _updateActor(_actor : Ty_physicsActor)
+  : void
+  {
+    _actor.update();
+    return;
+  }
+
+  /**
+   * Called once for each EnemySpawner during the game loop.
+   * 
+   * @param _spawner  
+   */
   private _updateSpawner(_spawner : IEnemySpawner)
   : void
   {

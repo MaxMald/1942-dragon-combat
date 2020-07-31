@@ -7,9 +7,8 @@ import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameMana
 import { EnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/enemiesManager";
 import { CmpHeroBulletController } from "../../../../../game/src/ts_src/components/cmpHeroBulletController";
 import { EnemiesManagerConfig } from "../../../../../game/src/ts_src/enemiesManager/enemiesManagerConfig";
-import { BaseActor } from "../../../../../game/src/ts_src/actors/baseActor";
-import { CmpTargetController } from "../../../../../game/src/ts_src/components/cmpTargetController";
-import { DC_COMPONENT_ID } from "../../../../../game/src/ts_src/commons/1942enums";
+import { DC_COMPONENT_ID, DC_ENEMY_TYPE } from "../../../../../game/src/ts_src/commons/1942enums";
+import { ErranteSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner";
 
 
 export class Test extends Phaser.Scene
@@ -58,6 +57,12 @@ export class Test extends Phaser.Scene
     (
       'fireball',
       'images/fireball.png'
+    );
+
+    this.load.image
+    (
+      'enemy',
+      'images/enemy.png'
     );
     return;
   }
@@ -151,7 +156,7 @@ export class Test extends Phaser.Scene
 
     let enemiesManagerConfig = new EnemiesManagerConfig();
 
-    enemiesManagerConfig.pool_size = 3;
+    enemiesManagerConfig.pool_size = 10;
     enemiesManagerConfig.texture_key = "target";
 
     enemiesManager.init(this, enemiesManagerConfig);
@@ -162,33 +167,13 @@ export class Test extends Phaser.Scene
 
     bulletManager.collisionVsGroup(this, enemiesManager.getBodiesGroup());
 
-    ///////////////////////////////////
-    // Targets
+    // Errante Spawner
 
-    let target_size = 3;
-    let off = this._m_canvas_size.x * 0.25;
-    
-    let actor : BaseActor<Phaser.Physics.Arcade.Sprite>;
-    let sprite : Phaser.Physics.Arcade.Sprite;
+    let erranteSpawner : ErranteSpawner = ErranteSpawner.Create();
 
-    while(target_size > 0)
-    {
+    enemiesManager.addSpawner(erranteSpawner);
 
-      actor = enemiesManager.getActor();
-
-      if(actor != null)
-      {
-        actor.addComponent(CmpTargetController.Create());
-        actor.init();
-
-        sprite = actor.getWrappedInstance();
-
-        sprite.x = off * target_size;
-        sprite.y = 200.0;
-      }
-      
-      --target_size;
-    }
+    enemiesManager.spawn(100.0, 100.0, DC_ENEMY_TYPE.kErrante);
     
     ///////////////////////////////////
     // Player Controller

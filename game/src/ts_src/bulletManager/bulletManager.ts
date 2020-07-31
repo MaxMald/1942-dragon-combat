@@ -123,6 +123,7 @@ export class BulletManager implements IBulletManager
 
       sprite.active = false;
       sprite.visible = false;
+      sprite.body.enable = false;
 
       bullet = BaseActor.Create(sprite, "Bullet_" + size.toString());
 

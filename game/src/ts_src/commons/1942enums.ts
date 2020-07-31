@@ -99,7 +99,12 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpCollisionController.
    */
-  kCollisionController : 5 as 5
+  kCollisionController : 5 as 5,
+
+  /**
+   * CmpMovementEnemy.
+   */
+  kMovementEnemy : 6 as 6
 });
 
 /****************************************************/

@@ -63,6 +63,7 @@ export class GameManager
     this.m_dt = _dt;
     
     this._m_bulletManager.update(_dt);
+    this._m_enemiesManager.update(_dt);
     return;
   }
 
