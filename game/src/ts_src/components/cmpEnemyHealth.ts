@@ -1,4 +1,3 @@
-import { COMPONENT_ID } from "commons/mxEnums";
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -76,7 +75,7 @@ export class CmpEnemyHealth implements IBaseComponent<Ty_physicsSprite>
     {
       case DC_MESSAGE_ID.kHit:
       
-      console.log("hit");
+      // TODO
       
       return;
     }

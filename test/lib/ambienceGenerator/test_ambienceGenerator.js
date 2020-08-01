@@ -4114,6 +4114,7 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DC_ANIMATION_ID = exports.DC_MESSAGE_ID = exports.DC_COMPONENT_ID = exports.DC_BOSS_ID = exports.DC_ENEMY_TYPE = void 0;
     exports.DC_ENEMY_TYPE = Object.freeze({
+        kUndefined: -1,
         kErrante: 0,
         kSonico: 1,
         kRanger: 2
@@ -4127,7 +4128,9 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
         kAnimation: 2,
         kHeroBulletController: 3,
         kMovementBullet: 4,
-        kCollisionController: 5
+        kCollisionController: 5,
+        kMovementEnemy: 6,
+        kEnemyHealth: 7
     });
     exports.DC_MESSAGE_ID = Object.freeze({
         kAgentMove: 500,
@@ -4135,7 +4138,8 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
         kToPosition: 502,
         kPointerReleased: 503,
         kPointerPressed: 504,
-        kMixedMovement: 505
+        kMixedMovement: 505,
+        kHit: 506
     });
     exports.DC_ANIMATION_ID = Object.freeze({
         kForward: 0,
@@ -4222,6 +4226,7 @@ define("game/src/ts_src/actors/baseActor", ["require", "exports"], function (req
             while (index < length) {
                 if (this._m_components[index].m_id == _id) {
                     this._m_components.splice(index, 1);
+                    return;
                 }
                 ++index;
             }
