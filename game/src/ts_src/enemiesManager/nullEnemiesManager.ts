@@ -12,9 +12,8 @@
 import { IEnemiesManager } from "./iEnemiesManager";
 import { Ty_physicsActor } from "../commons/1942types";
 import { DC_ENEMY_TYPE } from "../commons/1942enums";
-import { EnumLiteralsOf } from "commons/mxEnums";
 import { IEnemySpawner } from "./enemySpawner/iEnemySpawner";
-import { NullEnemySpwaner } from "./enemySpawner/nullEnemySpawner";
+import { NullEnemySpawner } from "./enemySpawner/nullEnemySpawner";
 
 /**
  * This class has no implementations, it is used by the GameManager when no 
@@ -25,6 +24,29 @@ export class NullEnemiesManager implements IEnemiesManager
   /****************************************************/
   /* Public                                           */
   /****************************************************/
+
+  static Prepare()
+  : void
+  {
+    if(NullEnemiesManager._INSTANCE == null)
+    {
+      NullEnemiesManager._INSTANCE = new NullEnemiesManager();
+    }
+    return;
+  }
+
+  static Shutdown()
+  : void
+  {
+    NullEnemiesManager._INSTANCE = null;
+    return;
+  }
+
+  static GetInstance()
+  : NullEnemiesManager
+  {
+    return NullEnemiesManager._INSTANCE;
+  }
   
   /**
    * No implementation.
@@ -48,7 +70,7 @@ export class NullEnemiesManager implements IEnemiesManager
   {
     console.log("NullEnemiesManager : getSpawner. ");
 
-   return new NullEnemySpwaner(); 
+   return NullEnemySpawner.GetInstance(); 
   } 
 
   /**
@@ -62,6 +84,15 @@ export class NullEnemiesManager implements IEnemiesManager
     console.log("NullEnemiesManager : getActor. ");
     return null;  
   }
+
+  /**
+   * No implementation.
+   * 
+   * @param _actor Actor. 
+   */
+  disableActor(_actor : Ty_physicsActor) 
+  : void
+  { }
 
   /**
    * No implementation
@@ -97,4 +128,19 @@ export class NullEnemiesManager implements IEnemiesManager
   { 
     return;
   }
+
+  /****************************************************/
+  /* Private                                          */
+  /****************************************************/
+  
+  /**
+   * Private constructor.
+   */
+  private constructor()
+  { }
+
+  /**
+   * Singleton.
+   */
+  private static _INSTANCE : NullEnemiesManager;
 }

@@ -65,6 +65,13 @@ export interface IEnemiesManager
   getActor() : Ty_physicsActor;
 
   /**
+   * Disable an actor.
+   * 
+   * @param _actor Actor. 
+   */
+  disableActor(_actor : Ty_physicsActor) : void;
+
+  /**
    * Safely destroys this EnemyManager.
    */
   destroy() : void;

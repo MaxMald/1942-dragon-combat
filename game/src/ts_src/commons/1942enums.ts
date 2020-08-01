@@ -104,7 +104,12 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpMovementEnemy.
    */
-  kMovementEnemy : 6 as 6
+  kMovementEnemy : 6 as 6,
+
+  /**
+   * CmpEnemyHealth.
+   */
+  kEnemyHealth : 7 as 7
 });
 
 /****************************************************/
@@ -161,7 +166,14 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg: Phaser.Math.Vector3.
    */
-  kMixedMovement : 505 as 505
+  kMixedMovement : 505 as 505,
+
+  /**
+   * The actor has received a hit.
+   * 
+   * msg : integer.
+   */
+  kHit : 506 as 506
 });
 
 /****************************************************/

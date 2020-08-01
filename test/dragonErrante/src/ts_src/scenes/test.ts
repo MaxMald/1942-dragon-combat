@@ -9,6 +9,7 @@ import { CmpHeroBulletController } from "../../../../../game/src/ts_src/componen
 import { EnemiesManagerConfig } from "../../../../../game/src/ts_src/enemiesManager/enemiesManagerConfig";
 import { DC_COMPONENT_ID, DC_ENEMY_TYPE } from "../../../../../game/src/ts_src/commons/1942enums";
 import { ErranteSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner";
+import { IEnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/iEnemiesManager";
 
 
 export class Test extends Phaser.Scene
@@ -163,6 +164,8 @@ export class Test extends Phaser.Scene
 
     gameManager.setEnemiesManager(enemiesManager);
 
+    this._m_enemiesManager = enemiesManager;
+
     // Collision:
 
     bulletManager.collisionVsGroup(this, enemiesManager.getBodiesGroup());
@@ -173,8 +176,6 @@ export class Test extends Phaser.Scene
 
     enemiesManager.addSpawner(erranteSpawner);
 
-    enemiesManager.spawn(100.0, 100.0, DC_ENEMY_TYPE.kErrante);
-    
     ///////////////////////////////////
     // Player Controller
 
@@ -226,6 +227,14 @@ export class Test extends Phaser.Scene
 
     pointer.prevPosition.x = pointer.position.x;
     pointer.prevPosition.y = pointer.position.y;
+
+    this._m_time += dt;
+    if(this._m_time >= this._m_triggerTime)
+    {
+      this._m_time = 0.0;
+
+      this._buildDragons();
+    }
 
     return;
   }
@@ -309,6 +318,28 @@ export class Test extends Phaser.Scene
   /* Private                                          */
   /****************************************************/  
 
+  private _buildDragons()
+  : void
+  {
+    let canvas_w = this._m_canvas_size.x;
+
+    let offset = canvas_w / 4;
+    let size = 3;
+
+    while(size > 0)
+    {
+      this._m_enemiesManager.spawn
+      (
+        offset * size, 
+        -90.0, 
+        DC_ENEMY_TYPE.kErrante
+      );
+      --size;
+    }
+
+    return;
+  }
+
   private _createButton
   (
     _x : number,
@@ -351,6 +382,8 @@ export class Test extends Phaser.Scene
 
   private _m_bulletManager : BulletManager;
 
+  private _m_enemiesManager : IEnemiesManager;
+
   ///////////////////////////////////
   // Graphics
 
@@ -372,4 +405,8 @@ export class Test extends Phaser.Scene
   private _m_pool_data : Phaser.GameObjects.Text;
 
   private _m_heroBulletCntrl_data : Phaser.GameObjects.Text;
+
+  private _m_triggerTime : number = 2.5;
+
+  private _m_time : number = 10.0;
 }

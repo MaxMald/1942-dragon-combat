@@ -1,5 +1,3 @@
-import { DC_ENEMY_TYPE } from "../../commons/1942enums";
-import { Ty_physicsActor } from "../../commons/1942types";
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -10,16 +8,44 @@ import { Ty_physicsActor } from "../../commons/1942types";
  * @since July-31-2020
  */
 
+import { DC_ENEMY_TYPE } from "../../commons/1942enums";
+import { Ty_physicsActor } from "../../commons/1942types";
+import { IEnemiesManager } from "../iEnemiesManager";
+import { NullEnemiesManager } from "../nullEnemiesManager";
 import { IEnemySpawner } from "./iEnemySpawner";
 
 /**
  * An EnemySpawner without implementations.
  */
-export class NullEnemySpwaner implements IEnemySpawner
-{ 
+export class NullEnemySpawner implements IEnemySpawner
+{
+  
   /****************************************************/
   /* Public                                           */
   /****************************************************/
+
+  static Prepare()
+  : void
+  {
+    if(NullEnemySpawner._INSTANCE == null)
+    {
+      NullEnemySpawner._INSTANCE = new NullEnemySpawner();
+    }
+    return;
+  }
+
+  static Shutdown()
+  : void
+  {
+    NullEnemySpawner._INSTANCE = null;
+    return;
+  }
+
+  static GetInstance()
+  : NullEnemySpawner
+  {
+    return NullEnemySpawner._INSTANCE;
+  }
   
   /**
    * No implementation.
@@ -46,6 +72,26 @@ export class NullEnemySpwaner implements IEnemySpawner
   }
 
   /**
+   * No implemenatation.
+   * 
+   * @param _enemiesManager 
+   */
+  setEnemiesManager(_enemiesManager: IEnemiesManager)
+  : void 
+  { }
+  
+  /**
+   * Allways retunrs a NullEnemiesManager.
+   * 
+   * @returns NullEnemiesManager.
+   */
+  getEnemiesManager()
+  : IEnemiesManager 
+  {
+    return NullEnemiesManager.GetInstance();
+  } 
+
+  /**
    * Get identifier of the EnemySpawner.
    */
   getID()
@@ -55,6 +101,24 @@ export class NullEnemySpwaner implements IEnemySpawner
   }
 
   /**
+   * Assemble the components into the Actor.
+   * 
+   * @param _actor Actor. 
+   */
+  assemble(_actor : Ty_physicsActor)
+  : void
+  { }
+
+  /**
+   * Disassemble the component of the given actor.
+   * 
+   * @param _actor Actor.
+   */
+  disasemble(_actor : Ty_physicsActor)
+  : void
+  { }
+
+  /**
    * No implementation.
    */
   destroy()
@@ -62,4 +126,19 @@ export class NullEnemySpwaner implements IEnemySpawner
   {
     return;
   }
+
+  /****************************************************/
+  /* Private                                          */
+  /****************************************************/
+
+  /**
+   * Private constructor.
+   */
+  private constructor()
+  { }
+  
+  /**
+   * Singleton.
+   */
+  static _INSTANCE : NullEnemySpawner;
 }

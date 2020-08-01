@@ -169,6 +169,7 @@ export class BaseActor<T>
     {
       if(this._m_components[index].m_id ==_id) {
         this._m_components.splice(index, 1);
+        return;
       }
       ++index;
     }

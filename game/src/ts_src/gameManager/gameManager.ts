@@ -10,6 +10,8 @@
 
 import { IBulletManager } from "../bulletManager/iBulletManager";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
+import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
+import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
 import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
 import { PlayerController } from "../playerController/playerController";
@@ -174,8 +176,17 @@ export class GameManager
   {
     this.m_dt = 0.0;
 
+     // Prepare the modules.
+
+     CmpNullCollisionController.Prepare();
+     NullEnemySpawner.Prepare();
+     NullEnemiesManager.Prepare();
+
+    // Create Managers.
+
     this._m_bulletManager = new NullBulletManager();
-    this._m_enemiesManager = new NullEnemiesManager();
+    this._m_enemiesManager = NullEnemiesManager.GetInstance();;   
+
     return;
   }
 
@@ -185,10 +196,17 @@ export class GameManager
   private _onShutdown()
   : void
   {
-    if(this._m_bulletManager != null)
-    {
-      this._m_bulletManager.destroy();
-    }    
+    // Destroy Managers.
+    
+    this._m_bulletManager.destroy();
+    this._m_enemiesManager.destroy();
+
+    // Shutdown the modules.
+
+    NullEnemiesManager.Shutdown();
+    NullEnemySpawner.Shutdown();
+    CmpNullCollisionController.Shutdown();   
+
     return;
   }
 

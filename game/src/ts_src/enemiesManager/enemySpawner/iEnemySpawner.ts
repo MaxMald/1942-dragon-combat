@@ -12,6 +12,7 @@ import { DC_ENEMY_TYPE } from "../../commons/1942enums";
  */
 
 import { Ty_physicsActor } from "../../commons/1942types";
+import { IEnemiesManager } from "../iEnemiesManager";
 
 /**
  * An EnemySpawner spawns an especific type of enemy in the world. The
@@ -43,10 +44,42 @@ export interface IEnemySpawner
   : void;
 
   /**
+   * Set the EnemiesManager that this spawner belongs.
+   * 
+   * @param _enemiesManager 
+   */
+  setEnemiesManager(_enemiesManager : IEnemiesManager)
+  : void;
+
+  /**
+   * Get the EnemiesManager that this spawner belongs.
+   * 
+   * @returns EnemiesManager.
+   */
+  getEnemiesManager()
+  : IEnemiesManager;  
+
+  /**
    * Get identifier of the EnemySpawner.
    */
   getID()
   : DC_ENEMY_TYPE;
+
+  /**
+   * Assemble the components into the Actor.
+   * 
+   * @param _actor Actor. 
+   */
+  assemble(_actor : Ty_physicsActor)
+  : void;
+
+  /**
+   * Disassemble the component of the given actor.
+   * 
+   * @param _actor Actor.
+   */
+  disasemble(_actor : Ty_physicsActor)
+  : void;
 
   /**
    * Safely destroys the EnemySpawner.

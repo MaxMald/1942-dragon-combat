@@ -18,11 +18,13 @@ import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
 import { DC_COMPONENT_ID, DC_ENEMY_TYPE } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
+import { CmpEnemyHealth } from "../components/cmpEnemyHealth";
 import { CmpMovementEnemy } from "../components/cmpMovementEnemy";
+import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
 import { ICmpCollisionController } from "../components/iCmpCollisionController";
 import { EnemiesManagerConfig } from "./enemiesManagerConfig";
 import { IEnemySpawner } from "./enemySpawner/iEnemySpawner";
-import { NullEnemySpwaner } from "./enemySpawner/nullEnemySpawner";
+import { NullEnemySpawner } from "./enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "./iEnemiesManager";
 
 /**
@@ -103,6 +105,8 @@ export class EnemiesManager implements IEnemiesManager
 
     let a_actors : Ty_physicsActor[] = new Array<Ty_physicsActor>();
 
+    let healthComponent : CmpEnemyHealth;
+
     while(size > 0)
     {
       sprite = bodiesGroup.create
@@ -126,6 +130,12 @@ export class EnemiesManager implements IEnemiesManager
       // Add common components
 
       actor.addComponent(CmpMovementEnemy.Create());
+      actor.addComponent(CmpNullCollisionController.GetInstance());
+
+      healthComponent = CmpEnemyHealth.Create();
+      healthComponent.setEnemiesManager(this);
+
+      actor.addComponent(healthComponent);
 
       // Initialize the actor.
 
@@ -165,6 +175,7 @@ export class EnemiesManager implements IEnemiesManager
     }
 
     hSpawner.set(id, _spawner);
+    _spawner.setEnemiesManager(this);
 
     return;
   }
@@ -188,7 +199,7 @@ export class EnemiesManager implements IEnemiesManager
     }
 
     console.warn("Enemy Spawner not found!");
-    return new NullEnemySpwaner();
+    return NullEnemySpawner.GetInstance();
   }
 
   /**
@@ -252,6 +263,18 @@ export class EnemiesManager implements IEnemiesManager
   : Ty_physicsActor
   {
     return this._m_actorPool.get();
+  }
+
+  /**
+   * Disable an actor.
+   * 
+   * @param _actor Actor. 
+   */
+  disableActor(_actor : Ty_physicsActor) 
+  : void
+  {
+    this._m_actorPool.desactive(_actor);
+    return;
   }
 
   /**
