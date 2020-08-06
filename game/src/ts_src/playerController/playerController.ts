@@ -20,6 +20,8 @@ import { CmpHeroBulletController } from "../components/cmpHeroBulletController";
 import { IBulletManager } from "../bulletManager/iBulletManager";
 import { DC_COMPONENT_ID } from "../commons/1942enums";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
+import { CmpHeroData } from "../components/cmpHeroData";
+import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
 
 /**
  * Create and manage the hero's actor. It provides a friendly interface to control
@@ -72,10 +74,14 @@ export class PlayerController
     let hero : BaseActor<Phaser.Physics.Arcade.Sprite> 
       = BaseActor.Create(heroSprite, "Hero");
     
+    heroSprite.setData('actor', hero);
+
     hero.addComponent(CmpHeroInput.Create()); // Input Controller
     hero.addComponent(CmpMovement.Create()); // Movement Controller
     hero.addComponent(CmpAnimation.Create()); // Animation Controller
+    hero.addComponent(CmpHeroData.Create()); // Data component.
     hero.addComponent(CmpHeroBulletController.Create()); // Bullet Controller
+    hero.addComponent(CmpNullCollisionController.GetInstance()); // collision controller.
     
     this.setPlayer(hero);
 

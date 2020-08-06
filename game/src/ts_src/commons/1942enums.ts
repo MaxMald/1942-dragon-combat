@@ -129,7 +129,22 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * ICmpEnemyController.
    */
-  kEnemyController : 11 as 11
+  kEnemyController : 11 as 11,
+
+  /**
+   * CmpHeroData
+   */
+  kHeroData : 12 as 12,
+
+  /**
+   * CmpHeroController
+   */
+  kTextController : 13 as 13,
+
+  /**
+   * CmpUIHealthController
+   */
+  kUIHealthController : 14 as 14
 });
 
 /****************************************************/
@@ -202,7 +217,14 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : Ty_physicsActor.
    */
-  kKill : 507 as 507
+  kKill : 507 as 507,
+
+  /**
+   * Set text.
+   * 
+   * msg : string.
+   */
+  kSetText : 508 as 508
 });
 
 /****************************************************/

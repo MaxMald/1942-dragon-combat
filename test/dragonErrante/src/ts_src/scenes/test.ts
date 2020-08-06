@@ -6,11 +6,16 @@ import { BulletManagerConfig } from "../../../../../game/src/ts_src/bulletManage
 import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
 import { EnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/enemiesManager";
 import { EnemiesManagerConfig } from "../../../../../game/src/ts_src/enemiesManager/enemiesManagerConfig";
-import { DC_ENEMY_TYPE } from "../../../../../game/src/ts_src/commons/1942enums";
+import { DC_COMPONENT_ID, DC_ENEMY_TYPE, DC_MESSAGE_ID } from "../../../../../game/src/ts_src/commons/1942enums";
 import { ErranteSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner";
 import { IEnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/iEnemiesManager";
 import { HeroBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletSpawner";
 import { EnemyBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletSpawner";
+import { BaseActor } from "../../../../../game/src/ts_src/actors/baseActor";
+import { Ty_Text } from "../../../../../game/src/ts_src/commons/1942types";
+import { FcUIHealth } from "../../../../../game/src/ts_src/factories/fcUIHealth";
+import { CmpHeroData } from "../../../../../game/src/ts_src/components/cmpHeroData";
+import { CmpUIHealthController } from "../../../../../game/src/ts_src/components/cmpUIHealthController";
 
 
 export class Test extends Phaser.Scene
@@ -110,25 +115,7 @@ export class Test extends Phaser.Scene
       1500,
       this._m_canvas_size.x,
       this._m_canvas_size.y - 1500
-    );
-
-    // POOL Debug text.
-
-    this._m_pool_data = this.add.text
-    (
-      50,
-      1520,
-      '',
-      { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' }
-    ); 
-
-    this._m_heroBulletCntrl_data = this.add.text
-    (
-      300,
-      1520,
-      '',
-      { fontFamily: 'Arial', fontSize: 20, color: '#00ff00' }
-    ); 
+    );    
 
     ///////////////////////////////////
     // Game Manager
@@ -163,7 +150,7 @@ export class Test extends Phaser.Scene
 
     let enemyBulletSpawner = EnemyBasicBulletSpawner.Create();
 
-    enim_bulletManager.addSpawner(enemyBulletSpawner);
+    enim_bulletManager.addSpawner(enemyBulletSpawner);    
 
     ///////////////////////////////////
     // Enemies Manager
@@ -219,8 +206,36 @@ export class Test extends Phaser.Scene
 
     gameManager.setPlayerController(heroController);
 
+    // Set player collision
+
+    let hero = heroController.getPlayer();
+
+    enim_bulletManager.collisionVsSprite(this, hero.getWrappedInstance());
+
     ///////////////////////////////////
-    // Targets
+    // UI
+
+    this._m_heroHP = FcUIHealth.Create(this);
+    this._m_heroHP.sendMessage
+    (
+      DC_MESSAGE_ID.kAgentMove,
+      new Phaser.Math.Vector3(20, 20) 
+    );   
+
+    let heroData = hero.getComponent<CmpHeroData>(DC_COMPONENT_ID.kHeroData);
+
+    let hpData = this._m_heroHP.getComponent<CmpUIHealthController>
+    (
+      DC_COMPONENT_ID.kUIHealthController
+    );
+
+    heroData.suscribe
+    (
+      'onHealthChanged', 
+      "UIHealth", 
+      hpData.onHealthChanged, 
+      hpData
+    );
 
     return;
   }
@@ -374,11 +389,12 @@ export class Test extends Phaser.Scene
 
   // POOL
 
-  private _m_pool_data : Phaser.GameObjects.Text;
-
-  private _m_heroBulletCntrl_data : Phaser.GameObjects.Text;
-
   private _m_triggerTime : number = 2.5;
 
   private _m_time : number = 10.0;
+
+  ///////////////////////////////////
+  // UI
+
+  private _m_heroHP : BaseActor<Ty_Text>;
 }

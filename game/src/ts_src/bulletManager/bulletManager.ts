@@ -367,7 +367,7 @@ export class BulletManager implements IBulletManager
   /**
    * Add a collision detection against a group.
    * 
-   * @param _scene The scene wich the physic engine.
+   * @param _scene The scene with the physics engine.
    * @param _bodies The bodies group.
    */
   collisionVsGroup
@@ -385,6 +385,31 @@ export class BulletManager implements IBulletManager
       undefined, 
       this
     );
+    return;
+  }
+
+  /**
+   * Add a collision detection ageinst a sprite.
+   * 
+   * @param _scene the scene with the physics engine.
+   * @param _body the sprite body.
+   */
+  collisionVsSprite
+  (
+    _scene : Phaser.Scene,
+    _body : Ty_physicsSprite
+  )
+  : void
+  {
+    _scene.physics.add.collider
+    (
+      _body,
+      this._m_bodiesGroup,
+      this._onCollision,
+      undefined,
+      this
+    );
+    return;
   }
 
   /**
