@@ -10,6 +10,7 @@ import { DC_ENEMY_TYPE } from "../../../../../game/src/ts_src/commons/1942enums"
 import { ErranteSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner";
 import { IEnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/iEnemiesManager";
 import { HeroBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletSpawner";
+import { EnemyBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletSpawner";
 
 
 export class Test extends Phaser.Scene
@@ -160,6 +161,10 @@ export class Test extends Phaser.Scene
 
     enim_bulletManager.init(this, bmConfig);    
 
+    let enemyBulletSpawner = EnemyBasicBulletSpawner.Create();
+
+    enim_bulletManager.addSpawner(enemyBulletSpawner);
+
     ///////////////////////////////////
     // Enemies Manager
 
@@ -172,7 +177,9 @@ export class Test extends Phaser.Scene
 
     enemiesManager.init(this, enemiesManagerConfig);
 
-    gameManager.setEnemiesManager(enemiesManager);
+    enemiesManager.setBulletManager(enim_bulletManager);
+
+    gameManager.setEnemiesManager(enemiesManager);    
 
     this._m_enemiesManager = enemiesManager;
 

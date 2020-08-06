@@ -168,6 +168,15 @@ export class EnemiesManager implements IEnemiesManager
   : void
   {
     this._m_bulletManager = _bulletManager;
+
+    this._m_hSpawner.forEach
+    (
+      function(_spawner : IEnemySpawner)
+      {
+        _spawner.setBulletManager(_bulletManager);
+        return;
+      }
+    );
     return;
   }
 
@@ -200,7 +209,9 @@ export class EnemiesManager implements IEnemiesManager
     }
 
     hSpawner.set(id, _spawner);
+
     _spawner.setEnemiesManager(this);
+    _spawner.setBulletManager(this._m_bulletManager);
 
     return;
   }
@@ -244,6 +255,10 @@ export class EnemiesManager implements IEnemiesManager
     // Update actors.
 
     this._m_actorPool.forEachActive(this._updateActor, this);
+
+    // Bullet Manager.
+
+    this._m_bulletManager.update(_dt);
 
     return;
   }

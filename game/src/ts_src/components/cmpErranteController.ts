@@ -8,8 +8,9 @@
  * @since July-31-2020
  */
 
-import { CmdKillEnemy } from "../commands/cmdKillEnemy";
-import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
+import { IBulletManager } from "../bulletManager/iBulletManager";
+import { NullBulletManager } from "../bulletManager/nullBulletManager";
+import { DC_BULLET_TYPE, DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, V3 } from "../commons/1942types";
 import { IEnemySpawner } from "../enemiesManager/enemySpawner/iEnemySpawner";
 import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
@@ -32,7 +33,14 @@ export class CmpErranteController implements ICmpEnemyController
 
     controller._m_direction = new Phaser.Math.Vector3(0.0, 1.0);
     controller._m_force = new Phaser.Math.Vector3();
+    
+    // default properties
+
     controller._m_speed = 400.0;
+    controller._m_fireRate = 2.0;
+    controller._m_time = 0.0;
+
+    controller._m_bulletManager = NullBulletManager.GetInstance();
     controller._m_enemiesManager = NullEnemiesManager.GetInstance();
     controller._m_spawner = NullEnemySpawner.GetInstance();
 
@@ -51,6 +59,20 @@ export class CmpErranteController implements ICmpEnemyController
   : void 
   {
     _actor.sendMessage(DC_MESSAGE_ID.kAgentMove, this._m_force);
+
+    if(this._m_time >= this._m_fireRate)
+    {
+      
+      let sprite = _actor.getWrappedInstance();
+
+      this._m_bulletManager.spawn
+      (
+        sprite.x, 
+        sprite.y + 100, 
+        DC_BULLET_TYPE.kEnemyBasic
+      );
+
+    }
     return;
   }
 
@@ -100,10 +122,24 @@ export class CmpErranteController implements ICmpEnemyController
     return this._m_enemiesManager;
   }
 
+  setBulletManager(_bulletManager : IBulletManager)
+  : void
+  {
+    this._m_bulletManager = _bulletManager;
+  }
+
+  getBulletManager()
+  : IBulletManager
+  {
+    return this._m_bulletManager;
+  }
+
   setDeltaTime(_dt : number)
   : void
   {
     this._m_dt = _dt;
+
+    // Movement force.
 
     let force = this._m_force;
     let direction = this._m_direction;
@@ -111,6 +147,18 @@ export class CmpErranteController implements ICmpEnemyController
 
     force.x = direction.x * mult;
     force.y = direction.y * mult;
+
+    // Fire mecanism
+
+    if(this._m_time >= this._m_fireRate)
+    {
+      this._m_time = _dt;
+    }
+    else
+    {
+      this._m_time += _dt;
+    }
+
     return;
   }
 
@@ -169,6 +217,16 @@ export class CmpErranteController implements ICmpEnemyController
   private _m_dt : number;
 
   /**
+   * fire rate.
+   */
+  private _m_fireRate : number;
+
+  /**
+   * time elapsed since the last time that the actors fire.
+   */
+  private _m_time : number;
+
+  /**
    * Reference ot the Errante Spawner.
    */
   private _m_spawner : IEnemySpawner;
@@ -182,4 +240,9 @@ export class CmpErranteController implements ICmpEnemyController
    * Reference to the enemies manager.
    */
   private _m_enemiesManager : IEnemiesManager;
+
+  /**
+   * Reference to the bullet manager.
+   */
+  private _m_bulletManager : IBulletManager;
 }

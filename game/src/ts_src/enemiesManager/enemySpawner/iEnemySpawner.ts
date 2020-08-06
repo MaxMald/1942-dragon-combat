@@ -1,3 +1,4 @@
+import { IBulletManager } from "../../bulletManager/iBulletManager";
 import { DC_ENEMY_TYPE } from "../../commons/1942enums";
 /**
  * HummingFlight Software Technologies - 2020
@@ -42,6 +43,18 @@ export interface IEnemySpawner
    */
   spawn(_actor : Ty_physicsActor, _x : number, _y : number)
   : void;
+
+  /**
+   * Set the bullet manager of this spawner.
+   */
+  setBulletManager(_bulletManager : IBulletManager)
+  : void;
+
+  /**
+   * Get the bullet manager of this spawner.
+   */
+  getBulletManager()
+  : IBulletManager;
 
   /**
    * Set the EnemiesManager that this spawner belongs.

@@ -1,3 +1,6 @@
+import { BulletManager } from "../../bulletManager/bulletManager";
+import { IBulletManager } from "../../bulletManager/iBulletManager";
+import { NullBulletManager } from "../../bulletManager/nullBulletManager";
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -30,6 +33,7 @@ export class ErranteSpawner implements IEnemySpawner
     let spawner : ErranteSpawner = new ErranteSpawner();
 
     spawner._m_enemiesManager = NullEnemiesManager.GetInstance();
+    spawner._m_bulletManager = NullBulletManager.GetInstance();
 
     spawner._m_controller = CmpErranteController.Create();
     spawner._m_controller.setSpawner(spawner);
@@ -130,6 +134,20 @@ export class ErranteSpawner implements IEnemySpawner
     return;
   }
 
+  setBulletManager(_bulletManager: IBulletManager)
+  : void 
+  {
+    this._m_bulletManager = _bulletManager;
+    this._m_controller.setBulletManager(_bulletManager);
+    return;
+  }
+
+  getBulletManager()
+  : IBulletManager 
+  {
+    return this._m_bulletManager;
+  }
+
   getEnemiesManager()
   : IEnemiesManager
   {
@@ -158,12 +176,17 @@ export class ErranteSpawner implements IEnemySpawner
    * Private constructor.
    */
   private constructor()
-  { }  
+  { }    
   
   /**
    * Reference to the enemies manager.
    */
   private _m_enemiesManager : IEnemiesManager;
+
+  /**
+   * Reference to the bullet manager.
+   */
+  private _m_bulletManager : IBulletManager;
 
   ///////////////////////////////////
   // Shared components

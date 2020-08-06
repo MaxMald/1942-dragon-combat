@@ -1,3 +1,5 @@
+import { IBulletManager } from "../../bulletManager/iBulletManager";
+import { NullBulletManager } from "../../bulletManager/nullBulletManager";
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -89,7 +91,27 @@ export class NullEnemySpawner implements IEnemySpawner
   : IEnemiesManager 
   {
     return NullEnemiesManager.GetInstance();
-  } 
+  }
+
+  /**
+   * No implementation.
+   * 
+   * @param _bulletManager 
+   */
+  setBulletManager(_bulletManager: IBulletManager)
+  : void 
+  { }
+
+  /**
+   * Allways returns the NullBulletManager.
+   * 
+   * @returns NullBulletManager.
+   */
+  getBulletManager()
+  : IBulletManager 
+  {
+    return NullBulletManager.GetInstance();
+  }
 
   /**
    * Get identifier of the EnemySpawner.
@@ -135,7 +157,7 @@ export class NullEnemySpawner implements IEnemySpawner
    * Private constructor.
    */
   private constructor()
-  { }
+  { }  
   
   /**
    * Singleton.
