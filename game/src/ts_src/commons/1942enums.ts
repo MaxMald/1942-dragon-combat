@@ -109,7 +109,22 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpEnemyHealth.
    */
-  kEnemyHealth : 7 as 7
+  kEnemyHealth : 7 as 7,
+
+  /**
+   * CmpBasicBulletController
+   */
+  kBasicBulletController : 8 as 8,
+
+  /**
+   * CmpBulletData.
+   */
+  kBulletData : 9 as 9,
+
+  /**
+   * CmpPlayZone.
+   */
+  kPlayZone : 10 as 10
 });
 
 /****************************************************/
@@ -173,7 +188,14 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : integer.
    */
-  kHit : 506 as 506
+  kHit : 506 as 506,
+
+  /**
+   * Kill the actor.
+   * 
+   * msg : Ty_physicsActor.
+   */
+  kKill : 507 as 507
 });
 
 /****************************************************/
@@ -212,4 +234,32 @@ export const DC_ANIMATION_ID = Object.freeze
    * Idle Animation.
    */
   kIdle : 4 as 4
+});
+
+/****************************************************/
+/* Bullet Type                                      */
+/****************************************************/
+
+/**
+ * Animation state identifier.
+ */
+
+export type DC_BULLET_TYPE = EnumLiteralsOf<typeof DC_BULLET_TYPE>;
+
+export const DC_BULLET_TYPE = Object.freeze
+({
+  /**
+   * Undefined bullet.
+   */
+  kUndefined : 0 as 0, 
+
+  /**
+   * Hero's basic bullet.
+   */
+  kHeroBasic : 1 as 1,
+
+  /**
+   * Enemy basic bullet.
+   */
+  kEnemyBasic : 2 as 2,
 });

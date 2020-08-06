@@ -12,12 +12,17 @@
 import { MxObjectPool } from "optimization/mxObjectPool";
 import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
-import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
+import { DC_BULLET_TYPE, DC_COMPONENT_ID } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
 import { CmpBulletCollisionController } from "../components/cmpBulletCollisionController";
+import { CmpBulletData } from "../components/cmpBulletData";
 import { CmpMovementBullet } from "../components/cmpMovementBullet";
+import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
+import { CmpPlayZone } from "../components/cmpPlayZone";
 import { ICmpCollisionController } from "../components/iCmpCollisionController";
 import { BulletManagerConfig } from "./bulletManagerConfig";
+import { IBulletSpawner } from "./bulletSpawner/iBulletSpawner";
+import { NullBulletSpawner } from "./bulletSpawner/nullBulletSpawner";
 import { IBulletManager } from "./iBulletManager";
 
 /**
@@ -38,7 +43,8 @@ export class BulletManager implements IBulletManager
   {
     let bulletMng : BulletManager = new BulletManager();
 
-    let pool : MxObjectPool<Ty_physicsActor> = MxObjectPool.Create<Ty_physicsActor>();
+    let pool : MxObjectPool<Ty_physicsActor> 
+      = MxObjectPool.Create<Ty_physicsActor>();
 
     pool.suscribe
     (
@@ -58,13 +64,14 @@ export class BulletManager implements IBulletManager
     
     bulletMng._m_pool = pool;
 
-    bulletMng._m_v3 = new Phaser.Math.Vector3();
+    // Shared components.
 
-    bulletMng._m_playZone_p1 = new Phaser.Geom.Point();
-    bulletMng._m_playZone_p2 = new Phaser.Geom.Point();
+    bulletMng._m_playZone = CmpPlayZone.Create();
+    bulletMng._m_collisionController = CmpBulletCollisionController.Create();
 
     bulletMng._m_dt = 0.0;
-    bulletMng._m_bulletSpeed = 50.0;
+
+    bulletMng._m_hSpawner = new Map<DC_BULLET_TYPE, IBulletSpawner>();
 
     return bulletMng;
   }
@@ -82,6 +89,10 @@ export class BulletManager implements IBulletManager
   )
   : void
   {
+    // Play Zone
+
+    this._m_playZone.setBoundings(-100, -100, 1180, 2020);
+
     // Create the bodies group.
 
     let bodiesGroup = this._m_bodiesGroup;
@@ -112,6 +123,9 @@ export class BulletManager implements IBulletManager
 
     let sprite : Ty_physicsSprite;
 
+    let playZoneComponent = this._m_playZone;
+    let collisionController = this._m_collisionController;
+
     while(size > 0)
     {
       sprite = bodiesGroup.create
@@ -129,8 +143,10 @@ export class BulletManager implements IBulletManager
 
       sprite.setData('actor', bullet);
 
-      bullet.addComponent(CmpMovementBullet.Create());
-      bullet.addComponent(CmpBulletCollisionController.Create());
+      bullet.addComponent(CmpMovementBullet.Create());      
+      bullet.addComponent(CmpBulletData.Create());
+      bullet.addComponent(collisionController);
+      bullet.addComponent(playZoneComponent);
 
       bullet.init();
 
@@ -143,35 +159,26 @@ export class BulletManager implements IBulletManager
 
     this._m_pool.init(a_bullets);
 
-    // Define the playzone area.
-
-    this._m_playZone_p1.setTo
-    (
-      -_config.playZone_padding, 
-      -_config.playZone_padding
-    );
-
-    this._m_playZone_p2.setTo
-    (
-      _scene.game.canvas.width + _config.playZone_padding,
-      _scene.game.canvas.height + _config.playZone_padding
-    );
-
-    // Set bullet properties.
-
-    this._m_bulletSpeed = _config.speed;
-
     return;
   }
 
   /**
-   * Update each active bullet.
+   * Update each active bullet and the bullet spawners.
    */
   update(_dt : number)
   : void 
   {    
     this._m_dt = _dt;
-    this._m_v3.y = -_dt * this._m_bulletSpeed;
+
+    // Update bullet spawners.
+
+    this._m_hSpawner.forEach
+    (
+      this._updateSpawner,
+      this
+    );
+
+    // Update pool.
 
     this._m_pool.forEachActive
     (
@@ -183,30 +190,98 @@ export class BulletManager implements IBulletManager
   }
 
   /**
-   * Get the speed of the bullets in pixels per second.
+   * Add a bullet spawner to this bullet manager. If a bullet spawner with the
+   * same identifier exists, it will be destroyed and replaced by the new one.
+   * 
+   * @param _spawner bullet spawner. 
    */
-  getBulletSpeed()
-  : number
+  addSpawner(_spawner : IBulletSpawner)
+  : void
   {
-    return this._m_bulletSpeed;
+    
+    let hSpawner = this._m_hSpawner;
+
+    let type = _spawner.getID();
+
+    if(hSpawner.has(type))
+    {
+      let toRemove = hSpawner.get(type);
+      toRemove.destroy();
+    }
+
+    hSpawner.set(type, _spawner);
+    
+    _spawner.setBulletManager(this);
+
+    return;
+  }
+
+   /**
+   * Get a bullet spawner from this bullet manager. If the spawner did not be
+   * founded, it will returns NullBulletSpawner instance.
+   * 
+   * @param _type bullet spawner identifier.
+   * 
+   * @returns bullet spawner. 
+   */
+  getSpawner(_type : DC_BULLET_TYPE)
+  : IBulletSpawner
+  {
+    let hSpawner = this._m_hSpawner;
+
+    if(hSpawner.has(_type))
+    {
+      return hSpawner.get(_type);
+    }
+
+    return NullBulletSpawner.GetInstance();
   }
 
   /**
    * Spawn a bullet in the world.
+   * 
+   * @param _x : position in x axis.
+   * @param _y : position in y axis.
+   * @param _type : bullet type.
    */
-  spawn(_x : number, _y : number)
+  spawn(_x : number, _y : number, _type : DC_BULLET_TYPE)
   : void
   {
-    let bullet : Ty_physicsActor = this._m_pool.get();
+    let hSpawner = this._m_hSpawner;
 
-    if(bullet !== null) 
+    if(hSpawner.has(_type)) 
     {
-      let sprite = bullet.getWrappedInstance();
+      let spawner = hSpawner.get(_type);
 
-      sprite.x = _x;
-      sprite.y = _y;
+      let actor : Ty_physicsActor = this._m_pool.get();
+
+      if(actor != null) // Spawn only if any actor is available.
+      {
+        spawner.spawn(actor, _x, _y);
+      }      
     }
 
+    return;
+  }
+
+  /**
+   * Get an actor from the pool.
+   */
+  getActor() 
+  : Ty_physicsActor
+  {
+    return this._m_pool.get();
+  }
+
+  /**
+   * Disable the given actor.
+   * 
+   * @param _actor actor. 
+   */
+  disableActor(_actor : Ty_physicsActor)
+  : void
+  {
+    this._m_pool.desactive(_actor);
     return;
   }
 
@@ -222,11 +297,28 @@ export class BulletManager implements IBulletManager
   }
 
   /**
-   * Destroy all the bullets of this BulletManager and clear the pool.
+   * Destroy all the bullets of this BulletManager and clear the pool. Destroy
+   * and removes the bullet spawners.
    */
   clear()
   : void
   {
+    // Destroy and remove bullets spawners.
+
+    let hSpawner = this._m_hSpawner;
+
+    hSpawner.forEach
+    (
+      function(_spawner : IBulletSpawner)
+      {
+        _spawner.destroy();
+      }
+    );
+
+    hSpawner.clear();
+
+    // Destroy and remove actors.
+
     let pool = this._m_pool;
 
     pool.forEach
@@ -239,7 +331,7 @@ export class BulletManager implements IBulletManager
       }
     );
 
-    this._m_pool.clear();
+    pool.clear();
     return;
   }
 
@@ -274,7 +366,7 @@ export class BulletManager implements IBulletManager
       this._onCollision, 
       undefined, 
       this
-    )
+    );
   }
 
   /**
@@ -340,10 +432,18 @@ export class BulletManager implements IBulletManager
     
     otherController.onCollision(bulletActor, otherActor);
 
-    // Desactive bullet.
+    return;
+  }
 
-    this._m_pool.desactive(bulletActor);
-
+  /**
+   * Update a bullet spawner.
+   * 
+   * @param _spawner bullet spawner. 
+   */
+  private _updateSpawner(_spawner : IBulletSpawner)
+  : void
+  {
+    _spawner.update(this._m_dt);
     return;
   }
 
@@ -355,15 +455,7 @@ export class BulletManager implements IBulletManager
   private _updateBullet(_bullet : Ty_physicsActor)
   : void
   {
-    _bullet.sendMessage(DC_MESSAGE_ID.kAgentMove, this._m_v3);
-
-    let sprite = _bullet.getWrappedInstance();
-    
-    if(!this._isPlayzone(sprite.x, sprite.y))
-    {
-      this._m_pool.desactive(_bullet);
-    }
-
+    _bullet.update();
     return;
   }
 
@@ -416,25 +508,6 @@ export class BulletManager implements IBulletManager
   }
 
   /**
-   * Check if the position is inside the playzone area. The playzone area defines
-   * the zone where a bullet can live, if it get out of this zone it must be
-   * desactivated.
-   * 
-   * @param _x position in x axis. 
-   * @param _y position in y axis.
-   * 
-   * @returns true if the given position is inside the playzone area.
-   */
-  private _isPlayzone(_x : number, _y : number)
-  : boolean
-  {
-    let p1 : Phaser.Geom.Point = this._m_playZone_p1;
-    let p2 : Phaser.Geom.Point = this._m_playZone_p2;
-
-    return (_y > p1.y && _y < p2.y);
-  }
-
-  /**
    * Object pool of Phaser Sprites (bullets).
    */
   private _m_pool : MxObjectPool<Ty_physicsActor>;
@@ -445,27 +518,27 @@ export class BulletManager implements IBulletManager
   private _m_dt : number;
 
   /**
-   * Vector 3.
-   */
-  private _m_v3 : Phaser.Math.Vector3;
-
-  /**
-   * Playzone limits point 1.
-   */
-  private _m_playZone_p1 : Phaser.Geom.Point;
-
-  /**
-   * Playzone limits point 2.
-   */
-  private _m_playZone_p2 : Phaser.Geom.Point;
-
-  /**
-   * Speed of the bullets in pixels per second.
-   */
-  private _m_bulletSpeed : number;
-
-  /**
    * The physic bodies of the bullets.
    */
   private _m_bodiesGroup : Ty_physicsGroup;
+
+  /**
+   * Map of bullet spawners.
+   */
+  private _m_hSpawner : Map<DC_BULLET_TYPE, IBulletSpawner>;
+
+  /****************************************************/
+  /* Shared Components                                */
+  /****************************************************/
+
+  /**
+   * Shared playzone component.
+   */
+  private _m_playZone : CmpPlayZone;
+
+  /**
+   * Shared collision controller component.
+   */
+  private _m_collisionController : CmpBulletCollisionController;
 }
+  

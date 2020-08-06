@@ -5,11 +5,11 @@ import { BulletManager } from "../../../../../game/src/ts_src/bulletManager/bull
 import { BulletManagerConfig } from "../../../../../game/src/ts_src/bulletManager/bulletManagerConfig";
 import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
 import { EnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/enemiesManager";
-import { CmpHeroBulletController } from "../../../../../game/src/ts_src/components/cmpHeroBulletController";
 import { EnemiesManagerConfig } from "../../../../../game/src/ts_src/enemiesManager/enemiesManagerConfig";
-import { DC_COMPONENT_ID, DC_ENEMY_TYPE } from "../../../../../game/src/ts_src/commons/1942enums";
+import { DC_ENEMY_TYPE } from "../../../../../game/src/ts_src/commons/1942enums";
 import { ErranteSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner";
 import { IEnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/iEnemiesManager";
+import { HeroBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletSpawner";
 
 
 export class Test extends Phaser.Scene
@@ -137,7 +137,11 @@ export class Test extends Phaser.Scene
     let gameManager : GameManager = GameManager.GetInstance();
 
     ///////////////////////////////////
-    // Bullet Controller
+    // Bullet Manager
+
+    // hero spawner.
+
+    let heroSpawner : HeroBasicBulletSpawner = HeroBasicBulletSpawner.Create();
 
     let bulletManager : BulletManager = BulletManager.Create();
 
@@ -146,9 +150,15 @@ export class Test extends Phaser.Scene
 
     bulletManager.init(this, bmConfig);
 
+    bulletManager.addSpawner(heroSpawner);
+
     this._m_bulletManager = bulletManager;
 
-    gameManager.setBulletManager(bulletManager);
+    // Bullet Manager : Enemies
+
+    let enim_bulletManager = BulletManager.Create();
+
+    enim_bulletManager.init(this, bmConfig);    
 
     ///////////////////////////////////
     // Enemies Manager
@@ -194,7 +204,9 @@ export class Test extends Phaser.Scene
 
     let heroController : PlayerController = new PlayerController();
     
-    heroController.init(this, undefined, pcConfig);     
+    heroController.init(this, undefined, pcConfig);
+
+    heroController.setBulletManager(bulletManager);
 
     this._m_heroController = heroController;
 
@@ -213,14 +225,6 @@ export class Test extends Phaser.Scene
     
     GameManager.GetInstance().update(dt);
 
-    // Updates the hero controller.
-
-    this._m_heroController.update(dt);
-
-    // Only for debugging purposes.
-
-    this.debugGraphics();
-
     // Clear the pointer previous position.
 
     let pointer = this._m_heroController.getPointer();
@@ -237,45 +241,6 @@ export class Test extends Phaser.Scene
     }
 
     return;
-  }
-
-  debugGraphics()
-  : void
-  {
-    // Clear graphics, before drawing again.
-
-    this._m_graph_green.clear();
-    this._m_graph_red.clear();
-
-    // Draw the bacground box.
-    
-    this._m_graph_box.clear();
-    this._m_graph_box.fillRectShape(this._m_rect_box);   
-
-    // Debug Pool Data:
-
-    let bulletManager : BulletManager = this._m_bulletManager;
-    let pool = this._m_bulletManager.getPool();
-
-
-    this._m_pool_data.text 
-      = "-- Hero Bullet Mng --\n"
-      + "\n Bullet speed : " + bulletManager.getBulletSpeed() + " px./s.\n"
-      + "\n** Pool **\n"
-      + "\nSize : " + pool.getSize().toString()
-      + "\nActive : " + pool.getActiveSize().toString()
-      + "\nDesactive : " + pool.getDesactiveSize().toString();
-
-    let hero = this._m_heroController.getPlayer(); 
-
-    let heroBulletCntrl : CmpHeroBulletController 
-      = hero.getComponent<CmpHeroBulletController>(DC_COMPONENT_ID.kHeroBulletController);
-
-    this._m_heroBulletCntrl_data.text
-      = "-- Hero Bullet Controller --\n"
-      + "\n Fire rate : " + (1.0 / heroBulletCntrl.getFireRate()).toString() + " bullets/s."; 
-    
-    return;    
   }
 
   /**

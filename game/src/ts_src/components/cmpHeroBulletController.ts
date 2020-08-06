@@ -10,14 +10,16 @@
 
 import { BaseActor } from "../actors/baseActor";
 import { IBulletManager } from "../bulletManager/iBulletManager";
-import { DC_COMPONENT_ID } from "../commons/1942enums";
+import { NullBulletManager } from "../bulletManager/nullBulletManager";
+import { DC_BULLET_TYPE, DC_COMPONENT_ID } from "../commons/1942enums";
 import { GameManager } from "../gameManager/gameManager";
 import { IBaseComponent } from "./iBaseComponent";
 
 /**
  * Spwan bullets relative to the hero position. It needs a BulletManager.
  */
-export class CmpHeroBulletController implements IBaseComponent<Phaser.Physics.Arcade.Sprite>
+export class CmpHeroBulletController 
+  implements IBaseComponent<Phaser.Physics.Arcade.Sprite>
 {
   /****************************************************/
   /* Public                                           */
@@ -25,17 +27,15 @@ export class CmpHeroBulletController implements IBaseComponent<Phaser.Physics.Ar
 
   /**
    * Creates a new hero bullet controller.
-   * 
-   * @param _bulletManager Reference to the BulletManager.
    */
-  static Create(_bulletManager : IBulletManager)
+  static Create()
   : CmpHeroBulletController
   {
     let bulletController : CmpHeroBulletController = new CmpHeroBulletController();
 
     bulletController.m_id = DC_COMPONENT_ID.kHeroBulletController;
 
-    bulletController._m_bulletManager = _bulletManager;
+    bulletController._m_bulletManager = NullBulletManager.GetInstance();
 
     return bulletController;
   }
@@ -49,6 +49,18 @@ export class CmpHeroBulletController implements IBaseComponent<Phaser.Physics.Ar
     this._m_gameManager = GameManager.GetInstance();
     
     this._m_loadingTime = 0.0;
+    return;
+  }
+
+  /**
+   * Set the bullet manager.
+   * 
+   * @param _bulletManager bullet manager. 
+   */
+  setBulletManager(_bulletManager : IBulletManager)
+  : void
+  {
+    this._m_bulletManager = _bulletManager;
     return;
   }
 
@@ -68,7 +80,12 @@ export class CmpHeroBulletController implements IBaseComponent<Phaser.Physics.Ar
     {
       let sprite = _actor.getWrappedInstance();
 
-      this._m_bulletManager.spawn(sprite.x , sprite.y - 110.0);
+      this._m_bulletManager.spawn
+      (
+        sprite.x , 
+        sprite.y - 110.0, 
+        DC_BULLET_TYPE.kHeroBasic
+      );
       
       loading = 0.0;
     }

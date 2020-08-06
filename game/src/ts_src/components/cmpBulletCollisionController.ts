@@ -9,7 +9,8 @@
  */
 
 import { BaseActor } from "../actors/baseActor";
-import { DC_COMPONENT_ID } from "../commons/1942enums";
+import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
+import { CmpBulletData } from "./cmpBulletData";
 import { ICmpCollisionController } from "./iCmpCollisionController";
 
 /**
@@ -37,32 +38,33 @@ export class CmpBulletCollisionController implements ICmpCollisionController
     _this: BaseActor<Phaser.Physics.Arcade.Sprite>)
   : void 
   {
+    // Hit.
+
+    let data = _this.getComponent<CmpBulletData>(DC_COMPONENT_ID.kBulletData);
+
+    _other.sendMessage(DC_MESSAGE_ID.kHit, data.getAttackPoints());
+
+    // Kill bullet.
+
+    _this.sendMessage(DC_MESSAGE_ID.kKill, _this);
     return;
   }
   
   init(_actor: BaseActor<Phaser.Physics.Arcade.Sprite>)
   : void 
-  {
-    return;
-  }
+  { }
 
   update(_actor: BaseActor<Phaser.Physics.Arcade.Sprite>)
   : void 
-  {
-    return;
-  }
+  { }
 
   receive(_id: number, _obj: any)
   : void 
-  {
-    return;
-  }
+  { }
 
   destroy()
   : void 
-  {
-    return;
-  }
+  { }
 
   m_id: number;
 

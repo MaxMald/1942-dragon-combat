@@ -10,6 +10,8 @@ import { EnemiesManagerConfig } from "../../../../../game/src/ts_src/enemiesMana
 import { BaseActor } from "../../../../../game/src/ts_src/actors/baseActor";
 import { CmpTargetController } from "../../../../../game/src/ts_src/components/cmpTargetController";
 import { DC_COMPONENT_ID } from "../../../../../game/src/ts_src/commons/1942enums";
+import { HeroBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletSpawner";
+import { CmpEnemyHealth } from "../../../../../game/src/ts_src/components/cmpEnemyHealth";
 
 
 export class Test extends Phaser.Scene
@@ -133,6 +135,10 @@ export class Test extends Phaser.Scene
     ///////////////////////////////////
     // Bullet Controller
 
+    // hero spawner.
+
+    let heroSpawner : HeroBasicBulletSpawner = HeroBasicBulletSpawner.Create();
+
     let bulletManager : BulletManager = BulletManager.Create();
 
     let bmConfig : BulletManagerConfig 
@@ -140,9 +146,9 @@ export class Test extends Phaser.Scene
 
     bulletManager.init(this, bmConfig);
 
-    this._m_bulletManager = bulletManager;
+    bulletManager.addSpawner(heroSpawner);
 
-    gameManager.setBulletManager(bulletManager);
+    this._m_bulletManager = bulletManager;
 
     ///////////////////////////////////
     // Enemies Manager
@@ -178,6 +184,11 @@ export class Test extends Phaser.Scene
 
       if(actor != null)
       {
+        let hp : CmpEnemyHealth 
+          = actor.getComponent<CmpEnemyHealth>(DC_COMPONENT_ID.kEnemyHealth);
+
+        hp.setHP(100000);
+
         actor.addComponent(CmpTargetController.Create());
         actor.init();
 
@@ -210,6 +221,8 @@ export class Test extends Phaser.Scene
     
     heroController.init(this, undefined, pcConfig);     
 
+    heroController.setBulletManager(bulletManager);
+
     this._m_heroController = heroController;
 
     gameManager.setPlayerController(heroController);
@@ -226,10 +239,6 @@ export class Test extends Phaser.Scene
     let dt : number = _delta * 0.001;
     
     GameManager.GetInstance().update(dt);
-
-    // Updates the hero controller.
-
-    this._m_heroController.update(dt);
 
     // Only for debugging purposes.
 
@@ -266,7 +275,6 @@ export class Test extends Phaser.Scene
 
     this._m_pool_data.text 
       = "-- Hero Bullet Mng --\n"
-      + "\n Bullet speed : " + bulletManager.getBulletSpeed() + " px./s.\n"
       + "\n** Pool **\n"
       + "\nSize : " + pool.getSize().toString()
       + "\nActive : " + pool.getActiveSize().toString()

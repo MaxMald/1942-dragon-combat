@@ -16,6 +16,7 @@
 import { MxObjectPool } from "optimization/mxObjectPool";
 import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
+import { IBulletManager } from "../bulletManager/iBulletManager";
 import { DC_COMPONENT_ID, DC_ENEMY_TYPE } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
 import { CmpEnemyHealth } from "../components/cmpEnemyHealth";
@@ -472,6 +473,11 @@ export class EnemiesManager implements IEnemiesManager
    * Pool of actor for enemies usage.
    */
   private _m_actorPool : MxObjectPool<Ty_physicsActor>;
+
+  /**
+   * Bullet Manager.
+   */
+  private _m_bulletManager : IBulletManager;
 
   /**
    * Group of physics bodies.

@@ -65,13 +65,12 @@ export class BaseActor<T>
   {
     let index : number = 0;
     let components : IBaseComponent<T>[] = this._m_components;
-    let length : number = components.length; 
     
-    while(index < length)
-    {
-      components[index].update(this);  
-      ++index;
-    }
+    components.forEach
+    (
+      this._updateComponent,
+      this
+    ); 
 
     return;
   }
@@ -224,8 +223,18 @@ export class BaseActor<T>
   /* Protected                                        */
   /****************************************************/
   
+  /**
+   * Protected constructor.
+   */
   protected constructor() 
   { }
+
+  protected _updateComponent(_component : IBaseComponent<T>)
+  : void
+  {
+    _component.update(this);
+    return;
+  }
 
   /**
    * Reference to the wrapped instance.

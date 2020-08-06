@@ -17,9 +17,9 @@ import { CmpAnimation } from "../components/cmpAnimation";
 import { StateHeroFFlight } from "../states/stateHeroFFLight";
 import { StateHeroGlide } from "../states/stateHeroGlide";
 import { CmpHeroBulletController } from "../components/cmpHeroBulletController";
-import { GameManager } from "../gameManager/gameManager";
 import { IBulletManager } from "../bulletManager/iBulletManager";
 import { DC_COMPONENT_ID } from "../commons/1942enums";
+import { NullBulletManager } from "../bulletManager/nullBulletManager";
 
 /**
  * Create and manage the hero's actor. It provides a friendly interface to control
@@ -32,13 +32,17 @@ export class PlayerController
   /****************************************************/
 
   constructor()
-  { }
+  { 
+    this._m_bulletManager = NullBulletManager.GetInstance();
+    return;
+  }
   
   /**
    * Creates the hero's actor and setup the properties of the hero behaviour with
    * a configuration object.
    * 
    * @param _scene The phaser scene that will create the hero.
+   * @param _bulletManager The hero's bullet manager.
    * @param _activePointer The pointer used to handle the hero input. The active 
    * pointer of the scene is used by default.
    * @param _config The user configuration object.
@@ -63,19 +67,15 @@ export class PlayerController
         'DragonFlight', 
         0
       );
-
-    // Create the Hero Actor
     
-    let bulletManager : IBulletManager 
-      = GameManager.GetInstance().getBulletManager();
 
     let hero : BaseActor<Phaser.Physics.Arcade.Sprite> 
-      = BaseActor.Create(heroSprite, "hero");
+      = BaseActor.Create(heroSprite, "Hero");
     
     hero.addComponent(CmpHeroInput.Create()); // Input Controller
     hero.addComponent(CmpMovement.Create()); // Movement Controller
     hero.addComponent(CmpAnimation.Create()); // Animation Controller
-    hero.addComponent(CmpHeroBulletController.Create(bulletManager)); // Bullet Controller
+    hero.addComponent(CmpHeroBulletController.Create()); // Bullet Controller
     
     this.setPlayer(hero);
 
@@ -136,6 +136,21 @@ export class PlayerController
     anim.addState(new StateHeroGlide());
 
     anim.setActive('Hero_Forward_Flight');
+    return;
+  }
+
+  setBulletManager(_bulletManager : IBulletManager)
+  : void
+  {
+    this._m_bulletManager = _bulletManager;
+
+    let bulletCntrl = this._m_player.getComponent<CmpHeroBulletController>
+    (
+      DC_COMPONENT_ID.kHeroBulletController
+    );
+
+    bulletCntrl.setBulletManager(_bulletManager);
+
     return;
   }
 
@@ -305,6 +320,8 @@ export class PlayerController
 
     this._m_player.update();
 
+    this._m_bulletManager.update(_dt);
+
     return;
   }
 
@@ -340,4 +357,9 @@ export class PlayerController
    * Reference to the Hero.
    */
   private _m_player : BaseActor<Phaser.Physics.Arcade.Sprite>;
+
+  /**
+   * Reference to the bullet manager.
+   */
+  private _m_bulletManager : IBulletManager;
 }

@@ -10,7 +10,10 @@
  */
 
 import { MxObjectPool } from "optimization/mxObjectPool";
+import { DC_BULLET_TYPE } from "../commons/1942enums";
 import { Ty_physicsActor } from "../commons/1942types";
+import { IBulletSpawner } from "./bulletSpawner/iBulletSpawner";
+import { NullBulletSpawner } from "./bulletSpawner/nullBulletSpawner";
 import { IBulletManager } from "./iBulletManager";
 
 /**
@@ -19,21 +22,72 @@ import { IBulletManager } from "./iBulletManager";
  */
 export class NullBulletManager implements IBulletManager
 { 
-
-  /**
-   * Creates a BulletManager with no implementations. It will have an empty
-   * pool.
-   */
-  constructor()
-  { 
-    this._m_pool = MxObjectPool.Create();
-    this._m_pool.init(new Array<Ty_physicsActor>());
-    return;
-  }
-
   /****************************************************/
   /* Public                                           */
   /****************************************************/ 
+
+  static Prepare()
+  : void
+  {
+    if(NullBulletManager._SINGLETON == null)
+    {
+      NullBulletManager._SINGLETON = new NullBulletManager();
+    }    
+    return;
+  }
+
+  static Shutdown()
+  : void
+  {
+    if(NullBulletManager._SINGLETON != null)
+    {
+      NullBulletManager._SINGLETON.destroy();
+    }
+    NullBulletManager._SINGLETON = null;
+    return;
+  }
+
+  static GetInstance()
+  : NullBulletManager
+  {
+    return NullBulletManager._SINGLETON;
+  }
+
+  /**
+   * No implementation.
+   * 
+   * @param _spawner 
+   */
+  addSpawner(_spawner: IBulletSpawner)
+  : void 
+  { 
+    console.log("NullBulletManager : addSpawner.");
+    return;
+  }
+
+  /**
+   * Allways returns the NullBulletSpawner singleton.
+   * 
+   * @param _type 
+   */
+  getSpawner(_type: DC_BULLET_TYPE)
+  : IBulletSpawner 
+  {
+    console.log("NullBulletManager : getSpawner.");
+    return NullBulletSpawner.GetInstance();
+  }
+
+  /**
+   * Allways returns null.
+   * 
+   * @returns returns null.
+   */
+  getActor()
+  : Ty_physicsActor 
+  {
+    console.log("NullBulletManager : getActor");
+    return null;
+  }
 
   /**
    * No implementation.
@@ -47,7 +101,7 @@ export class NullBulletManager implements IBulletManager
   /**
    * No implementation.
    */
-  spawn(_x : number, _y : number) : void 
+  spawn(_x : number, _y : number, _type : DC_BULLET_TYPE) : void 
   {
     console.log("NullBulletManager : spawn.");
     return;
@@ -62,6 +116,18 @@ export class NullBulletManager implements IBulletManager
   {
     console.log("NullBulletManager : get pool.");
     return this._m_pool; 
+  }
+
+  /**
+   * Disable the given actor.
+   * 
+   * @param _actor actor. 
+   */
+  disableActor(_actor: Ty_physicsActor)
+  : void 
+  {
+    console.log("NullBulletManager : disableActor");
+    return;
   }
 
   /**
@@ -87,7 +153,23 @@ export class NullBulletManager implements IBulletManager
   /****************************************************/
 
   /**
+   * Creates a BulletManager with no implementations. It will have an empty
+   * pool.
+   */
+  private constructor()
+  { 
+    this._m_pool = MxObjectPool.Create();
+    this._m_pool.init(new Array<Ty_physicsActor>());
+    return;
+  }  
+
+  /**
    * Empty pool.
    */
   private _m_pool : MxObjectPool<Ty_physicsActor>;
+
+  /**
+   * Singleton.
+   */
+  private static _SINGLETON : NullBulletManager;
 }

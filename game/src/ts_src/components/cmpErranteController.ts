@@ -51,7 +51,6 @@ export class CmpErranteController implements ICmpCollisionController
     _this: Ty_physicsActor
   ) : void     
   {
-    _this.sendMessage(DC_MESSAGE_ID.kHit, 0);
     return;
   }
   

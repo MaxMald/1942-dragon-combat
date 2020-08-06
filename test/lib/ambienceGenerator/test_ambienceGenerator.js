@@ -4112,7 +4112,7 @@ define("test/ambienceGenerator/src/ts_src/game_init", ["require", "exports", "ph
 define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.DC_ANIMATION_ID = exports.DC_MESSAGE_ID = exports.DC_COMPONENT_ID = exports.DC_BOSS_ID = exports.DC_ENEMY_TYPE = void 0;
+    exports.DC_BULLET_TYPE = exports.DC_ANIMATION_ID = exports.DC_MESSAGE_ID = exports.DC_COMPONENT_ID = exports.DC_BOSS_ID = exports.DC_ENEMY_TYPE = void 0;
     exports.DC_ENEMY_TYPE = Object.freeze({
         kUndefined: -1,
         kErrante: 0,
@@ -4130,7 +4130,10 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
         kMovementBullet: 4,
         kCollisionController: 5,
         kMovementEnemy: 6,
-        kEnemyHealth: 7
+        kEnemyHealth: 7,
+        kBasicBulletController: 8,
+        kBulletData: 9,
+        kPlayZone: 10
     });
     exports.DC_MESSAGE_ID = Object.freeze({
         kAgentMove: 500,
@@ -4139,7 +4142,8 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
         kPointerReleased: 503,
         kPointerPressed: 504,
         kMixedMovement: 505,
-        kHit: 506
+        kHit: 506,
+        kKill: 507
     });
     exports.DC_ANIMATION_ID = Object.freeze({
         kForward: 0,
@@ -4147,6 +4151,11 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
         kRight: 2,
         kLeft: 3,
         kIdle: 4
+    });
+    exports.DC_BULLET_TYPE = Object.freeze({
+        kUndefined: 0,
+        kHeroBasic: 1,
+        kEnemyBasic: 2,
     });
 });
 define("game/src/ts_src/components/iBaseComponent", ["require", "exports"], function (require, exports) {
@@ -4180,11 +4189,7 @@ define("game/src/ts_src/actors/baseActor", ["require", "exports"], function (req
         BaseActor.prototype.update = function () {
             var index = 0;
             var components = this._m_components;
-            var length = components.length;
-            while (index < length) {
-                components[index].update(this);
-                ++index;
-            }
+            components.forEach(this._updateComponent, this);
             return;
         };
         BaseActor.prototype.sendMessage = function (_id, _obj) {
@@ -4249,6 +4254,10 @@ define("game/src/ts_src/actors/baseActor", ["require", "exports"], function (req
                 component = this._m_components.pop();
                 component.destroy();
             }
+            return;
+        };
+        BaseActor.prototype._updateComponent = function (_component) {
+            _component.update(this);
             return;
         };
         return BaseActor;

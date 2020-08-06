@@ -11,19 +11,21 @@
 import { IBaseComponent } from "./iBaseComponent";
 import { BaseActor } from "../actors/baseActor";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
+import { Point, Ty_physicsSprite, V2 } from "../commons/1942types";
 
 /**
  * Provides Message receivers to move the position of the Arcade Sprite.
  */
-export class CmpMovementBullet implements IBaseComponent<Phaser.Physics.Arcade.Sprite> 
+export class CmpMovementBullet 
+implements IBaseComponent<Ty_physicsSprite> 
 {  
   /****************************************************/
   /* Public                                           */
   /****************************************************/  
 
   /**
-   * Creates a new CmpMovementBullet. The object will not be ready to use, make sure
-   * that the init() method is called by the BaseActor or manually.
+   * Creates a new CmpMovementBullet. The object will not be ready to use, make
+   * sure that the init() method is called by the BaseActor or manually.
    */
   static Create()
   : CmpMovementBullet
@@ -73,6 +75,16 @@ export class CmpMovementBullet implements IBaseComponent<Phaser.Physics.Arcade.S
           let movement : Phaser.Math.Vector3 = _obj as Phaser.Math.Vector3;
 
           this.move(movement.x, movement.y);
+        }
+
+        return;
+
+      case DC_MESSAGE_ID.kToPosition: // Agent moves with a movement vector.
+
+        {
+          let position : Phaser.Math.Vector3 = _obj as Phaser.Math.Vector3;
+
+          this.setPosition(position.x, position.y);
         }
 
         return;
@@ -161,18 +173,18 @@ export class CmpMovementBullet implements IBaseComponent<Phaser.Physics.Arcade.S
   /**
    * Reference to the Arcade Sprite.
    */
-  private _m_sprite : Phaser.Physics.Arcade.Sprite;
+  private _m_sprite : Ty_physicsSprite;
 
   /**
    * The direction of the the BaseActor, based in the previous position and the
    * actual.
    */
-  private _m_direction : Phaser.Math.Vector2;
+  private _m_direction : V2;
 
   /**
    * The previous position of the BaseActor.
    */
-  private _m_prevPosition : Phaser.Geom.Point;
+  private _m_prevPosition : Point;
 
   /**
    * Indicates if the parameters needs an update.

@@ -8,6 +8,7 @@
  * @since July-29-2020
  */
 
+import { NullBulletSpawner } from "../bulletManager/bulletSpawner/nullBulletSpawner";
 import { IBulletManager } from "../bulletManager/iBulletManager";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
@@ -62,40 +63,11 @@ export class GameManager
   update(_dt : number)
   : void
   {
-    this.m_dt = _dt;
-    
-    this._m_bulletManager.update(_dt);
+    this.m_dt = _dt; 
+
+    this._m_playerController.update(_dt);
     this._m_enemiesManager.update(_dt);
     return;
-  }
-
-  /**
-   * Set the reference to the BulletManager. If a BulletManager exists it will 
-   * be destroyed.
-   * 
-   * @param _bulletManager BulletManager. 
-   */
-  setBulletManager(_bulletManager : IBulletManager)
-  : void
-  {
-    if(this._m_bulletManager != null) 
-    {
-      this._m_bulletManager.destroy();
-    }
-
-    this._m_bulletManager = _bulletManager;
-    return;
-  }
-
-  /**
-   * Get the BulletManager.
-   * 
-   * @returns Reference to the BulletManager.
-   */
-  getBulletManager()
-  : IBulletManager
-  {
-    return this._m_bulletManager;
   }
 
   /**
@@ -139,7 +111,7 @@ export class GameManager
   }
 
   /**
-   * Get the Enemeis Manager.
+   * Get the Enemies Manager.
    */
   getEnemiesManager()
   : IEnemiesManager
@@ -153,8 +125,8 @@ export class GameManager
   destroy()
   : void 
   {
-    this._m_bulletManager.destroy();
-    this._m_playerController.destroy();
+    // Destroy Managers.
+    
     this._m_enemiesManager.destroy();
     return;
   }
@@ -169,6 +141,18 @@ export class GameManager
   /****************************************************/
 
   /**
+   * Updatte a bullet manager.
+   * 
+   * @param _bulletManager bullet manager. 
+   */
+  private _updateBulletManager(_bulletManager : IBulletManager)
+  : void
+  {
+    _bulletManager.update(this.m_dt);
+    return;
+  }
+
+  /**
    * Called once when the module had been prepared.
    */
   private _onPrepare()
@@ -178,13 +162,14 @@ export class GameManager
 
      // Prepare the modules.
 
+     NullBulletSpawner.Prepare();
      CmpNullCollisionController.Prepare();
+     NullBulletManager.Prepare();
      NullEnemySpawner.Prepare();
      NullEnemiesManager.Prepare();
 
     // Create Managers.
 
-    this._m_bulletManager = new NullBulletManager();
     this._m_enemiesManager = NullEnemiesManager.GetInstance();;   
 
     return;
@@ -196,16 +181,15 @@ export class GameManager
   private _onShutdown()
   : void
   {
-    // Destroy Managers.
-    
-    this._m_bulletManager.destroy();
-    this._m_enemiesManager.destroy();
+    this.destroy();
 
     // Shutdown the modules.
 
     NullEnemiesManager.Shutdown();
     NullEnemySpawner.Shutdown();
+    NullBulletManager.Shutdown();
     CmpNullCollisionController.Shutdown();   
+    NullBulletSpawner.Shutdown();
 
     return;
   }
@@ -220,11 +204,6 @@ export class GameManager
    * Singleton instance.
    */
   private static _INSTANCE : GameManager;
-
-  /**
-   * Reference to the BulletManager.
-   */
-  private _m_bulletManager : IBulletManager;
 
   /**
    * Reference to the IEnemiesManager.

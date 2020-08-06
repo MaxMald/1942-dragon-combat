@@ -75,7 +75,7 @@ export class CmpEnemyHealth implements IBaseComponent<Ty_physicsSprite>
     {
       case DC_MESSAGE_ID.kHit:
       
-      // TODO
+      this.hit(_obj as integer);
       
       return;
     }
@@ -146,6 +146,8 @@ export class CmpEnemyHealth implements IBaseComponent<Ty_physicsSprite>
       this._m_spawner.disasemble(actor);
       this._m_enemiesManager.disableActor(actor);      
     }
+
+    this._m_iHP = hp;
     return;
   }
 
