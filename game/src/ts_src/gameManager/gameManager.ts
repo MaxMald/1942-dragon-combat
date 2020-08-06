@@ -12,6 +12,7 @@ import { NullBulletSpawner } from "../bulletManager/bulletSpawner/nullBulletSpaw
 import { IBulletManager } from "../bulletManager/iBulletManager";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
+import { CmpNullEnemyController } from "../components/cmpNullEnemyController";
 import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
 import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
@@ -161,8 +162,9 @@ export class GameManager
     this.m_dt = 0.0;
 
      // Prepare the modules.
-
+     
      NullBulletSpawner.Prepare();
+     CmpNullEnemyController.Prepare();
      CmpNullCollisionController.Prepare();
      NullBulletManager.Prepare();
      NullEnemySpawner.Prepare();
@@ -188,7 +190,8 @@ export class GameManager
     NullEnemiesManager.Shutdown();
     NullEnemySpawner.Shutdown();
     NullBulletManager.Shutdown();
-    CmpNullCollisionController.Shutdown();   
+    CmpNullCollisionController.Shutdown(); 
+    CmpNullEnemyController.Shutdown();  
     NullBulletSpawner.Shutdown();
 
     return;

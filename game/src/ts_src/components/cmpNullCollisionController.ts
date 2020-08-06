@@ -1,4 +1,3 @@
-import { DC_COMPONENT_ID } from "../commons/1942enums";
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -10,6 +9,7 @@ import { DC_COMPONENT_ID } from "../commons/1942enums";
  * @since July-31-2020
  */
 
+import { DC_COMPONENT_ID } from "../commons/1942enums";
 import { Ty_physicsActor } from "../commons/1942types";
 import { ICmpCollisionController } from "./iCmpCollisionController";
 

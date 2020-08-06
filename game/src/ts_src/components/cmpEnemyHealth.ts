@@ -1,9 +1,8 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary This component manage the hp of the enemy. When the hp reach zero,
- * it automatically request the given IEnemySpawner to disasemble the actor,
- * then the IEnemiesManager to disable the actor. 
+ * @summary * This component manage the hp of the enemy. When the hp reach zero,
+ * it sends a message with the "kill" id.
  *
  * @file cmpEnemyHealth.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
@@ -12,16 +11,11 @@
 
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
-import { IEnemySpawner } from "../enemiesManager/enemySpawner/iEnemySpawner";
-import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
-import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
-import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
 import { IBaseComponent } from "./iBaseComponent";
 
 /**
- * This component manage the hp of the enemy. When the hp reach zero, it 
- * automatically request the given IEnemySpawner to disasemble the actor, then
- * the IEnemiesManager to disable the actor.
+ * This component manage the hp of the enemy. When the hp reach zero, it sends a
+ * message with the "kill" id.
  */
 export class CmpEnemyHealth implements IBaseComponent<Ty_physicsSprite>
 {
@@ -39,9 +33,6 @@ export class CmpEnemyHealth implements IBaseComponent<Ty_physicsSprite>
 
     enemyHealth.m_id = DC_COMPONENT_ID.kEnemyHealth;
     enemyHealth._m_iHP = 0;
-
-    enemyHealth.setEnemiesManager(NullEnemiesManager.GetInstance());
-    enemyHealth.setSpawner(NullEnemySpawner.GetInstance());
 
     return enemyHealth;
   }
@@ -83,30 +74,6 @@ export class CmpEnemyHealth implements IBaseComponent<Ty_physicsSprite>
   }
 
   /**
-   * Set the EnemySpawner.
-   * 
-   * @param _spawner EnemySpawner. 
-   */
-  setSpawner(_spawner : IEnemySpawner)
-  : void
-  {
-    this._m_spawner = _spawner;
-    return;
-  }
-
-  /**
-   * Set the EnemiesManager.
-   * 
-   * @param _enemiesManager EnemiesManager.
-   */
-  setEnemiesManager(_enemiesManager : IEnemiesManager)
-  : void
-  {
-    this._m_enemiesManager = _enemiesManager;
-    return;
-  }
-
-  /**
    * Get the number of health points of this actor.
    */
   getHP()
@@ -142,9 +109,7 @@ export class CmpEnemyHealth implements IBaseComponent<Ty_physicsSprite>
       hp = 0;
 
       let actor = this._m_actor;
-
-      this._m_spawner.disasemble(actor);
-      this._m_enemiesManager.disableActor(actor);      
+      actor.sendMessage(DC_MESSAGE_ID.kKill, actor);
     }
 
     this._m_iHP = hp;
@@ -176,15 +141,4 @@ export class CmpEnemyHealth implements IBaseComponent<Ty_physicsSprite>
    * Reference to the actor.
    */
   private _m_actor : Ty_physicsActor;
-
-  /**
-   * Reference ot the EnemySpawner.
-   */
-  private _m_spawner : IEnemySpawner;
-
-  /**
-   * Referenc to the EnemiesManager.
-   */
-  private _m_enemiesManager : IEnemiesManager;
-  
 }

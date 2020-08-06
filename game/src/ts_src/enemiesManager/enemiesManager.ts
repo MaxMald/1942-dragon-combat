@@ -17,11 +17,13 @@ import { MxObjectPool } from "optimization/mxObjectPool";
 import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
 import { IBulletManager } from "../bulletManager/iBulletManager";
+import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { DC_COMPONENT_ID, DC_ENEMY_TYPE } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
 import { CmpEnemyHealth } from "../components/cmpEnemyHealth";
 import { CmpMovementEnemy } from "../components/cmpMovementEnemy";
 import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
+import { CmpNullEnemyController } from "../components/cmpNullEnemyController";
 import { ICmpCollisionController } from "../components/iCmpCollisionController";
 import { EnemiesManagerConfig } from "./enemiesManagerConfig";
 import { IEnemySpawner } from "./enemySpawner/iEnemySpawner";
@@ -77,6 +79,10 @@ export class EnemiesManager implements IEnemiesManager
 
     manager._m_hSpawner = new Map<DC_ENEMY_TYPE, IEnemySpawner>();
 
+    // default properties.
+
+    manager._m_bulletManager = NullBulletManager.GetInstance();
+
     return manager;
   }
 
@@ -106,8 +112,6 @@ export class EnemiesManager implements IEnemiesManager
 
     let a_actors : Ty_physicsActor[] = new Array<Ty_physicsActor>();
 
-    let healthComponent : CmpEnemyHealth;
-
     while(size > 0)
     {
       sprite = bodiesGroup.create
@@ -132,11 +136,8 @@ export class EnemiesManager implements IEnemiesManager
 
       actor.addComponent(CmpMovementEnemy.Create());
       actor.addComponent(CmpNullCollisionController.GetInstance());
-
-      healthComponent = CmpEnemyHealth.Create();
-      healthComponent.setEnemiesManager(this);
-
-      actor.addComponent(healthComponent);
+      actor.addComponent(CmpEnemyHealth.Create());
+      actor.addComponent(CmpNullEnemyController.GetInstance());
 
       // Initialize the actor.
 
@@ -156,6 +157,29 @@ export class EnemiesManager implements IEnemiesManager
     this._m_actorPool.init(a_actors);
 
     return;
+  }
+
+  /**
+   * Set the bullet manager of this enemies manager.
+   * 
+   * @param _bulletManager bullet manager. 
+   */
+  setBulletManager(_bulletManager : IBulletManager)
+  : void
+  {
+    this._m_bulletManager = _bulletManager;
+    return;
+  }
+
+  /**
+   * Get the bullet manager of this enemies manager.
+   * 
+   * @returns bullet manager.
+   */
+  getBulletManager()
+  : IBulletManager
+  {
+    return this._m_bulletManager;
   }
 
   /**
@@ -397,21 +421,28 @@ export class EnemiesManager implements IEnemiesManager
   private _onCollision
   (
     _other : Ty_physicsSprite,
-    _sprite : Ty_physicsSprite
+    _self : Ty_physicsSprite
   )
   : void
   {
-    let baseActor : Ty_physicsActor = _sprite.getData("actor");
+    let otherActor : Ty_physicsActor = _other.getData("actor");
+    let selfActor : Ty_physicsActor = _self.getData("actor");
 
-    let controller 
-      = baseActor.getComponent<ICmpCollisionController>
+    let selfController 
+      = selfActor.getComponent<ICmpCollisionController>
       (
         DC_COMPONENT_ID.kCollisionController
       );
 
-    controller.onCollision(baseActor, _other.getData('actor'));
+    let otherController 
+      = otherActor.getComponent<ICmpCollisionController>
+      (
+        DC_COMPONENT_ID.kCollisionController
+      );
 
-    console.log("Collision!");
+    selfController.onCollision(otherActor, selfActor);
+    otherController.onCollision(selfActor, otherActor);
+
     return;
   }
 

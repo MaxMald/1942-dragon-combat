@@ -1,4 +1,3 @@
-import { COMPONENT_ID } from "commons/mxEnums";
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -13,11 +12,11 @@ import { DC_COMPONENT_ID, DC_ENEMY_TYPE, DC_MESSAGE_ID } from "../../commons/194
 import { Ty_physicsActor} from "../../commons/1942types";
 import { CmpEnemyHealth } from "../../components/cmpEnemyHealth";
 import { CmpErranteController } from "../../components/cmpErranteController";
-import { CmpNullCollisionController } from "../../components/cmpNullCollisionController";
+import { CmpNullEnemyController } from "../../components/cmpNullEnemyController";
+import { CmpPlayZone } from "../../components/cmpPlayZone";
 import { IEnemiesManager } from "../iEnemiesManager";
 import { NullEnemiesManager } from "../nullEnemiesManager";
 import { IEnemySpawner } from "./iEnemySpawner";
-import { NullEnemySpawner } from "./nullEnemySpawner";
 
 export class ErranteSpawner implements IEnemySpawner
 {
@@ -32,11 +31,12 @@ export class ErranteSpawner implements IEnemySpawner
 
     spawner._m_enemiesManager = NullEnemiesManager.GetInstance();
 
-    spawner._m_collisionCntrl = CmpErranteController.Create();
-    spawner._m_collisionCntrl.setSpawner(spawner);
+    spawner._m_controller = CmpErranteController.Create();
+    spawner._m_controller.setSpawner(spawner);
 
-    spawner._m_collisionCntrl.setPlayZoneP1(-100, -100);
-    spawner._m_collisionCntrl.setPlayZoneP2(1180, 2020);
+    spawner._m_playZone = CmpPlayZone.Create();
+
+    spawner._m_playZone.setBoundings(-100, -100, 1180, 2020);
 
     return spawner;
   }
@@ -44,7 +44,7 @@ export class ErranteSpawner implements IEnemySpawner
   update(_dt: number)
   : void 
   { 
-    this._m_collisionCntrl.setDeltaTime(_dt);
+    this._m_controller.setDeltaTime(_dt);
     return;
   }
 
@@ -86,13 +86,20 @@ export class ErranteSpawner implements IEnemySpawner
   assemble(_actor : Ty_physicsActor)
   : void
   {
-    _actor.addComponent(this._m_collisionCntrl);
+    // Health component.
 
     let healthComponent 
       = _actor.getComponent<CmpEnemyHealth>(DC_COMPONENT_ID.kEnemyHealth);
-
-    healthComponent.setSpawner(this);
     healthComponent.setHP(5);
+
+    // Errante Controller.
+
+    _actor.addComponent(this._m_controller);
+
+    // Playzone component.
+
+    _actor.addComponent(this._m_playZone);
+
     return;
   }
 
@@ -104,11 +111,13 @@ export class ErranteSpawner implements IEnemySpawner
   disasemble(_actor : Ty_physicsActor)
   : void
   {
-    _actor.addComponent(CmpNullCollisionController.GetInstance());
+    // Errante controller.
 
-    let healthComponent 
-      = _actor.getComponent<CmpEnemyHealth>(DC_COMPONENT_ID.kEnemyHealth);
-    healthComponent.setSpawner(NullEnemySpawner.GetInstance());
+    _actor.addComponent(CmpNullEnemyController.GetInstance());
+
+    // Remove playzone component.
+
+    _actor.removeComponent(DC_COMPONENT_ID.kPlayZone);
 
     return;
   }
@@ -117,6 +126,7 @@ export class ErranteSpawner implements IEnemySpawner
   : void
   {
     this._m_enemiesManager = _enemiesManager;
+    this._m_controller.setEnemiesManager(_enemiesManager);
     return;
   }
 
@@ -129,6 +139,14 @@ export class ErranteSpawner implements IEnemySpawner
   destroy()
   : void 
   {
+    this._m_controller.destroy();
+    this._m_controller = null;
+
+    this._m_playZone.destroy();
+    this._m_playZone = null;
+
+    this._m_enemiesManager = null;
+
     return;
   }
   
@@ -147,8 +165,16 @@ export class ErranteSpawner implements IEnemySpawner
    */
   private _m_enemiesManager : IEnemiesManager;
 
+  ///////////////////////////////////
+  // Shared components
+
   /**
    * Reference to the controller.
    */
-  private _m_collisionCntrl : CmpErranteController; 
+  private _m_controller : CmpErranteController;
+
+  /**
+   * Referece to the playzone component.
+   */
+  private _m_playZone : CmpPlayZone;
 }

@@ -33,7 +33,7 @@ export class BaseActor<T>
     
     actor._m_components = new Array<IBaseComponent<U>>();
     actor._m_instance = _instance;
-    actor.m_name = _name;
+    actor.m_name = _name;   
 
     return actor;
   }
@@ -63,14 +63,15 @@ export class BaseActor<T>
   update()
   : void
   {
-    let index : number = 0;
     let components : IBaseComponent<T>[] = this._m_components;
     
+    // Update Phase
+
     components.forEach
     (
       this._updateComponent,
       this
-    ); 
+    );
 
     return;
   }
@@ -85,15 +86,18 @@ export class BaseActor<T>
   : void
   {
     let index : number = 0;
-    let components : IBaseComponent<T>[] = this._m_components;
-    let length : number = components.length; 
-    
-    while(index < length)
+    let aComponent = this._m_components;
+    let size = aComponent.length;
+
+    while(index < size)
     {
-      components[index].receive(_id, _obj);  
+      if(aComponent[index] != null)
+      {
+        aComponent[index].receive(_id, _obj);
+      }
+
       ++index;
     }
-
     return;
   }
 
@@ -146,9 +150,7 @@ export class BaseActor<T>
 
     throw new Error
     (
-      "Component of index : " 
-      + _id.toString() 
-      + " not founded"
+      "Component of index : " + _id.toString() + " not founded"
     );
   }
 
@@ -229,6 +231,11 @@ export class BaseActor<T>
   protected constructor() 
   { }
 
+  /**
+   * Called in the update method.
+   * 
+   * @param _component component. 
+   */
   protected _updateComponent(_component : IBaseComponent<T>)
   : void
   {

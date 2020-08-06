@@ -132,7 +132,8 @@ export class CmpMovementEnemy implements IBaseComponent<Ty_physicsSprite>
   getDirection()
   : Phaser.Math.Vector2
   {
-    if(this._m_isDirty) {
+    if(this._m_isDirty) 
+    {
 
       let sprite = this._m_sprite;
       let prevPos = this._m_prevPosition;

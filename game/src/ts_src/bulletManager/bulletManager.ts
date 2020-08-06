@@ -17,7 +17,6 @@ import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1
 import { CmpBulletCollisionController } from "../components/cmpBulletCollisionController";
 import { CmpBulletData } from "../components/cmpBulletData";
 import { CmpMovementBullet } from "../components/cmpMovementBullet";
-import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
 import { CmpPlayZone } from "../components/cmpPlayZone";
 import { ICmpCollisionController } from "../components/iCmpCollisionController";
 import { BulletManagerConfig } from "./bulletManagerConfig";
@@ -43,8 +42,12 @@ export class BulletManager implements IBulletManager
   {
     let bulletMng : BulletManager = new BulletManager();
 
+    // create actor pool.
+
     let pool : MxObjectPool<Ty_physicsActor> 
       = MxObjectPool.Create<Ty_physicsActor>();
+
+    // suscribe to pool events.
 
     pool.suscribe
     (
@@ -64,10 +67,12 @@ export class BulletManager implements IBulletManager
     
     bulletMng._m_pool = pool;
 
-    // Shared components.
+    // Create shared components.
 
     bulletMng._m_playZone = CmpPlayZone.Create();
     bulletMng._m_collisionController = CmpBulletCollisionController.Create();
+
+    // initialize properties.
 
     bulletMng._m_dt = 0.0;
 
@@ -77,7 +82,7 @@ export class BulletManager implements IBulletManager
   }
 
   /**
-   * Intialize this Ty_physicsActor manager with a configuration file.
+   * Intialize this bullet manager with a configuration file.
    * 
    * @param _scene Scene where the bullets are going to be build.
    * @param _config Configuration file.
@@ -128,6 +133,8 @@ export class BulletManager implements IBulletManager
 
     while(size > 0)
     {
+      // create physic sprite.
+
       sprite = bodiesGroup.create
       (
         0.0,
@@ -135,18 +142,29 @@ export class BulletManager implements IBulletManager
         'fireball'
       );
 
+      // default properties.
+
       sprite.active = false;
       sprite.visible = false;
       sprite.body.enable = false;
+
+      // create actor.
 
       bullet = BaseActor.Create(sprite, "Bullet_" + size.toString());
 
       sprite.setData('actor', bullet);
 
+      // add common components.
+
       bullet.addComponent(CmpMovementBullet.Create());      
       bullet.addComponent(CmpBulletData.Create());
+
+      // add shared components.
+
       bullet.addComponent(collisionController);
       bullet.addComponent(playZoneComponent);
+
+      // initialize actor.
 
       bullet.init();
 
@@ -527,9 +545,8 @@ export class BulletManager implements IBulletManager
    */
   private _m_hSpawner : Map<DC_BULLET_TYPE, IBulletSpawner>;
 
-  /****************************************************/
-  /* Shared Components                                */
-  /****************************************************/
+  ///////////////////////////////////
+  // Shared Components
 
   /**
    * Shared playzone component.

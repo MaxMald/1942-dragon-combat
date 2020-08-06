@@ -124,7 +124,12 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpPlayZone.
    */
-  kPlayZone : 10 as 10
+  kPlayZone : 10 as 10,
+
+  /**
+   * ICmpEnemyController.
+   */
+  kEnemyController : 11 as 11
 });
 
 /****************************************************/
@@ -139,6 +144,8 @@ export type DC_MESSAGE_ID = EnumLiteralsOf<typeof DC_MESSAGE_ID>;
 
 export const DC_MESSAGE_ID = Object.freeze
 ({
+  kUndefined : 499 as 499,
+
   /**
    * Move agent.
    * 
@@ -262,4 +269,22 @@ export const DC_BULLET_TYPE = Object.freeze
    * Enemy basic bullet.
    */
   kEnemyBasic : 2 as 2,
+});
+
+/****************************************************/
+/* Actor Command                                    */
+/****************************************************/
+
+/**
+ * Animation state identifier.
+ */
+
+export type DC_ACTOR_COMMAND = EnumLiteralsOf<typeof DC_ACTOR_COMMAND>;
+
+export const DC_ACTOR_COMMAND = Object.freeze
+({
+  /**
+   * Remove a component
+   */
+  kRemoveComponent : 0 as 0
 });

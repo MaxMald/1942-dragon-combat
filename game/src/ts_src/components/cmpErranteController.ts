@@ -8,12 +8,16 @@
  * @since July-31-2020
  */
 
+import { CmdKillEnemy } from "../commands/cmdKillEnemy";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, V3 } from "../commons/1942types";
-import { ErranteSpawner } from "../enemiesManager/enemySpawner/erranteSpawner";
-import { ICmpCollisionController } from "./iCmpCollisionController";
+import { IEnemySpawner } from "../enemiesManager/enemySpawner/iEnemySpawner";
+import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
+import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
+import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
+import { ICmpEnemyController } from "./iCmpEnemyController";
 
-export class CmpErranteController implements ICmpCollisionController
+export class CmpErranteController implements ICmpEnemyController
 {
   /****************************************************/
   /* Public                                           */
@@ -24,36 +28,19 @@ export class CmpErranteController implements ICmpCollisionController
   {
     let controller = new CmpErranteController();
 
-    controller.m_id = DC_COMPONENT_ID.kCollisionController;
-
-    controller._m_playZone_p1 = new Phaser.Geom.Point();
-    controller._m_playZone_p2 = new Phaser.Geom.Point();
+    controller.m_id = DC_COMPONENT_ID.kEnemyController;
 
     controller._m_direction = new Phaser.Math.Vector3(0.0, 1.0);
     controller._m_force = new Phaser.Math.Vector3();
     controller._m_speed = 400.0;
+    controller._m_enemiesManager = NullEnemiesManager.GetInstance();
+    controller._m_spawner = NullEnemySpawner.GetInstance();
 
     controller.setDeltaTime(0.0);
 
     return controller;
   }
 
-  setSpawner(_spawner : ErranteSpawner)
-  : void
-  {
-    this._m_spawner = _spawner;
-    return;
-  }
-  
-  onCollision
-  (
-    _other: Ty_physicsActor, 
-    _this: Ty_physicsActor
-  ) : void     
-  {
-    return;
-  }
-  
   init(_actor: Ty_physicsActor)
   : void 
   {
@@ -64,27 +51,53 @@ export class CmpErranteController implements ICmpCollisionController
   : void 
   {
     _actor.sendMessage(DC_MESSAGE_ID.kAgentMove, this._m_force);
-
-    let sprite = _actor.getWrappedInstance();
-    if(!this._isPlayzone(sprite.x, sprite.y))
-    {
-      let spawner = this._m_spawner;
-      let enemiesManager = spawner.getEnemiesManager();
-
-      spawner.disasemble(_actor);
-
-      enemiesManager.disableActor(_actor);
-
-      console.log("Errante disable");
-    }
-
     return;
   }
 
   receive(_id: number, _obj: any)
   : void 
   {
+    switch(_id)
+    {
+      case DC_MESSAGE_ID.kKill :
+      
+      this._onKill(_obj as Ty_physicsActor);
+
+      return;
+    }
     return;
+  }
+
+  getCollisionDamage()
+  : number 
+  {
+    return this._m_collisionDamage;
+  }
+
+  setSpawner(_spawner : IEnemySpawner)
+  : void
+  {
+    this._m_spawner = _spawner;
+    return;
+  }
+
+  getSpawner()
+  : IEnemySpawner
+  {
+    return this._m_spawner;
+  }
+
+  setEnemiesManager(_enemyManager: IEnemiesManager)
+  : void 
+  {
+    this._m_enemiesManager = _enemyManager;
+    return;
+  }
+
+  getEnemiesManager()
+  : IEnemiesManager 
+  {
+    return this._m_enemiesManager;
   }
 
   setDeltaTime(_dt : number)
@@ -101,24 +114,11 @@ export class CmpErranteController implements ICmpCollisionController
     return;
   }
 
-  setPlayZoneP1(_x : number, _y : number)
-  : void
-  {
-    this._m_playZone_p1.setTo(_x, _y);
-    return;
-  }
-
-  setPlayZoneP2(_x : number, _y : number)
-  : void
-  {
-    this._m_playZone_p2.setTo(_x, _y);
-    return;
-  }
-
   destroy()
   : void 
-  {
-    throw new Error("Method not implemented.");
+  { 
+    this._m_spawner = null;
+    return;
   }
 
   m_id: number;
@@ -131,25 +131,21 @@ export class CmpErranteController implements ICmpCollisionController
    * Private constructor.
    */
   private constructor()
-  { }
+  { }  
 
   /**
-   * Check if the position is inside the playzone area. The playzone area defines
-   * the zone where a bullet can live, if it get out of this zone it must be
-   * desactivated.
+   * Called once, when the actor is killed.
    * 
-   * @param _x position in x axis. 
-   * @param _y position in y axis.
-   * 
-   * @returns true if the given position is inside the playzone area.
+   * @param _actor actor. 
    */
-  private _isPlayzone(_x : number, _y : number)
-  : boolean
-  {
-    let p1 : Phaser.Geom.Point = this._m_playZone_p1;
-    let p2 : Phaser.Geom.Point = this._m_playZone_p2;
+  private _onKill(_actor : Ty_physicsActor)
+  : void
+  {    
+    this._m_spawner.disasemble(_actor);
 
-    return (_y > p1.y && _y < p2.y) && (_x > p1.x && _x < p2.x);
+    this._m_enemiesManager.disableActor(_actor);
+
+    return;
   }
 
   /**
@@ -173,18 +169,17 @@ export class CmpErranteController implements ICmpCollisionController
   private _m_dt : number;
 
   /**
-   * Playzone limits point 1.
-   */
-  private _m_playZone_p1 : Phaser.Geom.Point;
-
-  /**
-   * Playzone limits point 2.
-   */
-  private _m_playZone_p2 : Phaser.Geom.Point;
-
-  /**
    * Reference ot the Errante Spawner.
    */
-  private _m_spawner : ErranteSpawner;
+  private _m_spawner : IEnemySpawner;
 
+  /**
+   * Damage inflected by this actor when collide with other.
+   */
+  private _m_collisionDamage : number;
+
+  /**
+   * Reference to the enemies manager.
+   */
+  private _m_enemiesManager : IEnemiesManager;
 }

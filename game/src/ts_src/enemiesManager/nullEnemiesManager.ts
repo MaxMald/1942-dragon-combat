@@ -14,6 +14,8 @@ import { Ty_physicsActor } from "../commons/1942types";
 import { DC_ENEMY_TYPE } from "../commons/1942enums";
 import { IEnemySpawner } from "./enemySpawner/iEnemySpawner";
 import { NullEnemySpawner } from "./enemySpawner/nullEnemySpawner";
+import { IBulletManager } from "../bulletManager/iBulletManager";
+import { NullBulletManager } from "../bulletManager/nullBulletManager";
 
 /**
  * This class has no implementations, it is used by the GameManager when no 
@@ -121,6 +123,26 @@ export class NullEnemiesManager implements IEnemiesManager
   }
 
   /**
+   * No implemetation.
+   * 
+   * @param _bulletManager 
+   */
+  setBulletManager(_bulletManager: IBulletManager)
+  : void 
+  { }
+
+  /**
+   * Allways returns NullBulletManager.
+   * 
+   * @returns NullBulletManager.
+   */
+  getBulletManager()
+  : IBulletManager 
+  {
+    return NullBulletManager.GetInstance();
+  }
+
+  /**
    * No implementation.
    */
   destroy()
@@ -137,7 +159,7 @@ export class NullEnemiesManager implements IEnemiesManager
    * Private constructor.
    */
   private constructor()
-  { }
+  { }  
 
   /**
    * Singleton.

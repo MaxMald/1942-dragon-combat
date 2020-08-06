@@ -8,9 +8,6 @@
  * @since July-22-2020
  */
 
-import { MxActor } from "behaviour/mxActor";
-
-
 /**
  * Base interface for the Commands.
  */
@@ -22,8 +19,6 @@ export interface ICommand
   
   /**
    * Execute the command.
-   * 
-   * @param _actor The actor where the command will be executed.
    */
-  exec(_actor : MxActor) : void;
+  exec() : void;
 }

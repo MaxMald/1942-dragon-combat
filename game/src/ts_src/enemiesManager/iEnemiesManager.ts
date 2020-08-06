@@ -1,4 +1,3 @@
-import { DC_ENEMY_TYPE } from "../commons/1942enums";
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -10,6 +9,8 @@ import { DC_ENEMY_TYPE } from "../commons/1942enums";
  * @since July-30-2020
  */
 
+import { IBulletManager } from "../bulletManager/iBulletManager";
+import { DC_ENEMY_TYPE } from "../commons/1942enums";
 import { Ty_physicsActor } from "../commons/1942types";
 import { IEnemySpawner } from "./enemySpawner/iEnemySpawner";
 
@@ -22,6 +23,22 @@ export interface IEnemiesManager
   /****************************************************/
   /* Public                                           */
   /****************************************************/
+
+  /**
+   * Set the bullet manager of this enemies manager.
+   * 
+   * @param _bulletManager bullet manager. 
+   */
+  setBulletManager(_bulletManager : IBulletManager)
+  : void;
+
+  /**
+   * Get the bullet manager of this enemies manager.
+   * 
+   * @returns bullet manager.
+   */
+  getBulletManager()
+  : IBulletManager;
   
   /**
    * Adds an EnemySpawner to this EnemiesManager. If exists an EnemySpawner with
@@ -48,7 +65,8 @@ export interface IEnemiesManager
    * 
    * @param _dt delta time. 
    */
-  update(_dt : number) : void;
+  update(_dt : number) 
+  : void;
 
   /**
    * Spawn an enemy in the world.
@@ -57,22 +75,26 @@ export interface IEnemiesManager
    * @param _y position in y axis.
    * @param _type enemy type.
    */
-  spawn(_x : number, _y : number, _type : DC_ENEMY_TYPE) : void;
+  spawn(_x : number, _y : number, _type : DC_ENEMY_TYPE) 
+  : void;
 
   /**
    * Get an available Actor.
    */
-  getActor() : Ty_physicsActor;
+  getActor() 
+  : Ty_physicsActor;
 
   /**
    * Disable an actor.
    * 
    * @param _actor Actor. 
    */
-  disableActor(_actor : Ty_physicsActor) : void;
+  disableActor(_actor : Ty_physicsActor) 
+  : void;
 
   /**
    * Safely destroys this EnemyManager.
    */
-  destroy() : void;
+  destroy() 
+  : void;
 }

@@ -4112,7 +4112,7 @@ define("test/ambienceGenerator/src/ts_src/game_init", ["require", "exports", "ph
 define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.DC_BULLET_TYPE = exports.DC_ANIMATION_ID = exports.DC_MESSAGE_ID = exports.DC_COMPONENT_ID = exports.DC_BOSS_ID = exports.DC_ENEMY_TYPE = void 0;
+    exports.DC_ACTOR_COMMAND = exports.DC_BULLET_TYPE = exports.DC_ANIMATION_ID = exports.DC_MESSAGE_ID = exports.DC_COMPONENT_ID = exports.DC_BOSS_ID = exports.DC_ENEMY_TYPE = void 0;
     exports.DC_ENEMY_TYPE = Object.freeze({
         kUndefined: -1,
         kErrante: 0,
@@ -4133,9 +4133,11 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
         kEnemyHealth: 7,
         kBasicBulletController: 8,
         kBulletData: 9,
-        kPlayZone: 10
+        kPlayZone: 10,
+        kEnemyController: 11
     });
     exports.DC_MESSAGE_ID = Object.freeze({
+        kUndefined: 499,
         kAgentMove: 500,
         kPointerMoved: 501,
         kToPosition: 502,
@@ -4157,12 +4159,99 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
         kHeroBasic: 1,
         kEnemyBasic: 2,
     });
+    exports.DC_ACTOR_COMMAND = Object.freeze({
+        kRemoveComponent: 0
+    });
+});
+define("game/src/ts_src/commands/iCommand", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("game/src/ts_src/components/iBaseComponent", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
 });
-define("game/src/ts_src/actors/baseActor", ["require", "exports"], function (require, exports) {
+define("game/src/ts_src/messages/actorMessage", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.MessageManager = exports.ActorMessage = void 0;
+    var ActorMessage = (function () {
+        function ActorMessage() {
+        }
+        return ActorMessage;
+    }());
+    exports.ActorMessage = ActorMessage;
+    var MessageManager = (function () {
+        function MessageManager() {
+        }
+        MessageManager.Prepare = function () {
+            if (MessageManager._INSTANCE == null) {
+                MessageManager._INSTANCE = new MessageManager();
+                MessageManager._INSTANCE.onPrepare();
+            }
+            return;
+        };
+        MessageManager.Shutdown = function () {
+            if (MessageManager._INSTANCE != null) {
+                MessageManager._INSTANCE.onShutdown();
+                MessageManager._INSTANCE = null;
+            }
+            return;
+        };
+        MessageManager.GetMessage = function () {
+            var singleton = MessageManager._INSTANCE;
+            var pool = singleton.m_pool;
+            var poolSize = pool.length;
+            var index = singleton.m_index;
+            var step = 0;
+            var msg;
+            while (step < poolSize) {
+                msg = pool[index % poolSize];
+                if (msg.m_id == _1942enums_1.DC_MESSAGE_ID.kUndefined) {
+                    singleton.m_index = ++index;
+                    return msg;
+                }
+                ++index;
+                ++step;
+            }
+            msg = new ActorMessage();
+            MessageManager.desactiveMessage(msg);
+            pool.push(msg);
+            singleton.m_index = index;
+            console.log("Created new message");
+            return msg;
+        };
+        MessageManager.desactiveMessage = function (_message) {
+            _message.m_obj = null;
+            _message.m_id = _1942enums_1.DC_MESSAGE_ID.kUndefined;
+            return;
+        };
+        MessageManager.prototype.onPrepare = function () {
+            this.m_pool = new Array();
+            var index = 0;
+            var msg;
+            var pool = this.m_pool;
+            while (index < 50) {
+                ++index;
+                msg = new ActorMessage();
+                MessageManager.desactiveMessage(msg);
+                pool.push(msg);
+            }
+            this.m_index = 0;
+            return;
+        };
+        MessageManager.prototype.onShutdown = function () {
+            var pool = this.m_pool;
+            while (pool.length) {
+                pool.pop();
+            }
+            return;
+        };
+        return MessageManager;
+    }());
+    exports.MessageManager = MessageManager;
+});
+define("game/src/ts_src/actors/baseActor", ["require", "exports", "game/src/ts_src/messages/actorMessage"], function (require, exports, actorMessage_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BaseActor = void 0;
@@ -4172,6 +4261,8 @@ define("game/src/ts_src/actors/baseActor", ["require", "exports"], function (req
         BaseActor.Create = function (_instance, _name) {
             var actor = new BaseActor();
             actor._m_components = new Array();
+            actor._m_aPostCommands = new Array();
+            actor._m_aMessage = new Array();
             actor._m_instance = _instance;
             actor.m_name = _name;
             return actor;
@@ -4187,19 +4278,17 @@ define("game/src/ts_src/actors/baseActor", ["require", "exports"], function (req
             return;
         };
         BaseActor.prototype.update = function () {
-            var index = 0;
             var components = this._m_components;
             components.forEach(this._updateComponent, this);
+            this._dispatchMessage();
+            this._execPostCommands();
             return;
         };
         BaseActor.prototype.sendMessage = function (_id, _obj) {
-            var index = 0;
-            var components = this._m_components;
-            var length = components.length;
-            while (index < length) {
-                components[index].receive(_id, _obj);
-                ++index;
-            }
+            var message = actorMessage_1.MessageManager.GetMessage();
+            message.m_id = _id;
+            message.m_obj = _obj;
+            this._m_aMessage.push(message);
             return;
         };
         BaseActor.prototype.getWrappedInstance = function () {
@@ -4248,6 +4337,10 @@ define("game/src/ts_src/actors/baseActor", ["require", "exports"], function (req
             }
             return false;
         };
+        BaseActor.prototype.addPostCommand = function (command) {
+            this._m_aPostCommands.push(command);
+            return;
+        };
         BaseActor.prototype.destroy = function () {
             var component;
             while (this._m_components.length) {
@@ -4258,6 +4351,36 @@ define("game/src/ts_src/actors/baseActor", ["require", "exports"], function (req
         };
         BaseActor.prototype._updateComponent = function (_component) {
             _component.update(this);
+            return;
+        };
+        BaseActor.prototype._dispatchMessage = function () {
+            if (this._m_aMessage.length) {
+                var message = void 0;
+                var messageList = this._m_aMessage;
+                var componentList = this._m_components;
+                var componentSize = 0;
+                var componentIndex = 0;
+                while (messageList.length) {
+                    message = messageList.pop();
+                    componentIndex = 0;
+                    componentSize = componentList.length;
+                    while (componentIndex < componentSize) {
+                        componentList[componentIndex].receive(message.m_id, message.m_obj);
+                        ++componentIndex;
+                    }
+                    ;
+                    actorMessage_1.MessageManager.desactiveMessage(message);
+                }
+            }
+            return;
+        };
+        BaseActor.prototype._execPostCommands = function () {
+            var aCommands = this._m_aPostCommands;
+            var command;
+            while (aCommands.length) {
+                command = aCommands.pop();
+                command.exec();
+            }
             return;
         };
         return BaseActor;
