@@ -3,7 +3,7 @@
  *
  * @summary 
  *
- * @file cmpUIHealthController.ts
+ * @file cmpUIScoreController.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
  * @since August-06-2020
  */
@@ -12,21 +12,17 @@ import { IBaseComponent } from "./iBaseComponent";
 import { BaseActor } from "../actors/baseActor";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_Text } from "../commons/1942types";
-import { CmpHeroData } from "./cmpHeroData";
+import { IScoreManager } from "../scoreManager/iScoreManager";
 
-export class CmpUIHealthController 
+export class CmpUIScoreController 
 implements IBaseComponent<Ty_Text>
 {
-  /****************************************************/
-  /* Public                                           */
-  /****************************************************/
-  
   static Create()
-  : CmpUIHealthController
+  : CmpUIScoreController
   {
-    let healthController = new CmpUIHealthController();
+    let healthController = new CmpUIScoreController();
 
-    healthController.m_id = DC_COMPONENT_ID.kUIHealthController;
+    healthController.m_id = DC_COMPONENT_ID.kUIScoreController;
 
     return healthController;
   }
@@ -46,31 +42,28 @@ implements IBaseComponent<Ty_Text>
   : void 
   { }
 
-  onHealthChanged(_heroData : CmpHeroData, _args : undefined)
+  onScoreChanged(_scoreManager : IScoreManager, _args : undefined)
   : void
   {
-    let sHealth : string = "Health : " + _heroData.getHealth().toString();
+    let sScore : string = "Score : " + _scoreManager.getScore().toString();
 
-    this._actor.sendMessage(DC_MESSAGE_ID.kSetText, sHealth);
+    this._actor.sendMessage(DC_MESSAGE_ID.kSetText, sScore);
 
     return;
   }
 
   destroy()
   : void 
-  {
+  { 
     this._actor = null;
     return;
   }
 
   m_id: number;
-  
+
   /****************************************************/
   /* Private                                          */
   /****************************************************/
-
-  private constructor()
-  { }
-
+  
   private _actor : BaseActor<Ty_Text>;
 }

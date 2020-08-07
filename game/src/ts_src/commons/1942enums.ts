@@ -144,7 +144,12 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpUIHealthController
    */
-  kUIHealthController : 14 as 14
+  kUIHealthController : 14 as 14,
+
+  /**
+   * CmpUIScoreController
+   */
+  kUIScoreController : 15 as 15,
 });
 
 /****************************************************/
@@ -224,7 +229,14 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : string.
    */
-  kSetText : 508 as 508
+  kSetText : 508 as 508,
+
+  /**
+   * Add point to the main score.
+   * 
+   * msg : integer
+   */
+  kAddScorePoints : 509 as 509
 });
 
 /****************************************************/

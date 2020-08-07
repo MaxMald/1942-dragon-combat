@@ -16,6 +16,7 @@ import { IEnemySpawner } from "../enemiesManager/enemySpawner/iEnemySpawner";
 import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
 import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
+import { GameManager } from "../gameManager/gameManager";
 import { ICmpEnemyController } from "./iCmpEnemyController";
 
 export class CmpErranteController implements ICmpEnemyController
@@ -45,6 +46,7 @@ export class CmpErranteController implements ICmpEnemyController
     controller._m_spawner = NullEnemySpawner.GetInstance();
 
     controller.setDeltaTime(0.0);
+    controller.setScorePoints(10);
 
     return controller;
   }
@@ -162,6 +164,27 @@ export class CmpErranteController implements ICmpEnemyController
     return;
   }
 
+  /**
+   * Get the score points that give this enemy when is destroyed.
+   */
+  getScorePoints()
+  : number 
+  {
+    return this._m_scorePoints;
+  }
+
+  /**
+   * Set the score points that give this enemy when is destroyed.
+   * 
+   * @param _points score points 
+   */
+  setScorePoints(_points: number)
+  : void 
+  {
+    this._m_scorePoints = _points;
+    return;
+  }
+
   destroy()
   : void 
   { 
@@ -180,6 +203,7 @@ export class CmpErranteController implements ICmpEnemyController
    */
   private constructor()
   { }  
+  
 
   /**
    * Called once, when the actor is killed.
@@ -192,6 +216,12 @@ export class CmpErranteController implements ICmpEnemyController
     this._m_spawner.disasemble(_actor);
 
     this._m_enemiesManager.disableActor(_actor);
+
+    GameManager.ReceiveMessage
+    (
+      DC_MESSAGE_ID.kAddScorePoints,
+      this._m_scorePoints 
+    );
 
     return;
   }
@@ -215,6 +245,11 @@ export class CmpErranteController implements ICmpEnemyController
    * Delta time.
    */
   private _m_dt : number;
+
+  /**
+   * The score points gived to the score manager when the enemy is destroyed.
+   */
+  private _m_scorePoints : integer;
 
   /**
    * fire rate.

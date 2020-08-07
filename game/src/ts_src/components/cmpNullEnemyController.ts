@@ -126,6 +126,24 @@ implements ICmpEnemyController
   }
 
   /**
+   * Allways returns 0.
+   */
+  getScorePoints()
+  : integer 
+  {
+    return 0;
+  }
+
+  /**
+   * No implementaion.
+   *  
+   * @param _points 
+   */
+  setScorePoints(_points: integer)
+  : void 
+  { }
+
+  /**
    * No implementation.
    */
   receive(_id: number, _obj: any)
@@ -149,7 +167,7 @@ implements ICmpEnemyController
    * Private constructor.
    */
   private constructor()
-  { }   
+  { }     
   
   /**
    * The module singleton.

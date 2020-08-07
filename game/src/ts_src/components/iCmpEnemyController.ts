@@ -46,6 +46,20 @@ extends IBaseComponent<Ty_physicsSprite>
   : IEnemySpawner;
 
   /**
+   * Get the score points that give this enemy when is destroyed.
+   */
+  getScorePoints()
+  : integer;
+
+  /**
+   * * Get the score points that give this enemy when is destroyed.
+   * 
+   * @param _points score points. 
+   */
+  setScorePoints(_points : integer)
+  : void;
+
+  /**
    * Set the enemies manager.
    * 
    * @param _enemyManager enemies manager. 

@@ -9,14 +9,16 @@
  */
 
 import { NullBulletSpawner } from "../bulletManager/bulletSpawner/nullBulletSpawner";
-import { IBulletManager } from "../bulletManager/iBulletManager";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
+import { DC_MESSAGE_ID } from "../commons/1942enums";
 import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
 import { CmpNullEnemyController } from "../components/cmpNullEnemyController";
 import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
 import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
 import { PlayerController } from "../playerController/playerController";
+import { IScoreManager } from "../scoreManager/iScoreManager";
+import { ScoreManager } from "../scoreManager/scoreManager";
 
 export class GameManager
 {
@@ -61,6 +63,30 @@ export class GameManager
     return GameManager._INSTANCE;
   }
 
+  /**
+   * Receive a message that will be handle by the GameManager. You can use
+   * this method to comunicate with the a system of the gameManager.
+   * 
+   * @param _id message identifier.
+   * @param _msg message.
+   */
+  static ReceiveMessage(_id : DC_MESSAGE_ID, _msg : any)
+  : void
+  {
+    let manager = GameManager._INSTANCE;
+
+    switch(_id)
+    {
+      case DC_MESSAGE_ID.kAddScorePoints :
+      {
+        manager.getScoreManager().addScore(_msg as integer);
+      }
+      return;
+    }
+
+    return;
+  }
+
   update(_dt : number)
   : void
   {
@@ -69,6 +95,29 @@ export class GameManager
     this._m_playerController.update(_dt);
     this._m_enemiesManager.update(_dt);
     return;
+  }
+
+  /**
+   * Get the score manager.
+   * 
+   * @param _scoreManager score manager.
+   */
+  setScoreManager(_scoreManager : IScoreManager)
+  : void
+  {
+    this._m_scoreManager = _scoreManager;
+    return;
+  }
+
+  /**
+   * Set the score manager.
+   * 
+   * @returns score manager.
+   */
+  getScoreManager()
+  : IScoreManager
+  {
+    return this._m_scoreManager;
   }
 
   /**
@@ -118,19 +167,7 @@ export class GameManager
   : IEnemiesManager
   {
     return this._m_enemiesManager;
-  }
-
-  /**
-  * Safely destroys the object.
-  */
-  destroy()
-  : void 
-  {
-    // Destroy Managers.
-    
-    this._m_enemiesManager.destroy();
-    return;
-  }
+  }  
 
   /**
    * Delta time.
@@ -142,18 +179,6 @@ export class GameManager
   /****************************************************/
 
   /**
-   * Updatte a bullet manager.
-   * 
-   * @param _bulletManager bullet manager. 
-   */
-  private _updateBulletManager(_bulletManager : IBulletManager)
-  : void
-  {
-    _bulletManager.update(this.m_dt);
-    return;
-  }
-
-  /**
    * Called once when the module had been prepared.
    */
   private _onPrepare()
@@ -161,18 +186,19 @@ export class GameManager
   {
     this.m_dt = 0.0;
 
-     // Prepare the modules.
+    // Prepare the modules.
      
-     NullBulletSpawner.Prepare();
-     CmpNullEnemyController.Prepare();
-     CmpNullCollisionController.Prepare();
-     NullBulletManager.Prepare();
-     NullEnemySpawner.Prepare();
-     NullEnemiesManager.Prepare();
+    NullBulletSpawner.Prepare();
+    CmpNullEnemyController.Prepare();
+    CmpNullCollisionController.Prepare();
+    NullBulletManager.Prepare();
+    NullEnemySpawner.Prepare();
+    NullEnemiesManager.Prepare();
 
     // Create Managers.
 
-    this._m_enemiesManager = NullEnemiesManager.GetInstance();;   
+    this.setEnemiesManager(NullEnemiesManager.GetInstance());
+    this.setScoreManager(ScoreManager.Create());
 
     return;
   }
@@ -183,7 +209,11 @@ export class GameManager
   private _onShutdown()
   : void
   {
-    this.destroy();
+    // Destroy managers.
+
+    this._m_scoreManager.destroy();
+
+    this._m_enemiesManager.destroy();
 
     // Shutdown the modules.
 
@@ -217,4 +247,9 @@ export class GameManager
    * Reference to the PlayerController.
    */
   private _m_playerController : PlayerController
+
+  /**
+   * Reference to the ScoreManager.
+   */
+  private _m_scoreManager : IScoreManager;
 }

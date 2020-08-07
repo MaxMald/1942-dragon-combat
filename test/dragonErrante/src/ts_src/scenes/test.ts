@@ -16,6 +16,8 @@ import { Ty_Text } from "../../../../../game/src/ts_src/commons/1942types";
 import { FcUIHealth } from "../../../../../game/src/ts_src/factories/fcUIHealth";
 import { CmpHeroData } from "../../../../../game/src/ts_src/components/cmpHeroData";
 import { CmpUIHealthController } from "../../../../../game/src/ts_src/components/cmpUIHealthController";
+import { FcUIScore } from "../../../../../game/src/ts_src/factories/fcUIScore";
+import { CmpUIScoreController } from "../../../../../game/src/ts_src/components/cmpUIScoreController";
 
 
 export class Test extends Phaser.Scene
@@ -218,7 +220,7 @@ export class Test extends Phaser.Scene
     this._m_heroHP = FcUIHealth.Create(this);
     this._m_heroHP.sendMessage
     (
-      DC_MESSAGE_ID.kAgentMove,
+      DC_MESSAGE_ID.kToPosition,
       new Phaser.Math.Vector3(20, 20) 
     );   
 
@@ -235,6 +237,28 @@ export class Test extends Phaser.Scene
       "UIHealth", 
       hpData.onHealthChanged, 
       hpData
+    );
+
+    this._m_heroScore = FcUIScore.Create(this);
+    this._m_heroScore.sendMessage
+    (
+      DC_MESSAGE_ID.kToPosition,
+      new Phaser.Math.Vector3(600, 20)
+    );
+
+    let scoreController = this._m_heroScore.getComponent<CmpUIScoreController>
+    (
+      DC_COMPONENT_ID.kUIScoreController
+    );
+
+    let scoreManager = gameManager.getScoreManager();
+
+    scoreManager.suscribe
+    (
+      "scoreChanged", 
+      "scoreUI", 
+      scoreController.onScoreChanged, 
+      scoreController
     );
 
     return;
@@ -397,4 +421,6 @@ export class Test extends Phaser.Scene
   // UI
 
   private _m_heroHP : BaseActor<Ty_Text>;
+
+  private _m_heroScore : BaseActor<Ty_Text>;
 }
