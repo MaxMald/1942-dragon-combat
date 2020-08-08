@@ -14,6 +14,7 @@ import { SurfacePainter } from "./surfacePainter";
 import { OPRESULT } from "commons/mxEnums";
 import { HeightMap } from "./heightMap";
 import { AmbienceGeneratorConfig } from "./ambienceGeneratorConfig";
+import { IAmbientGenerator } from "./iAmbientGenerator";
 
 /**
  * The AmbienceGenerator draw the background and place ambience props over
@@ -21,7 +22,8 @@ import { AmbienceGeneratorConfig } from "./ambienceGeneratorConfig";
  * the illusion of movement.
  */
 export class AmbienceGenerator 
-{
+implements IAmbientGenerator
+{ 
   /****************************************************/
   /* Public                                           */
   /****************************************************/
@@ -105,6 +107,33 @@ export class AmbienceGenerator
         console.error('Shader: ' + _config.terrainShaderKey + ' not found.');
       }
     }
+
+    this.setSpeed(_config.speed);
+
+    this._m_distance = 0.0;
+    return;
+  }
+
+  /**
+   * Updates the ambient generator.
+   * 
+   * @param _dt delta time. 
+   */
+  update(_dt: number)
+  : void 
+  { 
+
+    let distance = this._m_distance + (this._m_speed * _dt);
+    
+    if(distance > 2.0)
+    {
+      distance = 2.0;
+    }    
+
+    this._m_surfacePainter.update(distance);
+
+    this._m_distance = distance;
+
     return;
   }
 
@@ -194,6 +223,17 @@ export class AmbienceGenerator
   }
 
   /**
+   * Set the speed of the background ambient.
+   * 
+   * @param speed of the background ambient.
+   */
+  setSpeed(_speed : number)
+  : void
+  {
+    this._m_speed = _speed;
+  }
+
+  /**
    * Call the destroy() method of all members.
    */
   destroy()
@@ -217,4 +257,14 @@ export class AmbienceGenerator
    * Reference to the Height Map.
    */
   private _m_heightMap : HeightMap;
+
+  /**
+   * Ambient speed.
+   */
+  private _m_speed : number = 1.0;
+
+  /**
+   * Distance traveled.
+   */
+  private _m_distance : number;
 }

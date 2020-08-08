@@ -1,3 +1,4 @@
+import { CnfHero } from "../../../../../game/src/ts_src/commons/1942config";
 import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
 import { PlayerController } from "../../../../../game/src/ts_src/playerController/playerController";
 import { PlayerControllerConfig } from "../../../../../game/src/ts_src/playerController/playerControllerConfig";
@@ -34,16 +35,16 @@ export class Test extends Phaser.Scene
       "animations/DragonFlight.json"
     );
 
-    this.load.text
-    (
-      'playerControllerConfig',
-      'configFiles/playerControllerConfig.json'
-    );
-
     this.load.image
     (
       'button',
       'images/button.png'
+    );
+
+    this.load.text
+    (
+      'cnf_hero',
+      'configFiles/cnf_hero_001.json'
     );
     return;
   }
@@ -165,31 +166,22 @@ export class Test extends Phaser.Scene
 
     ///////////////////////////////////
     // Player Controller
+       
+    let heroConfig : CnfHero 
+      = JSON.parse(this.game.cache.text.get('cnf_hero'));
 
-    let pcConfig : PlayerControllerConfig 
-      = JSON.parse(this.cache.text.get('playerControllerConfig'));
-
-    // Movement Boundings
-
-    let padding : number = 100;
-
-    pcConfig.movement_rect_p1_x = padding;
-    pcConfig.movement_rect_p1_y = padding;
-
-    pcConfig.movement_rect_p2_x = this._m_canvas_size.x - padding;
-    pcConfig.movement_rect_p2_y = this._m_canvas_size.y - padding;
-
-    let heroController : PlayerController = new PlayerController();
+    heroConfig.x = this.game.canvas.width * 0.5;
+    heroConfig.y = this.game.canvas.height * 0.5;
     
-    heroController.init(this, undefined, pcConfig);
+    gameManager.initHero(this, heroConfig);
 
     // Only for debuggin purpuses.
 
-    this._m_pt_label.text = 'Speed : ' + pcConfig.player_speed.toString();
+    this._m_pt_label.text = 'Speed : ' + heroConfig.maximum_speed.toString();
 
     // Set local properties.
 
-    this._m_heroController = heroController;
+    this._m_heroController = gameManager.getPlayerController();
 
     return;
   }
@@ -197,9 +189,8 @@ export class Test extends Phaser.Scene
   update(_time : number, _delta : number)
   : void
   {    
-    // Updates the hero controller.
-
-    this._m_heroController.update(_delta * 0.001);
+    
+    GameManager.GetInstance().update(_delta * 0.001);
 
     // Only for debugging purposes.
 

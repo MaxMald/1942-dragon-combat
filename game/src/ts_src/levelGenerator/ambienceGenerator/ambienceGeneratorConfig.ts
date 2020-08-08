@@ -56,4 +56,9 @@ export class AmbienceGeneratorConfig
    * The keyof the surface painter shader.
    */
   terrainShaderKey : string;
+
+  /**
+   * The speed of the props and terrain surface.
+   */
+  speed : number;
 }

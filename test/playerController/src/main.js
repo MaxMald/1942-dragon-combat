@@ -24,7 +24,10 @@
         "mxUtilitites",
         "commons/mxEnums",
         "optimization/mxObjectPool",
-        "MxTools"
+        "MxTools",
+        "listeners/mxListener",
+        "listeners/mxListenerManager",
+        "shaders/mxShader"
       ]
     },
 

@@ -13,5 +13,7 @@
   
   "mapsTextureKey" : "waterNormalMap",
   
-  "terrainShaderKey" : "terrain_painter_01"
+  "terrainShaderKey" : "terrain_painter_01",
+
+  "speed" : 0.03
 }

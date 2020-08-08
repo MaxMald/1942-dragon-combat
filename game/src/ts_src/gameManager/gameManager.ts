@@ -8,14 +8,23 @@
  * @since July-29-2020
  */
 
+import { OPRESULT } from "commons/mxEnums";
 import { NullBulletSpawner } from "../bulletManager/bulletSpawner/nullBulletSpawner";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
+import { CnfHero } from "../commons/1942config";
 import { DC_MESSAGE_ID } from "../commons/1942enums";
 import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
 import { CmpNullEnemyController } from "../components/cmpNullEnemyController";
 import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
 import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
+import { AmbienceGenerator } from "../levelGenerator/ambienceGenerator/ambienceGenerator";
+import { AmbienceGeneratorConfig } from "../levelGenerator/ambienceGenerator/ambienceGeneratorConfig";
+import { IAmbientGenerator } from "../levelGenerator/ambienceGenerator/iAmbientGenerator";
+import { NullAmbientGenerator } from "../levelGenerator/ambienceGenerator/nullAmbientGenerator";
+import { ILevelGenerator } from "../levelGenerator/iLevelGenerator";
+import { LevelGenerator } from "../levelGenerator/levelGenerator";
+import { NullLevelGenerator } from "../levelGenerator/nullLevelGenerator";
 import { PlayerController } from "../playerController/playerController";
 import { IScoreManager } from "../scoreManager/iScoreManager";
 import { ScoreManager } from "../scoreManager/scoreManager";
@@ -83,8 +92,73 @@ export class GameManager
       }
       return;
     }
-
     return;
+  }
+
+  /**
+   * 
+   */
+  initLevelGenerator()
+  : OPRESULT
+  {
+    if(this._m_levelGenerator != null)
+    {
+      this._m_levelGenerator.destroy();
+    }
+
+    let levelGenerator = new LevelGenerator();
+    levelGenerator.init();
+
+    this._m_levelGenerator = levelGenerator;
+    return OPRESULT.kOk;
+  }
+
+  /**
+   * 
+   */
+  initAmbientGenerator
+  (
+    _scene : Phaser.Scene, 
+    _config : AmbienceGeneratorConfig
+  )
+  : OPRESULT
+  {
+    if(this._m_ambientGenrator != null)
+    {
+      this._m_ambientGenrator.destroy();
+    }
+
+    let ambientGenerator : AmbienceGenerator = new AmbienceGenerator();
+
+    ambientGenerator.init(_scene, _config);
+
+    this._m_ambientGenrator = ambientGenerator;
+
+    return OPRESULT.kOk;
+  }
+
+  /**
+   * Initialize the playerController with a configuration file. If a
+   * playerController exists, it will be destroyed and replaced.
+   *
+   */
+  initHero(_scene : Phaser.Scene, _cnfHero : CnfHero)
+  : OPRESULT
+  {
+    // Destroys previous playerController
+
+    let playerController : PlayerController = this._m_playerController;
+
+    if(playerController != null)
+    {
+      playerController.destroy();
+    }
+
+    playerController = new PlayerController();
+    playerController.init(_scene, _cnfHero);   
+
+    this._m_playerController = playerController;
+    return OPRESULT.kOk;
   }
 
   update(_dt : number)
@@ -92,6 +166,8 @@ export class GameManager
   {
     this.m_dt = _dt; 
 
+    this._m_ambientGenrator.update(_dt);
+    this._m_levelGenerator.update(_dt);
     this._m_playerController.update(_dt);
     this._m_enemiesManager.update(_dt);
     return;
@@ -167,7 +243,53 @@ export class GameManager
   : IEnemiesManager
   {
     return this._m_enemiesManager;
-  }  
+  }
+
+  /**
+   * Set the AmbientGenerator.
+   * 
+   * @param _ambientGenerator ambient generator. 
+   */
+  setAmbientGenerator(_ambientGenerator : IAmbientGenerator)
+  : void
+  {
+    this._m_ambientGenrator = _ambientGenerator;
+    return;
+  }
+
+  /**
+   * Get the AmbientGenerator.
+   * 
+   * @returns ambient generator.
+   */
+  getAmbientGenerator()
+  : IAmbientGenerator
+  {
+    return this._m_ambientGenrator;
+  }
+
+  /**
+   * Set the LevelGenerator.
+   * 
+   * @param _levelGenerator level generator. 
+   */
+  setLevelGenerator(_levelGenerator : ILevelGenerator)
+  : void
+  {
+    this._m_levelGenerator = _levelGenerator;
+    return;
+  }
+
+  /**
+   * Get the LevelGenerator.
+   * 
+   * @returns level generator.
+   */
+  getLevelGenerator()
+  : ILevelGenerator
+  {
+    return this._m_levelGenerator;
+  }
 
   /**
    * Delta time.
@@ -199,6 +321,8 @@ export class GameManager
 
     this.setEnemiesManager(NullEnemiesManager.GetInstance());
     this.setScoreManager(ScoreManager.Create());
+    this.setAmbientGenerator(new NullAmbientGenerator());
+    this.setLevelGenerator(new NullLevelGenerator());
 
     return;
   }
@@ -211,8 +335,9 @@ export class GameManager
   {
     // Destroy managers.
 
+    this._m_levelGenerator.destroy();
+    this._m_ambientGenrator.destroy();
     this._m_scoreManager.destroy();
-
     this._m_enemiesManager.destroy();
 
     // Shutdown the modules.
@@ -249,7 +374,17 @@ export class GameManager
   private _m_playerController : PlayerController
 
   /**
+   * Reference to the LevelGenerator.
+   */
+  private _m_levelGenerator : ILevelGenerator;
+
+  /**
    * Reference to the ScoreManager.
    */
   private _m_scoreManager : IScoreManager;
+
+  /**
+   * Reference to the AmbienGenrator.
+   */
+  private _m_ambientGenrator : IAmbientGenerator;
 }

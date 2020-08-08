@@ -12,6 +12,7 @@ import { CmpTargetController } from "../../../../../game/src/ts_src/components/c
 import { DC_COMPONENT_ID } from "../../../../../game/src/ts_src/commons/1942enums";
 import { HeroBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletSpawner";
 import { CmpEnemyHealth } from "../../../../../game/src/ts_src/components/cmpEnemyHealth";
+import { CnfBulletManager, CnfHero } from "../../../../../game/src/ts_src/commons/1942config";
 
 
 export class Test extends Phaser.Scene
@@ -61,6 +62,23 @@ export class Test extends Phaser.Scene
       'fireball',
       'images/fireball.png'
     );
+
+    // Hero configuration file.
+
+    this.load.text
+    (
+      'cnf_hero',
+      'configFiles/cnf_hero_001.json'
+    );
+
+    // Hero's BulletManager file.
+
+    this.load.text
+    (
+      'cnf_bulletManager_hero',
+      'configFiles/cnf_bulletManager_001.json'
+    );
+
     return;
   }
   
@@ -133,22 +151,55 @@ export class Test extends Phaser.Scene
     let gameManager : GameManager = GameManager.GetInstance();
 
     ///////////////////////////////////
-    // Bullet Controller
+    // Hero's Bullet Manager
 
-    // hero spawner.
+    let cnfBulletMng : CnfBulletManager 
+      = JSON.parse(this.game.cache.text.get('cnf_bulletManager_hero'));
 
-    let heroSpawner : HeroBasicBulletSpawner = HeroBasicBulletSpawner.Create();
+    let bulletMng : BulletManager = BulletManager.Create();
 
-    let bulletManager : BulletManager = BulletManager.Create();
+    let padding = cnfBulletMng.playzone_padding;
+    let canvas = this.game.canvas;
 
-    let bmConfig : BulletManagerConfig 
-      = JSON.parse(this.cache.text.get('bulletManagerConfig'));
+    bulletMng.init
+    (
+      this,
+      cnfBulletMng.pool_size,
+      cnfBulletMng.texture_key,
+      new Phaser.Geom.Point(-padding, -padding),
+      new Phaser.Geom.Point(canvas.width + padding, canvas.height + padding)
+    );
 
-    bulletManager.init(this, bmConfig);
+    // BulletSpawner : Basic Bullet.
 
-    bulletManager.addSpawner(heroSpawner);
+    let heroBulletSpawner = HeroBasicBulletSpawner.Create
+    (
+      new Phaser.Math.Vector2(0.0, -1.0),
+      1200
+    );
 
-    this._m_bulletManager = bulletManager;
+    bulletMng.addSpawner(heroBulletSpawner);
+
+    this._m_bulletManager = bulletMng;
+
+    ///////////////////////////////////
+    // Player Controller
+       
+    let heroConfig : CnfHero 
+      = JSON.parse(this.game.cache.text.get('cnf_hero'));
+
+    heroConfig.x = this.game.canvas.width * 0.5;
+    heroConfig.y = this.game.canvas.height * 0.5;
+    
+    gameManager.initHero(this, heroConfig);
+
+    // Bounds the playercontroller with the bullet manager
+
+    let playercontroller = gameManager.getPlayerController();
+
+    playercontroller.setBulletManager(bulletMng);   
+
+    this._m_heroController = playercontroller;
 
     ///////////////////////////////////
     // Enemies Manager
@@ -166,7 +217,7 @@ export class Test extends Phaser.Scene
 
     // Collision:
 
-    bulletManager.collisionVsGroup(this, enemiesManager.getBodiesGroup());
+    bulletMng.collisionVsGroup(this, enemiesManager.getBodiesGroup());
 
     ///////////////////////////////////
     // Targets
@@ -199,36 +250,7 @@ export class Test extends Phaser.Scene
       }
       
       --target_size;
-    }
-    
-    ///////////////////////////////////
-    // Player Controller
-
-    let pcConfig : PlayerControllerConfig 
-      = JSON.parse(this.cache.text.get('playerControllerConfig'));
-
-    // Movement Boundings
-
-    let padding : number = 100;
-
-    pcConfig.movement_rect_p1_x = padding;
-    pcConfig.movement_rect_p1_y = padding;
-
-    pcConfig.movement_rect_p2_x = this._m_canvas_size.x - padding;
-    pcConfig.movement_rect_p2_y = this._m_canvas_size.y - padding;
-
-    let heroController : PlayerController = new PlayerController();
-    
-    heroController.init(this, undefined, pcConfig);     
-
-    heroController.setBulletManager(bulletManager);
-
-    this._m_heroController = heroController;
-
-    gameManager.setPlayerController(heroController);
-
-    ///////////////////////////////////
-    // Targets
+    } 
 
     return;
   }

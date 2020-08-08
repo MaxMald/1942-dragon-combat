@@ -10,7 +10,6 @@
  */
 
 import { BaseActor } from "../actors/baseActor";
-import { PlayerControllerConfig } from "./playerControllerConfig";
 import { CmpHeroInput } from "../components/cmpHeroInput"
 import { CmpMovement } from "../components/cmpMovement";
 import { CmpAnimation } from "../components/cmpAnimation";
@@ -18,10 +17,12 @@ import { StateHeroFFlight } from "../states/stateHeroFFLight";
 import { StateHeroGlide } from "../states/stateHeroGlide";
 import { CmpHeroBulletController } from "../components/cmpHeroBulletController";
 import { IBulletManager } from "../bulletManager/iBulletManager";
-import { DC_COMPONENT_ID } from "../commons/1942enums";
+import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { CmpHeroData } from "../components/cmpHeroData";
 import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
+import { Point, Ty_physicsActor } from "../commons/1942types";
+import { CnfHero } from "../commons/1942config";
 
 /**
  * Create and manage the hero's actor. It provides a friendly interface to control
@@ -52,8 +53,7 @@ export class PlayerController
   init
   (
     _scene : Phaser.Scene,
-    _activePointer ?: Phaser.Input.Pointer,
-    _config ?: PlayerControllerConfig
+    _cnfHero : CnfHero
   ) : void
   {
     ///////////////////////////////////
@@ -66,71 +66,29 @@ export class PlayerController
       (
         _scene.game.canvas.width * 0.5, 
         _scene.game.canvas.height * 0.5, 
-        'DragonFlight', 
-        0
+        _cnfHero.texture, 
+        _cnfHero.frame
       );
-    
+
+    // Create the actor.
 
     let hero : BaseActor<Phaser.Physics.Arcade.Sprite> 
       = BaseActor.Create(heroSprite, "Hero");
     
     heroSprite.setData('actor', hero);
 
-    hero.addComponent(CmpHeroInput.Create()); // Input Controller
-    hero.addComponent(CmpMovement.Create()); // Movement Controller
-    hero.addComponent(CmpAnimation.Create()); // Animation Controller
-    hero.addComponent(CmpHeroData.Create()); // Data component.
-    hero.addComponent(CmpHeroBulletController.Create()); // Bullet Controller
-    hero.addComponent(CmpNullCollisionController.GetInstance()); // collision controller.
-    
-    this.setPlayer(hero);
+    // Create the hero's compnents.
 
-    // Setup the input pointer.
+    hero.addComponent(CmpHeroInput.Create());
+    hero.addComponent(CmpMovement.Create());
+    hero.addComponent(CmpAnimation.Create());
+    hero.addComponent(CmpHeroData.Create());
+    hero.addComponent(CmpHeroBulletController.Create());
+    hero.addComponent(CmpNullCollisionController.GetInstance());
 
-    if(_activePointer !== undefined) {
-      this.setPointer(_activePointer);
-    }
-    else 
-    {
-      if(_scene.game.device.input.touch) 
-      {
-        if(_scene.input.pointer1 === undefined)
-        {
-          _scene.input.addPointer();
-        }
-
-        this.setPointer(_scene.input.pointer1);
-      }
-      else
-      {
-        this.setPointer(_scene.input.activePointer);
-      }
-    }
-
-    ///////////////////////////////////
-    // User Configuration
-
-    if(_config !== undefined) 
-    {
-      this.setInputMode(_config.control_type);
-      this.setHeroSpeed(_config.player_speed);
-      this.setMovementPadding
-      (
-        _config.movement_rect_p1_x,
-        _config.movement_rect_p1_y,
-        _config.movement_rect_p2_x,
-        _config.movement_rect_p2_y
-      );
-      this.setHeroFireRate(_config.player_fireRate);
-    }
-    else
-    {
-      this.setHeroFireRate(2);
-    }
-    
-    // Initialize the Hero
-    
     hero.init();
+
+    this.setPlayer(hero);
 
     ///////////////////////////////////
     // Animations
@@ -142,6 +100,39 @@ export class PlayerController
     anim.addState(new StateHeroGlide());
 
     anim.setActive('Hero_Forward_Flight');
+
+    ///////////////////////////////////
+    // Properties
+
+    // Define the active pointer.
+
+    if(_scene.game.device.input.touch) 
+    {
+      if(_scene.input.pointer1 === undefined)
+      {
+        _scene.input.addPointer();
+      }
+      this.setPointer(_scene.input.pointer1);
+    }
+    else
+    {
+      this.setPointer(_scene.input.activePointer);
+    }
+
+    this.setPosition(_cnfHero.x, _cnfHero.y);
+    this.setInputMode(_cnfHero.movement_mode);
+    this.setHeroSpeed(_cnfHero.maximum_speed);
+    this.setHeroFireRate(_cnfHero.fireRate);
+
+    let canvas = _scene.game.canvas;
+
+    this.setMovementPadding
+    (
+      _cnfHero.hero_playzone_padding,
+      _cnfHero.hero_playzone_padding,
+      canvas.width - _cnfHero.hero_playzone_padding,
+      canvas.height - _cnfHero.hero_playzone_padding
+    );    
     return;
   }
 
@@ -295,7 +286,7 @@ export class PlayerController
    * 
    * @param _player 
    */
-  setPlayer(_player : BaseActor<Phaser.Physics.Arcade.Sprite>)
+  setPlayer(_player : Ty_physicsActor)
   : void
   {
     this._m_player = _player;
@@ -306,7 +297,7 @@ export class PlayerController
    * Get the Hero.
    */
   getPlayer()
-  : BaseActor<Phaser.Physics.Arcade.Sprite>
+  : Ty_physicsActor
   {
     return this._m_player;
   }
@@ -342,6 +333,23 @@ export class PlayerController
   } 
 
   /**
+   * Set player to the given position.
+   * 
+   * @param _x x component. 
+   * @param _y y component.
+   */
+  setPosition(_x : number, _y : number)
+  : void
+  {
+    this._m_player.sendMessage
+    (
+      DC_MESSAGE_ID.kToPosition, 
+      new Phaser.Math.Vector3(_x, _y, 0.0)
+    );
+    return;
+  }
+
+  /**
    * Get the player direction vector.
    * 
    * @reaturns Phaser Vector2
@@ -362,7 +370,7 @@ export class PlayerController
   /**
    * Reference to the Hero.
    */
-  private _m_player : BaseActor<Phaser.Physics.Arcade.Sprite>;
+  private _m_player : Ty_physicsActor;
 
   /**
    * Reference to the bullet manager.

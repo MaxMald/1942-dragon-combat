@@ -3,6 +3,7 @@ import { AmbienceGenerator } from "../../../../../game/src/ts_src/levelGenerator
 import { AmbienceGeneratorConfig } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGeneratorConfig";
 import { HeightMap } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/heightMap";
 import { SurfacePainter } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/surfacePainter";
+import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
 
 export class Test extends Phaser.Scene
 {
@@ -48,10 +49,12 @@ export class Test extends Phaser.Scene
       "atlas/rpg_summer_tileset_props.js"
     );
 
+    // Ambient Generator file.
+
     this.load.text
     (
-      'ambConfigFile',
-      'configFiles/ambGen_01.json'
+      'cnf_ambient',
+      'configFiles/cnf_ambient_001.json'
     );
     return;
   }
@@ -59,21 +62,24 @@ export class Test extends Phaser.Scene
   create()
   : void
   {
-    this._m_distance = 0.0;
+     ///////////////////////////////////
+     // GameManager
 
-    this._m_levelGenerator = new LevelGenerator();
-    this._m_levelGenerator.init();
+     GameManager.Prepare();
 
-    let ambienceGenerator : AmbienceGenerator 
-      = this._m_levelGenerator.getAmbienceGenerator();    
-
-    let config : AmbienceGeneratorConfig 
-      = JSON.parse(this.cache.text.get('ambConfigFile'));
+     let gameManager : GameManager = GameManager.GetInstance();
     
-    ambienceGenerator.init(this, config);
+    ///////////////////////////////////
+    // Ambient Generator
+
+    let ambientGenConfig : AmbienceGeneratorConfig
+      = JSON.parse(this.game.cache.text.get('cnf_ambient'));
+
+    gameManager.initAmbientGenerator(this, ambientGenConfig);
+    
+    let ambienceGenerator = gameManager.getAmbientGenerator() as AmbienceGenerator;
     
     this.vegetation(ambienceGenerator.getHeightMap());
-    this._m_surfacePainter = ambienceGenerator.getSurfacePainter();
     return;
   }
 
@@ -97,7 +103,8 @@ export class Test extends Phaser.Scene
     let point : Phaser.Geom.Point;
     let sprite : Phaser.GameObjects.Sprite;
 
-    while(pointSet.length) {
+    while(pointSet.length) 
+    {
       point = pointSet.pop();
 
       if(_hMap.getF(point.x, point.y * 0.25) > 190)
@@ -120,19 +127,6 @@ export class Test extends Phaser.Scene
   update(_time : number, _delta : number)
   : void
   {
-    //this._m_distance += (_delta * 0.001) * 0.03;   
-
-    this._m_surfacePainter.update(this._m_distance);
     return;
-  }
-
-  /****************************************************/
-  /* Private                                          */
-  /****************************************************/
-  
-  private _m_levelGenerator : LevelGenerator;
-
-  private _m_surfacePainter : SurfacePainter;
-
-  private _m_distance : number;
+  }  
 }

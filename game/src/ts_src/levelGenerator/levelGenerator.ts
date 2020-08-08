@@ -9,14 +9,15 @@
  * @since July-08-2020
  */
 
-import { AmbienceGenerator } from "./ambienceGenerator/ambienceGenerator";
+import { ILevelGenerator } from "./iLevelGenerator";
 
  /**
   * The LevelGenerator create the game scene like the ambience background,
   * props, items and enemies.
   */
 export class LevelGenerator
-{
+implements ILevelGenerator
+{ 
   /****************************************************/
   /* Public                                           */
   /****************************************************/
@@ -28,20 +29,17 @@ export class LevelGenerator
   init()
   : void
   {
-    this._m_ambienceGenerator  = new AmbienceGenerator();
     return;
   }
 
   /**
-   * Get the AmbienceGenerator of this LevelGenerator.
+   * Updates the LevelGenerator.
    * 
-   * @returns AmbienceGenerator instance.
+   * @param _dt delta time. 
    */
-  getAmbienceGenerator()
-  : AmbienceGenerator
-  {
-    return this._m_ambienceGenerator;
-  }
+  update(_dt: any)
+  : void 
+  { }
 
   /**
    * Call the destroy() method of each member in this LeveGenerator. Destroy
@@ -49,18 +47,12 @@ export class LevelGenerator
    */
   destroy()
   : void
-  {
-    this._m_ambienceGenerator.destroy();
-    this._m_ambienceGenerator = null;
+  {  
     return;
   }
 
   /****************************************************/
   /* Private                                          */
-  /****************************************************/
-  
-  /**
-   * AmbienceGenerator.
-   */
-  private _m_ambienceGenerator : AmbienceGenerator;
+  /****************************************************/  
+ 
 }

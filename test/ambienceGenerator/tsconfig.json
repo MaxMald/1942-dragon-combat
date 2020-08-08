@@ -20,6 +20,7 @@
     "./src/ts_src/**/*",
     "../../game/src/ts_src/levelGenerator/**/*",
     "../../externals/mxUtilities/*",
-    "../../game/src/ts_src/commons/**/*"
+    "../../game/src/ts_src/commons/**/*",
+    "../../game/src/ts_src/gameManager/**/*"
   ]
 }

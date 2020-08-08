@@ -51,6 +51,28 @@ define("test/ambienceGenerator/src/ts_src/scenes/preloader", ["require", "export
     }(Phaser.Scene));
     exports.Preloader = Preloader;
 });
+define("game/src/ts_src/levelGenerator/iLevelGenerator", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/levelGenerator/levelGenerator", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.LevelGenerator = void 0;
+    var LevelGenerator = (function () {
+        function LevelGenerator() {
+        }
+        LevelGenerator.prototype.init = function () {
+            return;
+        };
+        LevelGenerator.prototype.update = function (_dt) { };
+        LevelGenerator.prototype.destroy = function () {
+            return;
+        };
+        return LevelGenerator;
+    }());
+    exports.LevelGenerator = LevelGenerator;
+});
 define("game/src/ts_src/levelGenerator/ambienceGenerator/customTextureShader", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3918,12 +3940,17 @@ define("game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGeneratorConfig
     }());
     exports.AmbienceGeneratorConfig = AmbienceGeneratorConfig;
 });
+define("game/src/ts_src/levelGenerator/ambienceGenerator/iAmbientGenerator", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
 define("game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGenerator", ["require", "exports", "game/src/ts_src/levelGenerator/ambienceGenerator/surfacePainter", "commons/mxEnums", "game/src/ts_src/levelGenerator/ambienceGenerator/heightMap"], function (require, exports, surfacePainter_1, mxEnums_2, heightMap_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.AmbienceGenerator = void 0;
     var AmbienceGenerator = (function () {
         function AmbienceGenerator() {
+            this._m_speed = 1.0;
         }
         AmbienceGenerator.prototype.init = function (_scene, _config) {
             this._m_surfacePainter = new surfacePainter_1.SurfacePainter();
@@ -3960,6 +3987,17 @@ define("game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGenerator", ["r
                     console.error('Shader: ' + _config.terrainShaderKey + ' not found.');
                 }
             }
+            this.setSpeed(_config.speed);
+            this._m_distance = 0.0;
+            return;
+        };
+        AmbienceGenerator.prototype.update = function (_dt) {
+            var distance = this._m_distance + (this._m_speed * _dt);
+            if (distance > 2.0) {
+                distance = 2.0;
+            }
+            this._m_surfacePainter.update(distance);
+            this._m_distance = distance;
             return;
         };
         AmbienceGenerator.prototype.generateTerrainHeightMap = function (_width, _height, _amplitude, _ratio) {
@@ -3983,6 +4021,9 @@ define("game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGenerator", ["r
         AmbienceGenerator.prototype.getHeightMap = function () {
             return this._m_heightMap;
         };
+        AmbienceGenerator.prototype.setSpeed = function (_speed) {
+            this._m_speed = _speed;
+        };
         AmbienceGenerator.prototype.destroy = function () {
             this._m_surfacePainter.destroy();
             this._m_surfacePainter = null;
@@ -3991,123 +4032,6 @@ define("game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGenerator", ["r
         return AmbienceGenerator;
     }());
     exports.AmbienceGenerator = AmbienceGenerator;
-});
-define("game/src/ts_src/levelGenerator/levelGenerator", ["require", "exports", "game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGenerator"], function (require, exports, ambienceGenerator_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.LevelGenerator = void 0;
-    var LevelGenerator = (function () {
-        function LevelGenerator() {
-        }
-        LevelGenerator.prototype.init = function () {
-            this._m_ambienceGenerator = new ambienceGenerator_1.AmbienceGenerator();
-            return;
-        };
-        LevelGenerator.prototype.getAmbienceGenerator = function () {
-            return this._m_ambienceGenerator;
-        };
-        LevelGenerator.prototype.destroy = function () {
-            this._m_ambienceGenerator.destroy();
-            this._m_ambienceGenerator = null;
-            return;
-        };
-        return LevelGenerator;
-    }());
-    exports.LevelGenerator = LevelGenerator;
-});
-define("test/ambienceGenerator/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/levelGenerator/levelGenerator"], function (require, exports, levelGenerator_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Test = void 0;
-    var Test = (function (_super) {
-        __extends(Test, _super);
-        function Test() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        Test.prototype.preload = function () {
-            this.load.path = "../assets/";
-            this.load.glsl({
-                key: 'terrain_painter_01',
-                shaderType: 'fragment',
-                url: 'shaders/terrain_painter_01.frag'
-            });
-            this.load.image('colorTerrainTexture', 'images/terrain_01.png');
-            this.load.image('perlinTexture', 'images/perlin_256_01.png');
-            this.load.image('waterNormalMap', 'images/water_normal.png');
-            this.load.atlas("summer_props", "atlas/rpg_summer_tileset_props.png", "atlas/rpg_summer_tileset_props.js");
-            this.load.text('ambConfigFile', 'configFiles/ambGen_01.json');
-            return;
-        };
-        Test.prototype.create = function () {
-            this._m_distance = 0.0;
-            this._m_levelGenerator = new levelGenerator_1.LevelGenerator();
-            this._m_levelGenerator.init();
-            var ambienceGenerator = this._m_levelGenerator.getAmbienceGenerator();
-            var config = JSON.parse(this.cache.text.get('ambConfigFile'));
-            ambienceGenerator.init(this, config);
-            this.vegetation(ambienceGenerator.getHeightMap());
-            this._m_surfacePainter = ambienceGenerator.getSurfacePainter();
-            return;
-        };
-        Test.prototype.vegetation = function (_hMap) {
-            var pointSet = MxTools.PseudoRandom.MxHalton.GetPointSet(300);
-            pointSet.sort(function (_a, _b) {
-                return _a.y - _b.y;
-            });
-            var width = this.game.canvas.width;
-            var height = this.game.canvas.height;
-            var point;
-            var sprite;
-            while (pointSet.length) {
-                point = pointSet.pop();
-                if (_hMap.getF(point.x, point.y * 0.25) > 190) {
-                    sprite = this.add.sprite(point.x * width, height - (point.y * height), 'summer_props', 'tree_' + ((Phaser.Math.RND.integerInRange(0, 100) % 6) + 1) + '.png');
-                    sprite.setScale(0.4, 0.4);
-                }
-            }
-            return;
-        };
-        Test.prototype.update = function (_time, _delta) {
-            this._m_surfacePainter.update(this._m_distance);
-            return;
-        };
-        return Test;
-    }(Phaser.Scene));
-    exports.Test = Test;
-});
-define("test/ambienceGenerator/src/ts_src/game_init", ["require", "exports", "phaser3-nineslice", "test/ambienceGenerator/src/ts_src/scenes/boot", "test/ambienceGenerator/src/ts_src/scenes/preloader", "test/ambienceGenerator/src/ts_src/scenes/test"], function (require, exports, phaser3_nineslice_1, boot_1, preloader_1, test_1) {
-    "use strict";
-    var GameInit = (function () {
-        function GameInit() {
-        }
-        GameInit.prototype.start = function () {
-            var config = {
-                type: Phaser.WEBGL,
-                scale: {
-                    parent: 'phaser-game',
-                    autoCenter: Phaser.Scale.CENTER_BOTH,
-                    mode: Phaser.Scale.FIT
-                },
-                width: 1080,
-                height: 1920,
-                input: {
-                    gamepad: true
-                },
-                plugins: {
-                    global: [phaser3_nineslice_1.Plugin.DefaultCfg],
-                },
-                backgroundColor: 0x6ab4d4
-            };
-            this.m_game = new Phaser.Game(config);
-            this.m_game.scene.add('boot', boot_1.Boot);
-            this.m_game.scene.add('preloader', preloader_1.Preloader);
-            this.m_game.scene.add('test', test_1.Test);
-            this.m_game.scene.start('boot');
-            return;
-        };
-        return GameInit;
-    }());
-    return GameInit;
 });
 define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -4137,7 +4061,8 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
         kEnemyController: 11,
         kHeroData: 12,
         kTextController: 13,
-        kUIHealthController: 14
+        kUIHealthController: 14,
+        kUIScoreController: 15,
     });
     exports.DC_MESSAGE_ID = Object.freeze({
         kUndefined: 499,
@@ -4149,7 +4074,8 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
         kMixedMovement: 505,
         kHit: 506,
         kKill: 507,
-        kSetText: 508
+        kSetText: 508,
+        kAddScorePoints: 509
     });
     exports.DC_ANIMATION_ID = Object.freeze({
         kForward: 0,
@@ -4275,5 +4201,1305 @@ define("game/src/ts_src/actors/baseActor", ["require", "exports"], function (req
 define("game/src/ts_src/commons/1942types", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/bulletManager/bulletSpawner/iBulletSpawner", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/bulletManager/iBulletManager", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/bulletManager/bulletSpawner/nullBulletSpawner", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullBulletSpawner = void 0;
+    var NullBulletSpawner = (function () {
+        function NullBulletSpawner() {
+        }
+        NullBulletSpawner.Prepare = function () {
+            if (NullBulletSpawner._INSTANCE == null) {
+                NullBulletSpawner._INSTANCE = new NullBulletSpawner();
+            }
+            return;
+        };
+        NullBulletSpawner.Shutdown = function () {
+            NullBulletSpawner._INSTANCE = null;
+            return;
+        };
+        NullBulletSpawner.GetInstance = function () {
+            return NullBulletSpawner._INSTANCE;
+        };
+        NullBulletSpawner.prototype.update = function (_dt) {
+            console.log("NullBulletSpawner: update.");
+            return;
+        };
+        NullBulletSpawner.prototype.spawn = function (_actor, _x, _y) {
+            console.log("NullBulletSpawner: spawn.");
+            return;
+        };
+        NullBulletSpawner.prototype.assemble = function (_actor) {
+            console.log("NullBulletSpawner: assemble.");
+            return;
+        };
+        NullBulletSpawner.prototype.disassemble = function (_actor) {
+            console.log("NullBulletSpawner: disassemble.");
+            return;
+        };
+        NullBulletSpawner.prototype.setBulletManager = function (_manager) {
+            console.log("NullBulletSpawner: setBulletManager.");
+            return;
+        };
+        NullBulletSpawner.prototype.getID = function () {
+            console.log("NullBulletSpawner: getID.");
+            return _1942enums_1.DC_BULLET_TYPE.kUndefined;
+        };
+        NullBulletSpawner.prototype.destroy = function () { };
+        return NullBulletSpawner;
+    }());
+    exports.NullBulletSpawner = NullBulletSpawner;
+});
+define("game/src/ts_src/bulletManager/nullBulletManager", ["require", "exports", "optimization/mxObjectPool", "game/src/ts_src/bulletManager/bulletSpawner/nullBulletSpawner"], function (require, exports, mxObjectPool_1, nullBulletSpawner_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullBulletManager = void 0;
+    var NullBulletManager = (function () {
+        function NullBulletManager() {
+            this._m_pool = mxObjectPool_1.MxObjectPool.Create();
+            this._m_pool.init(new Array());
+            return;
+        }
+        NullBulletManager.Prepare = function () {
+            if (NullBulletManager._SINGLETON == null) {
+                NullBulletManager._SINGLETON = new NullBulletManager();
+            }
+            return;
+        };
+        NullBulletManager.Shutdown = function () {
+            if (NullBulletManager._SINGLETON != null) {
+                NullBulletManager._SINGLETON.destroy();
+            }
+            NullBulletManager._SINGLETON = null;
+            return;
+        };
+        NullBulletManager.GetInstance = function () {
+            return NullBulletManager._SINGLETON;
+        };
+        NullBulletManager.prototype.addSpawner = function (_spawner) {
+            console.log("NullBulletManager : addSpawner.");
+            return;
+        };
+        NullBulletManager.prototype.getSpawner = function (_type) {
+            console.log("NullBulletManager : getSpawner.");
+            return nullBulletSpawner_1.NullBulletSpawner.GetInstance();
+        };
+        NullBulletManager.prototype.getActor = function () {
+            console.log("NullBulletManager : getActor");
+            return null;
+        };
+        NullBulletManager.prototype.update = function (_dt) { };
+        NullBulletManager.prototype.spawn = function (_x, _y, _type) {
+            console.log("NullBulletManager : spawn.");
+            return;
+        };
+        ;
+        NullBulletManager.prototype.getPool = function () {
+            console.log("NullBulletManager : get pool.");
+            return this._m_pool;
+        };
+        NullBulletManager.prototype.disableActor = function (_actor) {
+            console.log("NullBulletManager : disableActor");
+            return;
+        };
+        NullBulletManager.prototype.clear = function () {
+            console.log("NullBulletManager : clear.");
+            return;
+        };
+        NullBulletManager.prototype.destroy = function () {
+            this._m_pool.destroy();
+            return;
+        };
+        return NullBulletManager;
+    }());
+    exports.NullBulletManager = NullBulletManager;
+});
+define("game/src/ts_src/commons/1942config", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CnfBulletManager = exports.CnfHero = void 0;
+    var CnfHero = (function () {
+        function CnfHero() {
+            this.x = 500;
+            this.y = 500;
+            this.texture = "DragonFlight";
+            this.frame = "D001_Flight.png";
+            this.movement_mode = "MIXED";
+            this.maximum_speed = 500;
+            this.health = 10;
+            this.score = 0;
+            this.fireRate = 8;
+            this.hero_playzone_padding = 100;
+            this.bulletManager_key = "";
+            return;
+        }
+        return CnfHero;
+    }());
+    exports.CnfHero = CnfHero;
+    var CnfBulletManager = (function () {
+        function CnfBulletManager() {
+        }
+        return CnfBulletManager;
+    }());
+    exports.CnfBulletManager = CnfBulletManager;
+});
+define("game/src/ts_src/components/iCmpCollisionController", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/components/cmpNullCollisionController", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpNullCollisionController = void 0;
+    var CmpNullCollisionController = (function () {
+        function CmpNullCollisionController() {
+        }
+        CmpNullCollisionController.Prepare = function () {
+            if (CmpNullCollisionController._INSTANCE == null) {
+                CmpNullCollisionController._INSTANCE = new CmpNullCollisionController();
+                CmpNullCollisionController._INSTANCE.m_id
+                    = _1942enums_2.DC_COMPONENT_ID.kCollisionController;
+            }
+            return;
+        };
+        CmpNullCollisionController.Shutdown = function () {
+            CmpNullCollisionController._INSTANCE = null;
+            return;
+        };
+        CmpNullCollisionController.GetInstance = function () {
+            return CmpNullCollisionController._INSTANCE;
+        };
+        CmpNullCollisionController.prototype.onCollision = function (_other, _this) { };
+        CmpNullCollisionController.prototype.init = function (_actor) { };
+        CmpNullCollisionController.prototype.update = function (_actor) { };
+        CmpNullCollisionController.prototype.receive = function (_id, _obj) { };
+        CmpNullCollisionController.prototype.destroy = function () { };
+        return CmpNullCollisionController;
+    }());
+    exports.CmpNullCollisionController = CmpNullCollisionController;
+});
+define("game/src/ts_src/enemiesManager/iEnemiesManager", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/enemiesManager/enemySpawner/iEnemySpawner", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/enemiesManager/nullEnemiesManager", ["require", "exports", "game/src/ts_src/enemiesManager/enemySpawner/nullEnemySpawner", "game/src/ts_src/bulletManager/nullBulletManager"], function (require, exports, nullEnemySpawner_1, nullBulletManager_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullEnemiesManager = void 0;
+    var NullEnemiesManager = (function () {
+        function NullEnemiesManager() {
+        }
+        NullEnemiesManager.Prepare = function () {
+            if (NullEnemiesManager._INSTANCE == null) {
+                NullEnemiesManager._INSTANCE = new NullEnemiesManager();
+            }
+            return;
+        };
+        NullEnemiesManager.Shutdown = function () {
+            NullEnemiesManager._INSTANCE = null;
+            return;
+        };
+        NullEnemiesManager.GetInstance = function () {
+            return NullEnemiesManager._INSTANCE;
+        };
+        NullEnemiesManager.prototype.addSpawner = function (_spawner) {
+            console.log("NullEnemiesManager : addSpawner. ");
+            return;
+        };
+        NullEnemiesManager.prototype.getSpawner = function (_id) {
+            console.log("NullEnemiesManager : getSpawner. ");
+            return nullEnemySpawner_1.NullEnemySpawner.GetInstance();
+        };
+        NullEnemiesManager.prototype.getActor = function () {
+            console.log("NullEnemiesManager : getActor. ");
+            return null;
+        };
+        NullEnemiesManager.prototype.disableActor = function (_actor) { };
+        NullEnemiesManager.prototype.update = function (_dt) {
+            console.log("NullEnemiesManager : update. ");
+            return;
+        };
+        NullEnemiesManager.prototype.spawn = function (_x, _y, _type) {
+            console.log("NullEnemiesManager : spawn. ");
+            return;
+        };
+        NullEnemiesManager.prototype.setBulletManager = function (_bulletManager) { };
+        NullEnemiesManager.prototype.getBulletManager = function () {
+            return nullBulletManager_1.NullBulletManager.GetInstance();
+        };
+        NullEnemiesManager.prototype.destroy = function () {
+            return;
+        };
+        return NullEnemiesManager;
+    }());
+    exports.NullEnemiesManager = NullEnemiesManager;
+});
+define("game/src/ts_src/enemiesManager/enemySpawner/nullEnemySpawner", ["require", "exports", "game/src/ts_src/bulletManager/nullBulletManager", "game/src/ts_src/commons/1942enums", "game/src/ts_src/enemiesManager/nullEnemiesManager"], function (require, exports, nullBulletManager_2, _1942enums_3, nullEnemiesManager_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullEnemySpawner = void 0;
+    var NullEnemySpawner = (function () {
+        function NullEnemySpawner() {
+        }
+        NullEnemySpawner.Prepare = function () {
+            if (NullEnemySpawner._INSTANCE == null) {
+                NullEnemySpawner._INSTANCE = new NullEnemySpawner();
+            }
+            return;
+        };
+        NullEnemySpawner.Shutdown = function () {
+            NullEnemySpawner._INSTANCE = null;
+            return;
+        };
+        NullEnemySpawner.GetInstance = function () {
+            return NullEnemySpawner._INSTANCE;
+        };
+        NullEnemySpawner.prototype.update = function (_dt) {
+            return;
+        };
+        NullEnemySpawner.prototype.spawn = function (_actor, _x, _y) {
+            return;
+        };
+        NullEnemySpawner.prototype.setEnemiesManager = function (_enemiesManager) { };
+        NullEnemySpawner.prototype.getEnemiesManager = function () {
+            return nullEnemiesManager_1.NullEnemiesManager.GetInstance();
+        };
+        NullEnemySpawner.prototype.setBulletManager = function (_bulletManager) { };
+        NullEnemySpawner.prototype.getBulletManager = function () {
+            return nullBulletManager_2.NullBulletManager.GetInstance();
+        };
+        NullEnemySpawner.prototype.getID = function () {
+            return _1942enums_3.DC_ENEMY_TYPE.kUndefined;
+        };
+        NullEnemySpawner.prototype.assemble = function (_actor) { };
+        NullEnemySpawner.prototype.disasemble = function (_actor) { };
+        NullEnemySpawner.prototype.destroy = function () {
+            return;
+        };
+        return NullEnemySpawner;
+    }());
+    exports.NullEnemySpawner = NullEnemySpawner;
+});
+define("game/src/ts_src/components/iCmpEnemyController", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/components/cmpNullEnemyController", ["require", "exports", "game/src/ts_src/commons/1942enums", "game/src/ts_src/enemiesManager/enemySpawner/nullEnemySpawner", "game/src/ts_src/enemiesManager/nullEnemiesManager"], function (require, exports, _1942enums_4, nullEnemySpawner_2, nullEnemiesManager_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpNullEnemyController = void 0;
+    var CmpNullEnemyController = (function () {
+        function CmpNullEnemyController() {
+        }
+        CmpNullEnemyController.Prepare = function () {
+            if (CmpNullEnemyController._INSTANCE == null) {
+                CmpNullEnemyController._INSTANCE = new CmpNullEnemyController();
+                CmpNullEnemyController._INSTANCE.m_id
+                    = _1942enums_4.DC_COMPONENT_ID.kEnemyController;
+            }
+            return;
+        };
+        CmpNullEnemyController.Shutdown = function () {
+            CmpNullEnemyController._INSTANCE = null;
+            return;
+        };
+        CmpNullEnemyController.GetInstance = function () {
+            return CmpNullEnemyController._INSTANCE;
+        };
+        CmpNullEnemyController.prototype.init = function (_actor) { };
+        CmpNullEnemyController.prototype.update = function (_actor) { };
+        CmpNullEnemyController.prototype.getCollisionDamage = function () {
+            return 0;
+        };
+        CmpNullEnemyController.prototype.setSpawner = function (_spawner) { };
+        CmpNullEnemyController.prototype.getSpawner = function () {
+            return nullEnemySpawner_2.NullEnemySpawner.GetInstance();
+        };
+        CmpNullEnemyController.prototype.setEnemiesManager = function (_enemyManager) { };
+        CmpNullEnemyController.prototype.getEnemiesManager = function () {
+            return nullEnemiesManager_2.NullEnemiesManager.GetInstance();
+        };
+        CmpNullEnemyController.prototype.getScorePoints = function () {
+            return 0;
+        };
+        CmpNullEnemyController.prototype.setScorePoints = function (_points) { };
+        CmpNullEnemyController.prototype.receive = function (_id, _obj) { };
+        CmpNullEnemyController.prototype.destroy = function () { };
+        return CmpNullEnemyController;
+    }());
+    exports.CmpNullEnemyController = CmpNullEnemyController;
+});
+define("game/src/ts_src/levelGenerator/ambienceGenerator/nullAmbientGenerator", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullAmbientGenerator = void 0;
+    var NullAmbientGenerator = (function () {
+        function NullAmbientGenerator() {
+        }
+        NullAmbientGenerator.prototype.update = function (_dt) { };
+        NullAmbientGenerator.prototype.setSpeed = function (_speed) { };
+        NullAmbientGenerator.prototype.destroy = function () { };
+        return NullAmbientGenerator;
+    }());
+    exports.NullAmbientGenerator = NullAmbientGenerator;
+});
+define("game/src/ts_src/levelGenerator/nullLevelGenerator", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullLevelGenerator = void 0;
+    var NullLevelGenerator = (function () {
+        function NullLevelGenerator() {
+        }
+        NullLevelGenerator.prototype.update = function (_dt) { };
+        NullLevelGenerator.prototype.destroy = function () { };
+        return NullLevelGenerator;
+    }());
+    exports.NullLevelGenerator = NullLevelGenerator;
+});
+define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpHeroInput = void 0;
+    var CmpHeroInput = (function () {
+        function CmpHeroInput() {
+        }
+        CmpHeroInput.Create = function () {
+            var input = new CmpHeroInput();
+            input.m_id = _1942enums_5.DC_COMPONENT_ID.kHeroInput;
+            input._m_v3 = new Phaser.Math.Vector3();
+            input._m_downPosition = new Phaser.Geom.Point();
+            input._m_player_speed = 200.0;
+            input._m_movement_fn = input._mixedMovement;
+            input._m_mode = "MIXED";
+            input._m_pointerDown = false;
+            return input;
+        };
+        CmpHeroInput.prototype.init = function (_actor) {
+            return;
+        };
+        CmpHeroInput.prototype.setPointer = function (_pointer) {
+            this._m_pointer = _pointer;
+            _pointer.isDown;
+            return;
+        };
+        CmpHeroInput.prototype.getPointer = function () {
+            return this._m_pointer;
+        };
+        CmpHeroInput.prototype.setMode = function (_mode) {
+            switch (_mode) {
+                case "RELATIVE":
+                    this._m_mode = "RELATIVE";
+                    this._m_movement_fn = this._relativeMovement;
+                    break;
+                case "ABSOLUTE":
+                    this._m_mode = "ABSOLUTE";
+                    this._m_movement_fn = this._absoluteMovement;
+                    break;
+                case "MIXED":
+                    this._m_mode = "MIXED";
+                    this._m_movement_fn = this._mixedMovement;
+                    break;
+                default:
+                    this._m_mode = "MIXED";
+                    this._m_movement_fn = this._mixedMovement;
+                    break;
+            }
+        };
+        CmpHeroInput.prototype.getMode = function () {
+            return this._m_mode;
+        };
+        CmpHeroInput.prototype.setSpeed = function (_speed) {
+            this._m_player_speed = _speed;
+        };
+        CmpHeroInput.prototype.update = function (_actor) {
+            var pointer = this._m_pointer;
+            if (pointer.isDown) {
+                if (!this._m_pointerDown) {
+                    this._m_pointerDown = !this._m_pointerDown;
+                    var sprite = _actor.getWrappedInstance();
+                    this._m_downPosition.x = sprite.x;
+                    this._m_downPosition.y = sprite.y;
+                    pointer.prevPosition.x = pointer.position.x;
+                    pointer.prevPosition.y = pointer.position.y;
+                    this._m_movement_fn.call(this, _actor);
+                    _actor.sendMessage(_1942enums_5.DC_MESSAGE_ID.kPointerPressed, pointer);
+                }
+                else {
+                    this._m_movement_fn.call(this, _actor);
+                }
+            }
+            else {
+                if (this._m_pointerDown) {
+                    this._m_pointerDown = !this._m_pointerDown;
+                    _actor.sendMessage(_1942enums_5.DC_MESSAGE_ID.kPointerReleased, pointer);
+                }
+            }
+            return;
+        };
+        CmpHeroInput.prototype.receive = function (_id, _obj) { };
+        CmpHeroInput.prototype.destroy = function () {
+            this._m_pointer = null;
+            this._m_movement_fn = null;
+            this._m_v3 = null;
+            return;
+        };
+        CmpHeroInput.prototype._absoluteMovement = function (_actor) {
+            var pointer = this._m_pointer;
+            var heroSprite = _actor.getWrappedInstance();
+            var heroPosition = new Phaser.Math.Vector2(heroSprite.x, heroSprite.y);
+            this._m_v3.x = pointer.position.x - heroPosition.x;
+            this._m_v3.y = pointer.position.y - heroPosition.y;
+            if (this._m_v3.length() > this._m_player_speed) {
+                this._m_v3.normalize();
+                this._m_v3.x *= this._m_player_speed;
+                this._m_v3.y *= this._m_player_speed;
+            }
+            _actor.sendMessage(_1942enums_5.DC_MESSAGE_ID.kAgentMove, this._m_v3);
+            return;
+        };
+        CmpHeroInput.prototype._relativeMovement = function (_actor) {
+            var pointer = this._m_pointer;
+            this._m_v3.x = this._m_downPosition.x + (pointer.position.x - pointer.downX);
+            this._m_v3.y = this._m_downPosition.y + (pointer.position.y - pointer.downY);
+            _actor.sendMessage(_1942enums_5.DC_MESSAGE_ID.kToPosition, this._m_v3);
+            return;
+        };
+        CmpHeroInput.prototype._mixedMovement = function (_actor) {
+            var pointer = this._m_pointer;
+            var heroSprite = _actor.getWrappedInstance();
+            var heroPosition = new Phaser.Math.Vector2(heroSprite.x, heroSprite.y);
+            this._m_v3.x = pointer.position.x - heroPosition.x;
+            if (this._m_v3.x > this._m_player_speed) {
+                this._m_v3.x = this._m_player_speed;
+            }
+            this._m_v3.y = this._m_downPosition.y + (pointer.position.y - pointer.downY);
+            _actor.sendMessage(_1942enums_5.DC_MESSAGE_ID.kMixedMovement, this._m_v3);
+            return;
+        };
+        return CmpHeroInput;
+    }());
+    exports.CmpHeroInput = CmpHeroInput;
+});
+define("game/src/ts_src/components/cmpMovement", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_6) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpMovement = void 0;
+    var CmpMovement = (function () {
+        function CmpMovement() {
+        }
+        CmpMovement.Create = function () {
+            var movement = new CmpMovement();
+            movement.m_id = _1942enums_6.DC_COMPONENT_ID.kMovement;
+            movement._limit_p1 = new Phaser.Geom.Point(0.0, 0.0);
+            movement._limit_p2 = new Phaser.Geom.Point(500.0, 500.0);
+            movement._m_prevPosition = new Phaser.Geom.Point(0.0, 0.0);
+            movement._m_direction = new Phaser.Math.Vector2(1.0, 0.0);
+            movement._m_isDirty = true;
+            return movement;
+        };
+        CmpMovement.prototype.init = function (_actor) {
+            this._m_sprite = _actor.getWrappedInstance();
+            return;
+        };
+        CmpMovement.prototype.setBounding = function (_p1_x, _p1_y, _p2_x, _p2_y) {
+            this._limit_p1.x = _p1_x;
+            this._limit_p1.y = _p1_y;
+            this._limit_p2.x = _p2_x;
+            this._limit_p2.y = _p2_y;
+            return;
+        };
+        CmpMovement.prototype.update = function (_actor) { };
+        CmpMovement.prototype.receive = function (_id, _obj) {
+            switch (_id) {
+                case _1942enums_6.DC_MESSAGE_ID.kPointerMoved:
+                    {
+                        var pointer = _obj;
+                        this.setPosition(pointer.position.x, pointer.position.y);
+                    }
+                    return;
+                case _1942enums_6.DC_MESSAGE_ID.kAgentMove:
+                    {
+                        var movement = _obj;
+                        var sprite = this._m_sprite;
+                        this.setPosition(sprite.x + movement.x, sprite.y + movement.y);
+                    }
+                    return;
+                case _1942enums_6.DC_MESSAGE_ID.kAgentMove:
+                    {
+                        var movement = _obj;
+                        var sprite = this._m_sprite;
+                        this.setPosition(sprite.x + movement.x, sprite.y + movement.y);
+                    }
+                    return;
+                case _1942enums_6.DC_MESSAGE_ID.kToPosition:
+                    {
+                        var positon = _obj;
+                        this.setPosition(positon.x, positon.y);
+                    }
+                    return;
+                case _1942enums_6.DC_MESSAGE_ID.kMixedMovement:
+                    {
+                        var positon = _obj;
+                        this.setPosition(this._m_sprite.x + positon.x, positon.y);
+                    }
+                    return;
+                default:
+                    return;
+            }
+        };
+        CmpMovement.prototype.setPosition = function (_x, _y) {
+            var sprite = this._m_sprite;
+            var position = new Phaser.Math.Vector2(_x, _y);
+            this._safePosition(position);
+            this._m_prevPosition.setTo(sprite.x, sprite.y);
+            this._m_sprite.setPosition(position.x, position.y);
+            this._m_isDirty = true;
+            return;
+        };
+        CmpMovement.prototype.getDirection = function () {
+            if (this._m_isDirty) {
+                var sprite = this._m_sprite;
+                var prevPos = this._m_prevPosition;
+                this._m_direction.setTo(sprite.x - prevPos.x, sprite.y - prevPos.y);
+                this._m_direction.normalize();
+                this._m_isDirty = false;
+            }
+            return this._m_direction;
+        };
+        CmpMovement.prototype.destroy = function () {
+            this._m_sprite = null;
+            return;
+        };
+        CmpMovement.prototype._safePosition = function (_position) {
+            var p1 = this._limit_p1;
+            var p2 = this._limit_p2;
+            if (_position.x < p1.x) {
+                _position.x = p1.x;
+            }
+            else if (_position.x > p2.x) {
+                _position.x = p2.x;
+            }
+            if (_position.y < p1.y) {
+                _position.y = p1.y;
+            }
+            else if (_position.y > p2.y) {
+                _position.y = p2.y;
+            }
+            return;
+        };
+        return CmpMovement;
+    }());
+    exports.CmpMovement = CmpMovement;
+});
+define("game/src/ts_src/states/IBaseState", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/states/IAnimationState", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/states/nullState", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullState = void 0;
+    var NullState = (function () {
+        function NullState() {
+        }
+        NullState.Prepare = function () {
+            NullState._INSTANCE = new NullState();
+            NullState._INSTANCE.m_id = "";
+            return;
+        };
+        NullState.ShutDown = function () {
+            NullState._INSTANCE = null;
+            return;
+        };
+        NullState.GetInstance = function () {
+            return NullState._INSTANCE;
+        };
+        NullState.prototype.onEnter = function () { };
+        NullState.prototype.onExit = function () { };
+        NullState.prototype.receive = function (_id, _obj) { };
+        NullState.prototype.update = function () { };
+        NullState.prototype.destroy = function () { };
+        return NullState;
+    }());
+    exports.NullState = NullState;
+});
+define("game/src/ts_src/components/cmpAnimation", ["require", "exports", "game/src/ts_src/commons/1942enums", "game/src/ts_src/states/nullState"], function (require, exports, _1942enums_7, nullState_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpAnimation = void 0;
+    var CmpAnimation = (function () {
+        function CmpAnimation() {
+        }
+        CmpAnimation.Create = function () {
+            var anim = new CmpAnimation();
+            anim.m_id = _1942enums_7.DC_COMPONENT_ID.kAnimation;
+            anim._m_states = new Map();
+            anim._m_activeState = nullState_1.NullState.GetInstance();
+            return anim;
+        };
+        CmpAnimation.prototype.init = function (_actor) {
+            this._m_sprite = _actor.getWrappedInstance();
+            return;
+        };
+        CmpAnimation.prototype.update = function (_actor) {
+            this._m_activeState.update();
+            return;
+        };
+        CmpAnimation.prototype.receive = function (_id, _obj) {
+            this._m_activeState.receive(_id, _obj);
+            return;
+        };
+        CmpAnimation.prototype.addState = function (_state) {
+            _state.m_component = this;
+            this._m_states.set(_state.m_id, _state);
+            return;
+        };
+        CmpAnimation.prototype.removeState = function (_id) {
+            if (this._m_states.has(_id)) {
+                this._m_states.delete(_id);
+            }
+            return;
+        };
+        CmpAnimation.prototype.setActive = function (_id) {
+            var state;
+            if (_id === undefined) {
+                state = nullState_1.NullState.GetInstance();
+            }
+            else {
+                state = this.getState(_id);
+            }
+            this._m_activeState.onExit();
+            this._m_activeState = state;
+            this._m_activeState.onEnter();
+            return;
+        };
+        CmpAnimation.prototype.getState = function (_id) {
+            if (this._m_states.has(_id)) {
+                return this._m_states.get(_id);
+            }
+            else {
+                return nullState_1.NullState.GetInstance();
+            }
+        };
+        CmpAnimation.prototype.getSprite = function () {
+            return this._m_sprite;
+        };
+        CmpAnimation.prototype.destroy = function () {
+            this._m_states.forEach(function (_state) {
+                _state.destroy();
+            });
+            this._m_states.clear();
+            this._m_states = null;
+            this._m_activeState = nullState_1.NullState.GetInstance();
+            this._m_sprite = null;
+            return;
+        };
+        return CmpAnimation;
+    }());
+    exports.CmpAnimation = CmpAnimation;
+});
+define("game/src/ts_src/states/stateHeroFFLight", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_8) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.StateHeroFFlight = void 0;
+    var StateHeroFFlight = (function () {
+        function StateHeroFFlight() {
+            this.m_id = "Hero_Forward_Flight";
+            this._m_isMoving = false;
+            return;
+        }
+        StateHeroFFlight.prototype.onEnter = function () {
+            var sprite = this.m_component.getSprite();
+            sprite.play('D001_Flight');
+            this._m_isMoving = true;
+            sprite.anims.currentAnim.once('repeat', this._onRepeat, this);
+            return;
+        };
+        StateHeroFFlight.prototype.onExit = function () { };
+        StateHeroFFlight.prototype.receive = function (_id, _obj) {
+            switch (_id) {
+                case _1942enums_8.DC_MESSAGE_ID.kPointerPressed:
+                    this._m_isMoving = true;
+                    return;
+                case _1942enums_8.DC_MESSAGE_ID.kPointerReleased:
+                    this._m_isMoving = false;
+                    return;
+                default:
+                    return;
+            }
+        };
+        StateHeroFFlight.prototype.update = function () { };
+        StateHeroFFlight.prototype.destroy = function () { };
+        StateHeroFFlight.prototype._onRepeat = function () {
+            if (this._m_isMoving) {
+                var sprite = this.m_component.getSprite();
+                sprite.anims.currentAnim.once('repeat', this._onRepeat, this);
+            }
+            else {
+                this.m_component.setActive('Hero_Glide');
+            }
+            return;
+        };
+        return StateHeroFFlight;
+    }());
+    exports.StateHeroFFlight = StateHeroFFlight;
+});
+define("game/src/ts_src/states/stateHeroGlide", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_9) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.StateHeroGlide = void 0;
+    var StateHeroGlide = (function () {
+        function StateHeroGlide() {
+            this.m_id = "Hero_Glide";
+            return;
+        }
+        StateHeroGlide.prototype.onEnter = function () {
+            var sprite = this.m_component.getSprite();
+            sprite.play('D001_Glide');
+            return;
+        };
+        StateHeroGlide.prototype.onExit = function () { };
+        StateHeroGlide.prototype.receive = function (_id, _obj) {
+            switch (_id) {
+                case _1942enums_9.DC_MESSAGE_ID.kPointerPressed:
+                    this.m_component.setActive("Hero_Forward_Flight");
+                    return;
+                default:
+                    return;
+            }
+        };
+        StateHeroGlide.prototype.update = function () { };
+        StateHeroGlide.prototype.destroy = function () { };
+        return StateHeroGlide;
+    }());
+    exports.StateHeroGlide = StateHeroGlide;
+});
+define("game/src/ts_src/components/cmpHeroBulletController", ["require", "exports", "game/src/ts_src/bulletManager/nullBulletManager", "game/src/ts_src/commons/1942enums", "game/src/ts_src/gameManager/gameManager"], function (require, exports, nullBulletManager_3, _1942enums_10, gameManager_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpHeroBulletController = void 0;
+    var CmpHeroBulletController = (function () {
+        function CmpHeroBulletController() {
+        }
+        CmpHeroBulletController.Create = function () {
+            var bulletController = new CmpHeroBulletController();
+            bulletController.m_id = _1942enums_10.DC_COMPONENT_ID.kHeroBulletController;
+            bulletController._m_bulletManager = nullBulletManager_3.NullBulletManager.GetInstance();
+            return bulletController;
+        };
+        CmpHeroBulletController.prototype.init = function (_actor) {
+            this._m_gameManager = gameManager_1.GameManager.GetInstance();
+            this._m_loadingTime = 0.0;
+            return;
+        };
+        CmpHeroBulletController.prototype.setBulletManager = function (_bulletManager) {
+            this._m_bulletManager = _bulletManager;
+            return;
+        };
+        CmpHeroBulletController.prototype.update = function (_actor) {
+            var loading = this._m_loadingTime;
+            loading += this._m_gameManager.m_dt;
+            if (loading >= this._m_frecuency) {
+                var sprite = _actor.getWrappedInstance();
+                this._m_bulletManager.spawn(sprite.x, sprite.y - 110.0, _1942enums_10.DC_BULLET_TYPE.kHeroBasic);
+                loading = 0.0;
+            }
+            this._m_loadingTime = loading;
+            return;
+        };
+        CmpHeroBulletController.prototype.receive = function (_id, _obj) {
+            return;
+        };
+        CmpHeroBulletController.prototype.setFireRate = function (_fireRate) {
+            if (_fireRate == 0.0) {
+                this._m_frecuency = 10000.0;
+            }
+            else {
+                this._m_frecuency = 1.0 / _fireRate;
+            }
+            return;
+        };
+        CmpHeroBulletController.prototype.getFireRate = function () {
+            return this._m_frecuency;
+        };
+        CmpHeroBulletController.prototype.destroy = function () {
+            this._m_bulletManager = null;
+            this._m_gameManager = null;
+            return;
+        };
+        return CmpHeroBulletController;
+    }());
+    exports.CmpHeroBulletController = CmpHeroBulletController;
+});
+define("game/src/ts_src/components/cmpHeroData", ["require", "exports", "game/src/ts_src/commons/1942enums", "listeners/mxListenerManager", "listeners/mxListener"], function (require, exports, _1942enums_11, mxListenerManager_1, mxListener_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpHeroData = void 0;
+    var CmpHeroData = (function () {
+        function CmpHeroData() {
+        }
+        CmpHeroData.Create = function () {
+            var data = new CmpHeroData();
+            data._m_health = 10;
+            data.m_id = _1942enums_11.DC_COMPONENT_ID.kHeroData;
+            data._m_listeners = new mxListenerManager_1.MxListenerManager();
+            data._m_listeners.addEvent('onHealthChanged');
+            return data;
+        };
+        CmpHeroData.prototype.init = function (_actor) {
+            this._m_actor = _actor;
+            return;
+        };
+        CmpHeroData.prototype.update = function (_actor) { };
+        CmpHeroData.prototype.receive = function (_id, _obj) {
+            switch (_id) {
+                case _1942enums_11.DC_MESSAGE_ID.kHit:
+                    this._onHit(_obj);
+                    return;
+            }
+        };
+        CmpHeroData.prototype.setHealth = function (_health) {
+            this._m_health = _health;
+            return;
+        };
+        CmpHeroData.prototype.getHealth = function () {
+            return this._m_health;
+        };
+        CmpHeroData.prototype.suscribe = function (_event, _username, _function, _context) {
+            this._m_listeners.suscribe(_event, _username, new mxListener_1.MxListener(_function, _context));
+            return;
+        };
+        CmpHeroData.prototype.unsuscribe = function (_event, _username) {
+            this._m_listeners.unsuscribe(_event, _username);
+            return;
+        };
+        CmpHeroData.prototype.destroy = function () {
+            this._m_listeners.destroy();
+            return;
+        };
+        CmpHeroData.prototype._onHit = function (_hitPoints) {
+            var health = this._m_health -= _hitPoints;
+            if (health <= 0) {
+                this._m_actor.sendMessage(_1942enums_11.DC_MESSAGE_ID.kKill, this._m_actor);
+                health = 0;
+            }
+            this._m_health = health;
+            this._m_listeners.call('onHealthChanged', this, undefined);
+            return;
+        };
+        return CmpHeroData;
+    }());
+    exports.CmpHeroData = CmpHeroData;
+});
+define("game/src/ts_src/playerController/playerController", ["require", "exports", "game/src/ts_src/actors/baseActor", "game/src/ts_src/components/cmpHeroInput", "game/src/ts_src/components/cmpMovement", "game/src/ts_src/components/cmpAnimation", "game/src/ts_src/states/stateHeroFFLight", "game/src/ts_src/states/stateHeroGlide", "game/src/ts_src/components/cmpHeroBulletController", "game/src/ts_src/commons/1942enums", "game/src/ts_src/bulletManager/nullBulletManager", "game/src/ts_src/components/cmpHeroData", "game/src/ts_src/components/cmpNullCollisionController"], function (require, exports, baseActor_1, cmpHeroInput_1, cmpMovement_1, cmpAnimation_1, stateHeroFFLight_1, stateHeroGlide_1, cmpHeroBulletController_1, _1942enums_12, nullBulletManager_4, cmpHeroData_1, cmpNullCollisionController_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.PlayerController = void 0;
+    var PlayerController = (function () {
+        function PlayerController() {
+            this._m_bulletManager = nullBulletManager_4.NullBulletManager.GetInstance();
+            return;
+        }
+        PlayerController.prototype.init = function (_scene, _cnfHero) {
+            var heroSprite = _scene.physics.add.sprite(_scene.game.canvas.width * 0.5, _scene.game.canvas.height * 0.5, _cnfHero.texture, _cnfHero.frame);
+            var hero = baseActor_1.BaseActor.Create(heroSprite, "Hero");
+            heroSprite.setData('actor', hero);
+            hero.addComponent(cmpHeroInput_1.CmpHeroInput.Create());
+            hero.addComponent(cmpMovement_1.CmpMovement.Create());
+            hero.addComponent(cmpAnimation_1.CmpAnimation.Create());
+            hero.addComponent(cmpHeroData_1.CmpHeroData.Create());
+            hero.addComponent(cmpHeroBulletController_1.CmpHeroBulletController.Create());
+            hero.addComponent(cmpNullCollisionController_1.CmpNullCollisionController.GetInstance());
+            hero.init();
+            this.setPlayer(hero);
+            var anim = hero.getComponent(_1942enums_12.DC_COMPONENT_ID.kAnimation);
+            anim.addState(new stateHeroFFLight_1.StateHeroFFlight());
+            anim.addState(new stateHeroGlide_1.StateHeroGlide());
+            anim.setActive('Hero_Forward_Flight');
+            if (_scene.game.device.input.touch) {
+                if (_scene.input.pointer1 === undefined) {
+                    _scene.input.addPointer();
+                }
+                this.setPointer(_scene.input.pointer1);
+            }
+            else {
+                this.setPointer(_scene.input.activePointer);
+            }
+            this.setPosition(_cnfHero.x, _cnfHero.y);
+            this.setInputMode(_cnfHero.movement_mode);
+            this.setHeroSpeed(_cnfHero.maximum_speed);
+            this.setHeroFireRate(_cnfHero.fireRate);
+            var canvas = _scene.game.canvas;
+            this.setMovementPadding(_cnfHero.hero_playzone_padding, _cnfHero.hero_playzone_padding, canvas.width - _cnfHero.hero_playzone_padding, canvas.height - _cnfHero.hero_playzone_padding);
+            return;
+        };
+        PlayerController.prototype.setBulletManager = function (_bulletManager) {
+            this._m_bulletManager = _bulletManager;
+            var bulletCntrl = this._m_player.getComponent(_1942enums_12.DC_COMPONENT_ID.kHeroBulletController);
+            bulletCntrl.setBulletManager(_bulletManager);
+            return;
+        };
+        PlayerController.prototype.setPointer = function (_pointer) {
+            var input = this._m_player.getComponent(_1942enums_12.DC_COMPONENT_ID.kHeroInput);
+            input.setPointer(_pointer);
+            return;
+        };
+        PlayerController.prototype.getPointer = function () {
+            var input = this._m_player.getComponent(_1942enums_12.DC_COMPONENT_ID.kHeroInput);
+            return input.getPointer();
+        };
+        PlayerController.prototype.setInputMode = function (_mode) {
+            var input = this._m_player.getComponent(_1942enums_12.DC_COMPONENT_ID.kHeroInput);
+            input.setMode(_mode);
+            return;
+        };
+        PlayerController.prototype.getInputMode = function () {
+            var input = this._m_player.getComponent(_1942enums_12.DC_COMPONENT_ID.kHeroInput);
+            return input.getMode();
+        };
+        PlayerController.prototype.setHeroSpeed = function (_speed) {
+            var input = this._m_player.getComponent(_1942enums_12.DC_COMPONENT_ID.kHeroInput);
+            input.setSpeed(_speed);
+            return;
+        };
+        PlayerController.prototype.setHeroFireRate = function (_fireRate) {
+            var bulletController = this._m_player.getComponent(_1942enums_12.DC_COMPONENT_ID.kHeroBulletController);
+            bulletController.setFireRate(_fireRate);
+            return;
+        };
+        PlayerController.prototype.getHeroFireRate = function () {
+            var bulletController = this._m_player.getComponent(_1942enums_12.DC_COMPONENT_ID.kHeroBulletController);
+            return bulletController.getFireRate();
+        };
+        PlayerController.prototype.setMovementPadding = function (_p1_x, _p1_y, _p2_x, _p2_y) {
+            var movement = this._m_player.getComponent(_1942enums_12.DC_COMPONENT_ID.kMovement);
+            movement.setBounding(_p1_x, _p1_y, _p2_x, _p2_y);
+            return;
+        };
+        PlayerController.prototype.setPlayer = function (_player) {
+            this._m_player = _player;
+            return;
+        };
+        PlayerController.prototype.getPlayer = function () {
+            return this._m_player;
+        };
+        PlayerController.prototype.update = function (_dt) {
+            this._m_player.update();
+            this._m_bulletManager.update(_dt);
+            return;
+        };
+        PlayerController.prototype.destroy = function () {
+            this._m_player.destroy();
+            return;
+        };
+        PlayerController.prototype.setPosition = function (_x, _y) {
+            this._m_player.sendMessage(_1942enums_12.DC_MESSAGE_ID.kToPosition, new Phaser.Math.Vector3(_x, _y, 0.0));
+            return;
+        };
+        PlayerController.prototype.getDirection = function () {
+            var movement = this._m_player.getComponent(_1942enums_12.DC_COMPONENT_ID.kMovement);
+            return movement.getDirection();
+        };
+        return PlayerController;
+    }());
+    exports.PlayerController = PlayerController;
+});
+define("game/src/ts_src/scoreManager/iScoreManager", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/scoreManager/scoreManager", ["require", "exports", "listeners/mxListener", "listeners/mxListenerManager"], function (require, exports, mxListener_2, mxListenerManager_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ScoreManager = void 0;
+    var ScoreManager = (function () {
+        function ScoreManager() {
+        }
+        ScoreManager.Create = function () {
+            var scoreManager = new ScoreManager();
+            scoreManager._m_score = 0.0;
+            scoreManager._m_listener
+                = new mxListenerManager_2.MxListenerManager();
+            scoreManager._m_listener.addEvent('scoreChanged');
+            return scoreManager;
+        };
+        ScoreManager.prototype.update = function (_dt) {
+            return;
+        };
+        ScoreManager.prototype.suscribe = function (_event, _username, _function, _context) {
+            this._m_listener.suscribe(_event, _username, new mxListener_2.MxListener(_function, _context));
+            return;
+        };
+        ScoreManager.prototype.unsuscribe = function (_event, _username) {
+            this._m_listener.unsuscribe(_event, _username);
+            return;
+        };
+        ScoreManager.prototype.getScore = function () {
+            return this._m_score;
+        };
+        ScoreManager.prototype.setScore = function (_score) {
+            this._m_score = _score;
+            this._m_listener.call("scoreChanged", this, undefined);
+            return;
+        };
+        ScoreManager.prototype.addScore = function (_points) {
+            this._m_score += _points;
+            this._m_listener.call("scoreChanged", this, undefined);
+            return;
+        };
+        ScoreManager.prototype.destroy = function () {
+            return;
+        };
+        return ScoreManager;
+    }());
+    exports.ScoreManager = ScoreManager;
+});
+define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "commons/mxEnums", "game/src/ts_src/bulletManager/bulletSpawner/nullBulletSpawner", "game/src/ts_src/bulletManager/nullBulletManager", "game/src/ts_src/commons/1942enums", "game/src/ts_src/components/cmpNullCollisionController", "game/src/ts_src/components/cmpNullEnemyController", "game/src/ts_src/enemiesManager/enemySpawner/nullEnemySpawner", "game/src/ts_src/enemiesManager/nullEnemiesManager", "game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGenerator", "game/src/ts_src/levelGenerator/ambienceGenerator/nullAmbientGenerator", "game/src/ts_src/levelGenerator/levelGenerator", "game/src/ts_src/levelGenerator/nullLevelGenerator", "game/src/ts_src/playerController/playerController", "game/src/ts_src/scoreManager/scoreManager"], function (require, exports, mxEnums_3, nullBulletSpawner_2, nullBulletManager_5, _1942enums_13, cmpNullCollisionController_2, cmpNullEnemyController_1, nullEnemySpawner_3, nullEnemiesManager_3, ambienceGenerator_1, nullAmbientGenerator_1, levelGenerator_1, nullLevelGenerator_1, playerController_1, scoreManager_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.GameManager = void 0;
+    var GameManager = (function () {
+        function GameManager() {
+        }
+        GameManager.Prepare = function () {
+            if (GameManager._INSTANCE == null) {
+                GameManager._INSTANCE = new GameManager();
+                GameManager._INSTANCE._onPrepare();
+            }
+            return;
+        };
+        GameManager.Shutdown = function () {
+            if (GameManager._INSTANCE != null) {
+                GameManager._INSTANCE._onShutdown();
+                GameManager._INSTANCE = null;
+            }
+            return;
+        };
+        GameManager.GetInstance = function () {
+            return GameManager._INSTANCE;
+        };
+        GameManager.ReceiveMessage = function (_id, _msg) {
+            var manager = GameManager._INSTANCE;
+            switch (_id) {
+                case _1942enums_13.DC_MESSAGE_ID.kAddScorePoints:
+                    {
+                        manager.getScoreManager().addScore(_msg);
+                    }
+                    return;
+            }
+            return;
+        };
+        GameManager.prototype.initLevelGenerator = function () {
+            if (this._m_levelGenerator != null) {
+                this._m_levelGenerator.destroy();
+            }
+            var levelGenerator = new levelGenerator_1.LevelGenerator();
+            levelGenerator.init();
+            this._m_levelGenerator = levelGenerator;
+            return mxEnums_3.OPRESULT.kOk;
+        };
+        GameManager.prototype.initAmbientGenerator = function (_scene, _config) {
+            if (this._m_ambientGenrator != null) {
+                this._m_ambientGenrator.destroy();
+            }
+            var ambientGenerator = new ambienceGenerator_1.AmbienceGenerator();
+            ambientGenerator.init(_scene, _config);
+            this._m_ambientGenrator = ambientGenerator;
+            return mxEnums_3.OPRESULT.kOk;
+        };
+        GameManager.prototype.initHero = function (_scene, _cnfHero) {
+            var playerController = this._m_playerController;
+            if (playerController != null) {
+                playerController.destroy();
+            }
+            playerController = new playerController_1.PlayerController();
+            playerController.init(_scene, _cnfHero);
+            this._m_playerController = playerController;
+            return mxEnums_3.OPRESULT.kOk;
+        };
+        GameManager.prototype.update = function (_dt) {
+            this.m_dt = _dt;
+            this._m_ambientGenrator.update(_dt);
+            this._m_levelGenerator.update(_dt);
+            this._m_playerController.update(_dt);
+            this._m_enemiesManager.update(_dt);
+            return;
+        };
+        GameManager.prototype.setScoreManager = function (_scoreManager) {
+            this._m_scoreManager = _scoreManager;
+            return;
+        };
+        GameManager.prototype.getScoreManager = function () {
+            return this._m_scoreManager;
+        };
+        GameManager.prototype.setPlayerController = function (_playerController) {
+            this._m_playerController = _playerController;
+            return;
+        };
+        GameManager.prototype.getPlayerController = function () {
+            return this._m_playerController;
+        };
+        GameManager.prototype.setEnemiesManager = function (_enemiesManager) {
+            if (this._m_enemiesManager != null) {
+                this._m_enemiesManager.destroy();
+            }
+            this._m_enemiesManager = _enemiesManager;
+            return;
+        };
+        GameManager.prototype.getEnemiesManager = function () {
+            return this._m_enemiesManager;
+        };
+        GameManager.prototype.setAmbientGenerator = function (_ambientGenerator) {
+            this._m_ambientGenrator = _ambientGenerator;
+            return;
+        };
+        GameManager.prototype.getAmbientGenerator = function () {
+            return this._m_ambientGenrator;
+        };
+        GameManager.prototype.setLevelGenerator = function (_levelGenerator) {
+            this._m_levelGenerator = _levelGenerator;
+            return;
+        };
+        GameManager.prototype.getLevelGenerator = function () {
+            return this._m_levelGenerator;
+        };
+        GameManager.prototype._onPrepare = function () {
+            this.m_dt = 0.0;
+            nullBulletSpawner_2.NullBulletSpawner.Prepare();
+            cmpNullEnemyController_1.CmpNullEnemyController.Prepare();
+            cmpNullCollisionController_2.CmpNullCollisionController.Prepare();
+            nullBulletManager_5.NullBulletManager.Prepare();
+            nullEnemySpawner_3.NullEnemySpawner.Prepare();
+            nullEnemiesManager_3.NullEnemiesManager.Prepare();
+            this.setEnemiesManager(nullEnemiesManager_3.NullEnemiesManager.GetInstance());
+            this.setScoreManager(scoreManager_1.ScoreManager.Create());
+            this.setAmbientGenerator(new nullAmbientGenerator_1.NullAmbientGenerator());
+            this.setLevelGenerator(new nullLevelGenerator_1.NullLevelGenerator());
+            return;
+        };
+        GameManager.prototype._onShutdown = function () {
+            this._m_levelGenerator.destroy();
+            this._m_ambientGenrator.destroy();
+            this._m_scoreManager.destroy();
+            this._m_enemiesManager.destroy();
+            nullEnemiesManager_3.NullEnemiesManager.Shutdown();
+            nullEnemySpawner_3.NullEnemySpawner.Shutdown();
+            nullBulletManager_5.NullBulletManager.Shutdown();
+            cmpNullCollisionController_2.CmpNullCollisionController.Shutdown();
+            cmpNullEnemyController_1.CmpNullEnemyController.Shutdown();
+            nullBulletSpawner_2.NullBulletSpawner.Shutdown();
+            return;
+        };
+        return GameManager;
+    }());
+    exports.GameManager = GameManager;
+});
+define("test/ambienceGenerator/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/gameManager/gameManager"], function (require, exports, gameManager_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Test = void 0;
+    var Test = (function (_super) {
+        __extends(Test, _super);
+        function Test() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        Test.prototype.preload = function () {
+            this.load.path = "../assets/";
+            this.load.glsl({
+                key: 'terrain_painter_01',
+                shaderType: 'fragment',
+                url: 'shaders/terrain_painter_01.frag'
+            });
+            this.load.image('colorTerrainTexture', 'images/terrain_01.png');
+            this.load.image('perlinTexture', 'images/perlin_256_01.png');
+            this.load.image('waterNormalMap', 'images/water_normal.png');
+            this.load.atlas("summer_props", "atlas/rpg_summer_tileset_props.png", "atlas/rpg_summer_tileset_props.js");
+            this.load.text('cnf_ambient', 'configFiles/cnf_ambient_001.json');
+            return;
+        };
+        Test.prototype.create = function () {
+            gameManager_2.GameManager.Prepare();
+            var gameManager = gameManager_2.GameManager.GetInstance();
+            var ambientGenConfig = JSON.parse(this.game.cache.text.get('cnf_ambient'));
+            gameManager.initAmbientGenerator(this, ambientGenConfig);
+            var ambienceGenerator = gameManager.getAmbientGenerator();
+            this.vegetation(ambienceGenerator.getHeightMap());
+            return;
+        };
+        Test.prototype.vegetation = function (_hMap) {
+            var pointSet = MxTools.PseudoRandom.MxHalton.GetPointSet(300);
+            pointSet.sort(function (_a, _b) {
+                return _a.y - _b.y;
+            });
+            var width = this.game.canvas.width;
+            var height = this.game.canvas.height;
+            var point;
+            var sprite;
+            while (pointSet.length) {
+                point = pointSet.pop();
+                if (_hMap.getF(point.x, point.y * 0.25) > 190) {
+                    sprite = this.add.sprite(point.x * width, height - (point.y * height), 'summer_props', 'tree_' + ((Phaser.Math.RND.integerInRange(0, 100) % 6) + 1) + '.png');
+                    sprite.setScale(0.4, 0.4);
+                }
+            }
+            return;
+        };
+        Test.prototype.update = function (_time, _delta) {
+            return;
+        };
+        return Test;
+    }(Phaser.Scene));
+    exports.Test = Test;
+});
+define("test/ambienceGenerator/src/ts_src/game_init", ["require", "exports", "phaser3-nineslice", "test/ambienceGenerator/src/ts_src/scenes/boot", "test/ambienceGenerator/src/ts_src/scenes/preloader", "test/ambienceGenerator/src/ts_src/scenes/test"], function (require, exports, phaser3_nineslice_1, boot_1, preloader_1, test_1) {
+    "use strict";
+    var GameInit = (function () {
+        function GameInit() {
+        }
+        GameInit.prototype.start = function () {
+            var config = {
+                type: Phaser.WEBGL,
+                scale: {
+                    parent: 'phaser-game',
+                    autoCenter: Phaser.Scale.CENTER_BOTH,
+                    mode: Phaser.Scale.FIT
+                },
+                width: 1080,
+                height: 1920,
+                input: {
+                    gamepad: true
+                },
+                plugins: {
+                    global: [phaser3_nineslice_1.Plugin.DefaultCfg],
+                },
+                backgroundColor: 0x6ab4d4
+            };
+            this.m_game = new Phaser.Game(config);
+            this.m_game.scene.add('boot', boot_1.Boot);
+            this.m_game.scene.add('preloader', preloader_1.Preloader);
+            this.m_game.scene.add('test', test_1.Test);
+            this.m_game.scene.start('boot');
+            return;
+        };
+        return GameInit;
+    }());
+    return GameInit;
 });
 //# sourceMappingURL=test_ambienceGenerator.js.map

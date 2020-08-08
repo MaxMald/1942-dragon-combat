@@ -9,7 +9,7 @@
  */
 
 import { DC_BULLET_TYPE, DC_COMPONENT_ID, DC_MESSAGE_ID } from "../../commons/1942enums";
-import { Ty_physicsActor } from "../../commons/1942types";
+import { Ty_physicsActor, V2 } from "../../commons/1942types";
 import { CmpBasicBulletController } from "../../components/cmpBasicBulletController";
 import { CmpBulletData } from "../../components/cmpBulletData";
 import { IBulletManager } from "../iBulletManager";
@@ -22,16 +22,49 @@ export class HeroBasicBulletSpawner implements IBulletSpawner
   /* Public                                           */
   /****************************************************/
   
-  static Create()
+  /**
+   * Create a new Bullet spawner.
+   * 
+   * @param _direction bullet default direction. default : (0.0, -1.0).
+   * @param _speed bullet speed (pix/s). default : 1200 pix/sec.
+   * 
+   * @returns HeroBasiBulletSpawner
+   */
+  static Create
+  (
+    _direction ?: V2,
+    _speed ?: number
+  )
   : HeroBasicBulletSpawner
   {
     let spawner = new HeroBasicBulletSpawner;
 
     let basicMovement = CmpBasicBulletController.Create();
-    basicMovement.setDirection(0.0, -1.0);
-    basicMovement.setSpeed(1200.0);
+
+    // Bullet default direction.
+
+    if(_direction != undefined)
+    {
+      basicMovement.setDirection(_direction.x, _direction.y);
+    }
+    else
+    {
+      basicMovement.setDirection(0.0, -1.0);
+    }
+    
+    // Bullet default speed.
+
+    if(_speed != undefined)
+    {
+      basicMovement.setSpeed(_speed);
+    }
+    else
+    {
+      basicMovement.setSpeed(1200.0);
+    }    
 
     spawner._m_controller = basicMovement;
+
     return spawner;
   }
 

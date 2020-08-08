@@ -1,0 +1,5 @@
+{
+  "pool_size" : 15,
+  "texture_key" : "fireball",
+  "playzone_padding" : 100
+}

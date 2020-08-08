@@ -13,7 +13,7 @@ import { MxObjectPool } from "optimization/mxObjectPool";
 import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
 import { DC_BULLET_TYPE, DC_COMPONENT_ID } from "../commons/1942enums";
-import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
+import { Point, Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
 import { CmpBulletCollisionController } from "../components/cmpBulletCollisionController";
 import { CmpBulletData } from "../components/cmpBulletData";
 import { CmpMovementBullet } from "../components/cmpMovementBullet";
@@ -82,21 +82,33 @@ export class BulletManager implements IBulletManager
   }
 
   /**
-   * Intialize this bullet manager with a configuration file.
+   * Initialize the BulletManager.
    * 
-   * @param _scene Scene where the bullets are going to be build.
-   * @param _config Configuration file.
+   * @param _scene phaser scene, used to build the bullets sprites. 
+   * @param _pool_size bullet pool size.
+   * @param _bullet_sprite sprite texture key.
+   * @param _playzone_p1 playzone point 1 (left - up).
+   * @param _playzone_p2 playzone point 2 (right - down).
    */
   init
   (
-    _scene : Phaser.Scene, 
-    _config : BulletManagerConfig
+    _scene : Phaser.Scene,
+    _pool_size : number,
+    _bullet_sprite : string,
+    _playzone_p1 : Point,
+    _playzone_p2 : Point
   )
   : void
   {
-    // Play Zone
+    // Define the playzone area.
 
-    this._m_playZone.setBoundings(-100, -100, 1180, 2020);
+    this._m_playZone.setBoundings
+    (
+      _playzone_p1.x, 
+      _playzone_p1.y, 
+      _playzone_p2.x, 
+      _playzone_p2.y
+    );
 
     // Create the bodies group.
 
@@ -121,7 +133,7 @@ export class BulletManager implements IBulletManager
 
     // Create the bullets.
 
-    let size = _config.size;
+    let size = _pool_size;
     
     let bullet : Ty_physicsActor;
     let a_bullets : Ty_physicsActor[] = new Array<Ty_physicsActor>();
@@ -139,7 +151,7 @@ export class BulletManager implements IBulletManager
       (
         0.0,
         0.0,
-        'fireball'
+        _bullet_sprite
       );
 
       // default properties.
