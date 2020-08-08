@@ -104,7 +104,6 @@ export class NullEnemiesManager implements IEnemiesManager
   update(_dt: number)
   : void 
   {
-    console.log("NullEnemiesManager : update. ");
     return;
   }
 

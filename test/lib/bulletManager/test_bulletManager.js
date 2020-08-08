@@ -829,7 +829,6 @@ define("game/src/ts_src/enemiesManager/nullEnemiesManager", ["require", "exports
         };
         NullEnemiesManager.prototype.disableActor = function (_actor) { };
         NullEnemiesManager.prototype.update = function (_dt) {
-            console.log("NullEnemiesManager : update. ");
             return;
         };
         NullEnemiesManager.prototype.spawn = function (_x, _y, _type) {
