@@ -53,6 +53,20 @@ export type Ty_Image = Phaser.GameObjects.Image;
 export type Ty_Text = Phaser.GameObjects.Text;
 
 /**
+ * Tile Map.
+ * 
+ * @type Phaser.Tilemaps.Tilemap
+ */
+export type Ty_TileMap = Phaser.Tilemaps.Tilemap;
+
+/**
+ * Tile object.
+ * 
+ * @type Phaser.Types.Tilemaps.TiledObject
+ */
+export type Ty_TileObject = Phaser.Types.Tilemaps.TiledObject;
+
+/**
  * Used for the enumerator pattern.
  */
 export type EnumLiteralsOf<T extends object> = T[keyof T];

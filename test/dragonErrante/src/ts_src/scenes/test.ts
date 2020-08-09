@@ -19,6 +19,7 @@ import { CmpUIHealthController } from "../../../../../game/src/ts_src/components
 import { FcUIScore } from "../../../../../game/src/ts_src/factories/fcUIScore";
 import { CmpUIScoreController } from "../../../../../game/src/ts_src/components/cmpUIScoreController";
 import { CnfBulletManager, CnfHero } from "../../../../../game/src/ts_src/commons/1942config";
+import { UIManager } from "../../../../../game/src/ts_src/uiManager/UIManager";
 
 
 export class Test extends Phaser.Scene
@@ -250,49 +251,9 @@ export class Test extends Phaser.Scene
     ///////////////////////////////////
     // UI
 
-    this._m_heroHP = FcUIHealth.Create(this);
-    this._m_heroHP.sendMessage
-    (
-      DC_MESSAGE_ID.kToPosition,
-      new Phaser.Math.Vector3(20, 20) 
-    );   
+    gameManager.setUIManager(new UIManager());
 
-    let heroData = hero.getComponent<CmpHeroData>(DC_COMPONENT_ID.kHeroData);
-
-    let hpData = this._m_heroHP.getComponent<CmpUIHealthController>
-    (
-      DC_COMPONENT_ID.kUIHealthController
-    );
-
-    heroData.suscribe
-    (
-      'onHealthChanged', 
-      "UIHealth", 
-      hpData.onHealthChanged, 
-      hpData
-    );
-
-    this._m_heroScore = FcUIScore.Create(this);
-    this._m_heroScore.sendMessage
-    (
-      DC_MESSAGE_ID.kToPosition,
-      new Phaser.Math.Vector3(600, 20)
-    );
-
-    let scoreController = this._m_heroScore.getComponent<CmpUIScoreController>
-    (
-      DC_COMPONENT_ID.kUIScoreController
-    );
-
-    let scoreManager = gameManager.getScoreManager();
-
-    scoreManager.suscribe
-    (
-      "scoreChanged", 
-      "scoreUI", 
-      scoreController.onScoreChanged, 
-      scoreController
-    );
+    gameManager.reset(this);
 
     return;
   }

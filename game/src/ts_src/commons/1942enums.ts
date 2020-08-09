@@ -164,6 +164,11 @@ export type DC_MESSAGE_ID = EnumLiteralsOf<typeof DC_MESSAGE_ID>;
 
 export const DC_MESSAGE_ID = Object.freeze
 ({
+  /**
+   * Undefined.
+   * 
+   * msg : undefined.
+   */
   kUndefined : 499 as 499,
 
   /**
@@ -236,7 +241,14 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : integer
    */
-  kAddScorePoints : 509 as 509
+  kAddScorePoints : 509 as 509,
+
+  /**
+   * Spawn an enemy.
+   * 
+   * msg : MsgEnemySpawn
+   */
+  KSpawnEnemy : 510 as 510
 });
 
 /****************************************************/

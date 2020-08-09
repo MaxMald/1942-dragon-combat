@@ -51,27 +51,514 @@ define("test/ambienceGenerator/src/ts_src/scenes/preloader", ["require", "export
     }(Phaser.Scene));
     exports.Preloader = Preloader;
 });
-define("game/src/ts_src/levelGenerator/iLevelGenerator", ["require", "exports"], function (require, exports) {
+define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.DC_ACTOR_COMMAND = exports.DC_BULLET_TYPE = exports.DC_ANIMATION_ID = exports.DC_MESSAGE_ID = exports.DC_COMPONENT_ID = exports.DC_BOSS_ID = exports.DC_ENEMY_TYPE = void 0;
+    exports.DC_ENEMY_TYPE = Object.freeze({
+        kUndefined: -1,
+        kErrante: 0,
+        kSonico: 1,
+        kRanger: 2
+    });
+    exports.DC_BOSS_ID = Object.freeze({
+        kBalsaru: 0
+    });
+    exports.DC_COMPONENT_ID = Object.freeze({
+        kMovement: 0,
+        kHeroInput: 1,
+        kAnimation: 2,
+        kHeroBulletController: 3,
+        kMovementBullet: 4,
+        kCollisionController: 5,
+        kMovementEnemy: 6,
+        kEnemyHealth: 7,
+        kBasicBulletController: 8,
+        kBulletData: 9,
+        kPlayZone: 10,
+        kEnemyController: 11,
+        kHeroData: 12,
+        kTextController: 13,
+        kUIHealthController: 14,
+        kUIScoreController: 15,
+    });
+    exports.DC_MESSAGE_ID = Object.freeze({
+        kUndefined: 499,
+        kAgentMove: 500,
+        kPointerMoved: 501,
+        kToPosition: 502,
+        kPointerReleased: 503,
+        kPointerPressed: 504,
+        kMixedMovement: 505,
+        kHit: 506,
+        kKill: 507,
+        kSetText: 508,
+        kAddScorePoints: 509,
+        KSpawnEnemy: 510
+    });
+    exports.DC_ANIMATION_ID = Object.freeze({
+        kForward: 0,
+        kBack: 1,
+        kRight: 2,
+        kLeft: 3,
+        kIdle: 4
+    });
+    exports.DC_BULLET_TYPE = Object.freeze({
+        kUndefined: 0,
+        kHeroBasic: 1,
+        kEnemyBasic: 2,
+    });
+    exports.DC_ACTOR_COMMAND = Object.freeze({
+        kRemoveComponent: 0
+    });
+});
+define("game/src/ts_src/components/iBaseComponent", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
 });
-define("game/src/ts_src/levelGenerator/levelGenerator", ["require", "exports"], function (require, exports) {
+define("game/src/ts_src/actors/baseActor", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.LevelGenerator = void 0;
-    var LevelGenerator = (function () {
-        function LevelGenerator() {
+    exports.BaseActor = void 0;
+    var BaseActor = (function () {
+        function BaseActor() {
         }
-        LevelGenerator.prototype.init = function () {
+        BaseActor.Create = function (_instance, _name) {
+            var actor = new BaseActor();
+            actor._m_components = new Array();
+            actor._m_instance = _instance;
+            actor.m_name = _name;
+            return actor;
+        };
+        BaseActor.prototype.init = function () {
+            var index = 0;
+            var components = this._m_components;
+            var length = components.length;
+            while (index < length) {
+                components[index].init(this);
+                ++index;
+            }
             return;
         };
-        LevelGenerator.prototype.update = function (_dt) { };
-        LevelGenerator.prototype.destroy = function () {
+        BaseActor.prototype.update = function () {
+            var components = this._m_components;
+            components.forEach(this._updateComponent, this);
             return;
         };
-        return LevelGenerator;
+        BaseActor.prototype.sendMessage = function (_id, _obj) {
+            var index = 0;
+            var aComponent = this._m_components;
+            var size = aComponent.length;
+            while (index < size) {
+                if (aComponent[index] != null) {
+                    aComponent[index].receive(_id, _obj);
+                }
+                ++index;
+            }
+            return;
+        };
+        BaseActor.prototype.getWrappedInstance = function () {
+            return this._m_instance;
+        };
+        BaseActor.prototype.addComponent = function (_component) {
+            if (this.hasComponent(_component.m_id)) {
+                this.removeComponent(_component.m_id);
+            }
+            this._m_components.push(_component);
+            return;
+        };
+        BaseActor.prototype.getComponent = function (_id) {
+            var index = 0;
+            var length = this._m_components.length;
+            while (index < length) {
+                if (this._m_components[index].m_id == _id) {
+                    return this._m_components[index];
+                }
+                ++index;
+            }
+            throw new Error("Component of index : " + _id.toString() + " not founded");
+        };
+        BaseActor.prototype.removeComponent = function (_id) {
+            var index = 0;
+            var length = this._m_components.length;
+            while (index < length) {
+                if (this._m_components[index].m_id == _id) {
+                    this._m_components.splice(index, 1);
+                    return;
+                }
+                ++index;
+            }
+            return;
+        };
+        BaseActor.prototype.hasComponent = function (_id) {
+            var index = 0;
+            var length = this._m_components.length;
+            while (index < length) {
+                if (this._m_components[index].m_id == _id) {
+                    return true;
+                }
+                ++index;
+            }
+            return false;
+        };
+        BaseActor.prototype.destroy = function () {
+            var component;
+            while (this._m_components.length) {
+                component = this._m_components.pop();
+                component.destroy();
+            }
+            return;
+        };
+        BaseActor.prototype._updateComponent = function (_component) {
+            _component.update(this);
+            return;
+        };
+        return BaseActor;
     }());
-    exports.LevelGenerator = LevelGenerator;
+    exports.BaseActor = BaseActor;
+});
+define("game/src/ts_src/commons/1942types", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/bulletManager/bulletSpawner/iBulletSpawner", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/bulletManager/iBulletManager", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/bulletManager/bulletSpawner/nullBulletSpawner", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullBulletSpawner = void 0;
+    var NullBulletSpawner = (function () {
+        function NullBulletSpawner() {
+        }
+        NullBulletSpawner.Prepare = function () {
+            if (NullBulletSpawner._INSTANCE == null) {
+                NullBulletSpawner._INSTANCE = new NullBulletSpawner();
+            }
+            return;
+        };
+        NullBulletSpawner.Shutdown = function () {
+            NullBulletSpawner._INSTANCE = null;
+            return;
+        };
+        NullBulletSpawner.GetInstance = function () {
+            return NullBulletSpawner._INSTANCE;
+        };
+        NullBulletSpawner.prototype.update = function (_dt) {
+            console.log("NullBulletSpawner: update.");
+            return;
+        };
+        NullBulletSpawner.prototype.spawn = function (_actor, _x, _y) {
+            console.log("NullBulletSpawner: spawn.");
+            return;
+        };
+        NullBulletSpawner.prototype.assemble = function (_actor) {
+            console.log("NullBulletSpawner: assemble.");
+            return;
+        };
+        NullBulletSpawner.prototype.disassemble = function (_actor) {
+            console.log("NullBulletSpawner: disassemble.");
+            return;
+        };
+        NullBulletSpawner.prototype.setBulletManager = function (_manager) {
+            console.log("NullBulletSpawner: setBulletManager.");
+            return;
+        };
+        NullBulletSpawner.prototype.getID = function () {
+            console.log("NullBulletSpawner: getID.");
+            return _1942enums_1.DC_BULLET_TYPE.kUndefined;
+        };
+        NullBulletSpawner.prototype.destroy = function () { };
+        return NullBulletSpawner;
+    }());
+    exports.NullBulletSpawner = NullBulletSpawner;
+});
+define("game/src/ts_src/bulletManager/nullBulletManager", ["require", "exports", "optimization/mxObjectPool", "game/src/ts_src/bulletManager/bulletSpawner/nullBulletSpawner"], function (require, exports, mxObjectPool_1, nullBulletSpawner_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullBulletManager = void 0;
+    var NullBulletManager = (function () {
+        function NullBulletManager() {
+            this._m_pool = mxObjectPool_1.MxObjectPool.Create();
+            this._m_pool.init(new Array());
+            return;
+        }
+        NullBulletManager.Prepare = function () {
+            if (NullBulletManager._SINGLETON == null) {
+                NullBulletManager._SINGLETON = new NullBulletManager();
+            }
+            return;
+        };
+        NullBulletManager.Shutdown = function () {
+            if (NullBulletManager._SINGLETON != null) {
+                NullBulletManager._SINGLETON.destroy();
+            }
+            NullBulletManager._SINGLETON = null;
+            return;
+        };
+        NullBulletManager.GetInstance = function () {
+            return NullBulletManager._SINGLETON;
+        };
+        NullBulletManager.prototype.addSpawner = function (_spawner) {
+            console.log("NullBulletManager : addSpawner.");
+            return;
+        };
+        NullBulletManager.prototype.getSpawner = function (_type) {
+            console.log("NullBulletManager : getSpawner.");
+            return nullBulletSpawner_1.NullBulletSpawner.GetInstance();
+        };
+        NullBulletManager.prototype.getActor = function () {
+            console.log("NullBulletManager : getActor");
+            return null;
+        };
+        NullBulletManager.prototype.update = function (_dt) { };
+        NullBulletManager.prototype.spawn = function (_x, _y, _type) {
+            console.log("NullBulletManager : spawn.");
+            return;
+        };
+        ;
+        NullBulletManager.prototype.getPool = function () {
+            console.log("NullBulletManager : get pool.");
+            return this._m_pool;
+        };
+        NullBulletManager.prototype.disableActor = function (_actor) {
+            console.log("NullBulletManager : disableActor");
+            return;
+        };
+        NullBulletManager.prototype.clear = function () {
+            console.log("NullBulletManager : clear.");
+            return;
+        };
+        NullBulletManager.prototype.destroy = function () {
+            this._m_pool.destroy();
+            return;
+        };
+        return NullBulletManager;
+    }());
+    exports.NullBulletManager = NullBulletManager;
+});
+define("game/src/ts_src/commons/1942config", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CnfBulletManager = exports.CnfHero = void 0;
+    var CnfHero = (function () {
+        function CnfHero() {
+            this.x = 500;
+            this.y = 500;
+            this.texture = "DragonFlight";
+            this.frame = "D001_Flight.png";
+            this.movement_mode = "MIXED";
+            this.maximum_speed = 500;
+            this.health = 10;
+            this.score = 0;
+            this.fireRate = 8;
+            this.hero_playzone_padding = 100;
+            this.bulletManager_key = "";
+            return;
+        }
+        return CnfHero;
+    }());
+    exports.CnfHero = CnfHero;
+    var CnfBulletManager = (function () {
+        function CnfBulletManager() {
+        }
+        return CnfBulletManager;
+    }());
+    exports.CnfBulletManager = CnfBulletManager;
+});
+define("game/src/ts_src/components/iCmpCollisionController", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/components/cmpNullCollisionController", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpNullCollisionController = void 0;
+    var CmpNullCollisionController = (function () {
+        function CmpNullCollisionController() {
+        }
+        CmpNullCollisionController.Prepare = function () {
+            if (CmpNullCollisionController._INSTANCE == null) {
+                CmpNullCollisionController._INSTANCE = new CmpNullCollisionController();
+                CmpNullCollisionController._INSTANCE.m_id
+                    = _1942enums_2.DC_COMPONENT_ID.kCollisionController;
+            }
+            return;
+        };
+        CmpNullCollisionController.Shutdown = function () {
+            CmpNullCollisionController._INSTANCE = null;
+            return;
+        };
+        CmpNullCollisionController.GetInstance = function () {
+            return CmpNullCollisionController._INSTANCE;
+        };
+        CmpNullCollisionController.prototype.onCollision = function (_other, _this) { };
+        CmpNullCollisionController.prototype.init = function (_actor) { };
+        CmpNullCollisionController.prototype.update = function (_actor) { };
+        CmpNullCollisionController.prototype.receive = function (_id, _obj) { };
+        CmpNullCollisionController.prototype.destroy = function () { };
+        return CmpNullCollisionController;
+    }());
+    exports.CmpNullCollisionController = CmpNullCollisionController;
+});
+define("game/src/ts_src/enemiesManager/iEnemiesManager", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/enemiesManager/enemySpawner/iEnemySpawner", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/enemiesManager/nullEnemiesManager", ["require", "exports", "game/src/ts_src/enemiesManager/enemySpawner/nullEnemySpawner", "game/src/ts_src/bulletManager/nullBulletManager"], function (require, exports, nullEnemySpawner_1, nullBulletManager_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullEnemiesManager = void 0;
+    var NullEnemiesManager = (function () {
+        function NullEnemiesManager() {
+        }
+        NullEnemiesManager.Prepare = function () {
+            if (NullEnemiesManager._INSTANCE == null) {
+                NullEnemiesManager._INSTANCE = new NullEnemiesManager();
+            }
+            return;
+        };
+        NullEnemiesManager.Shutdown = function () {
+            NullEnemiesManager._INSTANCE = null;
+            return;
+        };
+        NullEnemiesManager.GetInstance = function () {
+            return NullEnemiesManager._INSTANCE;
+        };
+        NullEnemiesManager.prototype.addSpawner = function (_spawner) {
+            console.log("NullEnemiesManager : addSpawner. ");
+            return;
+        };
+        NullEnemiesManager.prototype.getSpawner = function (_id) {
+            console.log("NullEnemiesManager : getSpawner. ");
+            return nullEnemySpawner_1.NullEnemySpawner.GetInstance();
+        };
+        NullEnemiesManager.prototype.getActor = function () {
+            console.log("NullEnemiesManager : getActor. ");
+            return null;
+        };
+        NullEnemiesManager.prototype.disableActor = function (_actor) { };
+        NullEnemiesManager.prototype.update = function (_dt) {
+            return;
+        };
+        NullEnemiesManager.prototype.spawn = function (_x, _y, _type) {
+            console.log("NullEnemiesManager : spawn. ");
+            return;
+        };
+        NullEnemiesManager.prototype.setBulletManager = function (_bulletManager) { };
+        NullEnemiesManager.prototype.getBulletManager = function () {
+            return nullBulletManager_1.NullBulletManager.GetInstance();
+        };
+        NullEnemiesManager.prototype.destroy = function () {
+            return;
+        };
+        return NullEnemiesManager;
+    }());
+    exports.NullEnemiesManager = NullEnemiesManager;
+});
+define("game/src/ts_src/enemiesManager/enemySpawner/nullEnemySpawner", ["require", "exports", "game/src/ts_src/bulletManager/nullBulletManager", "game/src/ts_src/commons/1942enums", "game/src/ts_src/enemiesManager/nullEnemiesManager"], function (require, exports, nullBulletManager_2, _1942enums_3, nullEnemiesManager_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullEnemySpawner = void 0;
+    var NullEnemySpawner = (function () {
+        function NullEnemySpawner() {
+        }
+        NullEnemySpawner.Prepare = function () {
+            if (NullEnemySpawner._INSTANCE == null) {
+                NullEnemySpawner._INSTANCE = new NullEnemySpawner();
+            }
+            return;
+        };
+        NullEnemySpawner.Shutdown = function () {
+            NullEnemySpawner._INSTANCE = null;
+            return;
+        };
+        NullEnemySpawner.GetInstance = function () {
+            return NullEnemySpawner._INSTANCE;
+        };
+        NullEnemySpawner.prototype.update = function (_dt) {
+            return;
+        };
+        NullEnemySpawner.prototype.spawn = function (_actor, _x, _y) {
+            return;
+        };
+        NullEnemySpawner.prototype.setEnemiesManager = function (_enemiesManager) { };
+        NullEnemySpawner.prototype.getEnemiesManager = function () {
+            return nullEnemiesManager_1.NullEnemiesManager.GetInstance();
+        };
+        NullEnemySpawner.prototype.setBulletManager = function (_bulletManager) { };
+        NullEnemySpawner.prototype.getBulletManager = function () {
+            return nullBulletManager_2.NullBulletManager.GetInstance();
+        };
+        NullEnemySpawner.prototype.getID = function () {
+            return _1942enums_3.DC_ENEMY_TYPE.kUndefined;
+        };
+        NullEnemySpawner.prototype.assemble = function (_actor) { };
+        NullEnemySpawner.prototype.disasemble = function (_actor) { };
+        NullEnemySpawner.prototype.destroy = function () {
+            return;
+        };
+        return NullEnemySpawner;
+    }());
+    exports.NullEnemySpawner = NullEnemySpawner;
+});
+define("game/src/ts_src/components/iCmpEnemyController", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/components/cmpNullEnemyController", ["require", "exports", "game/src/ts_src/commons/1942enums", "game/src/ts_src/enemiesManager/enemySpawner/nullEnemySpawner", "game/src/ts_src/enemiesManager/nullEnemiesManager"], function (require, exports, _1942enums_4, nullEnemySpawner_2, nullEnemiesManager_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpNullEnemyController = void 0;
+    var CmpNullEnemyController = (function () {
+        function CmpNullEnemyController() {
+        }
+        CmpNullEnemyController.Prepare = function () {
+            if (CmpNullEnemyController._INSTANCE == null) {
+                CmpNullEnemyController._INSTANCE = new CmpNullEnemyController();
+                CmpNullEnemyController._INSTANCE.m_id
+                    = _1942enums_4.DC_COMPONENT_ID.kEnemyController;
+            }
+            return;
+        };
+        CmpNullEnemyController.Shutdown = function () {
+            CmpNullEnemyController._INSTANCE = null;
+            return;
+        };
+        CmpNullEnemyController.GetInstance = function () {
+            return CmpNullEnemyController._INSTANCE;
+        };
+        CmpNullEnemyController.prototype.init = function (_actor) { };
+        CmpNullEnemyController.prototype.update = function (_actor) { };
+        CmpNullEnemyController.prototype.getCollisionDamage = function () {
+            return 0;
+        };
+        CmpNullEnemyController.prototype.setSpawner = function (_spawner) { };
+        CmpNullEnemyController.prototype.getSpawner = function () {
+            return nullEnemySpawner_2.NullEnemySpawner.GetInstance();
+        };
+        CmpNullEnemyController.prototype.setEnemiesManager = function (_enemyManager) { };
+        CmpNullEnemyController.prototype.getEnemiesManager = function () {
+            return nullEnemiesManager_2.NullEnemiesManager.GetInstance();
+        };
+        CmpNullEnemyController.prototype.getScorePoints = function () {
+            return 0;
+        };
+        CmpNullEnemyController.prototype.setScorePoints = function (_points) { };
+        CmpNullEnemyController.prototype.receive = function (_id, _obj) { };
+        CmpNullEnemyController.prototype.destroy = function () { };
+        return CmpNullEnemyController;
+    }());
+    exports.CmpNullEnemyController = CmpNullEnemyController;
 });
 define("game/src/ts_src/levelGenerator/ambienceGenerator/customTextureShader", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -4033,514 +4520,6 @@ define("game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGenerator", ["r
     }());
     exports.AmbienceGenerator = AmbienceGenerator;
 });
-define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.DC_ACTOR_COMMAND = exports.DC_BULLET_TYPE = exports.DC_ANIMATION_ID = exports.DC_MESSAGE_ID = exports.DC_COMPONENT_ID = exports.DC_BOSS_ID = exports.DC_ENEMY_TYPE = void 0;
-    exports.DC_ENEMY_TYPE = Object.freeze({
-        kUndefined: -1,
-        kErrante: 0,
-        kSonico: 1,
-        kRanger: 2
-    });
-    exports.DC_BOSS_ID = Object.freeze({
-        kBalsaru: 0
-    });
-    exports.DC_COMPONENT_ID = Object.freeze({
-        kMovement: 0,
-        kHeroInput: 1,
-        kAnimation: 2,
-        kHeroBulletController: 3,
-        kMovementBullet: 4,
-        kCollisionController: 5,
-        kMovementEnemy: 6,
-        kEnemyHealth: 7,
-        kBasicBulletController: 8,
-        kBulletData: 9,
-        kPlayZone: 10,
-        kEnemyController: 11,
-        kHeroData: 12,
-        kTextController: 13,
-        kUIHealthController: 14,
-        kUIScoreController: 15,
-    });
-    exports.DC_MESSAGE_ID = Object.freeze({
-        kUndefined: 499,
-        kAgentMove: 500,
-        kPointerMoved: 501,
-        kToPosition: 502,
-        kPointerReleased: 503,
-        kPointerPressed: 504,
-        kMixedMovement: 505,
-        kHit: 506,
-        kKill: 507,
-        kSetText: 508,
-        kAddScorePoints: 509
-    });
-    exports.DC_ANIMATION_ID = Object.freeze({
-        kForward: 0,
-        kBack: 1,
-        kRight: 2,
-        kLeft: 3,
-        kIdle: 4
-    });
-    exports.DC_BULLET_TYPE = Object.freeze({
-        kUndefined: 0,
-        kHeroBasic: 1,
-        kEnemyBasic: 2,
-    });
-    exports.DC_ACTOR_COMMAND = Object.freeze({
-        kRemoveComponent: 0
-    });
-});
-define("game/src/ts_src/components/iBaseComponent", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("game/src/ts_src/actors/baseActor", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.BaseActor = void 0;
-    var BaseActor = (function () {
-        function BaseActor() {
-        }
-        BaseActor.Create = function (_instance, _name) {
-            var actor = new BaseActor();
-            actor._m_components = new Array();
-            actor._m_instance = _instance;
-            actor.m_name = _name;
-            return actor;
-        };
-        BaseActor.prototype.init = function () {
-            var index = 0;
-            var components = this._m_components;
-            var length = components.length;
-            while (index < length) {
-                components[index].init(this);
-                ++index;
-            }
-            return;
-        };
-        BaseActor.prototype.update = function () {
-            var components = this._m_components;
-            components.forEach(this._updateComponent, this);
-            return;
-        };
-        BaseActor.prototype.sendMessage = function (_id, _obj) {
-            var index = 0;
-            var aComponent = this._m_components;
-            var size = aComponent.length;
-            while (index < size) {
-                if (aComponent[index] != null) {
-                    aComponent[index].receive(_id, _obj);
-                }
-                ++index;
-            }
-            return;
-        };
-        BaseActor.prototype.getWrappedInstance = function () {
-            return this._m_instance;
-        };
-        BaseActor.prototype.addComponent = function (_component) {
-            if (this.hasComponent(_component.m_id)) {
-                this.removeComponent(_component.m_id);
-            }
-            this._m_components.push(_component);
-            return;
-        };
-        BaseActor.prototype.getComponent = function (_id) {
-            var index = 0;
-            var length = this._m_components.length;
-            while (index < length) {
-                if (this._m_components[index].m_id == _id) {
-                    return this._m_components[index];
-                }
-                ++index;
-            }
-            throw new Error("Component of index : " + _id.toString() + " not founded");
-        };
-        BaseActor.prototype.removeComponent = function (_id) {
-            var index = 0;
-            var length = this._m_components.length;
-            while (index < length) {
-                if (this._m_components[index].m_id == _id) {
-                    this._m_components.splice(index, 1);
-                    return;
-                }
-                ++index;
-            }
-            return;
-        };
-        BaseActor.prototype.hasComponent = function (_id) {
-            var index = 0;
-            var length = this._m_components.length;
-            while (index < length) {
-                if (this._m_components[index].m_id == _id) {
-                    return true;
-                }
-                ++index;
-            }
-            return false;
-        };
-        BaseActor.prototype.destroy = function () {
-            var component;
-            while (this._m_components.length) {
-                component = this._m_components.pop();
-                component.destroy();
-            }
-            return;
-        };
-        BaseActor.prototype._updateComponent = function (_component) {
-            _component.update(this);
-            return;
-        };
-        return BaseActor;
-    }());
-    exports.BaseActor = BaseActor;
-});
-define("game/src/ts_src/commons/1942types", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("game/src/ts_src/bulletManager/bulletSpawner/iBulletSpawner", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("game/src/ts_src/bulletManager/iBulletManager", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("game/src/ts_src/bulletManager/bulletSpawner/nullBulletSpawner", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.NullBulletSpawner = void 0;
-    var NullBulletSpawner = (function () {
-        function NullBulletSpawner() {
-        }
-        NullBulletSpawner.Prepare = function () {
-            if (NullBulletSpawner._INSTANCE == null) {
-                NullBulletSpawner._INSTANCE = new NullBulletSpawner();
-            }
-            return;
-        };
-        NullBulletSpawner.Shutdown = function () {
-            NullBulletSpawner._INSTANCE = null;
-            return;
-        };
-        NullBulletSpawner.GetInstance = function () {
-            return NullBulletSpawner._INSTANCE;
-        };
-        NullBulletSpawner.prototype.update = function (_dt) {
-            console.log("NullBulletSpawner: update.");
-            return;
-        };
-        NullBulletSpawner.prototype.spawn = function (_actor, _x, _y) {
-            console.log("NullBulletSpawner: spawn.");
-            return;
-        };
-        NullBulletSpawner.prototype.assemble = function (_actor) {
-            console.log("NullBulletSpawner: assemble.");
-            return;
-        };
-        NullBulletSpawner.prototype.disassemble = function (_actor) {
-            console.log("NullBulletSpawner: disassemble.");
-            return;
-        };
-        NullBulletSpawner.prototype.setBulletManager = function (_manager) {
-            console.log("NullBulletSpawner: setBulletManager.");
-            return;
-        };
-        NullBulletSpawner.prototype.getID = function () {
-            console.log("NullBulletSpawner: getID.");
-            return _1942enums_1.DC_BULLET_TYPE.kUndefined;
-        };
-        NullBulletSpawner.prototype.destroy = function () { };
-        return NullBulletSpawner;
-    }());
-    exports.NullBulletSpawner = NullBulletSpawner;
-});
-define("game/src/ts_src/bulletManager/nullBulletManager", ["require", "exports", "optimization/mxObjectPool", "game/src/ts_src/bulletManager/bulletSpawner/nullBulletSpawner"], function (require, exports, mxObjectPool_1, nullBulletSpawner_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.NullBulletManager = void 0;
-    var NullBulletManager = (function () {
-        function NullBulletManager() {
-            this._m_pool = mxObjectPool_1.MxObjectPool.Create();
-            this._m_pool.init(new Array());
-            return;
-        }
-        NullBulletManager.Prepare = function () {
-            if (NullBulletManager._SINGLETON == null) {
-                NullBulletManager._SINGLETON = new NullBulletManager();
-            }
-            return;
-        };
-        NullBulletManager.Shutdown = function () {
-            if (NullBulletManager._SINGLETON != null) {
-                NullBulletManager._SINGLETON.destroy();
-            }
-            NullBulletManager._SINGLETON = null;
-            return;
-        };
-        NullBulletManager.GetInstance = function () {
-            return NullBulletManager._SINGLETON;
-        };
-        NullBulletManager.prototype.addSpawner = function (_spawner) {
-            console.log("NullBulletManager : addSpawner.");
-            return;
-        };
-        NullBulletManager.prototype.getSpawner = function (_type) {
-            console.log("NullBulletManager : getSpawner.");
-            return nullBulletSpawner_1.NullBulletSpawner.GetInstance();
-        };
-        NullBulletManager.prototype.getActor = function () {
-            console.log("NullBulletManager : getActor");
-            return null;
-        };
-        NullBulletManager.prototype.update = function (_dt) { };
-        NullBulletManager.prototype.spawn = function (_x, _y, _type) {
-            console.log("NullBulletManager : spawn.");
-            return;
-        };
-        ;
-        NullBulletManager.prototype.getPool = function () {
-            console.log("NullBulletManager : get pool.");
-            return this._m_pool;
-        };
-        NullBulletManager.prototype.disableActor = function (_actor) {
-            console.log("NullBulletManager : disableActor");
-            return;
-        };
-        NullBulletManager.prototype.clear = function () {
-            console.log("NullBulletManager : clear.");
-            return;
-        };
-        NullBulletManager.prototype.destroy = function () {
-            this._m_pool.destroy();
-            return;
-        };
-        return NullBulletManager;
-    }());
-    exports.NullBulletManager = NullBulletManager;
-});
-define("game/src/ts_src/commons/1942config", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.CnfBulletManager = exports.CnfHero = void 0;
-    var CnfHero = (function () {
-        function CnfHero() {
-            this.x = 500;
-            this.y = 500;
-            this.texture = "DragonFlight";
-            this.frame = "D001_Flight.png";
-            this.movement_mode = "MIXED";
-            this.maximum_speed = 500;
-            this.health = 10;
-            this.score = 0;
-            this.fireRate = 8;
-            this.hero_playzone_padding = 100;
-            this.bulletManager_key = "";
-            return;
-        }
-        return CnfHero;
-    }());
-    exports.CnfHero = CnfHero;
-    var CnfBulletManager = (function () {
-        function CnfBulletManager() {
-        }
-        return CnfBulletManager;
-    }());
-    exports.CnfBulletManager = CnfBulletManager;
-});
-define("game/src/ts_src/components/iCmpCollisionController", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("game/src/ts_src/components/cmpNullCollisionController", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.CmpNullCollisionController = void 0;
-    var CmpNullCollisionController = (function () {
-        function CmpNullCollisionController() {
-        }
-        CmpNullCollisionController.Prepare = function () {
-            if (CmpNullCollisionController._INSTANCE == null) {
-                CmpNullCollisionController._INSTANCE = new CmpNullCollisionController();
-                CmpNullCollisionController._INSTANCE.m_id
-                    = _1942enums_2.DC_COMPONENT_ID.kCollisionController;
-            }
-            return;
-        };
-        CmpNullCollisionController.Shutdown = function () {
-            CmpNullCollisionController._INSTANCE = null;
-            return;
-        };
-        CmpNullCollisionController.GetInstance = function () {
-            return CmpNullCollisionController._INSTANCE;
-        };
-        CmpNullCollisionController.prototype.onCollision = function (_other, _this) { };
-        CmpNullCollisionController.prototype.init = function (_actor) { };
-        CmpNullCollisionController.prototype.update = function (_actor) { };
-        CmpNullCollisionController.prototype.receive = function (_id, _obj) { };
-        CmpNullCollisionController.prototype.destroy = function () { };
-        return CmpNullCollisionController;
-    }());
-    exports.CmpNullCollisionController = CmpNullCollisionController;
-});
-define("game/src/ts_src/enemiesManager/iEnemiesManager", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("game/src/ts_src/enemiesManager/enemySpawner/iEnemySpawner", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("game/src/ts_src/enemiesManager/nullEnemiesManager", ["require", "exports", "game/src/ts_src/enemiesManager/enemySpawner/nullEnemySpawner", "game/src/ts_src/bulletManager/nullBulletManager"], function (require, exports, nullEnemySpawner_1, nullBulletManager_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.NullEnemiesManager = void 0;
-    var NullEnemiesManager = (function () {
-        function NullEnemiesManager() {
-        }
-        NullEnemiesManager.Prepare = function () {
-            if (NullEnemiesManager._INSTANCE == null) {
-                NullEnemiesManager._INSTANCE = new NullEnemiesManager();
-            }
-            return;
-        };
-        NullEnemiesManager.Shutdown = function () {
-            NullEnemiesManager._INSTANCE = null;
-            return;
-        };
-        NullEnemiesManager.GetInstance = function () {
-            return NullEnemiesManager._INSTANCE;
-        };
-        NullEnemiesManager.prototype.addSpawner = function (_spawner) {
-            console.log("NullEnemiesManager : addSpawner. ");
-            return;
-        };
-        NullEnemiesManager.prototype.getSpawner = function (_id) {
-            console.log("NullEnemiesManager : getSpawner. ");
-            return nullEnemySpawner_1.NullEnemySpawner.GetInstance();
-        };
-        NullEnemiesManager.prototype.getActor = function () {
-            console.log("NullEnemiesManager : getActor. ");
-            return null;
-        };
-        NullEnemiesManager.prototype.disableActor = function (_actor) { };
-        NullEnemiesManager.prototype.update = function (_dt) {
-            return;
-        };
-        NullEnemiesManager.prototype.spawn = function (_x, _y, _type) {
-            console.log("NullEnemiesManager : spawn. ");
-            return;
-        };
-        NullEnemiesManager.prototype.setBulletManager = function (_bulletManager) { };
-        NullEnemiesManager.prototype.getBulletManager = function () {
-            return nullBulletManager_1.NullBulletManager.GetInstance();
-        };
-        NullEnemiesManager.prototype.destroy = function () {
-            return;
-        };
-        return NullEnemiesManager;
-    }());
-    exports.NullEnemiesManager = NullEnemiesManager;
-});
-define("game/src/ts_src/enemiesManager/enemySpawner/nullEnemySpawner", ["require", "exports", "game/src/ts_src/bulletManager/nullBulletManager", "game/src/ts_src/commons/1942enums", "game/src/ts_src/enemiesManager/nullEnemiesManager"], function (require, exports, nullBulletManager_2, _1942enums_3, nullEnemiesManager_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.NullEnemySpawner = void 0;
-    var NullEnemySpawner = (function () {
-        function NullEnemySpawner() {
-        }
-        NullEnemySpawner.Prepare = function () {
-            if (NullEnemySpawner._INSTANCE == null) {
-                NullEnemySpawner._INSTANCE = new NullEnemySpawner();
-            }
-            return;
-        };
-        NullEnemySpawner.Shutdown = function () {
-            NullEnemySpawner._INSTANCE = null;
-            return;
-        };
-        NullEnemySpawner.GetInstance = function () {
-            return NullEnemySpawner._INSTANCE;
-        };
-        NullEnemySpawner.prototype.update = function (_dt) {
-            return;
-        };
-        NullEnemySpawner.prototype.spawn = function (_actor, _x, _y) {
-            return;
-        };
-        NullEnemySpawner.prototype.setEnemiesManager = function (_enemiesManager) { };
-        NullEnemySpawner.prototype.getEnemiesManager = function () {
-            return nullEnemiesManager_1.NullEnemiesManager.GetInstance();
-        };
-        NullEnemySpawner.prototype.setBulletManager = function (_bulletManager) { };
-        NullEnemySpawner.prototype.getBulletManager = function () {
-            return nullBulletManager_2.NullBulletManager.GetInstance();
-        };
-        NullEnemySpawner.prototype.getID = function () {
-            return _1942enums_3.DC_ENEMY_TYPE.kUndefined;
-        };
-        NullEnemySpawner.prototype.assemble = function (_actor) { };
-        NullEnemySpawner.prototype.disasemble = function (_actor) { };
-        NullEnemySpawner.prototype.destroy = function () {
-            return;
-        };
-        return NullEnemySpawner;
-    }());
-    exports.NullEnemySpawner = NullEnemySpawner;
-});
-define("game/src/ts_src/components/iCmpEnemyController", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("game/src/ts_src/components/cmpNullEnemyController", ["require", "exports", "game/src/ts_src/commons/1942enums", "game/src/ts_src/enemiesManager/enemySpawner/nullEnemySpawner", "game/src/ts_src/enemiesManager/nullEnemiesManager"], function (require, exports, _1942enums_4, nullEnemySpawner_2, nullEnemiesManager_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.CmpNullEnemyController = void 0;
-    var CmpNullEnemyController = (function () {
-        function CmpNullEnemyController() {
-        }
-        CmpNullEnemyController.Prepare = function () {
-            if (CmpNullEnemyController._INSTANCE == null) {
-                CmpNullEnemyController._INSTANCE = new CmpNullEnemyController();
-                CmpNullEnemyController._INSTANCE.m_id
-                    = _1942enums_4.DC_COMPONENT_ID.kEnemyController;
-            }
-            return;
-        };
-        CmpNullEnemyController.Shutdown = function () {
-            CmpNullEnemyController._INSTANCE = null;
-            return;
-        };
-        CmpNullEnemyController.GetInstance = function () {
-            return CmpNullEnemyController._INSTANCE;
-        };
-        CmpNullEnemyController.prototype.init = function (_actor) { };
-        CmpNullEnemyController.prototype.update = function (_actor) { };
-        CmpNullEnemyController.prototype.getCollisionDamage = function () {
-            return 0;
-        };
-        CmpNullEnemyController.prototype.setSpawner = function (_spawner) { };
-        CmpNullEnemyController.prototype.getSpawner = function () {
-            return nullEnemySpawner_2.NullEnemySpawner.GetInstance();
-        };
-        CmpNullEnemyController.prototype.setEnemiesManager = function (_enemyManager) { };
-        CmpNullEnemyController.prototype.getEnemiesManager = function () {
-            return nullEnemiesManager_2.NullEnemiesManager.GetInstance();
-        };
-        CmpNullEnemyController.prototype.getScorePoints = function () {
-            return 0;
-        };
-        CmpNullEnemyController.prototype.setScorePoints = function (_points) { };
-        CmpNullEnemyController.prototype.receive = function (_id, _obj) { };
-        CmpNullEnemyController.prototype.destroy = function () { };
-        return CmpNullEnemyController;
-    }());
-    exports.CmpNullEnemyController = CmpNullEnemyController;
-});
 define("game/src/ts_src/levelGenerator/ambienceGenerator/nullAmbientGenerator", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4555,6 +4534,21 @@ define("game/src/ts_src/levelGenerator/ambienceGenerator/nullAmbientGenerator", 
     }());
     exports.NullAmbientGenerator = NullAmbientGenerator;
 });
+define("game/src/ts_src/levelGenerator/iLevelGenerator", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/levelGenerator/levelGeneratorConfig", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.LevelGeneratorConfig = void 0;
+    var LevelGeneratorConfig = (function () {
+        function LevelGeneratorConfig() {
+        }
+        return LevelGeneratorConfig;
+    }());
+    exports.LevelGeneratorConfig = LevelGeneratorConfig;
+});
 define("game/src/ts_src/levelGenerator/nullLevelGenerator", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4562,11 +4556,28 @@ define("game/src/ts_src/levelGenerator/nullLevelGenerator", ["require", "exports
     var NullLevelGenerator = (function () {
         function NullLevelGenerator() {
         }
-        NullLevelGenerator.prototype.update = function (_dt) { };
+        NullLevelGenerator.prototype.loadMap = function (_map) { };
+        NullLevelGenerator.prototype.update = function (_dt, _distance) { };
+        NullLevelGenerator.prototype.setCameraHeigth = function (_height) { };
         NullLevelGenerator.prototype.destroy = function () { };
         return NullLevelGenerator;
     }());
     exports.NullLevelGenerator = NullLevelGenerator;
+});
+define("game/src/ts_src/messages/msgEnemySpawn", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.MsgEnemySpawn = void 0;
+    var MsgEnemySpawn = (function () {
+        function MsgEnemySpawn(_enemy_type, _x, _y) {
+            this.enemy_type = _enemy_type;
+            this.x = _x;
+            this.y = _y;
+            return;
+        }
+        return MsgEnemySpawn;
+    }());
+    exports.MsgEnemySpawn = MsgEnemySpawn;
 });
 define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_5) {
     "use strict";
@@ -5270,7 +5281,24 @@ define("game/src/ts_src/scoreManager/scoreManager", ["require", "exports", "list
     }());
     exports.ScoreManager = ScoreManager;
 });
-define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "commons/mxEnums", "game/src/ts_src/bulletManager/bulletSpawner/nullBulletSpawner", "game/src/ts_src/bulletManager/nullBulletManager", "game/src/ts_src/commons/1942enums", "game/src/ts_src/components/cmpNullCollisionController", "game/src/ts_src/components/cmpNullEnemyController", "game/src/ts_src/enemiesManager/enemySpawner/nullEnemySpawner", "game/src/ts_src/enemiesManager/nullEnemiesManager", "game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGenerator", "game/src/ts_src/levelGenerator/ambienceGenerator/nullAmbientGenerator", "game/src/ts_src/levelGenerator/levelGenerator", "game/src/ts_src/levelGenerator/nullLevelGenerator", "game/src/ts_src/playerController/playerController", "game/src/ts_src/scoreManager/scoreManager"], function (require, exports, mxEnums_3, nullBulletSpawner_2, nullBulletManager_5, _1942enums_13, cmpNullCollisionController_2, cmpNullEnemyController_1, nullEnemySpawner_3, nullEnemiesManager_3, ambienceGenerator_1, nullAmbientGenerator_1, levelGenerator_1, nullLevelGenerator_1, playerController_1, scoreManager_1) {
+define("game/src/ts_src/uiManager/IUIManager", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/uiManager/NullUIManager", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.NullUIManager = void 0;
+    var NullUIManager = (function () {
+        function NullUIManager() {
+        }
+        NullUIManager.prototype.reset = function (_scene, _gameManager) { };
+        NullUIManager.prototype.update = function (_dt) { };
+        return NullUIManager;
+    }());
+    exports.NullUIManager = NullUIManager;
+});
+define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "commons/mxEnums", "game/src/ts_src/bulletManager/bulletSpawner/nullBulletSpawner", "game/src/ts_src/bulletManager/nullBulletManager", "game/src/ts_src/commons/1942enums", "game/src/ts_src/components/cmpNullCollisionController", "game/src/ts_src/components/cmpNullEnemyController", "game/src/ts_src/enemiesManager/enemySpawner/nullEnemySpawner", "game/src/ts_src/enemiesManager/nullEnemiesManager", "game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGenerator", "game/src/ts_src/levelGenerator/ambienceGenerator/nullAmbientGenerator", "game/src/ts_src/levelGenerator/levelGenerator", "game/src/ts_src/levelGenerator/nullLevelGenerator", "game/src/ts_src/playerController/playerController", "game/src/ts_src/scoreManager/scoreManager", "game/src/ts_src/uiManager/NullUIManager"], function (require, exports, mxEnums_3, nullBulletSpawner_2, nullBulletManager_5, _1942enums_13, cmpNullCollisionController_2, cmpNullEnemyController_1, nullEnemySpawner_3, nullEnemiesManager_3, ambienceGenerator_1, nullAmbientGenerator_1, levelGenerator_1, nullLevelGenerator_1, playerController_1, scoreManager_1, NullUIManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.GameManager = void 0;
@@ -5302,15 +5330,22 @@ define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "common
                         manager.getScoreManager().addScore(_msg);
                     }
                     return;
+                case _1942enums_13.DC_MESSAGE_ID.KSpawnEnemy:
+                    {
+                        var msg = _msg;
+                        manager._m_enemiesManager.spawn(msg.x, msg.y, msg.enemy_type);
+                    }
+                    return;
             }
             return;
         };
-        GameManager.prototype.initLevelGenerator = function () {
+        GameManager.prototype.initLevelGenerator = function (_scene, _config) {
             if (this._m_levelGenerator != null) {
                 this._m_levelGenerator.destroy();
             }
-            var levelGenerator = new levelGenerator_1.LevelGenerator();
-            levelGenerator.init();
+            var levelGenerator = levelGenerator_1.LevelGenerator.Create();
+            levelGenerator.init(_scene, _config);
+            levelGenerator.setCameraHeigth(_scene.cameras.main.height);
             this._m_levelGenerator = levelGenerator;
             return mxEnums_3.OPRESULT.kOk;
         };
@@ -5333,12 +5368,18 @@ define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "common
             this._m_playerController = playerController;
             return mxEnums_3.OPRESULT.kOk;
         };
+        GameManager.prototype.reset = function (_scene) {
+            this._m_uiManager.reset(_scene, this);
+            return;
+        };
         GameManager.prototype.update = function (_dt) {
             this.m_dt = _dt;
+            this._m_distance += _dt * this._m_cameraSpeed;
             this._m_ambientGenrator.update(_dt);
-            this._m_levelGenerator.update(_dt);
+            this._m_levelGenerator.update(_dt, this._m_distance);
             this._m_playerController.update(_dt);
             this._m_enemiesManager.update(_dt);
+            this._m_uiManager.update(_dt);
             return;
         };
         GameManager.prototype.setScoreManager = function (_scoreManager) {
@@ -5379,7 +5420,29 @@ define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "common
         GameManager.prototype.getLevelGenerator = function () {
             return this._m_levelGenerator;
         };
+        GameManager.prototype.setUIManager = function (_uiManager) {
+            this._m_uiManager = _uiManager;
+            return;
+        };
+        GameManager.prototype.getUIManager = function () {
+            return this._m_uiManager;
+        };
+        GameManager.prototype.setCameraSpeed = function (_speed) {
+            this._m_cameraSpeed = _speed;
+        };
+        GameManager.prototype.getCameraSpeed = function () {
+            return this._m_cameraSpeed;
+        };
+        GameManager.prototype.setDistance = function (_distance) {
+            this._m_distance = _distance;
+            return;
+        };
+        GameManager.prototype.getDistance = function () {
+            return this._m_distance;
+        };
         GameManager.prototype._onPrepare = function () {
+            this._m_distance = 0.0;
+            this._m_cameraSpeed = 0.0;
             this.m_dt = 0.0;
             nullBulletSpawner_2.NullBulletSpawner.Prepare();
             cmpNullEnemyController_1.CmpNullEnemyController.Prepare();
@@ -5391,6 +5454,7 @@ define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "common
             this.setScoreManager(scoreManager_1.ScoreManager.Create());
             this.setAmbientGenerator(new nullAmbientGenerator_1.NullAmbientGenerator());
             this.setLevelGenerator(new nullLevelGenerator_1.NullLevelGenerator());
+            this.setUIManager(new NullUIManager_1.NullUIManager());
             return;
         };
         GameManager.prototype._onShutdown = function () {
@@ -5410,7 +5474,153 @@ define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "common
     }());
     exports.GameManager = GameManager;
 });
-define("test/ambienceGenerator/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/gameManager/gameManager"], function (require, exports, gameManager_2) {
+define("game/src/ts_src/commands/levelCommands/iLevelCommands", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/commands/levelCommands/cmdSpawnErrante", ["require", "exports", "game/src/ts_src/commons/1942enums", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/messages/msgEnemySpawn"], function (require, exports, _1942enums_14, gameManager_2, msgEnemySpawn_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmdSpawnErrante = void 0;
+    var CmdSpawnErrante = (function () {
+        function CmdSpawnErrante(_x, _y) {
+            this._m_position = new Phaser.Geom.Point(_x, _y);
+            return;
+        }
+        CmdSpawnErrante.prototype.exec = function (_levelGenerator) {
+            gameManager_2.GameManager.ReceiveMessage(_1942enums_14.DC_MESSAGE_ID.KSpawnEnemy, new msgEnemySpawn_1.MsgEnemySpawn(_1942enums_14.DC_ENEMY_TYPE.kErrante, this._m_position.x, this._m_position.y));
+            return;
+        };
+        CmdSpawnErrante.prototype.getPosition = function () {
+            return this._m_position;
+        };
+        CmdSpawnErrante.prototype.setPosition = function (_x, _y) {
+            this._m_position.x = _x;
+            this._m_position.y = _y;
+            return;
+        };
+        CmdSpawnErrante.prototype.destroy = function () { };
+        return CmdSpawnErrante;
+    }());
+    exports.CmdSpawnErrante = CmdSpawnErrante;
+});
+define("game/src/ts_src/levelGenerator/levelGenerator", ["require", "exports", "game/src/ts_src/commands/levelCommands/cmdSpawnErrante"], function (require, exports, cmdSpawnErrante_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.LevelGenerator = void 0;
+    var LevelGenerator = (function () {
+        function LevelGenerator() {
+        }
+        LevelGenerator.Create = function () {
+            var levelGenerator = new LevelGenerator();
+            levelGenerator._m_aLevelCommands = new Array();
+            levelGenerator._m_cameraHeight = 1080;
+            return levelGenerator;
+        };
+        LevelGenerator.prototype.init = function (_scene, _config) {
+            if (!_scene.cache.tilemap.has(_config.map_key)) {
+                console.log("map didn't found: " + _config.map_key);
+                return;
+            }
+            var map = _scene.add.tilemap(_config.map_key);
+            this.loadMap(map);
+            return;
+        };
+        LevelGenerator.prototype.loadMap = function (_map) {
+            var map_height = _map.heightInPixels;
+            var aLayerNames = _map.getObjectLayerNames();
+            var layerName;
+            var objectLayer;
+            while (aLayerNames.length) {
+                layerName = aLayerNames.pop();
+                objectLayer = _map.getObjectLayer(layerName);
+                if (objectLayer == null) {
+                    continue;
+                }
+                var index = 0;
+                var objectSize = objectLayer.objects.length;
+                var object = void 0;
+                var objectType = void 0;
+                while (index < objectSize) {
+                    object = objectLayer.objects[index];
+                    objectType = object.type;
+                    if (objectType != null && objectType != "") {
+                        if (object.x === undefined && object.y === undefined) {
+                            ++index;
+                            continue;
+                        }
+                        object.y = map_height - object.y;
+                        this.addSpawnCommandFromObject(object);
+                    }
+                    ++index;
+                }
+            }
+            this.orderCommands();
+            return;
+        };
+        LevelGenerator.prototype.update = function (_dt, _distance) {
+            var aCommands = this._m_aLevelCommands;
+            var command;
+            var position;
+            var distance = _distance + this._m_cameraHeight;
+            while (aCommands.length) {
+                command = aCommands[aCommands.length - 1];
+                position = command.getPosition();
+                if (position.y <= distance) {
+                    position.y = -50.0;
+                    command.setPosition(position.x, position.y);
+                    command.exec(this);
+                    command.destroy();
+                    aCommands.pop();
+                }
+                else {
+                    break;
+                }
+            }
+            return;
+        };
+        LevelGenerator.prototype.orderCommands = function () {
+            this._m_aLevelCommands.sort(function (a, b) {
+                return b.getPosition().y - a.getPosition().y;
+            });
+            return;
+        };
+        LevelGenerator.prototype.addSpawnCommandFromObject = function (_object) {
+            if (_object.x == null || _object.y == null) {
+                return;
+            }
+            var type = _object.type;
+            switch (type) {
+                case "Errante":
+                    this._createErranteCommand(_object);
+                    return;
+                default:
+                    return;
+            }
+        };
+        LevelGenerator.prototype.setCameraHeigth = function (_height) {
+            this._m_cameraHeight = _height;
+        };
+        LevelGenerator.prototype.destroy = function () {
+            var aCommands = this._m_aLevelCommands;
+            var command;
+            while (aCommands.length) {
+                command = aCommands.pop();
+                command.destroy();
+            }
+            aCommands = null;
+            return;
+        };
+        LevelGenerator.prototype._createErranteCommand = function (_object) {
+            var command = new cmdSpawnErrante_1.CmdSpawnErrante(_object.x, _object.y);
+            this._m_aLevelCommands.push(command);
+            return;
+        };
+        return LevelGenerator;
+    }());
+    exports.LevelGenerator = LevelGenerator;
+});
+define("test/ambienceGenerator/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/gameManager/gameManager"], function (require, exports, gameManager_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Test = void 0;
@@ -5424,7 +5634,7 @@ define("test/ambienceGenerator/src/ts_src/scenes/test", ["require", "exports", "
             this.load.glsl({
                 key: 'terrain_painter_01',
                 shaderType: 'fragment',
-                url: 'shaders/terrain_painter_01.frag'
+                url: 'shaders/terrain_painter_02.frag'
             });
             this.load.image('colorTerrainTexture', 'images/terrain_01.png');
             this.load.image('perlinTexture', 'images/perlin_256_01.png');
@@ -5434,8 +5644,8 @@ define("test/ambienceGenerator/src/ts_src/scenes/test", ["require", "exports", "
             return;
         };
         Test.prototype.create = function () {
-            gameManager_2.GameManager.Prepare();
-            var gameManager = gameManager_2.GameManager.GetInstance();
+            gameManager_3.GameManager.Prepare();
+            var gameManager = gameManager_3.GameManager.GetInstance();
             var ambientGenConfig = JSON.parse(this.game.cache.text.get('cnf_ambient'));
             gameManager.initAmbientGenerator(this, ambientGenConfig);
             var ambienceGenerator = gameManager.getAmbientGenerator();
@@ -5500,5 +5710,16 @@ define("test/ambienceGenerator/src/ts_src/game_init", ["require", "exports", "ph
         return GameInit;
     }());
     return GameInit;
+});
+define("game/src/ts_src/gameManager/levelConfig", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.LevelConfig = void 0;
+    var LevelConfig = (function () {
+        function LevelConfig() {
+        }
+        return LevelConfig;
+    }());
+    exports.LevelConfig = LevelConfig;
 });
 //# sourceMappingURL=test_ambienceGenerator.js.map

@@ -24,10 +24,14 @@ import { IAmbientGenerator } from "../levelGenerator/ambienceGenerator/iAmbientG
 import { NullAmbientGenerator } from "../levelGenerator/ambienceGenerator/nullAmbientGenerator";
 import { ILevelGenerator } from "../levelGenerator/iLevelGenerator";
 import { LevelGenerator } from "../levelGenerator/levelGenerator";
+import { LevelGeneratorConfig } from "../levelGenerator/levelGeneratorConfig";
 import { NullLevelGenerator } from "../levelGenerator/nullLevelGenerator";
+import { MsgEnemySpawn } from "../messages/msgEnemySpawn";
 import { PlayerController } from "../playerController/playerController";
 import { IScoreManager } from "../scoreManager/iScoreManager";
 import { ScoreManager } from "../scoreManager/scoreManager";
+import { IUIManager } from "../uiManager/IUIManager";
+import { NullUIManager } from "../uiManager/NullUIManager";
 
 export class GameManager
 {
@@ -91,6 +95,19 @@ export class GameManager
         manager.getScoreManager().addScore(_msg as integer);
       }
       return;
+
+      case DC_MESSAGE_ID.KSpawnEnemy : 
+      {
+        let msg = _msg as MsgEnemySpawn;
+
+        manager._m_enemiesManager.spawn
+        (
+          msg.x, 
+          msg.y, 
+          msg.enemy_type
+        );
+      }
+      return;
     }
     return;
   }
@@ -98,7 +115,7 @@ export class GameManager
   /**
    * 
    */
-  initLevelGenerator()
+  initLevelGenerator(_scene : Phaser.Scene, _config : LevelGeneratorConfig)
   : OPRESULT
   {
     if(this._m_levelGenerator != null)
@@ -106,8 +123,10 @@ export class GameManager
       this._m_levelGenerator.destroy();
     }
 
-    let levelGenerator = new LevelGenerator();
-    levelGenerator.init();
+    let levelGenerator = LevelGenerator.Create();
+    levelGenerator.init(_scene, _config);
+
+    levelGenerator.setCameraHeigth(_scene.cameras.main.height);
 
     this._m_levelGenerator = levelGenerator;
     return OPRESULT.kOk;
@@ -158,18 +177,30 @@ export class GameManager
     playerController.init(_scene, _cnfHero);   
 
     this._m_playerController = playerController;
+    
     return OPRESULT.kOk;
+  }
+
+  reset(_scene : Phaser.Scene)
+  : void
+  {
+    this._m_uiManager.reset(_scene, this);
+    
+    return;
   }
 
   update(_dt : number)
   : void
   {
     this.m_dt = _dt; 
+    this._m_distance += _dt * this._m_cameraSpeed;
 
     this._m_ambientGenrator.update(_dt);
-    this._m_levelGenerator.update(_dt);
+    this._m_levelGenerator.update(_dt, this._m_distance);
     this._m_playerController.update(_dt);
     this._m_enemiesManager.update(_dt);
+    this._m_uiManager.update(_dt);
+
     return;
   }
 
@@ -292,6 +323,72 @@ export class GameManager
   }
 
   /**
+   * Set the UIManager.
+   * 
+   * @param _uiManager 
+   */
+  setUIManager(_uiManager : IUIManager)
+  : void
+  {
+    this._m_uiManager = _uiManager;
+    return;
+  }
+
+  /**
+   * Get the UIManager.
+   */
+  getUIManager()
+  : IUIManager
+  {
+    return this._m_uiManager;
+  }
+
+  /**
+   * Set the camera speed.
+   * 
+   * @param _speed speed (pix./sec.). 
+   */
+  setCameraSpeed(_speed : number)
+  : void
+  {
+    this._m_cameraSpeed = _speed;
+  }
+
+  /**
+   * Get the camera speed.
+   * 
+   * @returns speed (pix./sec.).
+   */
+  getCameraSpeed()
+  : number
+  {
+    return this._m_cameraSpeed;
+  }
+
+  /**
+   * Set the distance traveled by the camera.
+   * 
+   * @param _distance distance (pix.)
+   */
+  setDistance(_distance : number)
+  : void
+  {
+    this._m_distance = _distance;
+    return;
+  }
+
+  /**
+   * Get the distance traveled by the camera.
+   * 
+   * @returns distance (pix.).
+   */
+  getDistance()
+  : number
+  {
+    return this._m_distance;
+  }
+
+  /**
    * Delta time.
    */
   m_dt : number;
@@ -306,6 +403,10 @@ export class GameManager
   private _onPrepare()
   : void
   {
+    // Default properties.
+
+    this._m_distance = 0.0;
+    this._m_cameraSpeed = 0.0;
     this.m_dt = 0.0;
 
     // Prepare the modules.
@@ -323,6 +424,7 @@ export class GameManager
     this.setScoreManager(ScoreManager.Create());
     this.setAmbientGenerator(new NullAmbientGenerator());
     this.setLevelGenerator(new NullLevelGenerator());
+    this.setUIManager(new NullUIManager());
 
     return;
   }
@@ -387,4 +489,19 @@ export class GameManager
    * Reference to the AmbienGenrator.
    */
   private _m_ambientGenrator : IAmbientGenerator;
+
+  /**
+   * Reference to the UIManager.
+   */
+  private _m_uiManager : IUIManager;
+
+  /**
+   * The speed (pix./sec.) of the camera during the level.
+   */
+  private _m_cameraSpeed : number;
+
+  /**
+   * Distance traveled by the camera (Theoretically).
+   */
+  private _m_distance : number;
 }

@@ -28,7 +28,8 @@
     "../../game/src/ts_src/enemiesManager/**/*",
     "../../externals/mxUtilities/*",
     "../../game/src/ts_src/commons/**/*",
-    "../../game/src/ts_src/factories/**/*"
+    "../../game/src/ts_src/factories/**/*",
+    "../../game/src/ts_src/uiManager/**/*"
   ],
 
   "exclude": 

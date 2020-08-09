@@ -20,7 +20,7 @@ export class Test extends Phaser.Scene
       {
         key : 'terrain_painter_01',
         shaderType : 'fragment',
-        url : 'shaders/terrain_painter_01.frag' 
+        url : 'shaders/terrain_painter_02.frag' 
       }
     );
 

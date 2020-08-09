@@ -27,7 +27,8 @@
         "optimization/mxPoolArgs",
         "MxTools",
         "listeners/mxListener",
-        "listeners/mxListenerManager"
+        "listeners/mxListenerManager",
+        "shaders/mxShader"
       ]
     },
 
