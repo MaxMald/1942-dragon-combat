@@ -158,7 +158,6 @@ implements ILevelGenerator
     let aCommands = this._m_aLevelCommands;
     let command : ILevelCommand;
     let position : Point;
-    let distance : number = _distance + this._m_cameraHeight;
 
     while(aCommands.length)
     {
@@ -166,7 +165,7 @@ implements ILevelGenerator
 
       position = command.getPosition();
 
-      if(position.y <= distance)
+      if(position.y <= _distance)
       {
 
         // Reset height.

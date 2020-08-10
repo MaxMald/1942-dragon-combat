@@ -99,6 +99,10 @@ implements IBaseComponent<Ty_physicsSprite>
       case DC_MESSAGE_ID.kKill :
         this._onKill(_obj as Ty_physicsActor);
       return;
+
+      case DC_MESSAGE_ID.kDesactive :
+        this._onKill(_obj as Ty_physicsActor);
+      return;
     }
   }
   

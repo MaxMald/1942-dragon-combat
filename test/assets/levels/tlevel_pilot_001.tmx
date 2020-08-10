@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="34">
+<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="252">
  <editorsettings>
   <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
@@ -17,61 +17,643 @@
   <object id="11" name="0 px" type="Guide Line" x="0" y="0" width="1088" height="1"/>
  </objectgroup>
  <objectgroup id="2" name="First Wave" offsetx="-3" offsety="6">
-  <object id="1" name="Errante" type="Errante" x="545.82" y="7671.87">
+  <object id="1" name="Errante" type="Errante" x="544.668" y="8570.54">
    <point/>
   </object>
-  <object id="2" name="Errante" type="Errante" x="194.273" y="7665.64">
+  <object id="2" name="Errante" type="Errante" x="193.121" y="8564.31">
    <point/>
   </object>
-  <object id="12" name="Errante" type="Errante" x="863.333" y="7673.33">
+  <object id="12" name="Errante" type="Errante" x="862.181" y="8572">
    <point/>
   </object>
-  <object id="13" name="Errante" type="Errante" x="968.061" y="7463.58">
+  <object id="13" name="Errante" type="Errante" x="964.243" y="8451.58">
    <point/>
   </object>
-  <object id="14" name="Errante" type="Errante" x="864.727" y="7330.24">
+  <object id="14" name="Errante" type="Errante" x="858.243" y="8352.91">
    <point/>
   </object>
-  <object id="15" name="Errante" type="Errante" x="764.727" y="7237.58">
+  <object id="15" name="Errante" type="Errante" x="763.575" y="8294.92">
    <point/>
   </object>
-  <object id="16" name="Errante" type="Errante" x="155.394" y="7462.24" rotation="360">
+  <object id="16" name="Errante" type="Errante" x="151.576" y="8450.24" rotation="360">
    <point/>
   </object>
-  <object id="17" name="Errante" type="Errante" x="256.394" y="7349.25" rotation="360">
+  <object id="17" name="Errante" type="Errante" x="249.91" y="8371.92" rotation="360">
    <point/>
   </object>
-  <object id="18" name="Errante" type="Errante" x="350.061" y="7250.58" rotation="360">
+  <object id="18" name="Errante" type="Errante" x="348.909" y="8307.92" rotation="360">
    <point/>
   </object>
-  <object id="19" name="Errante" type="Errante" x="466.061" y="7153.24">
+  <object id="19" name="Errante" type="Errante" x="454.243" y="8247.91">
    <point/>
   </object>
-  <object id="20" name="Errante" type="Errante" x="798" y="6868">
+  <object id="20" name="Errante" type="Errante" x="793.849" y="7994.67">
    <point/>
   </object>
-  <object id="21" name="Errante" type="Errante" x="896" y="6948">
+  <object id="21" name="Errante" type="Errante" x="891.849" y="8074.67">
    <point/>
   </object>
-  <object id="22" name="Errante" type="Errante" x="1006" y="6866">
+  <object id="22" name="Errante" type="Errante" x="1001.85" y="7992.67">
    <point/>
   </object>
-  <object id="26" name="Errante" type="Errante" x="572.485" y="6726.06">
+  <object id="26" name="Errante" type="Errante" x="539.849" y="7894.73">
    <point/>
   </object>
-  <object id="29" name="Errante" type="Errante" x="660" y="7152">
+  <object id="29" name="Errante" type="Errante" x="648.181" y="8246.67">
    <point/>
   </object>
-  <object id="30" name="Errante" type="Errante" x="574" y="7082">
+  <object id="30" name="Errante" type="Errante" x="559.515" y="8191.34">
    <point/>
   </object>
-  <object id="31" name="Errante" type="Errante" x="64" y="6871.33">
+  <object id="31" name="Errante" type="Errante" x="101.849" y="7998">
    <point/>
   </object>
-  <object id="32" name="Errante" type="Errante" x="162" y="6951.33">
+  <object id="32" name="Errante" type="Errante" x="199.849" y="8078">
    <point/>
   </object>
-  <object id="33" name="Errante" type="Errante" x="272" y="6869.33">
+  <object id="33" name="Errante" type="Errante" x="309.849" y="7996">
+   <point/>
+  </object>
+  <object id="34" name="Errante" type="Errante" x="822.181" y="7746">
+   <point/>
+  </object>
+  <object id="35" name="Errante" type="Errante" x="894.849" y="7746.67">
+   <point/>
+  </object>
+  <object id="36" name="Errante" type="Errante" x="970.181" y="7748">
+   <point/>
+  </object>
+  <object id="37" name="Errante" type="Errante" x="118.849" y="7746.67">
+   <point/>
+  </object>
+  <object id="38" name="Errante" type="Errante" x="191.516" y="7747.34">
+   <point/>
+  </object>
+  <object id="39" name="Errante" type="Errante" x="266.849" y="7748.67">
+   <point/>
+  </object>
+  <object id="40" name="Errante" type="Errante" x="476.849" y="7608.67">
+   <point/>
+  </object>
+  <object id="41" name="Errante" type="Errante" x="549.515" y="7609.34">
+   <point/>
+  </object>
+  <object id="42" name="Errante" type="Errante" x="624.849" y="7610.67">
+   <point/>
+  </object>
+  <object id="43" name="Errante" type="Errante" x="872.181" y="7424">
+   <point/>
+  </object>
+  <object id="44" name="Errante" type="Errante" x="944.849" y="7424.67">
+   <point/>
+  </object>
+  <object id="45" name="Errante" type="Errante" x="1020.18" y="7426">
+   <point/>
+  </object>
+  <object id="49" name="Errante" type="Errante" x="476.849" y="7420.67">
+   <point/>
+  </object>
+  <object id="50" name="Errante" type="Errante" x="549.515" y="7421.34">
+   <point/>
+  </object>
+  <object id="51" name="Errante" type="Errante" x="624.849" y="7422.67">
+   <point/>
+  </object>
+  <object id="52" name="Errante" type="Errante" x="484.182" y="7238">
+   <point/>
+  </object>
+  <object id="53" name="Errante" type="Errante" x="556.849" y="7238.67">
+   <point/>
+  </object>
+  <object id="54" name="Errante" type="Errante" x="632.178" y="7240">
+   <point/>
+  </object>
+  <object id="58" name="Errante" type="Errante" x="56.8485" y="7238.67">
+   <point/>
+  </object>
+  <object id="59" name="Errante" type="Errante" x="129.516" y="7239.34">
+   <point/>
+  </object>
+  <object id="60" name="Errante" type="Errante" x="204.849" y="7240.67">
+   <point/>
+  </object>
+  <object id="62" name="Errante" type="Errante" x="931.518" y="7101.34">
+   <point/>
+  </object>
+  <object id="63" name="Errante" type="Errante" x="1014.18" y="7000.67">
+   <point/>
+  </object>
+  <object id="64" name="Errante" type="Errante" x="757.188" y="7094.34">
+   <point/>
+  </object>
+  <object id="65" name="Errante" type="Errante" x="839.849" y="6993.67">
+   <point/>
+  </object>
+  <object id="66" name="Errante" type="Errante" x="587.518" y="7085.34">
+   <point/>
+  </object>
+  <object id="67" name="Errante" type="Errante" x="670.178" y="6984.67">
+   <point/>
+  </object>
+  <object id="68" name="Errante" type="Errante" x="413.188" y="7078.34">
+   <point/>
+  </object>
+  <object id="69" name="Errante" type="Errante" x="495.849" y="6977.67">
+   <point/>
+  </object>
+  <object id="70" name="Errante" type="Errante" x="249.518" y="7086.34">
+   <point/>
+  </object>
+  <object id="71" name="Errante" type="Errante" x="331.178" y="6987.67">
+   <point/>
+  </object>
+  <object id="72" name="Errante" type="Errante" x="66.1885" y="7083.34">
+   <point/>
+  </object>
+  <object id="73" name="Errante" type="Errante" x="151.849" y="6990.67">
+   <point/>
+  </object>
+  <object id="74" name="Errante" type="Errante" x="535.213" y="6808.64">
+   <point/>
+  </object>
+  <object id="75" name="Errante" type="Errante" x="636.849" y="6758.67">
+   <point/>
+  </object>
+  <object id="76" name="Errante" type="Errante" x="449.849" y="6757.67">
+   <point/>
+  </object>
+  <object id="77" name="Errante" type="Errante" x="753.849" y="6692.67">
+   <point/>
+  </object>
+  <object id="78" name="Errante" type="Errante" x="333.849" y="6689.67">
+   <point/>
+  </object>
+  <object id="79" name="Errante" type="Errante" x="859.849" y="6629.67">
+   <point/>
+  </object>
+  <object id="80" name="Errante" type="Errante" x="219.849" y="6627.67">
+   <point/>
+  </object>
+  <object id="81" name="Errante" type="Errante" x="556.849" y="6396">
+   <point/>
+  </object>
+  <object id="82" name="Errante" type="Errante" x="495.515" y="6338.67">
+   <point/>
+  </object>
+  <object id="83" name="Errante" type="Errante" x="623.515" y="6339.34">
+   <point/>
+  </object>
+  <object id="84" name="Errante" type="Errante" x="932.181" y="6295.33">
+   <point/>
+  </object>
+  <object id="85" name="Errante" type="Errante" x="870.849" y="6238">
+   <point/>
+  </object>
+  <object id="86" name="Errante" type="Errante" x="998.849" y="6238.67">
+   <point/>
+  </object>
+  <object id="87" name="Errante" type="Errante" x="217.514" y="6288.66">
+   <point/>
+  </object>
+  <object id="88" name="Errante" type="Errante" x="156.181" y="6231.33">
+   <point/>
+  </object>
+  <object id="89" name="Errante" type="Errante" x="284.182" y="6232">
+   <point/>
+  </object>
+  <object id="90" name="Errante" type="Errante" x="555.515" y="6064.67">
+   <point/>
+  </object>
+  <object id="91" name="Errante" type="Errante" x="494.183" y="6007.34">
+   <point/>
+  </object>
+  <object id="92" name="Errante" type="Errante" x="622.182" y="6008.01">
+   <point/>
+  </object>
+  <object id="93" name="Errante" type="Errante" x="930.849" y="5964">
+   <point/>
+  </object>
+  <object id="94" name="Errante" type="Errante" x="869.515" y="5906.67">
+   <point/>
+  </object>
+  <object id="95" name="Errante" type="Errante" x="997.515" y="5907.34">
+   <point/>
+  </object>
+  <object id="96" name="Errante" type="Errante" x="216.181" y="5957.33">
+   <point/>
+  </object>
+  <object id="97" name="Errante" type="Errante" x="154.849" y="5900">
+   <point/>
+  </object>
+  <object id="98" name="Errante" type="Errante" x="282.849" y="5900.67">
+   <point/>
+  </object>
+  <object id="99" name="Errante" type="Errante" x="551.515" y="5776.67">
+   <point/>
+  </object>
+  <object id="100" name="Errante" type="Errante" x="490.183" y="5719.34">
+   <point/>
+  </object>
+  <object id="101" name="Errante" type="Errante" x="618.182" y="5720.01">
+   <point/>
+  </object>
+  <object id="102" name="Errante" type="Errante" x="926.849" y="5676">
+   <point/>
+  </object>
+  <object id="103" name="Errante" type="Errante" x="865.515" y="5618.67">
+   <point/>
+  </object>
+  <object id="104" name="Errante" type="Errante" x="993.515" y="5619.34">
+   <point/>
+  </object>
+  <object id="105" name="Errante" type="Errante" x="212.181" y="5669.33">
+   <point/>
+  </object>
+  <object id="106" name="Errante" type="Errante" x="150.849" y="5612">
+   <point/>
+  </object>
+  <object id="107" name="Errante" type="Errante" x="278.849" y="5612.67">
+   <point/>
+  </object>
+  <object id="108" name="Errante" type="Errante" x="860.181" y="5438">
+   <point/>
+  </object>
+  <object id="109" name="Errante" type="Errante" x="932.849" y="5438.67">
+   <point/>
+  </object>
+  <object id="110" name="Errante" type="Errante" x="1008.18" y="5440">
+   <point/>
+  </object>
+  <object id="114" name="Errante" type="Errante" x="454.849" y="5444.67">
+   <point/>
+  </object>
+  <object id="115" name="Errante" type="Errante" x="527.515" y="5445.34">
+   <point/>
+  </object>
+  <object id="116" name="Errante" type="Errante" x="602.849" y="5446.67">
+   <point/>
+  </object>
+  <object id="117" name="Errante" type="Errante" x="464.182" y="5264">
+   <point/>
+  </object>
+  <object id="118" name="Errante" type="Errante" x="536.849" y="5264.67">
+   <point/>
+  </object>
+  <object id="119" name="Errante" type="Errante" x="612.178" y="5266">
+   <point/>
+  </object>
+  <object id="123" name="Errante" type="Errante" x="36.8485" y="5260.67">
+   <point/>
+  </object>
+  <object id="124" name="Errante" type="Errante" x="109.516" y="5261.34">
+   <point/>
+  </object>
+  <object id="125" name="Errante" type="Errante" x="184.849" y="5262.67">
+   <point/>
+  </object>
+  <object id="126" name="Errante" type="Errante" x="563.213" y="5103.31">
+   <point/>
+  </object>
+  <object id="127" name="Errante" type="Errante" x="664.849" y="5053.34">
+   <point/>
+  </object>
+  <object id="128" name="Errante" type="Errante" x="477.849" y="5052.34">
+   <point/>
+  </object>
+  <object id="129" name="Errante" type="Errante" x="781.849" y="4987.34">
+   <point/>
+  </object>
+  <object id="130" name="Errante" type="Errante" x="361.849" y="4984.34">
+   <point/>
+  </object>
+  <object id="131" name="Errante" type="Errante" x="887.849" y="4924.34">
+   <point/>
+  </object>
+  <object id="132" name="Errante" type="Errante" x="247.849" y="4922.34">
+   <point/>
+  </object>
+  <object id="133" name="Errante" type="Errante" x="566.849" y="4768">
+   <point/>
+  </object>
+  <object id="134" name="Errante" type="Errante" x="564.335" y="4671.21">
+   <point/>
+  </object>
+  <object id="135" name="Errante" type="Errante" x="212.788" y="4664.98">
+   <point/>
+  </object>
+  <object id="136" name="Errante" type="Errante" x="881.849" y="4672.67">
+   <point/>
+  </object>
+  <object id="137" name="Errante" type="Errante" x="983.909" y="4552.25">
+   <point/>
+  </object>
+  <object id="138" name="Errante" type="Errante" x="877.909" y="4453.58">
+   <point/>
+  </object>
+  <object id="139" name="Errante" type="Errante" x="783.243" y="4395.59">
+   <point/>
+  </object>
+  <object id="140" name="Errante" type="Errante" x="171.243" y="4550.91" rotation="360">
+   <point/>
+  </object>
+  <object id="141" name="Errante" type="Errante" x="269.577" y="4472.59" rotation="360">
+   <point/>
+  </object>
+  <object id="142" name="Errante" type="Errante" x="368.577" y="4408.59" rotation="360">
+   <point/>
+  </object>
+  <object id="143" name="Errante" type="Errante" x="473.909" y="4348.58">
+   <point/>
+  </object>
+  <object id="144" name="Errante" type="Errante" x="911.515" y="4175.34">
+   <point/>
+  </object>
+  <object id="145" name="Errante" type="Errante" x="667.849" y="4347.34">
+   <point/>
+  </object>
+  <object id="146" name="Errante" type="Errante" x="579.182" y="4292.01">
+   <point/>
+  </object>
+  <object id="147" name="Errante" type="Errante" x="219.516" y="4178.67">
+   <point/>
+  </object>
+  <object id="148" name="Errante" type="Errante" x="552.607" y="4097.15">
+   <point/>
+  </object>
+  <object id="149" name="Errante" type="Errante" x="491.274" y="4039.82">
+   <point/>
+  </object>
+  <object id="150" name="Errante" type="Errante" x="619.274" y="4040.49">
+   <point/>
+  </object>
+  <object id="151" name="Errante" type="Errante" x="927.939" y="3996.48">
+   <point/>
+  </object>
+  <object id="152" name="Errante" type="Errante" x="866.607" y="3939.15">
+   <point/>
+  </object>
+  <object id="153" name="Errante" type="Errante" x="994.607" y="3939.82">
+   <point/>
+  </object>
+  <object id="154" name="Errante" type="Errante" x="213.273" y="3989.81">
+   <point/>
+  </object>
+  <object id="155" name="Errante" type="Errante" x="151.94" y="3932.48">
+   <point/>
+  </object>
+  <object id="156" name="Errante" type="Errante" x="279.94" y="3933.15">
+   <point/>
+  </object>
+  <object id="157" name="Errante" type="Errante" x="551.274" y="3765.82">
+   <point/>
+  </object>
+  <object id="158" name="Errante" type="Errante" x="489.94" y="3708.49">
+   <point/>
+  </object>
+  <object id="159" name="Errante" type="Errante" x="617.94" y="3709.16">
+   <point/>
+  </object>
+  <object id="160" name="Errante" type="Errante" x="926.607" y="3665.15">
+   <point/>
+  </object>
+  <object id="161" name="Errante" type="Errante" x="865.274" y="3607.82">
+   <point/>
+  </object>
+  <object id="162" name="Errante" type="Errante" x="993.274" y="3608.49">
+   <point/>
+  </object>
+  <object id="163" name="Errante" type="Errante" x="211.94" y="3658.48">
+   <point/>
+  </object>
+  <object id="164" name="Errante" type="Errante" x="150.607" y="3601.15">
+   <point/>
+  </object>
+  <object id="165" name="Errante" type="Errante" x="278.606" y="3601.82">
+   <point/>
+  </object>
+  <object id="166" name="Errante" type="Errante" x="547.274" y="3477.82">
+   <point/>
+  </object>
+  <object id="167" name="Errante" type="Errante" x="485.94" y="3420.49">
+   <point/>
+  </object>
+  <object id="168" name="Errante" type="Errante" x="613.94" y="3421.16">
+   <point/>
+  </object>
+  <object id="169" name="Errante" type="Errante" x="922.607" y="3377.15">
+   <point/>
+  </object>
+  <object id="170" name="Errante" type="Errante" x="861.274" y="3319.82">
+   <point/>
+  </object>
+  <object id="171" name="Errante" type="Errante" x="989.274" y="3320.49">
+   <point/>
+  </object>
+  <object id="172" name="Errante" type="Errante" x="207.94" y="3370.48">
+   <point/>
+  </object>
+  <object id="173" name="Errante" type="Errante" x="146.607" y="3313.15">
+   <point/>
+  </object>
+  <object id="174" name="Errante" type="Errante" x="274.606" y="3313.82">
+   <point/>
+  </object>
+  <object id="175" name="Errante" type="Errante" x="909.333" y="3171.94">
+   <point/>
+  </object>
+  <object id="176" name="Errante" type="Errante" x="982.001" y="3172.61">
+   <point/>
+  </object>
+  <object id="177" name="Errante" type="Errante" x="1057.33" y="3173.94">
+   <point/>
+  </object>
+  <object id="181" name="Errante" type="Errante" x="468" y="3164.61">
+   <point/>
+  </object>
+  <object id="182" name="Errante" type="Errante" x="540.668" y="3165.28">
+   <point/>
+  </object>
+  <object id="183" name="Errante" type="Errante" x="616.001" y="3166.61">
+   <point/>
+  </object>
+  <object id="184" name="Errante" type="Errante" x="475.334" y="2987.94">
+   <point/>
+  </object>
+  <object id="185" name="Errante" type="Errante" x="548.001" y="2988.61">
+   <point/>
+  </object>
+  <object id="186" name="Errante" type="Errante" x="623.331" y="2989.94">
+   <point/>
+  </object>
+  <object id="190" name="Errante" type="Errante" x="32" y="2984.61">
+   <point/>
+  </object>
+  <object id="191" name="Errante" type="Errante" x="104.668" y="2985.28">
+   <point/>
+  </object>
+  <object id="192" name="Errante" type="Errante" x="180" y="2986.61">
+   <point/>
+  </object>
+  <object id="193" name="Errante" type="Errante" x="959.186" y="2829.34">
+   <point/>
+  </object>
+  <object id="194" name="Errante" type="Errante" x="1003.85" y="2708.67">
+   <point/>
+  </object>
+  <object id="195" name="Errante" type="Errante" x="784.855" y="2822.34">
+   <point/>
+  </object>
+  <object id="196" name="Errante" type="Errante" x="867.515" y="2721.67">
+   <point/>
+  </object>
+  <object id="197" name="Errante" type="Errante" x="615.186" y="2813.34">
+   <point/>
+  </object>
+  <object id="198" name="Errante" type="Errante" x="697.845" y="2712.67">
+   <point/>
+  </object>
+  <object id="199" name="Errante" type="Errante" x="440.856" y="2806.34">
+   <point/>
+  </object>
+  <object id="200" name="Errante" type="Errante" x="523.515" y="2705.67">
+   <point/>
+  </object>
+  <object id="201" name="Errante" type="Errante" x="277.185" y="2814.34">
+   <point/>
+  </object>
+  <object id="202" name="Errante" type="Errante" x="358.846" y="2715.67">
+   <point/>
+  </object>
+  <object id="203" name="Errante" type="Errante" x="93.8552" y="2811.34">
+   <point/>
+  </object>
+  <object id="204" name="Errante" type="Errante" x="179.516" y="2718.67">
+   <point/>
+  </object>
+  <object id="205" name="Errante" type="Errante" x="682.273" y="2212.85">
+   <point/>
+  </object>
+  <object id="211" name="Errante" type="Errante" x="769.273" y="2138.85">
+   <point/>
+  </object>
+  <object id="212" name="Errante" type="Errante" x="853.273" y="2066.85">
+   <point/>
+  </object>
+  <object id="213" name="Errante" type="Errante" x="933.273" y="2012.19">
+   <point/>
+  </object>
+  <object id="214" name="Errante" type="Errante" x="1011.94" y="1946.85">
+   <point/>
+  </object>
+  <object id="215" name="Errante" type="Errante" x="405.185" y="2492.67">
+   <point/>
+  </object>
+  <object id="216" name="Errante" type="Errante" x="318.185" y="2418.67">
+   <point/>
+  </object>
+  <object id="217" name="Errante" type="Errante" x="230.185" y="2342.67">
+   <point/>
+  </object>
+  <object id="218" name="Errante" type="Errante" x="158.185" y="2286.01">
+   <point/>
+  </object>
+  <object id="219" name="Errante" type="Errante" x="88.8485" y="2224.67">
+   <point/>
+  </object>
+  <object id="220" name="Errante" type="Errante" x="570.849" y="1840.67">
+   <point/>
+  </object>
+  <object id="221" name="Errante" type="Errante" x="509.515" y="1783.34">
+   <point/>
+  </object>
+  <object id="222" name="Errante" type="Errante" x="637.515" y="1784.01">
+   <point/>
+  </object>
+  <object id="223" name="Errante" type="Errante" x="946.181" y="1740">
+   <point/>
+  </object>
+  <object id="224" name="Errante" type="Errante" x="884.849" y="1682.67">
+   <point/>
+  </object>
+  <object id="225" name="Errante" type="Errante" x="1012.85" y="1683.34">
+   <point/>
+  </object>
+  <object id="226" name="Errante" type="Errante" x="231.514" y="1733.33">
+   <point/>
+  </object>
+  <object id="227" name="Errante" type="Errante" x="170.181" y="1676">
+   <point/>
+  </object>
+  <object id="228" name="Errante" type="Errante" x="298.182" y="1676.67">
+   <point/>
+  </object>
+  <object id="229" name="Errante" type="Errante" x="566.849" y="1552.67">
+   <point/>
+  </object>
+  <object id="230" name="Errante" type="Errante" x="568.213" y="1477.64">
+   <point/>
+  </object>
+  <object id="231" name="Errante" type="Errante" x="669.849" y="1427.67">
+   <point/>
+  </object>
+  <object id="232" name="Errante" type="Errante" x="482.849" y="1426.67">
+   <point/>
+  </object>
+  <object id="233" name="Errante" type="Errante" x="786.849" y="1361.67">
+   <point/>
+  </object>
+  <object id="234" name="Errante" type="Errante" x="366.849" y="1358.67">
+   <point/>
+  </object>
+  <object id="235" name="Errante" type="Errante" x="892.849" y="1298.67">
+   <point/>
+  </object>
+  <object id="236" name="Errante" type="Errante" x="252.849" y="1296.67">
+   <point/>
+  </object>
+  <object id="237" name="Errante" type="Errante" x="568.181" y="992">
+   <point/>
+  </object>
+  <object id="238" name="Errante" type="Errante" x="552" y="9060">
+   <point/>
+  </object>
+  <object id="239" name="Errante" type="Errante" x="692.758" y="548.84">
+   <point/>
+  </object>
+  <object id="240" name="Errante" type="Errante" x="779.758" y="474.84">
+   <point/>
+  </object>
+  <object id="241" name="Errante" type="Errante" x="863.758" y="402.84">
+   <point/>
+  </object>
+  <object id="242" name="Errante" type="Errante" x="943.758" y="348.18">
+   <point/>
+  </object>
+  <object id="243" name="Errante" type="Errante" x="1022.43" y="282.84">
+   <point/>
+  </object>
+  <object id="244" name="Errante" type="Errante" x="415.67" y="828.66">
+   <point/>
+  </object>
+  <object id="245" name="Errante" type="Errante" x="328.67" y="754.66">
+   <point/>
+  </object>
+  <object id="246" name="Errante" type="Errante" x="240.67" y="678.66">
+   <point/>
+  </object>
+  <object id="247" name="Errante" type="Errante" x="168.67" y="622">
+   <point/>
+  </object>
+  <object id="248" name="Errante" type="Errante" x="99.3335" y="560.66">
+   <point/>
+  </object>
+  <object id="249" name="Errante" type="Errante" x="581.334" y="176.66">
+   <point/>
+  </object>
+  <object id="250" name="Errante" type="Errante" x="520" y="119.33">
+   <point/>
+  </object>
+  <object id="251" name="Errante" type="Errante" x="648" y="120">
    <point/>
   </object>
  </objectgroup>

@@ -86,7 +86,8 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
         kKill: 507,
         kSetText: 508,
         kAddScorePoints: 509,
-        KSpawnEnemy: 510
+        KSpawnEnemy: 510,
+        kDesactive: 511
     });
     exports.DC_ANIMATION_ID = Object.freeze({
         kForward: 0,
@@ -4644,11 +4645,10 @@ define("game/src/ts_src/levelGenerator/levelGenerator", ["require", "exports", "
             var aCommands = this._m_aLevelCommands;
             var command;
             var position;
-            var distance = _distance + this._m_cameraHeight;
             while (aCommands.length) {
                 command = aCommands[aCommands.length - 1];
                 position = command.getPosition();
-                if (position.y <= distance) {
+                if (position.y <= _distance) {
                     position.y = -50.0;
                     command.setPosition(position.x, position.y);
                     command.exec(this);
@@ -5772,7 +5772,7 @@ define("game/src/ts_src/components/cmpPlayZone", ["require", "exports", "game/sr
                 && (p1.y < sprite.y && sprite.y < p2.y)) {
                 return;
             }
-            _actor.sendMessage(_1942enums_18.DC_MESSAGE_ID.kKill, _actor);
+            _actor.sendMessage(_1942enums_18.DC_MESSAGE_ID.kDesactive, _actor);
             return;
         };
         CmpPlayZone.prototype.receive = function (_id, _obj) { };
@@ -5997,6 +5997,9 @@ define("game/src/ts_src/components/cmpBasicBulletController", ["require", "expor
         CmpBasicBulletController.prototype.receive = function (_id, _obj) {
             switch (_id) {
                 case _1942enums_20.DC_MESSAGE_ID.kKill:
+                    this._onKill(_obj);
+                    return;
+                case _1942enums_20.DC_MESSAGE_ID.kDesactive:
                     this._onKill(_obj);
                     return;
             }
@@ -6472,6 +6475,9 @@ define("game/src/ts_src/components/cmpErranteController", ["require", "exports",
                 case _1942enums_26.DC_MESSAGE_ID.kKill:
                     this._onKill(_obj);
                     return;
+                case _1942enums_26.DC_MESSAGE_ID.kDesactive:
+                    this._onDesactived(_obj);
+                    return;
             }
             return;
         };
@@ -6528,6 +6534,11 @@ define("game/src/ts_src/components/cmpErranteController", ["require", "exports",
             this._m_spawner.disasemble(_actor);
             this._m_enemiesManager.disableActor(_actor);
             gameManager_3.GameManager.ReceiveMessage(_1942enums_26.DC_MESSAGE_ID.kAddScorePoints, this._m_scorePoints);
+            return;
+        };
+        CmpErranteController.prototype._onDesactived = function (_actor) {
+            this._m_spawner.disasemble(_actor);
+            this._m_enemiesManager.disableActor(_actor);
             return;
         };
         return CmpErranteController;

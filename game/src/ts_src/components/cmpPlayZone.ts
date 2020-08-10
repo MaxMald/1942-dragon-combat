@@ -11,7 +11,7 @@
 
 import { BaseActor } from "../actors/baseActor";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
-import { Point, Ty_physicsSprite } from "../commons/1942types";
+import { Point, Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
 import { IBaseComponent } from "./iBaseComponent";
 
 /**
@@ -63,7 +63,7 @@ export class CmpPlayZone implements IBaseComponent<Ty_physicsSprite>
    * 
    * @param _actor actor.
    */
-  update(_actor: BaseActor<Phaser.Physics.Arcade.Sprite>)
+  update(_actor: Ty_physicsActor)
   : void 
   {
     let sprite = _actor.getWrappedInstance();
@@ -77,7 +77,7 @@ export class CmpPlayZone implements IBaseComponent<Ty_physicsSprite>
       return;
     }
 
-    _actor.sendMessage(DC_MESSAGE_ID.kKill, _actor);
+    _actor.sendMessage(DC_MESSAGE_ID.kDesactive, _actor);
     return;
   }
 

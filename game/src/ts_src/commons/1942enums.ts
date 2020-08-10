@@ -248,7 +248,14 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : MsgEnemySpawn
    */
-  KSpawnEnemy : 510 as 510
+  KSpawnEnemy : 510 as 510,
+
+  /**
+   * Desactive actor.
+   * 
+   * msg : BaseActor.
+   */
+  kDesactive : 511 as 511
 });
 
 /****************************************************/

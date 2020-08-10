@@ -5337,11 +5337,24 @@ define("game/src/ts_src/playerController/playerController", ["require", "exports
     }());
     exports.PlayerController = PlayerController;
 });
+define("game/src/ts_src/scoreManager/scoreManagerConfig", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ScoreManagerConfig = void 0;
+    var ScoreManagerConfig = (function () {
+        function ScoreManagerConfig() {
+            this.init_score = 0;
+            return;
+        }
+        return ScoreManagerConfig;
+    }());
+    exports.ScoreManagerConfig = ScoreManagerConfig;
+});
 define("game/src/ts_src/scoreManager/iScoreManager", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
 });
-define("game/src/ts_src/scoreManager/scoreManager", ["require", "exports", "listeners/mxListener", "listeners/mxListenerManager"], function (require, exports, mxListener_2, mxListenerManager_2) {
+define("game/src/ts_src/scoreManager/scoreManager", ["require", "exports", "listeners/mxListener", "listeners/mxListenerManager", "game/src/ts_src/scoreManager/scoreManagerConfig"], function (require, exports, mxListener_2, mxListenerManager_2, scoreManagerConfig_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ScoreManager = void 0;
@@ -5355,6 +5368,17 @@ define("game/src/ts_src/scoreManager/scoreManager", ["require", "exports", "list
                 = new mxListenerManager_2.MxListenerManager();
             scoreManager._m_listener.addEvent('scoreChanged');
             return scoreManager;
+        };
+        ScoreManager.prototype.init = function (_scene, _config) {
+            this._m_config = _config;
+            return;
+        };
+        ScoreManager.prototype.reset = function (_scene, _gameManager) {
+            if (this._m_config == null) {
+                this._m_config = new scoreManagerConfig_1.ScoreManagerConfig();
+            }
+            this.setScore(this._m_config.init_score);
+            return;
         };
         ScoreManager.prototype.update = function (_dt) {
             return;
@@ -5381,6 +5405,7 @@ define("game/src/ts_src/scoreManager/scoreManager", ["require", "exports", "list
             return;
         };
         ScoreManager.prototype.destroy = function () {
+            this._m_listener.destroy();
             return;
         };
         return ScoreManager;
@@ -5398,6 +5423,8 @@ define("game/src/ts_src/uiManager/NullUIManager", ["require", "exports"], functi
     var NullUIManager = (function () {
         function NullUIManager() {
         }
+        NullUIManager.prototype.init = function (_scene, _gameManager) {
+        };
         NullUIManager.prototype.reset = function (_scene, _gameManager) { };
         NullUIManager.prototype.update = function (_dt) { };
         return NullUIManager;
@@ -5475,6 +5502,7 @@ define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "common
             return mxEnums_3.OPRESULT.kOk;
         };
         GameManager.prototype.reset = function (_scene) {
+            this._m_scoreManager.reset(_scene, this);
             this._m_uiManager.reset(_scene, this);
             return;
         };
@@ -5485,6 +5513,7 @@ define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "common
             this._m_levelGenerator.update(_dt, this._m_distance);
             this._m_playerController.update(_dt);
             this._m_enemiesManager.update(_dt);
+            this._m_scoreManager.update(_dt);
             this._m_uiManager.update(_dt);
             return;
         };

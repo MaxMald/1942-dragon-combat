@@ -1,5 +1,5 @@
 {
-  "pool_size" : 20,
+  "pool_size" : 30,
 
   "texture_key" : "enemy"
 }

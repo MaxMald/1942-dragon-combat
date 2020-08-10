@@ -88,6 +88,12 @@ export class CmpErranteController implements ICmpEnemyController
       this._onKill(_obj as Ty_physicsActor);
 
       return;
+
+      case DC_MESSAGE_ID.kDesactive :
+
+      this._onDesactived(_obj as Ty_physicsActor);
+
+      return;
     }
     return;
   }
@@ -222,6 +228,21 @@ export class CmpErranteController implements ICmpEnemyController
       DC_MESSAGE_ID.kAddScorePoints,
       this._m_scorePoints 
     );
+
+    return;
+  }
+
+  /**
+   * Called once, whe the actor is desactived.
+   * 
+   * @param _actor actor.
+   */
+  private _onDesactived(_actor : Ty_physicsActor)
+  : void
+  {
+    this._m_spawner.disasemble(_actor);
+
+    this._m_enemiesManager.disableActor(_actor);
 
     return;
   }
