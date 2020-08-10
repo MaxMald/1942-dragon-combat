@@ -10,6 +10,8 @@ import { EnemyBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletMa
 import { EnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/enemiesManager";
 import { ErranteSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner";
 import { UIManager } from "../../../../../game/src/ts_src/uiManager/UIManager";
+import { ScoreManager } from "../../../../../game/src/ts_src/scoreManager/scoreManager";
+import { ScoreManagerConfig } from "../../../../../game/src/ts_src/scoreManager/scoreManagerConfig";
 
 export class Test extends Phaser.Scene
 {
@@ -153,6 +155,14 @@ export class Test extends Phaser.Scene
       'configFiles/cnf_scene_001.json'
     );
 
+    // Score Manager config file.
+
+    this.load.text
+    (
+      'cnf_scoreManager',
+      'configFiles/cnf_scoreManager_001.json'
+    );
+
     return;
   }
   
@@ -179,6 +189,18 @@ export class Test extends Phaser.Scene
     gameManager.setCameraSpeed(sceneConfig.camera_speed);
 
     ///////////////////////////////////
+    // Score Manager
+
+    let scoreManager : ScoreManager = ScoreManager.Create();
+
+    let scoreManagerConfig : ScoreManagerConfig
+      = JSON.parse(this.game.cache.text.get('cnf_scoreManager'));
+
+    scoreManager.init(this, scoreManagerConfig);
+
+    gameManager.setScoreManager(scoreManager);
+
+    ///////////////////////////////////
     // Ambient Generator
 
     let ambientGenConfig : AmbienceGeneratorConfig
@@ -193,9 +215,6 @@ export class Test extends Phaser.Scene
       = JSON.parse(this.game.cache.text.get('cnf_pilot'));
 
     gameManager.initLevelGenerator(this, levelGenConfig);
-
-    ///////////////////////////////////
-    // Enemy Manager
 
     ///////////////////////////////////
     // Bullet Manager : Enemies
@@ -316,7 +335,12 @@ export class Test extends Phaser.Scene
     /* User Interface                                   */
     /****************************************************/
 
-    this._m_gameManager.setUIManager(new UIManager());
+    let uiManager = new UIManager();
+    uiManager.init(this, gameManager);
+
+    this._m_gameManager.setUIManager(uiManager);
+
+    // Reset managers.
 
     this._m_gameManager.reset(this);
    

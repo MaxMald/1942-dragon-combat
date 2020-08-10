@@ -34,39 +34,26 @@ implements IUIManager
    */
   constructor()
   { }
-  
+
   /**
-   * Create or reset the UI actors.
+   * Initialize the UIManager. Suscribe to the hero and score events.
    * 
-   * @param _scene Phaser scene. 
+   * @param _scene phaser scene. 
    * @param _gameManager game manager.
    */
-  reset(_scene: Phaser.Scene, _gameManager: GameManager)
-  : void 
+  init
+  (
+    _scene : Phaser.Scene, 
+    _gameManager : GameManager
+  )
+  : void
   {
-
-    if(this._m_heroHealth == null)
-    {
-      // Create the hero health actor.
-      
-      this._m_heroHealth = FcUIHealth.Create(_scene);
-    }
-
     ///////////////////////////////////
-    // Hero Healt UI
+    // Hero health points
 
-    let heroHealth : BaseActor<Ty_Text> = this._m_heroHealth; 
-
-    heroHealth.sendMessage
-    (
-      DC_MESSAGE_ID.kToPosition,
-      new Phaser.Math.Vector3(20, 20) 
-    );   
-
-    // Get the hero
+    let heroHealth = FcUIHealth.Create(_scene);
 
     let playerController = _gameManager.getPlayerController();
-
     let hero = playerController.getPlayer();
     
     if(hero != null)
@@ -88,22 +75,9 @@ implements IUIManager
     }
 
     ///////////////////////////////////
-    // Hero Score UI
+    // Hero's score points
 
-    if(this._m_heroScore == null)
-    {
-      // Create the hero score actor.
-      
-      this._m_heroScore = FcUIScore.Create(_scene);
-    }
-
-    let heroScore = this._m_heroScore;
-
-    heroScore.sendMessage
-    (
-      DC_MESSAGE_ID.kToPosition,
-      new Phaser.Math.Vector3(600, 20)
-    );
+    let heroScore = FcUIScore.Create(_scene);
 
     let scoreController = heroScore.getComponent<CmpUIScoreController>
     (
@@ -120,6 +94,50 @@ implements IUIManager
       scoreController
     );
 
+    this._m_heroScore = heroScore;
+    this._m_heroHealth = heroHealth;
+    return;
+  }
+  
+  /**
+   * Create or reset the UI actors.
+   * 
+   * @param _scene Phaser scene. 
+   * @param _gameManager game manager.
+   */
+  reset(_scene: Phaser.Scene, _gameManager: GameManager)
+  : void 
+  {
+
+    if(this._m_heroHealth == null)
+    {
+      // Create the hero health actor.
+      this._m_heroHealth = FcUIHealth.Create(_scene);      
+    }
+
+    ///////////////////////////////////
+    // Hero Healt UI
+
+    this._m_heroHealth.sendMessage
+    (
+      DC_MESSAGE_ID.kToPosition,
+      new Phaser.Math.Vector3(20, 20) 
+    );
+
+    ///////////////////////////////////
+    // Hero Score UI
+
+    if(this._m_heroScore == null)
+    {
+      // Create the hero score actor      
+      this._m_heroScore = FcUIScore.Create(_scene);
+    }
+
+    this._m_heroScore.sendMessage
+    (
+      DC_MESSAGE_ID.kToPosition,
+      new Phaser.Math.Vector3(600, 20)
+    );
     return;
   }
 

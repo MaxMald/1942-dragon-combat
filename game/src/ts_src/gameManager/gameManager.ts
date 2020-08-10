@@ -181,11 +181,16 @@ export class GameManager
     return OPRESULT.kOk;
   }
 
+  /**
+   * Reset the game managers.
+   * 
+   * @param _scene phaser scene. 
+   */
   reset(_scene : Phaser.Scene)
   : void
   {
+    this._m_scoreManager.reset(_scene, this);
     this._m_uiManager.reset(_scene, this);
-    
     return;
   }
 
@@ -199,13 +204,15 @@ export class GameManager
     this._m_levelGenerator.update(_dt, this._m_distance);
     this._m_playerController.update(_dt);
     this._m_enemiesManager.update(_dt);
+    
+    this._m_scoreManager.update(_dt);
     this._m_uiManager.update(_dt);
 
     return;
   }
 
   /**
-   * Get the score manager.
+   * Set the score manager.
    * 
    * @param _scoreManager score manager.
    */

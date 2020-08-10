@@ -12,6 +12,16 @@ import { GameManager } from "../gameManager/gameManager";
 
 export interface IUIManager
 { 
+
+  /**
+   * Initialize the UIManager.
+   * 
+   * @param _scene phaser scene. 
+   * @param _gameManager game manager.
+   */
+  init(_scene : Phaser.Scene, _gameManager : GameManager)
+  : void;
+
   /**
    * Reset the UIManager to its default values.
    * 

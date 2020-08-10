@@ -16,6 +16,18 @@ implements IUIManager
 {
 
   /**
+   * No implemenation.
+   * 
+   * @param _scene phaser scene. 
+   * @param _gameManager game manager.
+   */
+  init(_scene : Phaser.Scene, _gameManager : GameManager)
+  : void
+  {
+
+  }
+
+  /**
    * 
    * @param _scene Phaser's scene.
    * @param _gameManager game manager.

@@ -1,21 +1,44 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary 
+ * @summary The score manager has the count of credit points that the player had
+  * take during the all the game or level.
  *
  * @file iScoreManager.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
  * @since August-06-2020
  */
 
+import { GameManager } from "../gameManager/gameManager";
+import { ScoreManagerConfig } from "./scoreManagerConfig";
+
  /**
-  * 
+  * The score manager has the count of credit points that the player had take
+  * during the all the game or level.
   */
 export interface IScoreManager
 {
   /****************************************************/
   /* Public                                           */
   /****************************************************/
+
+  /**
+   * Initialize the score manager.
+   * 
+   * @param _scene phaser scene. 
+   * @param _config configuration file.
+   */
+  init(_scene : Phaser.Scene, _config : ScoreManagerConfig)
+  : void;
+
+  /**
+   * Reset the score manager.
+   * 
+   * @param _scene phaser scene. 
+   * @param _gameManager game manager.
+   */
+  reset(_scene : Phaser.Scene, _gameManager : GameManager)
+  : void;
   
   /**
    * Update the score manager.

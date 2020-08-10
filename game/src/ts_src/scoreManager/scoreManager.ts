@@ -10,7 +10,9 @@
 
 import { MxListener } from "listeners/mxListener";
 import { MxListenerManager } from "listeners/mxListenerManager";
+import { GameManager } from "../gameManager/gameManager";
 import { IScoreManager } from "./iScoreManager";
+import { ScoreManagerConfig } from "./scoreManagerConfig";
 
  /**
   * 
@@ -36,14 +38,50 @@ implements IScoreManager
 
     scoreManager._m_score = 0.0;
     
-    // events.
+    // Create the event manager.
 
     scoreManager._m_listener 
-      = new MxListenerManager<IScoreManager, undefined>()
+      = new MxListenerManager<IScoreManager, undefined>();
 
     scoreManager._m_listener.addEvent('scoreChanged');
 
     return scoreManager;
+  }
+
+  /**
+   * Initialize the score manager.
+   * 
+   * @param _scene phaser scene.
+   * @param _config configuration file.
+   */
+  init(_scene : Phaser.Scene, _config : ScoreManagerConfig)
+  : void
+  { 
+    this._m_config = _config;
+    return;
+  }
+
+  /**
+   * Reset properties to default values. These values will be defined by the
+   * configuration value, if it exists.
+   * 
+   * @param _scene phaser scene.
+   * @param _gameManager game manager.
+   */
+  reset
+  (
+    _scene : Phaser.Scene, 
+    _gameManager : GameManager
+  )
+  : void
+  {    
+    if(this._m_config == null)
+    {
+      this._m_config = new ScoreManagerConfig();
+    }
+
+    this.setScore(this._m_config.init_score);
+    return;
   }
 
   /**
@@ -139,10 +177,13 @@ implements IScoreManager
     return;
   }
 
+  /**
+   * Safely destroys the score manager.
+   */
   destroy()
   : void 
   {
-    
+    this._m_listener.destroy();
     return;
   }
 
@@ -154,13 +195,17 @@ implements IScoreManager
    * private constructor.
    */
   private constructor()
-  { }
-  
+  { }  
   
   /**
    * Hero's score.
    */
   private _m_score : integer;
+
+  /**
+   * The score manager configuration file.
+   */
+  private _m_config : ScoreManagerConfig;
 
   /**
    * ScoreManager listeners.

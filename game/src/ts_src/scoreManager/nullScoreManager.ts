@@ -8,7 +8,9 @@
  * @since August-06-2020
  */
 
+import { GameManager } from "../gameManager/gameManager";
 import { IScoreManager } from "./iScoreManager";
+import { ScoreManagerConfig } from "./scoreManagerConfig";
 
 /**
  * Score manager without implemenation.
@@ -24,6 +26,32 @@ implements IScoreManager
   : NullScoreManager
   {
     return new NullScoreManager();
+  }
+
+  /**
+   * No implementation
+   * 
+   * @param _scene 
+   * @param _config 
+   */
+  init(_scene : Phaser.Scene, _config : ScoreManagerConfig)
+  : void
+  { }
+
+  /**
+   * No implementation.
+   * 
+   * @param _scene 
+   * @param _gameManager 
+   */
+  reset
+  (
+    _scene : Phaser.Scene, 
+    _gameManager : GameManager
+  )
+  : void
+  {
+    return;
   }
   
   /**

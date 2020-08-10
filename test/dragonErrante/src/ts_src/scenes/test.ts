@@ -1,23 +1,16 @@
 import { PlayerController } from "../../../../../game/src/ts_src/playerController/playerController";
-import { PlayerControllerConfig } from "../../../../../game/src/ts_src/playerController/playerControllerConfig";
 import { NullState } from "../../../../../game/src/ts_src/states/nullState";
 import { BulletManager } from "../../../../../game/src/ts_src/bulletManager/bulletManager";
-import { BulletManagerConfig } from "../../../../../game/src/ts_src/bulletManager/bulletManagerConfig";
 import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
 import { EnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/enemiesManager";
 import { EnemiesManagerConfig } from "../../../../../game/src/ts_src/enemiesManager/enemiesManagerConfig";
-import { DC_COMPONENT_ID, DC_ENEMY_TYPE, DC_MESSAGE_ID } from "../../../../../game/src/ts_src/commons/1942enums";
+import { DC_ENEMY_TYPE } from "../../../../../game/src/ts_src/commons/1942enums";
 import { ErranteSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner";
 import { IEnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/iEnemiesManager";
 import { HeroBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletSpawner";
 import { EnemyBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletSpawner";
 import { BaseActor } from "../../../../../game/src/ts_src/actors/baseActor";
 import { Ty_Text } from "../../../../../game/src/ts_src/commons/1942types";
-import { FcUIHealth } from "../../../../../game/src/ts_src/factories/fcUIHealth";
-import { CmpHeroData } from "../../../../../game/src/ts_src/components/cmpHeroData";
-import { CmpUIHealthController } from "../../../../../game/src/ts_src/components/cmpUIHealthController";
-import { FcUIScore } from "../../../../../game/src/ts_src/factories/fcUIScore";
-import { CmpUIScoreController } from "../../../../../game/src/ts_src/components/cmpUIScoreController";
 import { CnfBulletManager, CnfHero } from "../../../../../game/src/ts_src/commons/1942config";
 import { UIManager } from "../../../../../game/src/ts_src/uiManager/UIManager";
 

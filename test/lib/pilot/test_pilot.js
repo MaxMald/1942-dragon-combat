@@ -5337,11 +5337,24 @@ define("game/src/ts_src/playerController/playerController", ["require", "exports
     }());
     exports.PlayerController = PlayerController;
 });
+define("game/src/ts_src/scoreManager/scoreManagerConfig", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ScoreManagerConfig = void 0;
+    var ScoreManagerConfig = (function () {
+        function ScoreManagerConfig() {
+            this.init_score = 0;
+            return;
+        }
+        return ScoreManagerConfig;
+    }());
+    exports.ScoreManagerConfig = ScoreManagerConfig;
+});
 define("game/src/ts_src/scoreManager/iScoreManager", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
 });
-define("game/src/ts_src/scoreManager/scoreManager", ["require", "exports", "listeners/mxListener", "listeners/mxListenerManager"], function (require, exports, mxListener_2, mxListenerManager_2) {
+define("game/src/ts_src/scoreManager/scoreManager", ["require", "exports", "listeners/mxListener", "listeners/mxListenerManager", "game/src/ts_src/scoreManager/scoreManagerConfig"], function (require, exports, mxListener_2, mxListenerManager_2, scoreManagerConfig_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ScoreManager = void 0;
@@ -5355,6 +5368,17 @@ define("game/src/ts_src/scoreManager/scoreManager", ["require", "exports", "list
                 = new mxListenerManager_2.MxListenerManager();
             scoreManager._m_listener.addEvent('scoreChanged');
             return scoreManager;
+        };
+        ScoreManager.prototype.init = function (_scene, _config) {
+            this._m_config = _config;
+            return;
+        };
+        ScoreManager.prototype.reset = function (_scene, _gameManager) {
+            if (this._m_config == null) {
+                this._m_config = new scoreManagerConfig_1.ScoreManagerConfig();
+            }
+            this.setScore(this._m_config.init_score);
+            return;
         };
         ScoreManager.prototype.update = function (_dt) {
             return;
@@ -5381,6 +5405,7 @@ define("game/src/ts_src/scoreManager/scoreManager", ["require", "exports", "list
             return;
         };
         ScoreManager.prototype.destroy = function () {
+            this._m_listener.destroy();
             return;
         };
         return ScoreManager;
@@ -5398,6 +5423,8 @@ define("game/src/ts_src/uiManager/NullUIManager", ["require", "exports"], functi
     var NullUIManager = (function () {
         function NullUIManager() {
         }
+        NullUIManager.prototype.init = function (_scene, _gameManager) {
+        };
         NullUIManager.prototype.reset = function (_scene, _gameManager) { };
         NullUIManager.prototype.update = function (_dt) { };
         return NullUIManager;
@@ -5475,6 +5502,7 @@ define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "common
             return mxEnums_3.OPRESULT.kOk;
         };
         GameManager.prototype.reset = function (_scene) {
+            this._m_scoreManager.reset(_scene, this);
             this._m_uiManager.reset(_scene, this);
             return;
         };
@@ -5485,6 +5513,7 @@ define("game/src/ts_src/gameManager/gameManager", ["require", "exports", "common
             this._m_levelGenerator.update(_dt, this._m_distance);
             this._m_playerController.update(_dt);
             this._m_enemiesManager.update(_dt);
+            this._m_scoreManager.update(_dt);
             this._m_uiManager.update(_dt);
             return;
         };
@@ -6731,12 +6760,8 @@ define("game/src/ts_src/uiManager/UIManager", ["require", "exports", "game/src/t
     var UIManager = (function () {
         function UIManager() {
         }
-        UIManager.prototype.reset = function (_scene, _gameManager) {
-            if (this._m_heroHealth == null) {
-                this._m_heroHealth = fcUIHealth_1.FcUIHealth.Create(_scene);
-            }
-            var heroHealth = this._m_heroHealth;
-            heroHealth.sendMessage(_1942enums_31.DC_MESSAGE_ID.kToPosition, new Phaser.Math.Vector3(20, 20));
+        UIManager.prototype.init = function (_scene, _gameManager) {
+            var heroHealth = fcUIHealth_1.FcUIHealth.Create(_scene);
             var playerController = _gameManager.getPlayerController();
             var hero = playerController.getPlayer();
             if (hero != null) {
@@ -6744,14 +6769,23 @@ define("game/src/ts_src/uiManager/UIManager", ["require", "exports", "game/src/t
                 var hpData = heroHealth.getComponent(_1942enums_31.DC_COMPONENT_ID.kUIHealthController);
                 heroData.suscribe('onHealthChanged', "UIHealth", hpData.onHealthChanged, hpData);
             }
-            if (this._m_heroScore == null) {
-                this._m_heroScore = fcUIScore_1.FcUIScore.Create(_scene);
-            }
-            var heroScore = this._m_heroScore;
-            heroScore.sendMessage(_1942enums_31.DC_MESSAGE_ID.kToPosition, new Phaser.Math.Vector3(600, 20));
+            var heroScore = fcUIScore_1.FcUIScore.Create(_scene);
             var scoreController = heroScore.getComponent(_1942enums_31.DC_COMPONENT_ID.kUIScoreController);
             var scoreManager = _gameManager.getScoreManager();
             scoreManager.suscribe("scoreChanged", "scoreUI", scoreController.onScoreChanged, scoreController);
+            this._m_heroScore = heroScore;
+            this._m_heroHealth = heroHealth;
+            return;
+        };
+        UIManager.prototype.reset = function (_scene, _gameManager) {
+            if (this._m_heroHealth == null) {
+                this._m_heroHealth = fcUIHealth_1.FcUIHealth.Create(_scene);
+            }
+            this._m_heroHealth.sendMessage(_1942enums_31.DC_MESSAGE_ID.kToPosition, new Phaser.Math.Vector3(20, 20));
+            if (this._m_heroScore == null) {
+                this._m_heroScore = fcUIScore_1.FcUIScore.Create(_scene);
+            }
+            this._m_heroScore.sendMessage(_1942enums_31.DC_MESSAGE_ID.kToPosition, new Phaser.Math.Vector3(600, 20));
             return;
         };
         UIManager.prototype.update = function (_dt) {
@@ -6763,7 +6797,7 @@ define("game/src/ts_src/uiManager/UIManager", ["require", "exports", "game/src/t
     }());
     exports.UIManager = UIManager;
 });
-define("test/pilot/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/states/nullState", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/bulletManager/bulletManager", "game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletSpawner", "game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletSpawner", "game/src/ts_src/enemiesManager/enemiesManager", "game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner", "game/src/ts_src/uiManager/UIManager"], function (require, exports, nullState_2, gameManager_4, bulletManager_1, heroBasicBulletSpawner_1, enemyBasicBulletSpawner_1, enemiesManager_1, erranteSpawner_1, UIManager_1) {
+define("test/pilot/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/states/nullState", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/bulletManager/bulletManager", "game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletSpawner", "game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletSpawner", "game/src/ts_src/enemiesManager/enemiesManager", "game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner", "game/src/ts_src/uiManager/UIManager", "game/src/ts_src/scoreManager/scoreManager"], function (require, exports, nullState_2, gameManager_4, bulletManager_1, heroBasicBulletSpawner_1, enemyBasicBulletSpawner_1, enemiesManager_1, erranteSpawner_1, UIManager_1, scoreManager_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Test = void 0;
@@ -6794,6 +6828,7 @@ define("test/pilot/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_
             this.load.text('cnf_ambient', 'configFiles/cnf_ambient_001.json');
             this.load.text('cnf_pilot', 'configFiles/cnf_level_001.json');
             this.load.text('cnf_pilot_scene', 'configFiles/cnf_scene_001.json');
+            this.load.text('cnf_scoreManager', 'configFiles/cnf_scoreManager_001.json');
             return;
         };
         Test.prototype.create = function () {
@@ -6802,6 +6837,10 @@ define("test/pilot/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_
             var gameManager = gameManager_4.GameManager.GetInstance();
             var sceneConfig = JSON.parse(this.game.cache.text.get('cnf_pilot_scene'));
             gameManager.setCameraSpeed(sceneConfig.camera_speed);
+            var scoreManager = scoreManager_2.ScoreManager.Create();
+            var scoreManagerConfig = JSON.parse(this.game.cache.text.get('cnf_scoreManager'));
+            scoreManager.init(this, scoreManagerConfig);
+            gameManager.setScoreManager(scoreManager);
             var ambientGenConfig = JSON.parse(this.game.cache.text.get('cnf_ambient'));
             gameManager.initAmbientGenerator(this, ambientGenConfig);
             var levelGenConfig = JSON.parse(this.game.cache.text.get('cnf_pilot'));
@@ -6837,7 +6876,9 @@ define("test/pilot/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_
             enim_bulletManager.collisionVsSprite(this, hero.getWrappedInstance());
             bulletMng.collisionVsGroup(this, enemiesManager.getBodiesGroup());
             this._m_gameManager = gameManager;
-            this._m_gameManager.setUIManager(new UIManager_1.UIManager());
+            var uiManager = new UIManager_1.UIManager();
+            uiManager.init(this, gameManager);
+            this._m_gameManager.setUIManager(uiManager);
             this._m_gameManager.reset(this);
             return;
         };
