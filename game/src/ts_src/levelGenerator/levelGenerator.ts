@@ -9,6 +9,7 @@
  * @since July-08-2020
  */
 
+import { CmdEnterBoss } from "../commands/levelCommands/cmdEnterBoss";
 import { CmdSpawnErrante } from "../commands/levelCommands/cmdSpawnErrante";
 import { ILevelCommand } from "../commands/levelCommands/iLevelCommands";
 import { Point, Ty_TileMap, Ty_TileObject } from "../commons/1942types";
@@ -166,13 +167,7 @@ implements ILevelGenerator
       position = command.getPosition();
 
       if(position.y <= _distance)
-      {
-
-        // Reset height.
-
-        position.y = -50.0;
-        command.setPosition(position.x, position.y);
-
+      {      
         // Execute and destroy the command.
         
         command.exec(this);
@@ -228,10 +223,16 @@ implements ILevelGenerator
 
     switch(type)
     {
+      // Spawn Errante in position.      
       case "Errante" :
 
       this._createErranteCommand(_object);
+      return;
 
+      // Boss enter in position.
+      case "Boss":
+
+      this._bossEnter(_object);
       return;
       
       default:
@@ -295,6 +296,15 @@ implements ILevelGenerator
 
     this._m_aLevelCommands.push(command);    
     return;
+  }
+
+  private _bossEnter(_object : Ty_TileObject)
+  : void
+  {
+    let command : CmdEnterBoss = new CmdEnterBoss();
+    command.setPosition(_object.x, _object.y);
+
+    this._m_aLevelCommands.push(command);
   }
 
   /**

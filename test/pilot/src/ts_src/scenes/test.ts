@@ -11,6 +11,7 @@ import { ErranteSpawner } from "../../../../../game/src/ts_src/enemiesManager/en
 import { UIManager } from "../../../../../game/src/ts_src/uiManager/UIManager";
 import { ScoreManager } from "../../../../../game/src/ts_src/scoreManager/scoreManager";
 import { ScoreManagerConfig } from "../../../../../game/src/ts_src/scoreManager/scoreManagerConfig";
+import { SpiderBossManager } from "../../../../../game/src/ts_src/bossManager/spiderBossManager";
 
 export class Test extends Phaser.Scene
 {
@@ -87,6 +88,20 @@ export class Test extends Phaser.Scene
     let enemyBulletSpawner = EnemyBasicBulletSpawner.Create();
 
     enim_bulletManager.addSpawner(enemyBulletSpawner);    
+
+    ///////////////////////////////////
+    // Boss Manager
+
+    let bossManager : SpiderBossManager = new SpiderBossManager();
+    bossManager.init(this, gameManager);
+
+    bossManager.setPosition
+    (
+      canvas.width * 0.5,
+      -100.0
+    );
+
+    gameManager.setBossManager(bossManager);
 
     ///////////////////////////////////
     // Enemies Manager
@@ -175,6 +190,11 @@ export class Test extends Phaser.Scene
 
     this._m_gameManager = gameManager;
 
+    ////////////////////////////////////
+    // Send hero to boss
+
+    bossManager.setHero(heroController, hero);
+
     /****************************************************/
     /* User Interface                                   */
     /****************************************************/
@@ -206,5 +226,4 @@ export class Test extends Phaser.Scene
    * Reference to the game manager.
    */
   private _m_gameManager : GameManager;
-
 }

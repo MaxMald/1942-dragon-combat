@@ -11,7 +11,7 @@
 
 import { MxObjectPool } from "optimization/mxObjectPool";
 import { DC_BULLET_TYPE } from "../commons/1942enums";
-import { Ty_physicsActor } from "../commons/1942types";
+import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
 import { IBulletSpawner } from "./bulletSpawner/iBulletSpawner";
 import { NullBulletSpawner } from "./bulletSpawner/nullBulletSpawner";
 import { IBulletManager } from "./iBulletManager";
@@ -127,6 +127,38 @@ export class NullBulletManager implements IBulletManager
   : void 
   {
     console.log("NullBulletManager : disableActor");
+    return;
+  }
+
+  /**
+   * No implementation.
+   * 
+   * @param _scene The scene with the physics engine.
+   * @param _bodies The bodies group.
+   */
+  collisionVsGroup
+  (
+    _scene : Phaser.Scene, 
+    _bodies : Ty_physicsGroup
+  ) : void
+  { 
+    console.log("NullBulletManager : collisionVsGroup");
+    return;
+  }
+
+  /**
+   * No implementation.
+   * 
+   * @param _scene the scene with the physics engine.
+   * @param _body the sprite body.
+   */
+  collisionVsSprite
+  (  
+    _scene : Phaser.Scene,
+    _body : Ty_physicsSprite
+  ): void
+  { 
+    console.log("NullBulletManager : collisionVsSprite");
     return;
   }
 

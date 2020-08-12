@@ -30,7 +30,8 @@
     "../../game/src/ts_src/commons/**/*",
     "../../game/src/ts_src/factories/**/*",
     "../../game/src/ts_src/levelGenerator/**/*",
-    "../../game/src/ts_src/uiManager/**/*"
+    "../../game/src/ts_src/uiManager/**/*",
+    "../../game/src/ts_src/bossManager/**/*"
   ],
 
   "exclude": 

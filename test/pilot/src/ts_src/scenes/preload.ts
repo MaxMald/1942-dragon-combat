@@ -8,8 +8,6 @@
  * @since August-11-2020
  */
 
-
-
 /**
  * Preload test assets and start pilot level.
  */
@@ -93,6 +91,12 @@ extends Phaser.Scene
     (
       'enemy',
       'images/enemy.png'
+    );
+
+    this.load.image
+    (
+      'spiderBoss',
+      'images/boss.png'
     );
 
     ///////////////////////////////////

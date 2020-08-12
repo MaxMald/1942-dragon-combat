@@ -13,7 +13,7 @@
 
 import { MxObjectPool } from "optimization/mxObjectPool";
 import { DC_BULLET_TYPE } from "../commons/1942enums";
-import { Ty_physicsActor } from "../commons/1942types";
+import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
 import { IBulletSpawner } from "./bulletSpawner/iBulletSpawner";
 
 /**
@@ -84,6 +84,30 @@ export interface IBulletManager
    */
   getPool() 
   : MxObjectPool<Ty_physicsActor>;
+
+  /**
+   * Add a collision detection against a group.
+   * 
+   * @param _scene The scene with the physics engine.
+   * @param _bodies The bodies group.
+   */
+  collisionVsGroup
+  (
+    _scene : Phaser.Scene, 
+    _bodies : Ty_physicsGroup
+  ) : void;
+
+  /**
+   * Add a collision detection ageinst a sprite.
+   * 
+   * @param _scene the scene with the physics engine.
+   * @param _body the sprite body.
+   */
+  collisionVsSprite
+  (  
+    _scene : Phaser.Scene,
+    _body : Ty_physicsSprite
+  ): void;
 
   /**
    * Destroy all the bullets of this BulletManager and clear the pool.

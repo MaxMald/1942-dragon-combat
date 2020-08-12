@@ -45,7 +45,7 @@ implements ILevelCommand
       (
         DC_ENEMY_TYPE.kErrante,
         this._m_position.x,
-        this._m_position.y
+        -50.0
       )
     );
 

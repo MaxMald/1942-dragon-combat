@@ -159,7 +159,17 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpImageController
    */
-  kImageController : 17 as 17
+  kImageController : 17 as 17,
+
+  /**
+   * CmpPhysicSpriteController
+   */
+  kPhysicSpriteController : 18 as 18,
+
+  /**
+   * CmpPhysicSpriteController
+   */
+  kSpiderBossController : 19 as 19
 });
 
 /****************************************************/
@@ -300,7 +310,14 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : game manager
    */
-  kGameReset : 516 as 516
+  kGameReset : 516 as 516,
+
+  /**
+   * Boss enter to scene.
+   * 
+   * msg : null
+   */
+  kBossEnter : 517 as 517
 });
 
 /****************************************************/

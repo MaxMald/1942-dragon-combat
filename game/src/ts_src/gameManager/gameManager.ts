@@ -9,6 +9,8 @@
  */
 
 import { OPRESULT } from "commons/mxEnums";
+import { IBossManager } from "../bossManager/IBossManager";
+import { NullBossManager } from "../bossManager/NullBossManager";
 import { NullBulletSpawner } from "../bulletManager/bulletSpawner/nullBulletSpawner";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { CnfHero } from "../commons/1942config";
@@ -164,7 +166,8 @@ export class GameManager
     this.setScoreManager(ScoreManager.Create());
     this.setAmbientGenerator(new NullAmbientGenerator());
     this.setLevelGenerator(new NullLevelGenerator());
-    this.setUIManager(new NullUIManager());    
+    this.setUIManager(new NullUIManager());
+    this.setBossManager(new NullBossManager());
 
     return;
   }
@@ -195,6 +198,9 @@ export class GameManager
 
     this._m_playerController.destroy();
     this._m_playerController = null;
+
+    this._m_bossManager.destroy();
+    this._m_bossManager = null;
 
     // Initalize the game manager
 
@@ -304,6 +310,7 @@ export class GameManager
       this._m_levelGenerator.update(_dt, this._m_distance);
       this._m_playerController.update(_dt);
       this._m_enemiesManager.update(_dt);
+      this._m_bossManager.update(_dt);
     }    
     
     this._m_scoreManager.update(_dt);
@@ -454,6 +461,28 @@ export class GameManager
   : IUIManager
   {
     return this._m_uiManager;
+  }
+
+  /**
+   * Set the boss manager.
+   * 
+   * @param _bossManager boss manager. 
+   */
+  setBossManager(_bossManager : IBossManager)
+  : void
+  {
+    this._m_bossManager = _bossManager;
+  }
+
+  /**
+   * Get the boss manager.
+   * 
+   * @returns boss manager.
+   */
+  getBossManager()
+  : IBossManager
+  {
+    return this._m_bossManager;
   }
 
   /**
@@ -651,6 +680,11 @@ export class GameManager
    * Reference to the AmbienGenrator.
    */
   private _m_ambientGenrator : IAmbientGenerator;
+
+  /**
+   * Reference to the BossManager.
+   */
+  private _m_bossManager : IBossManager;
 
   /**
    * Reference to the UIManager.
