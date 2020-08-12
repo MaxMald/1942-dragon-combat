@@ -32,6 +32,7 @@ import { MsgEnemySpawn } from "../messages/msgEnemySpawn";
 import { IPlayerController } from "../playerController/IPlayerController";
 import { NullPlayerController } from "../playerController/nullPlayerController";
 import { PlayerController } from "../playerController/playerController";
+import { BasicBulletControlPool } from "../pools/basicbulletControlPool";
 import { IScoreManager } from "../scoreManager/iScoreManager";
 import { ScoreManager } from "../scoreManager/scoreManager";
 import { NullState } from "../states/nullState";
@@ -162,12 +163,13 @@ export class GameManager
     this.m_dt = 0.0;
 
     this._m_playerController = new NullPlayerController();
+    this._m_basicBulletControlPool = new BasicBulletControlPool();
     this.setEnemiesManager(NullEnemiesManager.GetInstance());
     this.setScoreManager(ScoreManager.Create());
     this.setAmbientGenerator(new NullAmbientGenerator());
     this.setLevelGenerator(new NullLevelGenerator());
     this.setUIManager(new NullUIManager());
-    this.setBossManager(new NullBossManager());
+    this.setBossManager(new NullBossManager());    
 
     return;
   }
@@ -201,6 +203,9 @@ export class GameManager
 
     this._m_bossManager.destroy();
     this._m_bossManager = null;
+
+    this._m_basicBulletControlPool.destroy();
+    this._m_basicBulletControlPool = null;
 
     // Initalize the game manager
 
@@ -486,6 +491,17 @@ export class GameManager
   }
 
   /**
+   * Get the basic bullet control pool.
+   * 
+   * @returns basic bullet control pool.
+   */
+  getBasicBulletControlPool()
+  : BasicBulletControlPool
+  {
+    return this._m_basicBulletControlPool;
+  }
+
+  /**
    * Set the game scene.
    * 
    * @param _scene phaser scene. 
@@ -690,6 +706,11 @@ export class GameManager
    * Reference to the UIManager.
    */
   private _m_uiManager : IUIManager;
+
+  /**
+   * Reference to the basic bullet control pool.
+   */
+  private _m_basicBulletControlPool : BasicBulletControlPool;
 
   /**
    * The speed (pix./sec.) of the camera during the level.

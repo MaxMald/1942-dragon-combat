@@ -196,6 +196,13 @@ export class Test extends Phaser.Scene
     bossManager.setHero(heroController, hero);
 
     /****************************************************/
+    /* Initalize Pools                                  */
+    /****************************************************/
+
+    let basicBulletControlPool = gameManager.getBasicBulletControlPool();
+    basicBulletControlPool.init(20);
+
+    /****************************************************/
     /* User Interface                                   */
     /****************************************************/
 

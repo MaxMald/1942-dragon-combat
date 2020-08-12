@@ -75,7 +75,7 @@ export class HeroBasicBulletSpawner implements IBulletSpawner
     return;
   }
 
-  spawn(_actor: Ty_physicsActor, _x: number, _y: number)
+  spawn(_actor: Ty_physicsActor, _x: number, _y: number, _data ?: any)
   : void 
   {
     this.assemble(_actor);

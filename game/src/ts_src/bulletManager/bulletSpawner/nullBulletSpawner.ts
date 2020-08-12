@@ -63,8 +63,9 @@ export class NullBulletSpawner implements IBulletSpawner
    * @param _actor 
    * @param _x 
    * @param _y 
+   * @param _data
    */
-  spawn(_actor: Ty_physicsActor, _x: number, _y: number)
+  spawn(_actor: Ty_physicsActor, _x: number, _y: number, _data ?: any)
   : void 
   { 
     console.log("NullBulletSpawner: spawn.");

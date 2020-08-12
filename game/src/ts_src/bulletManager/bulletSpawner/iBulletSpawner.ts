@@ -39,8 +39,9 @@ export interface IBulletSpawner
    * @param _actor actor. 
    * @param _x position in x axis.
    * @param _y position in y axis.
+   * @param _data data.
    */
-  spawn(_actor : Ty_physicsActor, _x : number, _y : number)
+  spawn(_actor : Ty_physicsActor, _x : number, _y : number, _data ?: any)
   : void;
 
   /**
