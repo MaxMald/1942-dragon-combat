@@ -27,9 +27,12 @@ import { LevelGenerator } from "../levelGenerator/levelGenerator";
 import { LevelGeneratorConfig } from "../levelGenerator/levelGeneratorConfig";
 import { NullLevelGenerator } from "../levelGenerator/nullLevelGenerator";
 import { MsgEnemySpawn } from "../messages/msgEnemySpawn";
+import { IPlayerController } from "../playerController/IPlayerController";
+import { NullPlayerController } from "../playerController/nullPlayerController";
 import { PlayerController } from "../playerController/playerController";
 import { IScoreManager } from "../scoreManager/iScoreManager";
 import { ScoreManager } from "../scoreManager/scoreManager";
+import { NullState } from "../states/nullState";
 import { IUIManager } from "../uiManager/IUIManager";
 import { NullUIManager } from "../uiManager/NullUIManager";
 
@@ -40,7 +43,7 @@ export class GameManager
   /****************************************************/
   
   /**
-   * Start the module.
+   * Start the GameManager.
    */
   static Prepare()
   : void
@@ -54,7 +57,7 @@ export class GameManager
   }
 
   /**
-   * Shutdown the module.
+   * Shutdown the GameManager.
    */
   static Shutdown()
   : void
@@ -90,12 +93,17 @@ export class GameManager
 
     switch(_id)
     {
+      /**
+       * Add points to the score manager.
+       */
       case DC_MESSAGE_ID.kAddScorePoints :
-      {
-        manager.getScoreManager().addScore(_msg as integer);
-      }
+
+      manager.getScoreManager().addScore(_msg as integer);
       return;
 
+      /**
+       * Tell the enemy manager to spawn an enemy.
+       */
       case DC_MESSAGE_ID.KSpawnEnemy : 
       {
         let msg = _msg as MsgEnemySpawn;
@@ -108,14 +116,105 @@ export class GameManager
         );
       }
       return;
+
+      /**
+       * The mission had been a failure. Stop the game and display a message
+       * box.
+       */
+      case DC_MESSAGE_ID.kMisionFailure :
+
+      manager._onMisionFailure();
+      return;
+
+      /**
+       * The mission had been completed. Stop the game and display the score
+       * box.
+       */
+      case DC_MESSAGE_ID.kMisionCompleted :
+
+      manager._onMisionCompleted();
+      return;
+
+      /**
+       * Reset the mission scene. Shutdown the actual scene and restart it.
+       */
+      case DC_MESSAGE_ID.kGameReset:
+      
+      manager.gameReset();
+      return;
     }
     return;
   }
 
   /**
-   * 
+   * Set properties with default values. Managers will be set with safely null
+   * objects.
    */
-  initLevelGenerator(_scene : Phaser.Scene, _config : LevelGeneratorConfig)
+  init()
+  : void
+  {
+    this._m_restartScene = false;
+    this._m_gameplayStop = false;
+    this._m_distance = 0.0;
+    this._m_cameraSpeed = 0.0;
+    this.m_dt = 0.0;
+
+    this._m_playerController = new NullPlayerController();
+    this.setEnemiesManager(NullEnemiesManager.GetInstance());
+    this.setScoreManager(ScoreManager.Create());
+    this.setAmbientGenerator(new NullAmbientGenerator());
+    this.setLevelGenerator(new NullLevelGenerator());
+    this.setUIManager(new NullUIManager());    
+
+    return;
+  }
+
+  /**
+   * Destroys all the managers in the game manager and initialize the game
+   * manager.
+   */
+  reset()
+  : void
+  {
+    // Destroy Managers
+
+    this._m_uiManager.destroy();
+    this._m_uiManager = null;
+
+    this._m_levelGenerator.destroy();
+    this._m_levelGenerator = null;
+    
+    this._m_ambientGenrator.destroy();
+    this._m_ambientGenrator = null;
+
+    this._m_scoreManager.destroy();
+    this._m_scoreManager = null;
+
+    this._m_enemiesManager.destroy();
+    this._m_enemiesManager = null;
+
+    this._m_playerController.destroy();
+    this._m_playerController = null;
+
+    // Initalize the game manager
+
+    this.init();
+
+    return;
+  }
+
+  /**
+   * Destroy the previous level generator (if exists) and creates a new one with
+   * the given configuration file.
+   * 
+   * @param _scene phaser scene. 
+   * @param _config configuration file.
+   */
+  initLevelGenerator
+  (
+    _scene : Phaser.Scene, 
+    _config : LevelGeneratorConfig
+  )
   : OPRESULT
   {
     if(this._m_levelGenerator != null)
@@ -133,7 +232,11 @@ export class GameManager
   }
 
   /**
+   * Destroys the previous ambieng generator (if exists) and creates a new on
+   * with the given configuartion file.
    * 
+   * @param _scene phaser scene. 
+   * @param _config configuration file.
    */
   initAmbientGenerator
   (
@@ -160,18 +263,20 @@ export class GameManager
    * Initialize the playerController with a configuration file. If a
    * playerController exists, it will be destroyed and replaced.
    *
+   * @param _scene phaser scene.
+   * @param _cnfHero configuration file.
    */
   initHero(_scene : Phaser.Scene, _cnfHero : CnfHero)
   : OPRESULT
   {
-    // Destroys previous playerController
+    // Destroys previous playerController    
 
-    let playerController : PlayerController = this._m_playerController;
-
-    if(playerController != null)
+    if(this._m_playerController != null)
     {
-      playerController.destroy();
+      this._m_playerController.destroy();
     }
+
+    let playerController : PlayerController;
 
     playerController = new PlayerController();
     playerController.init(_scene, _cnfHero);   
@@ -182,31 +287,32 @@ export class GameManager
   }
 
   /**
-   * Reset the game managers.
+   * Update every manager of this game manager. Managers that are exclusive of 
+   * the gameplay are updated only if the the gameplay is not stopped.
    * 
-   * @param _scene phaser scene. 
+   * @param _dt delta time. 
    */
-  reset(_scene : Phaser.Scene)
-  : void
-  {
-    this._m_scoreManager.reset(_scene, this);
-    this._m_uiManager.reset(_scene, this);
-    return;
-  }
-
   update(_dt : number)
   : void
   {
     this.m_dt = _dt; 
     this._m_distance += _dt * this._m_cameraSpeed;
 
-    this._m_ambientGenrator.update(_dt);
-    this._m_levelGenerator.update(_dt, this._m_distance);
-    this._m_playerController.update(_dt);
-    this._m_enemiesManager.update(_dt);
+    if(!this._m_gameplayStop)
+    {
+      this._m_ambientGenrator.update(_dt);
+      this._m_levelGenerator.update(_dt, this._m_distance);
+      this._m_playerController.update(_dt);
+      this._m_enemiesManager.update(_dt);
+    }    
     
     this._m_scoreManager.update(_dt);
     this._m_uiManager.update(_dt);
+
+    if(this._m_restartScene)
+    {
+      this._restart();
+    }
 
     return;
   }
@@ -252,7 +358,7 @@ export class GameManager
    * @returns Reference to the PlayerController.
    */
   getPlayerController()
-  : PlayerController
+  : IPlayerController
   {
     return this._m_playerController;
   }
@@ -351,6 +457,27 @@ export class GameManager
   }
 
   /**
+   * Set the game scene.
+   * 
+   * @param _scene phaser scene. 
+   */
+  setGameScene(_scene : Phaser.Scene)
+  : void
+  {
+    this._m_scene = _scene;
+    return;
+  }
+
+  /**
+   * Get the game scene.
+   */
+  getGameScene()
+  : Phaser.Scene
+  {
+    return this._m_scene;
+  }
+
+  /**
    * Set the camera speed.
    * 
    * @param _speed speed (pix./sec.). 
@@ -396,6 +523,16 @@ export class GameManager
   }
 
   /**
+   * Called when the mission is going to be reset.
+   */
+  gameReset()
+  : void
+  {    
+    this._m_restartScene = true;
+    return;
+  }
+
+  /**
    * Delta time.
    */
   m_dt : number;
@@ -409,15 +546,10 @@ export class GameManager
    */
   private _onPrepare()
   : void
-  {
-    // Default properties.
-
-    this._m_distance = 0.0;
-    this._m_cameraSpeed = 0.0;
-    this.m_dt = 0.0;
-
+  {   
     // Prepare the modules.
      
+    NullState.Prepare();
     NullBulletSpawner.Prepare();
     CmpNullEnemyController.Prepare();
     CmpNullCollisionController.Prepare();
@@ -425,13 +557,7 @@ export class GameManager
     NullEnemySpawner.Prepare();
     NullEnemiesManager.Prepare();
 
-    // Create Managers.
-
-    this.setEnemiesManager(NullEnemiesManager.GetInstance());
-    this.setScoreManager(ScoreManager.Create());
-    this.setAmbientGenerator(new NullAmbientGenerator());
-    this.setLevelGenerator(new NullLevelGenerator());
-    this.setUIManager(new NullUIManager());
+    this.init();
 
     return;
   }
@@ -442,12 +568,7 @@ export class GameManager
   private _onShutdown()
   : void
   {
-    // Destroy managers.
-
-    this._m_levelGenerator.destroy();
-    this._m_ambientGenrator.destroy();
-    this._m_scoreManager.destroy();
-    this._m_enemiesManager.destroy();
+    this.reset();
 
     // Shutdown the modules.
 
@@ -457,6 +578,7 @@ export class GameManager
     CmpNullCollisionController.Shutdown(); 
     CmpNullEnemyController.Shutdown();  
     NullBulletSpawner.Shutdown();
+    NullState.ShutDown();
 
     return;
   }
@@ -466,6 +588,39 @@ export class GameManager
    */
   private constructor()
   { }
+
+  /**
+   * Stop the gameplay and display the score box.
+   */
+  private _onMisionCompleted()
+  : void
+  {
+    this._m_uiManager.receive(DC_MESSAGE_ID.kMisionCompleted, this);
+    this._m_gameplayStop = true;
+    return;
+  }
+
+  /**
+   * Stop the gampelay and display a message box.
+   */
+  private _onMisionFailure()
+  : void
+  {
+    this._m_uiManager.receive(DC_MESSAGE_ID.kMisionFailure, this);
+    this._m_gameplayStop = true;
+    return;
+  }
+
+  /**
+   * Restart level.
+   */
+  private _restart()
+  : void
+  {
+    this.reset();
+    this._m_scene.scene.start('test');
+    return;
+  }
   
   /**
    * Singleton instance.
@@ -480,7 +635,7 @@ export class GameManager
   /**
    * Reference to the PlayerController.
    */
-  private _m_playerController : PlayerController
+  private _m_playerController : IPlayerController
 
   /**
    * Reference to the LevelGenerator.
@@ -511,4 +666,19 @@ export class GameManager
    * Distance traveled by the camera (Theoretically).
    */
   private _m_distance : number;
+
+  /**
+   * Indicates if the gameplay had been stopped. Used when the hero is death.
+   */
+  private _m_gameplayStop : boolean;
+
+  /**
+   * Indicate if the scene is going to be restart.
+   */
+  private _m_restartScene : boolean; 
+
+  /**
+   * Reference to the game scene.
+   */
+  private _m_scene : Phaser.Scene;
 }

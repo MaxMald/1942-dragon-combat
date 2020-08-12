@@ -68,6 +68,7 @@ export class Test extends Phaser.Scene
      GameManager.Prepare();
 
      let gameManager : GameManager = GameManager.GetInstance();
+     gameManager.setGameScene(this);
     
     ///////////////////////////////////
     // Ambient Generator

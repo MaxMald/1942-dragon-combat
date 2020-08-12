@@ -1,7 +1,6 @@
 import { CnfHero } from "../../../../../game/src/ts_src/commons/1942config";
 import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
-import { PlayerController } from "../../../../../game/src/ts_src/playerController/playerController";
-import { PlayerControllerConfig } from "../../../../../game/src/ts_src/playerController/playerControllerConfig";
+import { IPlayerController } from "../../../../../game/src/ts_src/playerController/IPlayerController";
 import { NullState } from "../../../../../game/src/ts_src/states/nullState";
 
 export class Test extends Phaser.Scene
@@ -163,6 +162,7 @@ export class Test extends Phaser.Scene
     GameManager.Prepare();
 
     let gameManager : GameManager = GameManager.GetInstance();
+    gameManager.setGameScene(this);
 
     ///////////////////////////////////
     // Player Controller
@@ -386,7 +386,7 @@ export class Test extends Phaser.Scene
     return;
   }
 
-  private _m_heroController : PlayerController;
+  private _m_heroController : IPlayerController;
 
   ///////////////////////////////////
   // Graphics

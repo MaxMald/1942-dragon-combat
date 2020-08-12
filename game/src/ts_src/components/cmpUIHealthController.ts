@@ -58,7 +58,7 @@ implements IBaseComponent<Ty_Text>
 
   destroy()
   : void 
-  {
+  {    
     this._actor = null;
     return;
   }

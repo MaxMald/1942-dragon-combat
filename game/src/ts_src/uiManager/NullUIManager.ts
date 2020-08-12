@@ -8,6 +8,7 @@
  * @since August-09-2020
  */
 
+import { DC_MESSAGE_ID } from "../commons/1942enums";
 import { GameManager } from "../gameManager/gameManager";
 import { IUIManager } from "./IUIManager";
 
@@ -23,9 +24,17 @@ implements IUIManager
    */
   init(_scene : Phaser.Scene, _gameManager : GameManager)
   : void
-  {
+  { }
 
-  }
+  /**
+   * No implemenation.
+   * 
+   * @param _id 
+   * @param _msg 
+   */
+  receive(_id : DC_MESSAGE_ID, _msg : any)
+  : void
+  { }
 
   /**
    * 
@@ -43,6 +52,13 @@ implements IUIManager
    */
   update(_dt: number)
   : void 
+  { }
+
+  /**
+   * No implementation.
+   */
+  destroy()
+  : void
   { }
   
 }

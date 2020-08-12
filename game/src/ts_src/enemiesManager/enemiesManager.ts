@@ -394,8 +394,46 @@ export class EnemiesManager implements IEnemiesManager
   destroy()
   : void
   {
+    // Destroy spawners.
+
+    this._m_hSpawner.forEach
+    (
+      function(_spanwer : IEnemySpawner)
+      : void
+      {
+        _spanwer.destroy();
+        return;
+      }
+    );
+
+    this._m_hSpawner.clear();
+    this._m_hSpawner = null;
+
+    // Destroy BulletManager.
+
+    this._m_bulletManager.destroy();
+    this._m_bulletManager = null;
+
+    // Destroy gameobjects.
+
     this._m_bodiesGroup.destroy();
+    this._m_bodiesGroup = null;
+
+    this._m_actorPool.forEach
+    (
+      function(_actor : Ty_physicsActor)
+      {
+        let sprite = _actor.getWrappedInstance();
+
+        _actor.destroy();
+        sprite.destroy();
+
+        return;
+      }
+    );
     this._m_actorPool.destroy();
+    this._m_actorPool = null;
+
     return;
   }
 

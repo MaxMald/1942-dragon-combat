@@ -14,6 +14,7 @@ import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
 import { MxListenerManager } from "listeners/mxListenerManager";
 import { MxListener } from "listeners/mxListener";
+import { GameManager } from "../gameManager/gameManager";
 
 /**
  * Save the score and health of the hero.
@@ -160,6 +161,12 @@ implements IBaseComponent<Ty_physicsSprite>
     {
       this._m_actor.sendMessage(DC_MESSAGE_ID.kKill, this._m_actor);
       health = 0;
+
+      GameManager.ReceiveMessage
+      (
+        DC_MESSAGE_ID.kMisionFailure, 
+        GameManager.GetInstance()
+      );
     } 
 
     this._m_health = health;

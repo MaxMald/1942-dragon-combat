@@ -1,4 +1,3 @@
-import { DC_MESSAGE_ID } from "../commons/1942enums";
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -9,6 +8,7 @@ import { DC_MESSAGE_ID } from "../commons/1942enums";
  * @since July-24-2020
  */
 
+import { DC_MESSAGE_ID } from "../commons/1942enums";
 import { CmpAnimation } from "../components/cmpAnimation";
 import { IAnimationState } from "./IAnimationState";
 
@@ -70,7 +70,14 @@ export class StateHeroFFlight implements IAnimationState
 
   destroy()
   : void 
-  { }
+  { 
+    // Remove listeners.
+
+    let sprite = this.m_component.getSprite();
+    sprite.anims.currentAnim.removeAllListeners('repeat');
+    
+    return;
+  }
   
   m_id: string;
   

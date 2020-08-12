@@ -48,7 +48,7 @@ implements IBaseComponent<Ty_Text>
     {
       case DC_MESSAGE_ID.kSetText :
 
-        this._m_text.text = _obj as string;
+      this._m_text.text = _obj as string;
       
       return;
 
@@ -56,7 +56,6 @@ implements IBaseComponent<Ty_Text>
 
       {
         let position = _obj as V3;
-
         this._m_text.setPosition(position.x, position.y);
       }
 
@@ -73,12 +72,31 @@ implements IBaseComponent<Ty_Text>
       }
 
       return;
+
+      case DC_MESSAGE_ID.kShow : 
+
+      {
+        this._m_text.setVisible(true);
+        this._m_text.setActive(true);
+      }
+
+      return;
+
+      case DC_MESSAGE_ID.kClose : 
+
+      {
+        this._m_text.setVisible(false);
+        this._m_text.setActive(false);
+      }
+
+      return;
     }
   }
 
   destroy()
   : void 
   {
+    this._m_text.destroy();
     this._m_text = null;
     return;
   }

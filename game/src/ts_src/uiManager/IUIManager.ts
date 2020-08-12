@@ -8,6 +8,7 @@
  * @since August-09-2020
  */
 
+import { DC_MESSAGE_ID } from "../commons/1942enums";
 import { GameManager } from "../gameManager/gameManager";
 
 export interface IUIManager
@@ -20,6 +21,15 @@ export interface IUIManager
    * @param _gameManager game manager.
    */
   init(_scene : Phaser.Scene, _gameManager : GameManager)
+  : void;
+
+  /**
+   * Receive a message.
+   * 
+   * @param _id message id. 
+   * @param _msg message
+   */
+  receive(_id : DC_MESSAGE_ID, _msg : any)
   : void;
 
   /**
@@ -37,5 +47,11 @@ export interface IUIManager
    * @param _dt delta time. 
    */
   update(_dt : number)
+  : void;
+
+  /**
+   * Destroy the ui manager.
+   */
+  destroy()
   : void;
 }

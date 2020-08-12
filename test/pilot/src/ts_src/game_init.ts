@@ -1,5 +1,7 @@
 import { Plugin } from "phaser3-nineslice";
+import { Preload } from "./scenes/preload";
 import { Test } from "./scenes/test";
+import { Boot } from "./scenes/boot";
 
 class GameInit
 {
@@ -49,12 +51,14 @@ class GameInit
     ///////////////////////////////////
     // Create Scenes        
 
+    this.m_game.scene.add('boot', Boot);
+    this.m_game.scene.add('preload', Preload);
     this.m_game.scene.add('test', Test);
 
     ///////////////////////////////////
     // Start BOOT    
 
-    this.m_game.scene.start('test');
+    this.m_game.scene.start('boot');
 
     ////////////////////////////////////
     // 

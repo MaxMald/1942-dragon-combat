@@ -150,6 +150,16 @@ export const DC_COMPONENT_ID = Object.freeze
    * CmpUIScoreController
    */
   kUIScoreController : 15 as 15,
+
+  /**
+   * CmpActorGroup
+   */
+  kActorGroup : 16 as 16,
+
+  /**
+   * CmpImageController
+   */
+  kImageController : 17 as 17
 });
 
 /****************************************************/
@@ -255,7 +265,42 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : BaseActor.
    */
-  kDesactive : 511 as 511
+  kDesactive : 511 as 511,
+
+  /**
+   * Show the actor.
+   * 
+   * msg : null.
+   */
+  kShow : 512 as 512,
+
+  /**
+   * Close the actor.
+   * 
+   * msg : null.
+   */
+  kClose : 513 as 513,
+
+  /**
+   * Level had been completed.
+   * 
+   * msg : game manager
+   */
+  kMisionCompleted : 514 as 514,
+
+  /**
+   * Mission failure.
+   * 
+   * msg : game manager
+   */
+  kMisionFailure : 515 as 515,
+
+  /**
+   * Reset the game.
+   * 
+   * msg : game manager
+   */
+  kGameReset : 516 as 516
 });
 
 /****************************************************/

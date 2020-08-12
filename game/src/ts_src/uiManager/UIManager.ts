@@ -10,11 +10,13 @@
 
 import { BaseActor } from "../actors/baseActor";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
-import { Ty_Text } from "../commons/1942types";
+import { Ty_Image, Ty_Text } from "../commons/1942types";
+import { CmpActorGroupImage } from "../components/cmpActorGroup";
 import { CmpHeroData } from "../components/cmpHeroData";
 import { CmpUIHealthController } from "../components/cmpUIHealthController";
 import { CmpUIScoreController } from "../components/cmpUIScoreController";
 import { FcUIHealth } from "../factories/fcUIHealth";
+import { FcUIMessage } from "../factories/fcUIMessage";
 import { FcUIScore } from "../factories/fcUIScore";
 import { GameManager } from "../gameManager/gameManager";
 import { IUIManager } from "./IUIManager";
@@ -94,8 +96,14 @@ implements IUIManager
       scoreController
     );
 
+    ///////////////////////////////////
+    // Dialog Box.
+
+    let dialogBox = FcUIMessage.Create(_scene);
+    
     this._m_heroScore = heroScore;
     this._m_heroHealth = heroHealth;
+    this._m_dialogBox = dialogBox;
     return;
   }
   
@@ -112,7 +120,7 @@ implements IUIManager
     if(this._m_heroHealth == null)
     {
       // Create the hero health actor.
-      this._m_heroHealth = FcUIHealth.Create(_scene);      
+      this._m_heroHealth = FcUIHealth.Create(_scene);
     }
 
     ///////////////////////////////////
@@ -138,6 +146,48 @@ implements IUIManager
       DC_MESSAGE_ID.kToPosition,
       new Phaser.Math.Vector3(600, 20)
     );
+
+    ////////////////////////////////////
+    // Dialog Box
+
+    let canvas = _scene.game.canvas;
+
+    let dialogImage = this._m_dialogBox.getWrappedInstance();
+    let movement = new Phaser.Math.Vector3
+    (
+      canvas.width * 0.5 - dialogImage.x,
+      canvas.height * 0.5 - dialogImage.y
+    );
+
+    this._m_dialogBox.sendMessage(DC_MESSAGE_ID.kAgentMove, movement);
+    this._m_dialogBox.sendMessage(DC_MESSAGE_ID.kClose, null);
+
+    return;
+  }
+
+  /**
+   * No implemenation.
+   * 
+   * @param _id 
+   * @param _msg 
+   */
+  receive(_id : DC_MESSAGE_ID, _msg : any)
+  : void
+  { 
+    switch(_id)
+    {
+      case DC_MESSAGE_ID.kMisionCompleted :
+      
+      this._onMissionCompleted(_msg as GameManager);
+      
+      return;
+
+      case DC_MESSAGE_ID.kMisionFailure :
+
+      this._onMissionFailure(_msg as GameManager);
+      
+      return;
+    }
     return;
   }
 
@@ -151,6 +201,25 @@ implements IUIManager
   { 
     this._m_heroHealth.update();
     this._m_heroScore.update();
+    this._m_dialogBox.update();
+
+    return;
+  }
+
+  /**
+   * Safely destroys the UI manager.
+   */
+  destroy()
+  : void
+  {
+    this._m_heroHealth.destroy();
+    this._m_heroHealth = null;
+    
+    this._m_heroScore.destroy();
+    this._m_heroScore = null;
+
+    this._m_dialogBox.destroy();
+    this._m_dialogBox = null;
 
     return;
   }
@@ -158,6 +227,51 @@ implements IUIManager
   /****************************************************/
   /* Private                                          */
   /****************************************************/
+
+  /**
+   * Called when the mision had been completed.
+   * 
+   * @param _gameManager game manager.
+   */
+  private _onMissionCompleted(_gameManager : GameManager)
+  : void
+  {
+
+    let actorGroup = this._m_dialogBox.getComponent<CmpActorGroupImage>
+    (
+      DC_COMPONENT_ID.kActorGroup
+    );
+
+    let boxMsgActor = actorGroup.getActor("box_message");
+
+    boxMsgActor.sendMessage(DC_MESSAGE_ID.kSetText, "Mision Completed");
+
+    this._m_dialogBox.sendMessage(DC_MESSAGE_ID.kShow, null);
+
+    return;
+  }
+
+  /**
+   * Called when the mision had been a failure.
+   * 
+   * @param _gameManager game manager. 
+   */
+  private _onMissionFailure(_gameManager : GameManager)
+  : void
+  {
+    let actorGroup = this._m_dialogBox.getComponent<CmpActorGroupImage>
+    (
+      DC_COMPONENT_ID.kActorGroup
+    );
+
+    let boxMsgActor = actorGroup.getActor("box_message");
+
+    boxMsgActor.sendMessage(DC_MESSAGE_ID.kSetText, "Mision Failure");
+
+    this._m_dialogBox.sendMessage(DC_MESSAGE_ID.kShow, null);
+
+    return;
+  }
   
   /**
    * Hero's health points actor.
@@ -168,4 +282,9 @@ implements IUIManager
    * Hero's score points actor.
    */
   private _m_heroScore : BaseActor<Ty_Text>;
+
+  /**
+   * Reference to the dialog box.
+   */
+  private _m_dialogBox : BaseActor<Ty_Image>;
 }

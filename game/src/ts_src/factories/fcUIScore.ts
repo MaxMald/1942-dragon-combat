@@ -11,16 +11,17 @@
 import { BaseActor } from "../actors/baseActor";
 import { Ty_Text } from "../commons/1942types";
 import { CmpTextController } from "../components/cmpTextController";
+import { CmpUIHealthController } from "../components/cmpUIHealthController";
 import { CmpUIScoreController } from "../components/cmpUIScoreController";
 
-export class FcUIScore 
+export class FcUIScore
 {
   /****************************************************/
   /* Public                                           */
   /****************************************************/
   
   /**
-   * Create a UI health
+   * Create a UI Score
    */
   static Create(_scene : Phaser.Scene)
   : BaseActor<Ty_Text>
@@ -29,11 +30,11 @@ export class FcUIScore
     (
       0, 
       0, 
-      "Score : 0", 
+      "Health: 10", 
       { fontFamily: 'Arial', fontSize: 64, color: '#000000' }
     );
 
-    let actor = BaseActor.Create<Ty_Text>(text, "hero_ui_score");
+    let actor = BaseActor.Create<Ty_Text>(text, "hero_ui_health");
 
     actor.addComponent(CmpTextController.Create());
     actor.addComponent(CmpUIScoreController.Create());

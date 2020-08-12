@@ -21,14 +21,16 @@ import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { CmpHeroData } from "../components/cmpHeroData";
 import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
-import { Point, Ty_physicsActor } from "../commons/1942types";
+import { Point, Ty_physicsActor, V2 } from "../commons/1942types";
 import { CnfHero } from "../commons/1942config";
+import { IPlayerController } from "./IPlayerController";
 
 /**
  * Create and manage the hero's actor. It provides a friendly interface to control
  * the hero.
  */
 export class PlayerController
+implements IPlayerController
 {
   /****************************************************/
   /* Public                                           */
@@ -136,6 +138,11 @@ export class PlayerController
     return;
   }
 
+  /**
+   * Set the hero's bullet manager.
+   * 
+   * @param _bulletManager bullet manager.
+   */
   setBulletManager(_bulletManager : IBulletManager)
   : void
   {
@@ -152,9 +159,20 @@ export class PlayerController
   }
 
   /**
-   * Set the pointer that is associated to the player input.
+   * Get the hero's bullet manager.
    * 
-   * @param _pointer Phaser pointer.
+   * @returns bullet manager.
+   */
+  getBulletManager()
+  : IBulletManager
+  {
+    return this._m_bulletManager;
+  }
+
+  /**
+   * Set the input pointer that controls the hero states.
+   * 
+   * @param _pointer phaser input pointer. 
    */
   setPointer(_pointer : Phaser.Input.Pointer)
   : void
@@ -167,7 +185,7 @@ export class PlayerController
   }
 
   /**
-   * Get the pointer that is associated to the player input.
+   * Get the input pointer that controls the hero states.
    */
   getPointer()
   : Phaser.Input.Pointer
@@ -178,17 +196,16 @@ export class PlayerController
     return input.getPointer();
   }
 
-  /**
-   * Set the input mode to control the hero.
+ /**
+   * Set the movement mode of the hero. The modes define the behaviour wich the
+   * actor will react to the events of the pointer.
    * 
-   * ABSOLUTE : The hero moves to the pointer position.
-   * 
-   * RELATIVE : The hero moves the same ammount and direction as the pointer.
-   * 
-   * MIXED : The hero moves moves tho the pointer X position, but relative to
+   * * ABSOLUTE : The hero moves to the pointer position.
+   * * RELATIVE : The hero moves the same ammount and direction as the pointer. 
+   * * MIXED : The hero moves moves tho the pointer X position, but relative to
    * its Y position.
    * 
-   * @param _mode Input Mode.
+   * @param _mode input mode.
    */
   setInputMode(_mode : string)
   : void
@@ -201,7 +218,15 @@ export class PlayerController
   }
 
   /**
+   * Get the movement mode of the hero. The mode defines the behaviour wich the
+   * actor react to the events of the pointer
    * 
+   * * ABSOLUTE : The hero moves to the pointer position.
+   * * RELATIVE : The hero moves the same ammount and direction as the pointer. 
+   * * MIXED : The hero moves moves tho the pointer X position, but relative to
+   * its Y position.
+   * 
+   * @returns input mode.
    */
   getInputMode()
   : string
@@ -229,6 +254,21 @@ export class PlayerController
   }
 
   /**
+   * Get the maximum speed (pixels per frame) of the hero when it moves to 
+   * the pointer position in a ABSOLUTE or MIXED mode.
+   * 
+   * @returns maximum speed in pixels per frame. 
+   */
+  getHeroSpeed()
+  : number
+  {
+    let input : CmpHeroInput 
+      = this._m_player.getComponent<CmpHeroInput>(DC_COMPONENT_ID.kHeroInput);
+
+    return input.getSpeed();
+  }
+
+  /**
    * Set the Hero's fire rate in bullets per second.
    * 
    * @param _fireRate Number of bullets spawned per second. 
@@ -237,7 +277,10 @@ export class PlayerController
   : void
   {
     let bulletController : CmpHeroBulletController
-      = this._m_player.getComponent<CmpHeroBulletController>(DC_COMPONENT_ID.kHeroBulletController);
+      = this._m_player.getComponent<CmpHeroBulletController>
+      (
+        DC_COMPONENT_ID.kHeroBulletController
+      );
 
     bulletController.setFireRate(_fireRate);
     return;
@@ -252,13 +295,17 @@ export class PlayerController
   : number
   {
     let bulletController : CmpHeroBulletController
-      = this._m_player.getComponent<CmpHeroBulletController>(DC_COMPONENT_ID.kHeroBulletController);
+      = this._m_player.getComponent<CmpHeroBulletController>
+      (
+        DC_COMPONENT_ID.kHeroBulletController
+      );
 
     return bulletController.getFireRate();
   }
 
   /**
-   * Set the hero limit of movement in the world. 
+   * Set the zone of free movement. The hero's position is limited by the 
+   * boudings of this zone.
    * 
    * @param _p1_x Rect point 1, x value.
    * @param _p1_y Rect point 1, y value.
@@ -282,9 +329,9 @@ export class PlayerController
   }
 
   /**
-   * Set the Hero.
+   * Set the hero's actor.
    * 
-   * @param _player 
+   * @param _player actor.
    */
   setPlayer(_player : Ty_physicsActor)
   : void
@@ -294,43 +341,15 @@ export class PlayerController
   }
 
   /**
-   * Get the Hero.
+   * Get the hero's actor
+   * 
+   * @returns actor.
    */
   getPlayer()
   : Ty_physicsActor
   {
     return this._m_player;
   }
-
-  /**
-   * Handle the inputs and update any logic proccess.
-   * 
-   * The playerController must have a reference to the hero and the InputPlugin
-   * when this method is called.
-   * 
-   * @param _dt Delta time. 
-   */
-  update(_dt : number)
-  : void
-  {
-    // Update logic
-
-    this._m_player.update();
-
-    this._m_bulletManager.update(_dt);
-
-    return;
-  }
-
-  /**
-   * Safely destroys this object.
-   */
-  destroy()
-  : void
-  {
-    this._m_player.destroy();
-    return;
-  } 
 
   /**
    * Set player to the given position.
@@ -350,17 +369,70 @@ export class PlayerController
   }
 
   /**
+   * Get the current hero position.
+   * 
+   * @returns hero's position.
+   */
+  getPosition()
+  : V2
+  {
+    let sprite = this._m_player.getWrappedInstance();
+
+    return new Phaser.Math.Vector2(sprite.x, sprite.y);
+  }
+
+  /**
    * Get the player direction vector.
    * 
    * @reaturns Phaser Vector2
    */
   getDirection()
-  : Phaser.Math.Vector2
+  : V2
   {
     let movement : CmpMovement
       = this._m_player.getComponent<CmpMovement>(DC_COMPONENT_ID.kMovement);
 
     return movement.getDirection();
+  }
+
+  /**
+   * Handle the pointer events and update the actor components.
+   * 
+   * The playerController must have a reference to the hero and the InputPlugin
+   * when this method is called.
+   * 
+   * @param _dt delta time. 
+   */
+  update(_dt : number)
+  : void
+  {
+    // Update logic
+
+    this._m_player.update();
+
+    this._m_bulletManager.update(_dt);
+
+    return;
+  }
+
+  /**
+   * Safely destroys this game controller.
+   */
+  destroy()
+  : void
+  {
+    // Destroy BulletManager.
+
+    this._m_bulletManager.destroy();
+    this._m_bulletManager = null;
+    
+    // Destroy Dragon.
+
+    let sprite = this._m_player.getWrappedInstance();
+    
+    this._m_player.destroy();
+    sprite.destroy();
+    return;
   }
 
   /****************************************************/

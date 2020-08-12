@@ -122,6 +122,18 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
   }
 
   /**
+   * Get the maximum speed (pixels per frame) that the hero moves when it follows
+   * the pointer.
+   * 
+   * @returns speed in pixels per frame.
+   */
+  getSpeed()
+  : number
+  {
+    return this._m_player_speed;
+  }
+
+  /**
    * Calls the movement function defined by the input mode.
    * 
    * @param _actor BaseActor.

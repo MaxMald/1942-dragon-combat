@@ -10,12 +10,14 @@
  */
 
 import { IBaseComponent } from "../components/iBaseComponent";
+import { IActor } from "./iActor";
 
 /**
  * Simple actor class (from the Component Pattern) wich has an array of 
  * components that defines its behaviour. 
  */
 export class BaseActor<T>
+implements IActor
 {
 
   /**
@@ -198,6 +200,17 @@ export class BaseActor<T>
     }
 
     return false;
+  }
+
+  /**
+   * Get the actor's name.
+   * 
+   * @returns the actor's name.
+   */
+  getName()
+  : string
+  {
+    return this.m_name;
   }
 
   /**

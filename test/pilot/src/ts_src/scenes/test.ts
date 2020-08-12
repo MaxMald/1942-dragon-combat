@@ -1,4 +1,3 @@
-import { NullState } from "../../../../../game/src/ts_src/states/nullState";
 import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
 import { CnfBulletManager, CnfHero } from "../../../../../game/src/ts_src/commons/1942config";
 import { AmbienceGeneratorConfig } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGeneratorConfig";
@@ -18,168 +17,13 @@ export class Test extends Phaser.Scene
   /****************************************************/
   /* Public                                           */
   /****************************************************/
-
-  preload()
-  : void
-  {
-    this.load.path = "../assets/";
-
-    ///////////////////////////////////
-    // Atlas
-
-    this.load.atlas
-    (
-      "DragonFlight",
-      "atlas/DragonFlight.png",
-      "atlas/DragonFlight.js"
-    );
-
-    ///////////////////////////////////
-    // Shaders
-
-    this.load.glsl
-    (
-      {
-        key : 'terrain_painter_01',
-        shaderType : 'fragment',
-        url : 'shaders/terrain_painter_02.frag' 
-      }
-    );
-
-    ///////////////////////////////////
-    // Animations
-
-    this.load.animation
-    (
-      "dragon_anim",
-      "animations/DragonFlight.json"
-    );   
-
-    ///////////////////////////////////
-    // Images    
-
-    this.load.image
-    (
-      'colorTerrainTexture',
-      'images/terrain_01.png'
-    );
-
-    this.load.image
-    (
-      'perlinTexture',
-      'images/perlin_256_01.png'
-    );
-
-    this.load.image
-    (
-      'waterNormalMap',
-      'images/water_normal.png'
-    );
-
-    this.load.image
-    (
-      'fireball',
-      'images/fireball.png'
-    );
-
-    this.load.image
-    (
-      'enemy',
-      'images/enemy.png'
-    );
-
-    ///////////////////////////////////
-    // Tiled Map
-
-    this.load.tilemapTiledJSON
-    (
-      'map_pilot',
-      'levels/tlevel_pilot_001.json'
-    );
-
-    ///////////////////////////////////
-    // Configuration Files
-
-    // Hero's configuration file.
-
-    this.load.text
-    (
-      'cnf_hero',
-      'configFiles/cnf_hero_001.json'
-    );
-
-    // Hero's BulletManager file.
-
-    this.load.text
-    (
-      'cnf_bulletManager_hero',
-      'configFiles/cnf_bulletManager_001.json'
-    );
-
-    // Enemies BulletManager file.
-    this.load.text
-    (
-      'cnf_bulletManager_enemies',
-      'configFiles/cnf_bulletManager_002.json'
-    );
-
-    // Errante Spawner file.
-
-    this.load.text
-    (
-      'cnf_spawner_errante',
-      'configFiles/cnf_spawner_errante_001.json'
-    );
-
-    // Ambient Generator file.
-
-    this.load.text
-    (
-      'cnf_ambient',
-      'configFiles/cnf_ambient_001.json'
-    );
-
-    // Level Generator file.
-
-    this.load.text
-    (
-      'cnf_pilot',
-      'configFiles/cnf_level_001.json'
-    );
-
-    // Scene file.
-
-    this.load.text
-    (
-      'cnf_pilot_scene',
-      'configFiles/cnf_scene_001.json'
-    );
-
-    // Score Manager config file.
-
-    this.load.text
-    (
-      'cnf_scoreManager',
-      'configFiles/cnf_scoreManager_001.json'
-    );
-
-    return;
-  }
   
   create()
   : void
-  {
-    ///////////////////////////////////
-    // Prepare Modules
+  {    
+    let gameManager = GameManager.GetInstance();
+    gameManager.setGameScene(this);
 
-    NullState.Prepare();
-   
-    // game manager.
-
-    GameManager.Prepare();
-
-    let gameManager : GameManager = GameManager.GetInstance();  
-    
     ///////////////////////////////////
     // Scene Configuration
 
@@ -196,7 +40,7 @@ export class Test extends Phaser.Scene
     let scoreManagerConfig : ScoreManagerConfig
       = JSON.parse(this.game.cache.text.get('cnf_scoreManager'));
 
-    scoreManager.init(this, scoreManagerConfig);
+    scoreManager.init(this, scoreManagerConfig);    
 
     gameManager.setScoreManager(scoreManager);
 
@@ -337,13 +181,12 @@ export class Test extends Phaser.Scene
 
     let uiManager = new UIManager();
     uiManager.init(this, gameManager);
+    uiManager.reset(this, gameManager);
 
     this._m_gameManager.setUIManager(uiManager);
-
-    // Reset managers.
-
-    this._m_gameManager.reset(this);
    
+    // Reset score manager.
+    scoreManager.reset(this, gameManager);
     return;
   }
 

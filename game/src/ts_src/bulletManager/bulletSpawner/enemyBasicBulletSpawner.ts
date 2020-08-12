@@ -126,7 +126,13 @@ export class EnemyBasicBulletSpawner implements IBulletSpawner
 
   destroy()
   : void 
-  { }
+  { 
+    this._m_controller.destroy();
+    this._m_controller = null;
+
+    this._m_bulletManager = null;
+    return;
+  }
 
   /****************************************************/
   /* Private                                          */

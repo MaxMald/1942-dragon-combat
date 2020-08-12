@@ -13,6 +13,7 @@ import { BaseActor } from "../../../../../game/src/ts_src/actors/baseActor";
 import { Ty_Text } from "../../../../../game/src/ts_src/commons/1942types";
 import { CnfBulletManager, CnfHero } from "../../../../../game/src/ts_src/commons/1942config";
 import { UIManager } from "../../../../../game/src/ts_src/uiManager/UIManager";
+import { IPlayerController } from "../../../../../game/src/ts_src/playerController/IPlayerController";
 
 
 export class Test extends Phaser.Scene
@@ -49,6 +50,12 @@ export class Test extends Phaser.Scene
     (
       'fireball',
       'images/fireball.png'
+    );
+
+    this.load.image
+    (
+      'dialogBox',
+      'images/dialogBox_01.png'
     );
 
     this.load.image
@@ -135,7 +142,8 @@ export class Test extends Phaser.Scene
     GameManager.Prepare();
 
     let gameManager : GameManager = GameManager.GetInstance();
-
+    gameManager.setGameScene(this);
+    
     ///////////////////////////////////
     // Hero's Bullet Manager
 
@@ -235,19 +243,22 @@ export class Test extends Phaser.Scene
 
     // Set player collision
 
+    /*
     let heroController = gameManager.getPlayerController();
 
     let hero = heroController.getPlayer();
 
     enim_bulletManager.collisionVsSprite(this, hero.getWrappedInstance());
-
+*/
     ///////////////////////////////////
     // UI
 
-    gameManager.setUIManager(new UIManager());
+    let uiManager = new UIManager();
+    uiManager.init(this, gameManager);
+    uiManager.reset(this, gameManager);
 
-    gameManager.reset(this);
-
+    gameManager.setUIManager(uiManager);
+   
     return;
   }
 
@@ -376,7 +387,7 @@ export class Test extends Phaser.Scene
     return;
   }
 
-  private _m_heroController : PlayerController;
+  private _m_heroController : IPlayerController;
 
   private _m_bulletManager : BulletManager;
 

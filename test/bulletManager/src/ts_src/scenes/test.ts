@@ -1,8 +1,5 @@
-import { PlayerController } from "../../../../../game/src/ts_src/playerController/playerController";
-import { PlayerControllerConfig } from "../../../../../game/src/ts_src/playerController/playerControllerConfig";
 import { NullState } from "../../../../../game/src/ts_src/states/nullState";
 import { BulletManager } from "../../../../../game/src/ts_src/bulletManager/bulletManager";
-import { BulletManagerConfig } from "../../../../../game/src/ts_src/bulletManager/bulletManagerConfig";
 import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
 import { EnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/enemiesManager";
 import { CmpHeroBulletController } from "../../../../../game/src/ts_src/components/cmpHeroBulletController";
@@ -13,6 +10,7 @@ import { DC_COMPONENT_ID } from "../../../../../game/src/ts_src/commons/1942enum
 import { HeroBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletSpawner";
 import { CmpEnemyHealth } from "../../../../../game/src/ts_src/components/cmpEnemyHealth";
 import { CnfBulletManager, CnfHero } from "../../../../../game/src/ts_src/commons/1942config";
+import { IPlayerController } from "../../../../../game/src/ts_src/playerController/IPlayerController";
 
 
 export class Test extends Phaser.Scene
@@ -392,7 +390,7 @@ export class Test extends Phaser.Scene
     return;
   }
 
-  private _m_heroController : PlayerController;
+  private _m_heroController : IPlayerController;
 
   private _m_bulletManager : BulletManager;
 

@@ -429,9 +429,48 @@ export class BulletManager implements IBulletManager
    */
   destroy()
   : void
-  {
-    this._m_pool.destroy();
+  {    
+
+    // Destroy spawners.
+
+    this._m_hSpawner.forEach
+    (
+      function(_spawner : IBulletSpawner)
+      : void
+      {
+        _spawner.destroy();
+      }
+    );
+
+    this._m_hSpawner.clear();
+    this._m_hSpawner = null;
+
+    // Destroy bullet gameobjects.
+
     this._m_bodiesGroup.destroy();
+
+    this._m_pool.forEach
+    (
+      function(_actor : Ty_physicsActor)
+      {
+        let sprite = _actor.getWrappedInstance();
+
+        _actor.destroy();
+        sprite.destroy();
+
+        return;
+      }
+    );
+    this._m_pool.destroy();
+
+    // Destroy shared components.
+
+    this._m_playZone.destroy();
+    this._m_playZone = null;
+
+    this._m_collisionController.destroy();
+    this._m_playZone = null;
+
     return;
   }
 
