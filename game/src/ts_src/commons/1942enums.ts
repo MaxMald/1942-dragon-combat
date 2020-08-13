@@ -169,7 +169,17 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpPhysicSpriteController
    */
-  kSpiderBossController : 19 as 19
+  kSpiderBossController : 19 as 19,
+
+  /**
+   * CmpSimpleBulletController
+   */
+  kSimpleBulletControl : 20 as 20,
+
+  /**
+   * CmpUIBossHealthControl
+   */
+  kUIBossHealthControl : 21 as 21
 });
 
 /****************************************************/
@@ -317,7 +327,21 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : null
    */
-  kBossEnter : 517 as 517
+  kBossEnter : 517 as 517,
+
+  /**
+   * Set the actor direction.
+   * 
+   * msg : Vector2
+   */
+  kDirection : 518 as 518,
+
+  /**
+   * Set the actor speed.
+   * 
+   * msg : number
+   */
+  kSpeed : 519 as 519
 });
 
 /****************************************************/
@@ -384,6 +408,11 @@ export const DC_BULLET_TYPE = Object.freeze
    * Enemy basic bullet.
    */
   kEnemyBasic : 2 as 2,
+
+  /**
+   * A simple bullet.
+   */
+  kSimple : 3 as 3
 });
 
 /****************************************************/

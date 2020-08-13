@@ -8,6 +8,7 @@
  * @since August-12-2020
  */
 
+import { DC_MESSAGE_ID } from "../../commons/1942enums";
 import { Point } from "../../commons/1942types";
 import { GameManager } from "../../gameManager/gameManager";
 import { ILevelGenerator } from "../../levelGenerator/iLevelGenerator";
@@ -29,11 +30,7 @@ implements ILevelCommand
   exec(_levelGenerator: ILevelGenerator)
   : void 
   { 
-    let gameManager = GameManager.GetInstance();
-
-    let bossManager = gameManager.getBossManager();
-
-    bossManager.active();
+    GameManager.ReceiveMessage(DC_MESSAGE_ID.kBossEnter, null);
     return;
   }
   

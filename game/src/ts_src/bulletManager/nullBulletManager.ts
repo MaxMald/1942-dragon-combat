@@ -101,7 +101,7 @@ export class NullBulletManager implements IBulletManager
   /**
    * No implementation.
    */
-  spawn(_x : number, _y : number, _type : DC_BULLET_TYPE) : void 
+  spawn(_x : number, _y : number, _type : DC_BULLET_TYPE, _data ?: any) : void 
   {
     console.log("NullBulletManager : spawn.");
     return;

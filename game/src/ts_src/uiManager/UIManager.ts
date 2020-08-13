@@ -13,8 +13,10 @@ import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_Image, Ty_Text } from "../commons/1942types";
 import { CmpActorGroupImage } from "../components/cmpActorGroup";
 import { CmpHeroData } from "../components/cmpHeroData";
+import { CmpUIBossHealthControl } from "../components/cmpUIBossHealthControl";
 import { CmpUIHealthController } from "../components/cmpUIHealthController";
 import { CmpUIScoreController } from "../components/cmpUIScoreController";
+import { FCUIBossHealth } from "../factories/fcUIBossHealth";
 import { FcUIHealth } from "../factories/fcUIHealth";
 import { FcUIMessage } from "../factories/fcUIMessage";
 import { FcUIScore } from "../factories/fcUIScore";
@@ -97,6 +99,31 @@ implements IUIManager
     );
 
     ///////////////////////////////////
+    // Boss Score
+
+    this._m_bossScore = FCUIBossHealth.Create(_scene);    
+
+    let bossHealthController = this._m_bossScore.getComponent<CmpUIBossHealthControl>
+    (
+      DC_COMPONENT_ID.kUIBossHealthControl
+    );
+
+    let bossManager = _gameManager.getBossManager();
+    bossManager.suscribe
+    (
+      "onHealthChanged",
+      "bossHealthUI",
+       bossHealthController.onHealthChanged,
+       bossHealthController
+    );
+    
+    bossHealthController.onHealthChanged
+    (
+      bossManager, 
+      bossManager.getBossHealth()
+    );
+
+    ///////////////////////////////////
     // Dialog Box.
 
     let dialogBox = FcUIMessage.Create(_scene);
@@ -147,6 +174,21 @@ implements IUIManager
       new Phaser.Math.Vector3(600, 20)
     );
 
+    ///////////////////////////////////
+    // Boss Health UI
+
+    this._m_bossScore.sendMessage
+    (
+      DC_MESSAGE_ID.kToPosition,
+      new Phaser.Math.Vector3(20, 150)
+    );
+
+    this._m_bossScore.sendMessage
+    (
+      DC_MESSAGE_ID.kClose,
+      null
+    );
+
     ////////////////////////////////////
     // Dialog Box
 
@@ -178,14 +220,21 @@ implements IUIManager
     {
       case DC_MESSAGE_ID.kMisionCompleted :
       
-      this._onMissionCompleted(_msg as GameManager);
-      
+      this._onMissionCompleted(_msg as GameManager);      
       return;
 
       case DC_MESSAGE_ID.kMisionFailure :
 
-      this._onMissionFailure(_msg as GameManager);
-      
+      this._onMissionFailure(_msg as GameManager);      
+      return;
+
+      case DC_MESSAGE_ID.kBossEnter :
+
+      this._m_bossScore.sendMessage
+      (
+        DC_MESSAGE_ID.kShow,
+        null
+      );
       return;
     }
     return;
@@ -201,6 +250,7 @@ implements IUIManager
   { 
     this._m_heroHealth.update();
     this._m_heroScore.update();
+    this._m_bossScore.update();
     this._m_dialogBox.update();
 
     return;
@@ -219,6 +269,9 @@ implements IUIManager
     this._m_heroScore = null;
 
     this._m_dialogBox.destroy();
+    this._m_dialogBox = null;
+
+    this._m_bossScore.destroy();
     this._m_dialogBox = null;
 
     return;
@@ -282,6 +335,11 @@ implements IUIManager
    * Hero's score points actor.
    */
   private _m_heroScore : BaseActor<Ty_Text>;
+
+  /**
+   * Boss's health points actor.
+   */
+  private _m_bossScore : BaseActor<Ty_Text>;
 
   /**
    * Reference to the dialog box.

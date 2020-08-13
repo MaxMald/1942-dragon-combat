@@ -12,6 +12,7 @@ import { UIManager } from "../../../../../game/src/ts_src/uiManager/UIManager";
 import { ScoreManager } from "../../../../../game/src/ts_src/scoreManager/scoreManager";
 import { ScoreManagerConfig } from "../../../../../game/src/ts_src/scoreManager/scoreManagerConfig";
 import { SpiderBossManager } from "../../../../../game/src/ts_src/bossManager/spiderBossManager";
+import { SimpleBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/simpleBulletSpawner";
 
 export class Test extends Phaser.Scene
 {
@@ -62,9 +63,23 @@ export class Test extends Phaser.Scene
     gameManager.initLevelGenerator(this, levelGenConfig);
 
     ///////////////////////////////////
-    // Bullet Manager : Enemies
+    // Boss Manager
 
     let canvas = this.game.canvas;
+
+    let bossManager : SpiderBossManager = new SpiderBossManager();
+    bossManager.init(this, gameManager);
+
+    bossManager.setPosition
+    (
+      canvas.width * 0.5,
+      -100.0
+    );
+
+    gameManager.setBossManager(bossManager);
+
+    ///////////////////////////////////
+    // Bullet Manager : Enemies    
 
     let cnfEnemiesBulletMng : CnfBulletManager 
       = JSON.parse(this.game.cache.text.get('cnf_bulletManager_enemies'));
@@ -87,21 +102,10 @@ export class Test extends Phaser.Scene
 
     let enemyBulletSpawner = EnemyBasicBulletSpawner.Create();
 
-    enim_bulletManager.addSpawner(enemyBulletSpawner);    
-
-    ///////////////////////////////////
-    // Boss Manager
-
-    let bossManager : SpiderBossManager = new SpiderBossManager();
-    bossManager.init(this, gameManager);
-
-    bossManager.setPosition
-    (
-      canvas.width * 0.5,
-      -100.0
-    );
-
-    gameManager.setBossManager(bossManager);
+    enim_bulletManager.addSpawner(enemyBulletSpawner);
+    enim_bulletManager.addSpawner(SimpleBulletSpawner.Create()); 
+    
+    bossManager.setBulletManager(enim_bulletManager);
 
     ///////////////////////////////////
     // Enemies Manager

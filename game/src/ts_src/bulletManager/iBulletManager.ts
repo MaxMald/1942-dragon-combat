@@ -59,8 +59,9 @@ export interface IBulletManager
    * @param _x : position in x axis.
    * @param _y : position in y axis.
    * @param _type : bullet type.
+   * @param _data : aditional data.
    */
-  spawn(_x : number, _y : number, _type : DC_BULLET_TYPE) 
+  spawn(_x : number, _y : number, _type : DC_BULLET_TYPE, _data ?: any) 
   : void;
 
   /**

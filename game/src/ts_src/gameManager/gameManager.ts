@@ -145,6 +145,14 @@ export class GameManager
       
       manager.gameReset();
       return;
+
+      /**
+       * Default, send message to managers.
+       */
+      default:
+
+      manager.sendMessageToManagers(_id, _msg);
+      return;
     }
     return;
   }
@@ -326,6 +334,14 @@ export class GameManager
       this._restart();
     }
 
+    return;
+  }
+
+  sendMessageToManagers(_id : DC_MESSAGE_ID, _msg : any)
+  : void
+  {
+    this._m_uiManager.receive(_id, _msg);
+    this._m_bossManager.receive(_id, _msg);
     return;
   }
 

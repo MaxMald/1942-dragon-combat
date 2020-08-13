@@ -8,8 +8,11 @@
  * @since August-12-2020
  */
 
+import { MxListener } from "listeners/mxListener";
+import { MxListenerManager } from "listeners/mxListenerManager";
 import { BaseActor } from "../actors/baseActor";
-import { DC_COMPONENT_ID } from "../commons/1942enums";
+import { IBossManager } from "../bossManager/IBossManager";
+import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsSprite } from "../commons/1942types";
 import { GameManager } from "../gameManager/gameManager";
 import { IBaseState } from "../states/IBaseState";
@@ -28,7 +31,7 @@ implements IBaseComponent<Ty_physicsSprite>
   
   constructor()
   {
-    this.m_id = DC_COMPONENT_ID.kSpiderBossController;
+    this.m_id = DC_COMPONENT_ID.kSpiderBossController;    
     return;
   }
 
@@ -37,6 +40,12 @@ implements IBaseComponent<Ty_physicsSprite>
   { 
     this.destroy();
 
+    // Events manager.
+
+    this._m_events = new MxListenerManager<IBossManager, any>();
+    this._m_events.addEvent("onHealthChanged");
+
+    this._m_health = 50.0;
     this._m_speed = 200.0;
     this._m_gameManager = GameManager.GetInstance();
 
@@ -62,6 +71,9 @@ implements IBaseComponent<Ty_physicsSprite>
     // Attack State
 
     let attackState = new StateSpiderAttack();
+    attackState.setSpiderSprite(_actor.getWrappedInstance());
+    attackState.setSpiderController(this);
+
     this._hStates.set(attackState.m_id, attackState);
 
     // Set default state
@@ -114,6 +126,66 @@ implements IBaseComponent<Ty_physicsSprite>
     return this._m_speed;
   }
 
+  getState(_id : string)
+  : IBaseState
+  {
+    return this._hStates.get(_id);
+  }
+
+  getHealth()
+  : number
+  {
+    return this._m_health;
+  }
+
+  addHealthPoints(_points : number)
+  : void
+  {
+    this._m_health += _points;
+    if(this._m_health <= 0)
+    {
+      this._m_health = 0;
+      
+      GameManager.ReceiveMessage(DC_MESSAGE_ID.kMisionCompleted, null);
+    }
+
+    this._m_events.call
+    (
+      'onHealthChanged', 
+      this._m_gameManager.getBossManager(),
+      this._m_health
+    );
+    return;
+  }
+
+  suscribe
+  (
+    _event : string,
+    _username : string,
+    _fn : (_bossManager : IBossManager, _args : any) => void,
+    _context : any
+  ) : void
+  {
+    this._m_events.suscribe
+    (
+      _event, 
+      _username, 
+      new MxListener<IBossManager, any>(_fn, _context)
+    );
+    return;
+  }
+
+  unsuscribe
+  (
+    _event : string,
+    _username : string
+  )
+  :void
+  {
+    this._m_events.unsuscribe(_event, _username);
+    return;
+  }
+
   destroy()
   : void 
   {
@@ -130,7 +202,13 @@ implements IBaseComponent<Ty_physicsSprite>
 
       this._hStates.clear();
       this._hStates = null;
-    }    
+    }
+
+    if(this._m_events != null)
+    {
+      this._m_events.destroy();
+      this._m_events = null;
+    }
 
     this._activeState = NullState.GetInstance();
     this._m_gameManager = null;
@@ -157,6 +235,16 @@ implements IBaseComponent<Ty_physicsSprite>
    * Spider speed in pix/sec.
    */
   private _m_speed : number;
+
+  /**
+   * Spider Health.
+   */
+  private _m_health : number;
+
+  /**
+   * Events manager.
+   */
+  private _m_events : MxListenerManager<IBossManager, any>;
 
   /**
    * Reference to the game manager.

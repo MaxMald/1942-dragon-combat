@@ -9,16 +9,16 @@
  */
 
 import { BaseActor } from "../actors/baseActor";
-import { BulletManager } from "../bulletManager/bulletManager";
 import { IBulletManager } from "../bulletManager/iBulletManager";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
-import { DC_MESSAGE_ID } from "../commons/1942enums";
+import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
 import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
 import { CmpPhysicSpriteController } from "../components/cmpPhysicSpriteController";
 import { CmpSpiderBossController } from "../components/cmpSpiderBossController";
 import { GameManager } from "../gameManager/gameManager";
 import { IPlayerController } from "../playerController/IPlayerController";
+import { StateSpiderAttack } from "../states/stateSpiderAttack";
 import { IBossManager } from "./IBossManager";
 
 export class SpiderBossManager
@@ -76,6 +76,22 @@ implements IBossManager
   { 
     this._m_spider.update();
     return;
+  }
+
+  /**
+   * Get the Boss HealtPoints.
+   * 
+   * @returns health points.
+   */
+  getBossHealth()
+  : number
+  {
+    let spiderController = this._m_spider.getComponent<CmpSpiderBossController>
+    (
+      DC_COMPONENT_ID.kSpiderBossController
+    );
+
+    return spiderController.getHealth();
   }
 
   /**
@@ -140,6 +156,18 @@ implements IBossManager
   : void 
   {
     this._m_bulletManager = _bulletManager;
+
+    let spiderControl = this._m_spider.getComponent<CmpSpiderBossController>
+    (
+      DC_COMPONENT_ID.kSpiderBossController
+    );
+
+    let attackState 
+      = spiderControl.getState('Spider_Attack') as StateSpiderAttack;
+
+    attackState.setBulletManager(_bulletManager);
+
+    spiderControl
     return;
   }
 
@@ -170,6 +198,71 @@ implements IBossManager
   desactive()
   : void 
   {
+    return;
+  }
+
+  /**
+   * Suscribe to an event.
+   * 
+   * * onHealthChanged : Trigger when the health of the boss changed. Args:
+   *   {number} healt points.
+   * 
+   * @param _event event key. 
+   * @param _username username.
+   * @param _fn function.
+   * @param _context context.
+   */
+  suscribe
+  (
+    _event : string, 
+    _username : string, 
+    _fn : (_bossManager : IBossManager, _args : any) => void,
+    _context : any
+  ) : void
+  {
+    let spiderController = this._m_spider.getComponent<CmpSpiderBossController>
+    (
+      DC_COMPONENT_ID.kSpiderBossController
+    );
+
+    spiderController.suscribe(_event, _username, _fn, _context);
+    return;
+  }
+
+  /**
+   * Unsuscribe to an event.
+   * 
+   * * onHealthChanged : Trigger when the health of the boss changed. Args:
+   *   {number} healt points.
+   * 
+   * @param _event event key. 
+   * @param _username username.
+   */
+  unsuscribe(_event : string, _username : string) 
+  : void
+  {
+    let spiderController = this._m_spider.getComponent<CmpSpiderBossController>
+    (
+      DC_COMPONENT_ID.kSpiderBossController
+    );
+
+    spiderController.unsuscribe(_event, _username);
+    return;
+  }
+
+  /**
+   * Receive a message;
+   * 
+   * @param _id message id.
+   * @param _msg message
+   */
+  receive(_id : DC_MESSAGE_ID, _msg : any)
+  : void
+  {
+    if(_id == DC_MESSAGE_ID.kBossEnter)
+    {
+      this.active();
+    }
     return;
   }
   

@@ -9,7 +9,7 @@
  */
 
 import { MxObjectPool } from "optimization/mxObjectPool";
-import { CmpBasicBulletController } from "../components/cmpBasicBulletController";
+import { CmpSimpleBulletController } from "../components/cmpSimpleBulletControl";
 
 export class BasicBulletControlPool
 {
@@ -25,12 +25,12 @@ export class BasicBulletControlPool
   {
     this.destroy();
 
-    let pool = MxObjectPool.Create<CmpBasicBulletController>();
-    let aComponents = Array<CmpBasicBulletController>();
+    let pool = MxObjectPool.Create<CmpSimpleBulletController>();
+    let aComponents = Array<CmpSimpleBulletController>();
 
     while(_size > 0)
     {      
-      aComponents.push(CmpBasicBulletController.Create());
+      aComponents.push(CmpSimpleBulletController.Create());
       --_size;
     }
 
@@ -41,12 +41,12 @@ export class BasicBulletControlPool
   }
 
   get()
-  : CmpBasicBulletController
+  : CmpSimpleBulletController
   {
     return this._m_pool.get();
   }
 
-  desactive(_cmp : CmpBasicBulletController)
+  desactive(_cmp : CmpSimpleBulletController)
   : void
   {
     this._m_pool.desactive(_cmp);
@@ -60,7 +60,7 @@ export class BasicBulletControlPool
     {
       this._m_pool.forEach
       (
-        function(_cmp : CmpBasicBulletController)
+        function(_cmp : CmpSimpleBulletController)
         : void
         {
           _cmp.destroy();
@@ -78,5 +78,5 @@ export class BasicBulletControlPool
   /* Private                                          */
   /****************************************************/
   
-  private _m_pool : MxObjectPool<CmpBasicBulletController>;
+  private _m_pool : MxObjectPool<CmpSimpleBulletController>;
 }

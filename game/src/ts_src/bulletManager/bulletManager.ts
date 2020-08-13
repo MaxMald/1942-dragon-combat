@@ -274,7 +274,7 @@ export class BulletManager implements IBulletManager
    * @param _y : position in y axis.
    * @param _type : bullet type.
    */
-  spawn(_x : number, _y : number, _type : DC_BULLET_TYPE)
+  spawn(_x : number, _y : number, _type : DC_BULLET_TYPE, _data ?: any)
   : void
   {
     let hSpawner = this._m_hSpawner;
@@ -287,7 +287,7 @@ export class BulletManager implements IBulletManager
 
       if(actor != null) // Spawn only if any actor is available.
       {
-        spawner.spawn(actor, _x, _y);
+        spawner.spawn(actor, _x, _y, _data);
       }      
     }
 

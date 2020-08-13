@@ -3,31 +3,28 @@
  *
  * @summary 
  *
- * @file cmpUIHealthController.ts
+ * @file cmpUIBossHealthControl.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
- * @since August-06-2020
+ * @since August-12-2020
  */
 
-import { IBaseComponent } from "./iBaseComponent";
 import { BaseActor } from "../actors/baseActor";
+import { IBossManager } from "../bossManager/IBossManager";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_Text } from "../commons/1942types";
-import { CmpHeroData } from "./cmpHeroData";
 
-export class CmpUIHealthController 
-implements IBaseComponent<Ty_Text>
+export class CmpUIBossHealthControl
 {
   /****************************************************/
   /* Public                                           */
   /****************************************************/
   
   static Create()
-  : CmpUIHealthController
+  : CmpUIBossHealthControl
   {
-    let healthController = new CmpUIHealthController();
+    let healthController = new CmpUIBossHealthControl();
 
-    healthController.m_id = DC_COMPONENT_ID.kUIHealthController;
-
+    healthController.m_id = DC_COMPONENT_ID.kUIBossHealthControl;
     return healthController;
   }
 
@@ -44,27 +41,14 @@ implements IBaseComponent<Ty_Text>
 
   receive(_id: number, _obj: any)
   : void 
-  { 
-    switch(_id)
-    {
-      case DC_MESSAGE_ID.kClose:
-      
-      return;
-      
-      case DC_MESSAGE_ID.kShow:
-      
-      
-      return;
-    }
-  }
+  { }
 
-  onHealthChanged(_heroData : CmpHeroData, _args : undefined)
+  onHealthChanged(_bossManager : IBossManager, _args : any)
   : void
   {
-    let sHealth : string = "Health : " + _heroData.getHealth().toString();
+    let sHealth : string = "Boss Health : " + (_args as number).toString();
 
     this._actor.sendMessage(DC_MESSAGE_ID.kSetText, sHealth);
-
     return;
   }
 

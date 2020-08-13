@@ -1,23 +1,24 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary Apply a force of movement to the actor. 
+ * @summary 
  *
- * @file cmpBasicBulletController.ts
+ * @file cmpSimpleBulletControl.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
- * @since August-05-2020
+ * @since August-12-2020
  */
 
 import { BaseActor } from "../actors/baseActor";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite, V2, V3 } from "../commons/1942types";
+import { GameManager } from "../gameManager/gameManager";
 import { CmpBulletData } from "./cmpBulletData";
 import { IBaseComponent } from "./iBaseComponent";
 
 /**
  * Apply a force of movement to the actor.
  */
-export class CmpBasicBulletController 
+export class CmpSimpleBulletController 
 implements IBaseComponent<Ty_physicsSprite>
 {
   /****************************************************/
@@ -25,15 +26,16 @@ implements IBaseComponent<Ty_physicsSprite>
   /****************************************************/
   
   static Create()
-  : CmpBasicBulletController
+  : CmpSimpleBulletController
   {
-    let controller = new CmpBasicBulletController();
+    let controller = new CmpSimpleBulletController();
 
+    controller._m_gameManager = GameManager.GetInstance();
     controller._m_direction = new Phaser.Math.Vector2(1.0, 0.0);
     controller._m_force = new Phaser.Math.Vector3();
     controller._m_speed = 0.0;
 
-    controller.m_id = DC_COMPONENT_ID.kBasicBulletController;
+    controller.m_id = DC_COMPONENT_ID.kSimpleBulletControl;
     
     return controller;
   }
@@ -68,25 +70,14 @@ implements IBaseComponent<Ty_physicsSprite>
     return;
   }
 
-  /**
-   * Recalculate the force with the given delta time.
-   * 
-   * @param _dt delta time.
-   */
-  resetForce(_dt : number)
-  : void
+  update(_actor: BaseActor<Ty_physicsSprite>)
+  : void 
   {
-    let mult = _dt * this._m_speed;
+    let mult = this._m_gameManager.m_dt * this._m_speed;
 
     this._m_force.x = this._m_direction.x * mult;
     this._m_force.y = this._m_direction.y * mult;
 
-    return;
-  }
-
-  update(_actor: BaseActor<Ty_physicsSprite>)
-  : void 
-  { 
     _actor.sendMessage(DC_MESSAGE_ID.kAgentMove, this._m_force);
     return;
   }
@@ -97,10 +88,12 @@ implements IBaseComponent<Ty_physicsSprite>
     switch(_id)
     {
       case DC_MESSAGE_ID.kKill :
+
         this._onKill(_obj as Ty_physicsActor);
       return;
 
       case DC_MESSAGE_ID.kDesactive :
+
         this._onKill(_obj as Ty_physicsActor);
       return;
 
@@ -146,7 +139,6 @@ implements IBaseComponent<Ty_physicsSprite>
     );
 
     data.getSpawner().disassemble(_actor);
-
     return;
   }
 
@@ -164,4 +156,9 @@ implements IBaseComponent<Ty_physicsSprite>
    * Bullet speed.
    */
   private _m_speed : number;
+
+  /**
+   * Reference to the GameManager.
+   */
+  private _m_gameManager : GameManager;
 }

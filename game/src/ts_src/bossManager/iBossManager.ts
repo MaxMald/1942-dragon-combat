@@ -8,8 +8,8 @@
  * @since August-12-2020
  */
 
-import { VoidExpression } from "../../../../node_modules/typescript/lib/typescript";
 import { IBulletManager } from "../bulletManager/iBulletManager";
+import { DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor } from "../commons/1942types";
 import { GameManager } from "../gameManager/gameManager";
 import { IPlayerController } from "../playerController/IPlayerController";
@@ -35,6 +35,14 @@ export interface IBossManager
    */
   update(_dt : number)
   : void;
+
+  /**
+   * Get the Boss HealtPoints.
+   * 
+   * @returns health points.
+   */
+  getBossHealth()
+  : number;
 
   /**
    * Set the boss position.
@@ -77,6 +85,39 @@ export interface IBossManager
    */
   getBulletManager()
   : IBulletManager;
+
+  /**
+   * Suscribe to an event.
+   * 
+   * @param _event event key. 
+   * @param _username username.
+   * @param _fn function.
+   * @param _context context.
+   */
+  suscribe
+  (
+    _event : string, 
+    _username : string, 
+    _fn : (_bossManager : IBossManager, _args : any) => void,
+    _context : any
+  ) : void;
+
+  /**
+   * Unsuscribe to an event.
+   * 
+   * @param _event event key. 
+   * @param _username username.
+   */
+  unsuscribe(_event : string, _username : string) : void;
+
+  /**
+   * Receive a message;
+   * 
+   * @param _id message id.
+   * @param _msg message
+   */
+  receive(_id : DC_MESSAGE_ID, _msg : any)
+  : void;
 
   /**
    * Active the boss.
