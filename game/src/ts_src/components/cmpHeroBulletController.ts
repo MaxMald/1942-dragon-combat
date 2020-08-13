@@ -11,7 +11,7 @@
 import { BaseActor } from "../actors/baseActor";
 import { IBulletManager } from "../bulletManager/iBulletManager";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
-import { DC_BULLET_TYPE, DC_COMPONENT_ID } from "../commons/1942enums";
+import { DC_BULLET_TYPE, DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { GameManager } from "../gameManager/gameManager";
 import { IBaseComponent } from "./iBaseComponent";
 
@@ -34,6 +34,7 @@ export class CmpHeroBulletController
     let bulletController : CmpHeroBulletController = new CmpHeroBulletController();
 
     bulletController.m_id = DC_COMPONENT_ID.kHeroBulletController;
+    bulletController._m_loadingMult = 0.0;
 
     bulletController._m_bulletManager = NullBulletManager.GetInstance();
 
@@ -74,7 +75,7 @@ export class CmpHeroBulletController
   {
     let loading : number = this._m_loadingTime;
 
-    loading += this._m_gameManager.m_dt;
+    loading += (this._m_gameManager.m_dt * this._m_loadingMult);
     
     if(loading >= this._m_frecuency)
     {
@@ -102,6 +103,18 @@ export class CmpHeroBulletController
   receive(_id: number, _obj: any)
   : void 
   {
+    switch(_id)
+    {
+      case DC_MESSAGE_ID.kPointerPressed :
+
+      this._m_loadingMult = 1.0;
+      return;
+
+      case DC_MESSAGE_ID.kPointerReleased : 
+
+      this._m_loadingMult = 0.0;
+      return;
+    }
     return;
   }
 
@@ -172,4 +185,9 @@ export class CmpHeroBulletController
    * Loading time since the last time that a bullet had spawn.
    */
   private _m_loadingTime : number;
+
+  /**
+   * Loading multiplier.
+   */
+  private _m_loadingMult : number;
 }

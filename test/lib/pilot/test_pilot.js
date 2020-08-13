@@ -5315,6 +5315,7 @@ define("game/src/ts_src/components/cmpHeroBulletController", ["require", "export
         CmpHeroBulletController.Create = function () {
             var bulletController = new CmpHeroBulletController();
             bulletController.m_id = _1942enums_12.DC_COMPONENT_ID.kHeroBulletController;
+            bulletController._m_loadingMult = 0.0;
             bulletController._m_bulletManager = nullBulletManager_5.NullBulletManager.GetInstance();
             return bulletController;
         };
@@ -5329,7 +5330,7 @@ define("game/src/ts_src/components/cmpHeroBulletController", ["require", "export
         };
         CmpHeroBulletController.prototype.update = function (_actor) {
             var loading = this._m_loadingTime;
-            loading += this._m_gameManager.m_dt;
+            loading += (this._m_gameManager.m_dt * this._m_loadingMult);
             if (loading >= this._m_frecuency) {
                 var sprite = _actor.getWrappedInstance();
                 this._m_bulletManager.spawn(sprite.x, sprite.y - 110.0, _1942enums_12.DC_BULLET_TYPE.kHeroBasic);
@@ -5339,6 +5340,14 @@ define("game/src/ts_src/components/cmpHeroBulletController", ["require", "export
             return;
         };
         CmpHeroBulletController.prototype.receive = function (_id, _obj) {
+            switch (_id) {
+                case _1942enums_12.DC_MESSAGE_ID.kPointerPressed:
+                    this._m_loadingMult = 1.0;
+                    return;
+                case _1942enums_12.DC_MESSAGE_ID.kPointerReleased:
+                    this._m_loadingMult = 0.0;
+                    return;
+            }
             return;
         };
         CmpHeroBulletController.prototype.setFireRate = function (_fireRate) {
