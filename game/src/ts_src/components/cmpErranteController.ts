@@ -12,6 +12,7 @@ import { IBulletManager } from "../bulletManager/iBulletManager";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { DC_BULLET_TYPE, DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, V3 } from "../commons/1942types";
+import { ErranteConfig } from "../enemiesManager/enemySpawner/erranteConfig";
 import { IEnemySpawner } from "../enemiesManager/enemySpawner/iEnemySpawner";
 import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
@@ -19,7 +20,8 @@ import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
 import { GameManager } from "../gameManager/gameManager";
 import { ICmpEnemyController } from "./iCmpEnemyController";
 
-export class CmpErranteController implements ICmpEnemyController
+export class CmpErranteController 
+implements ICmpEnemyController
 {
   /****************************************************/
   /* Public                                           */
@@ -37,8 +39,7 @@ export class CmpErranteController implements ICmpEnemyController
     
     // default properties
 
-    controller._m_speed = 400.0;
-    controller._m_fireRate = 2.0;
+    controller._m_config = new ErranteConfig();
     controller._m_time = 0.0;
 
     controller._m_bulletManager = NullBulletManager.GetInstance();
@@ -46,7 +47,6 @@ export class CmpErranteController implements ICmpEnemyController
     controller._m_spawner = NullEnemySpawner.GetInstance();
 
     controller.setDeltaTime(0.0);
-    controller.setScorePoints(10);
 
     return controller;
   }
@@ -62,7 +62,7 @@ export class CmpErranteController implements ICmpEnemyController
   {
     _actor.sendMessage(DC_MESSAGE_ID.kAgentMove, this._m_force);
 
-    if(this._m_time >= this._m_fireRate)
+    if(this._m_time >= this._m_config._fire_rate_sec)
     {
       
       let sprite = _actor.getWrappedInstance();
@@ -78,6 +78,39 @@ export class CmpErranteController implements ICmpEnemyController
     return;
   }
 
+  /**
+   * Reset the movement force with the given delta time value. Adds one step to
+   * the fire mecanism time.
+   * 
+   * @param _dt delta time. 
+   */
+  setDeltaTime(_dt : number)
+  : void
+  {
+    let config = this._m_config;
+
+    // Reset the movement force.
+
+    let force = this._m_force;
+    let direction = this._m_direction;
+    let mult = config.speed * _dt;
+
+    force.x = direction.x * mult;
+    force.y = direction.y * mult;
+
+    // Fire mecanism
+
+    if(this._m_time >= config._fire_rate_sec)
+    {
+      this._m_time = _dt;
+    }
+    else
+    {
+      this._m_time += _dt;
+    }
+    return;
+  }
+
   receive(_id: number, _obj: any)
   : void 
   {
@@ -86,22 +119,40 @@ export class CmpErranteController implements ICmpEnemyController
       case DC_MESSAGE_ID.kKill :
       
       this._onKill(_obj as Ty_physicsActor);
-
       return;
 
       case DC_MESSAGE_ID.kDesactive :
 
       this._onDesactived(_obj as Ty_physicsActor);
-
       return;
     }
     return;
   }
 
+  /**
+   * Get the damage points received from this enemy if a collision occur.
+   * 
+   * @returns collision damage points.
+   */
   getCollisionDamage()
   : number 
   {
-    return this._m_collisionDamage;
+    return this._m_config.collision_damage;
+  }
+
+  /**
+   * Defines the properties of the errante controller with a configuration
+   * object.
+   * 
+   * @param _config configuarion object.
+   */
+  setConfiguration(_config : ErranteConfig)
+  : void
+  {
+    _config._fire_rate_sec = 1.0 / _config.fire_rate;
+
+    this._m_config = _config;
+    return;
   }
 
   setSpawner(_spawner : IEnemySpawner)
@@ -140,61 +191,39 @@ export class CmpErranteController implements ICmpEnemyController
   : IBulletManager
   {
     return this._m_bulletManager;
-  }
-
-  setDeltaTime(_dt : number)
-  : void
-  {
-    this._m_dt = _dt;
-
-    // Movement force.
-
-    let force = this._m_force;
-    let direction = this._m_direction;
-    let mult = this._m_speed * _dt;
-
-    force.x = direction.x * mult;
-    force.y = direction.y * mult;
-
-    // Fire mecanism
-
-    if(this._m_time >= this._m_fireRate)
-    {
-      this._m_time = _dt;
-    }
-    else
-    {
-      this._m_time += _dt;
-    }
-
-    return;
-  }
+  }  
 
   /**
-   * Get the score points that give this enemy when is destroyed.
+   * Points gived when the enemy is destroyed.
    */
   getScorePoints()
   : number 
   {
-    return this._m_scorePoints;
+    return this._m_config.score;
   }
 
   /**
-   * Set the score points that give this enemy when is destroyed.
+   * Points gived when the enemy is destroyed.
    * 
    * @param _points score points 
    */
   setScorePoints(_points: number)
   : void 
   {
-    this._m_scorePoints = _points;
+    this._m_config.score = _points;
     return;
   }
 
+  /**
+   * Safely destroyed this component.
+   */
   destroy()
   : void 
   { 
     this._m_spawner = null;
+    this._m_enemiesManager = null;
+    this._m_config = null;
+
     return;
   }
 
@@ -212,7 +241,7 @@ export class CmpErranteController implements ICmpEnemyController
   
 
   /**
-   * Called once, when the actor is killed.
+   * Disasemble and disable the actor. Send score to game manager.
    * 
    * @param _actor actor. 
    */
@@ -226,9 +255,8 @@ export class CmpErranteController implements ICmpEnemyController
     GameManager.ReceiveMessage
     (
       DC_MESSAGE_ID.kAddScorePoints,
-      this._m_scorePoints 
+      this._m_config.score 
     );
-
     return;
   }
 
@@ -241,7 +269,6 @@ export class CmpErranteController implements ICmpEnemyController
   : void
   {
     this._m_spawner.disasemble(_actor);
-
     this._m_enemiesManager.disableActor(_actor);
 
     return;
@@ -255,27 +282,7 @@ export class CmpErranteController implements ICmpEnemyController
   /**
    * Force vector.
    */
-  private _m_force : V3;
-
-  /**
-   * Dragon speed.
-   */
-  private _m_speed : number;
-
-  /**
-   * Delta time.
-   */
-  private _m_dt : number;
-
-  /**
-   * The score points gived to the score manager when the enemy is destroyed.
-   */
-  private _m_scorePoints : integer;
-
-  /**
-   * fire rate.
-   */
-  private _m_fireRate : number;
+  private _m_force : V3; 
 
   /**
    * time elapsed since the last time that the actors fire.
@@ -283,14 +290,14 @@ export class CmpErranteController implements ICmpEnemyController
   private _m_time : number;
 
   /**
+   * Configuration object.
+   */
+  private _m_config : ErranteConfig;
+
+  /**
    * Reference ot the Errante Spawner.
    */
   private _m_spawner : IEnemySpawner;
-
-  /**
-   * Damage inflected by this actor when collide with other.
-   */
-  private _m_collisionDamage : number;
 
   /**
    * Reference to the enemies manager.

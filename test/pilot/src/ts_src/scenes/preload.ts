@@ -97,82 +97,27 @@ extends Phaser.Scene
     (
       'spiderBoss',
       'images/boss.png'
-    );
+    );   
 
     ///////////////////////////////////
-    // Tiled Map
+    // Pack
+
+    this.load.pack
+    (
+      'configuration_pilot_pack',
+      'packs/configuration_pack.json',
+      'pilot'
+    );
+
+    let tiledMapPack = JSON.parse(this.game.cache.text.get('TiledMap_Pack'));
+    let tiledMap = tiledMapPack.pilot.files[0];
 
     this.load.tilemapTiledJSON
     (
-      'map_pilot',
-      'levels/tlevel_pilot_001.json'
+      tiledMap.key,
+      tiledMap.url
     );
 
-    ///////////////////////////////////
-    // Configuration Files
-
-    // Hero's configuration file.
-
-    this.load.text
-    (
-      'cnf_hero',
-      'configFiles/cnf_hero_001.json'
-    );
-
-    // Hero's BulletManager file.
-
-    this.load.text
-    (
-      'cnf_bulletManager_hero',
-      'configFiles/cnf_bulletManager_001.json'
-    );
-
-    // Enemies BulletManager file.
-    this.load.text
-    (
-      'cnf_bulletManager_enemies',
-      'configFiles/cnf_bulletManager_002.json'
-    );
-
-    // Errante Spawner file.
-
-    this.load.text
-    (
-      'cnf_spawner_errante',
-      'configFiles/cnf_spawner_errante_001.json'
-    );
-
-    // Ambient Generator file.
-
-    this.load.text
-    (
-      'cnf_ambient',
-      'configFiles/cnf_ambient_001.json'
-    );
-
-    // Level Generator file.
-
-    this.load.text
-    (
-      'cnf_pilot',
-      'configFiles/cnf_level_001.json'
-    );
-
-    // Scene file.
-
-    this.load.text
-    (
-      'cnf_pilot_scene',
-      'configFiles/cnf_scene_001.json'
-    );
-
-    // Score Manager config file.
-
-    this.load.text
-    (
-      'cnf_scoreManager',
-      'configFiles/cnf_scoreManager_001.json'
-    );
     return;
   }
 

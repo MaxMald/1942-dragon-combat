@@ -10,10 +10,11 @@
       "name": "1942 Launch",
       "url": "http://127.0.0.1:8080/",
       "webRoot": "${workspaceFolder}",
+      
       "pathMappings": [
         {
           "url": "http://127.0.0.1:8080/test",
-          "path": "${workspaceFolder}"
+          "path": "${workspaceFolder}/test"
         }
       ]
     }

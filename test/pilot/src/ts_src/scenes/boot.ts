@@ -21,6 +21,21 @@ extends Phaser.Scene
   /****************************************************/
   /* Public                                           */
   /****************************************************/
+
+  /**
+   * Preload needed assets.
+   */
+  preload()
+  : void
+  {
+    this.load.path = "../assets/";
+    
+    this.load.text
+    (
+      'TiledMap_Pack', 
+      'packs/tiledMap_pack.json'
+    );
+  }
   
   /**
    * Start the game manager module and start the preload scene.

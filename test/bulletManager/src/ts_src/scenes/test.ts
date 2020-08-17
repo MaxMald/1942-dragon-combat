@@ -66,7 +66,7 @@ export class Test extends Phaser.Scene
     this.load.text
     (
       'cnf_hero',
-      'configFiles/cnf_hero_001.json'
+      'configFiles/hero/cnf_hero_001.json'
     );
 
     // Hero's BulletManager file.

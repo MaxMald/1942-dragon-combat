@@ -1,5 +1,3 @@
-import { IBulletManager } from "../../bulletManager/iBulletManager";
-import { DC_ENEMY_TYPE } from "../../commons/1942enums";
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -12,6 +10,8 @@ import { DC_ENEMY_TYPE } from "../../commons/1942enums";
  * @since July-31-2020
  */
 
+import { IBulletManager } from "../../bulletManager/iBulletManager";
+import { DC_ENEMY_TYPE } from "../../commons/1942enums";
 import { Ty_physicsActor } from "../../commons/1942types";
 import { IEnemiesManager } from "../iEnemiesManager";
 

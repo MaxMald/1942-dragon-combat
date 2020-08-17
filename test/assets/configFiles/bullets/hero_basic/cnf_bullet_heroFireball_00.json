@@ -1,0 +1,7 @@
+{
+  "speed" : 1200,
+
+  "collision_damage" : 1,
+
+  "texture_key" : "fireball"
+}

@@ -1,0 +1,73 @@
+{ 
+  "pilot": {
+
+    "files": [
+      
+      {
+        "type": "text",
+        "key": "cnf_errante",
+        "url": "configFiles/enemies/errante/cnf_actor_errante_00.json"
+      },
+
+      {
+        "type": "text",
+        "key": "cnf_bullet_enemyBasic",
+        "url": "configFiles/bullets/enemy_basic/cnf_bullet_enemyBasic_00.json"
+      },
+
+      {
+        "type": "text",
+        "key": "cnf_hero",
+        "url": "configFiles/hero/cnf_hero_001.json"
+      },
+
+      {
+        "type": "text",
+        "key": "cnf_bullet_heroBasic",
+        "url": "configFiles/bullets/hero_basic/cnf_bullet_heroFireball_00.json"
+      },
+
+      {
+        "type": "text",
+        "key": "cnf_bulletManager_hero",
+        "url": "configFiles/cnf_bulletManager_001.json"
+      },
+
+      {
+        "type": "text",
+        "key": "cnf_bulletManager_enemies",
+        "url": "configFiles/cnf_bulletManager_002.json"
+      },
+
+      {
+        "type": "text",
+        "key": "cnf_spawner_errante",
+        "url": "configFiles/cnf_spawner_errante_001.json"
+      },
+
+      {
+        "type": "text",
+        "key": "cnf_ambient",
+        "url": "configFiles/cnf_ambient_001.json"
+      },
+
+      {
+        "type": "text",
+        "key": "cnf_pilot",
+        "url": "configFiles/cnf_level_001.json"
+      },
+
+      {
+        "type": "text",
+        "key": "cnf_pilot_scene",
+        "url": "configFiles/cnf_scene_001.json"
+      },
+
+      {
+        "type": "text",
+        "key": "cnf_scoreManager",
+        "url": "configFiles/cnf_scoreManager_001.json"
+      }
+    ]
+  }
+}

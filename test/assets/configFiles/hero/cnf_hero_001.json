@@ -2,21 +2,21 @@
   "x" : 0,
 
   "y" : 0,
+
+  "maximum_speed" : 200,  
   
-  "texture" : "DragonFlight",
-  
-  "frame" : "D001_Flight.png",
-  
-  "movement_mode" : "MIXED",
-  
-  "maximum_speed" : 200,
+  "fireRate" : 8,  
   
   "health" : 20,
   
   "score" : 0,
+
+  "movement_mode" : "MIXED",  
+
+  "texture" : "DragonFlight",
   
-  "fireRate" : 8,
-  
+  "frame" : "D001_Flight.png",
+
   "hero_playzone_padding" : 100,
   
   "bulletManager_key" : "cnf_bulletManager_hero"

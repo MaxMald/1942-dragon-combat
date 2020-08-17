@@ -9,6 +9,7 @@
  */
 
 import { BaseActor } from "../actors/baseActor";
+import { EnemyBasicBulletConfig } from "../bulletManager/bulletSpawner/enemyBasicBulletConfig";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite, V2, V3 } from "../commons/1942types";
 import { CmpBulletData } from "./cmpBulletData";
@@ -31,7 +32,7 @@ implements IBaseComponent<Ty_physicsSprite>
 
     controller._m_direction = new Phaser.Math.Vector2(1.0, 0.0);
     controller._m_force = new Phaser.Math.Vector3();
-    controller._m_speed = 0.0;
+    controller._m_config = new EnemyBasicBulletConfig();
 
     controller.m_id = DC_COMPONENT_ID.kBasicBulletController;
     
@@ -41,6 +42,18 @@ implements IBaseComponent<Ty_physicsSprite>
   init(_actor: BaseActor<Ty_physicsSprite>)
   : void 
   { }
+
+  /**
+   * Set the configuration object.
+   * 
+   * @param _config configuartion object. 
+   */
+  setConfiguartion(_config : EnemyBasicBulletConfig)
+  : void
+  {
+    this._m_config = _config;
+    return;
+  }
 
   /**
    * Set the bullet direction.
@@ -64,7 +77,7 @@ implements IBaseComponent<Ty_physicsSprite>
   setSpeed(_speed : number)
   : void
   {
-    this._m_speed = _speed;
+    this._m_config.speed = _speed;
     return;
   }
 
@@ -76,7 +89,7 @@ implements IBaseComponent<Ty_physicsSprite>
   resetForce(_dt : number)
   : void
   {
-    let mult = _dt * this._m_speed;
+    let mult = _dt * this._m_config.speed;
 
     this._m_force.x = this._m_direction.x * mult;
     this._m_force.y = this._m_direction.y * mult;
@@ -118,9 +131,15 @@ implements IBaseComponent<Ty_physicsSprite>
     }
   }
   
+  /**
+   * Safely destroys this component.
+   */
   destroy()
   : void 
-  { }
+  { 
+    this._m_config = null;
+    return;
+  }
 
   m_id: number;
 
@@ -161,7 +180,7 @@ implements IBaseComponent<Ty_physicsSprite>
   private _m_direction : V2;
 
   /**
-   * Bullet speed.
+   * Configuartion object.
    */
-  private _m_speed : number;
+  private _m_config : EnemyBasicBulletConfig;
 }

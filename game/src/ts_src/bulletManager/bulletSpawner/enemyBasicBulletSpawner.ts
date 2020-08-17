@@ -13,6 +13,7 @@ import { Ty_physicsActor } from "../../commons/1942types";
 import { CmpBasicBulletController } from "../../components/cmpBasicBulletController";
 import { CmpBulletData } from "../../components/cmpBulletData";
 import { IBulletManager } from "../iBulletManager";
+import { EnemyBasicBulletConfig } from "./enemyBasicBulletConfig";
 import { IBulletSpawner } from "./iBulletSpawner";
 import { NullBulletSpawner } from "./nullBulletSpawner";
 
@@ -28,10 +29,11 @@ export class EnemyBasicBulletSpawner implements IBulletSpawner
     let spawner = new EnemyBasicBulletSpawner;
 
     let basicMovement = CmpBasicBulletController.Create();
-    basicMovement.setDirection(0.0, 1.0);
-    basicMovement.setSpeed(1200.0);
-
+    basicMovement.setDirection(0.0, 1.0);   
+    
     spawner._m_controller = basicMovement;
+
+    spawner.setBulletConfiguartion(new EnemyBasicBulletConfig());
     return spawner;
   }
 
@@ -39,6 +41,19 @@ export class EnemyBasicBulletSpawner implements IBulletSpawner
   : void 
   {
     this._m_controller.resetForce(_dt);
+    return;
+  }
+
+  /**
+   * Set the configuartion object of the bullet. 
+   * 
+   * @param _config conguratio object. 
+   */
+  setBulletConfiguartion(_config : EnemyBasicBulletConfig)
+  : void
+  {
+    this._m_controller.setConfiguartion(_config);
+    this._m_bulletConfig = _config;
     return;
   }
 
@@ -63,6 +78,7 @@ export class EnemyBasicBulletSpawner implements IBulletSpawner
     let sprite = _actor.getWrappedInstance();
 
     sprite.setTint(0xff0000);
+    sprite.setTexture(this._m_bulletConfig.texture_key);
 
     // Set the bullet spawner.
 
@@ -75,7 +91,7 @@ export class EnemyBasicBulletSpawner implements IBulletSpawner
 
     // Set properties.
 
-    bulletData.setAttackPoints(1);
+    bulletData.setAttackPoints(this._m_bulletConfig.collision_damage);
 
     // Set the controller.
 
@@ -119,11 +135,18 @@ export class EnemyBasicBulletSpawner implements IBulletSpawner
     return;
   }
 
-  getID(): DC_BULLET_TYPE 
+  /**
+   * Get the bullet's spawner ID.
+   */
+  getID()
+  : DC_BULLET_TYPE 
   {
     return DC_BULLET_TYPE.kEnemyBasic;
   }
 
+  /**
+   * Safely destroys the bullet spawner.
+   */
   destroy()
   : void 
   { 
@@ -131,6 +154,7 @@ export class EnemyBasicBulletSpawner implements IBulletSpawner
     this._m_controller = null;
 
     this._m_bulletManager = null;
+    this._m_bulletConfig = null;
     return;
   }
 
@@ -143,15 +167,19 @@ export class EnemyBasicBulletSpawner implements IBulletSpawner
    */
   private constructor()
   { } 
-  
+
   /**
-   * Shared bullet controller.
+   * Bullet configuartion object.
    */
-  private _m_controller : CmpBasicBulletController;
+  private _m_bulletConfig : EnemyBasicBulletConfig;
 
   /**
    * Reference to the bullet manger.
    */
   private _m_bulletManager : IBulletManager;
-
+  
+  /**
+   * Shared bullet controller.
+   */
+  private _m_controller : CmpBasicBulletController;
 }

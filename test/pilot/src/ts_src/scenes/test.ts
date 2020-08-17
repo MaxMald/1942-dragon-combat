@@ -13,6 +13,8 @@ import { ScoreManager } from "../../../../../game/src/ts_src/scoreManager/scoreM
 import { ScoreManagerConfig } from "../../../../../game/src/ts_src/scoreManager/scoreManagerConfig";
 import { SpiderBossManager } from "../../../../../game/src/ts_src/bossManager/spiderBossManager";
 import { SimpleBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/simpleBulletSpawner";
+import { EnemyBasicBulletConfig } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletConfig";
+import { heroBasicBulletConfig } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletConfig";
 
 export class Test extends Phaser.Scene
 {
@@ -25,6 +27,8 @@ export class Test extends Phaser.Scene
   {    
     let gameManager = GameManager.GetInstance();
     gameManager.setGameScene(this);
+
+    let gameCache = this.game.cache;
 
     ///////////////////////////////////
     // Scene Configuration
@@ -82,7 +86,7 @@ export class Test extends Phaser.Scene
     // Bullet Manager : Enemies    
 
     let cnfEnemiesBulletMng : CnfBulletManager 
-      = JSON.parse(this.game.cache.text.get('cnf_bulletManager_enemies'));
+      = JSON.parse(gameCache.text.get('cnf_bulletManager_enemies'));
 
     let enim_bulletManager = BulletManager.Create();
     let enim_padding = cnfEnemiesBulletMng.playzone_padding;
@@ -100,9 +104,24 @@ export class Test extends Phaser.Scene
       )
     );
 
+    ///////////////////////////////////
+    // Spawner : Enemy Basic Bullet
+
     let enemyBulletSpawner = EnemyBasicBulletSpawner.Create();
 
+    if(gameCache.text.has('cnf_bullet_enemyBasic'))
+    {
+      let enemyBasicConfig : EnemyBasicBulletConfig 
+        = JSON.parse(gameCache.text.get('cnf_bullet_enemyBasic'));
+
+      enemyBulletSpawner.setBulletConfiguartion(enemyBasicConfig);
+    }
+
     enim_bulletManager.addSpawner(enemyBulletSpawner);
+
+    ///////////////////////////////////
+    // Spawner : Simple Bullet Spawner
+
     enim_bulletManager.addSpawner(SimpleBulletSpawner.Create()); 
     
     bossManager.setBulletManager(enim_bulletManager);
@@ -122,9 +141,17 @@ export class Test extends Phaser.Scene
     gameManager.setEnemiesManager(enemiesManager);
 
     ///////////////////////////////////
-    // Errante Spawner
+    // Spawner : Errante
 
     let erranteSpawner : ErranteSpawner = ErranteSpawner.Create();
+
+    if(this.game.cache.text.has('cnf_errante'))
+    {
+      let erranteConfig 
+        = JSON.parse(gameCache.text.get('cnf_errante'));
+
+      erranteSpawner.setErranteConfig(erranteConfig);
+    }
 
     enemiesManager.addSpawner(erranteSpawner);
 
@@ -147,13 +174,18 @@ export class Test extends Phaser.Scene
       new Phaser.Geom.Point(canvas.width + padding, canvas.height + padding)
     );
 
-    // BulletSpawner : Basic Bullet.
+    ///////////////////////////////////
+    // Spawner : BasicBullet
 
-    let heroBulletSpawner = HeroBasicBulletSpawner.Create
-    (
-      new Phaser.Math.Vector2(0.0, -1.0),
-      1200
-    );
+    let heroBulletSpawner = HeroBasicBulletSpawner.Create();
+
+    if(gameCache.text.has('cnf_bullet_heroBasic'))
+    {
+      let heroBasicConfig : heroBasicBulletConfig 
+        = JSON.parse(gameCache.text.get('cnf_bullet_heroBasic'));
+
+      heroBulletSpawner.setBulletConfiguration(heroBasicConfig);
+    }
 
     bulletMng.addSpawner(heroBulletSpawner); 
 

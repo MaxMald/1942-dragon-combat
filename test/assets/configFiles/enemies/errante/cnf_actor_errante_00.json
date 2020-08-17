@@ -1,0 +1,15 @@
+{
+  "speed" : 500,
+
+  "fire_rate" : 0.5,
+
+  "collision_damage" : 1,
+
+  "health" : 2,
+
+  "score" : 1,
+
+  "texture_key" : "enemy",
+
+  "_fire_rate_sec" : 0.5
+}

@@ -33,7 +33,7 @@ export class CnfHero
     this.fireRate = 8;    
     this.hero_playzone_padding = 100;
 
-    this.bulletManager_key = "";
+    this.bulletManager_key = "cnf_bulletManager_hero";
 
     return;
   }

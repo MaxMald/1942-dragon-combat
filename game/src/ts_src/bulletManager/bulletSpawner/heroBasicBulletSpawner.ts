@@ -13,6 +13,7 @@ import { Ty_physicsActor, V2 } from "../../commons/1942types";
 import { CmpBasicBulletController } from "../../components/cmpBasicBulletController";
 import { CmpBulletData } from "../../components/cmpBulletData";
 import { IBulletManager } from "../iBulletManager";
+import { heroBasicBulletConfig } from "./heroBasicBulletConfig";
 import { IBulletSpawner } from "./iBulletSpawner";
 import { NullBulletSpawner } from "./nullBulletSpawner";
 
@@ -30,42 +31,33 @@ export class HeroBasicBulletSpawner implements IBulletSpawner
    * 
    * @returns HeroBasiBulletSpawner
    */
-  static Create
-  (
-    _direction ?: V2,
-    _speed ?: number
-  )
+  static Create()
   : HeroBasicBulletSpawner
   {
     let spawner = new HeroBasicBulletSpawner;
 
     let basicMovement = CmpBasicBulletController.Create();
 
+    let bulletConfig = new heroBasicBulletConfig();
+
     // Bullet default direction.
 
-    if(_direction != undefined)
-    {
-      basicMovement.setDirection(_direction.x, _direction.y);
-    }
-    else
-    {
-      basicMovement.setDirection(0.0, -1.0);
-    }
-    
-    // Bullet default speed.
-
-    if(_speed != undefined)
-    {
-      basicMovement.setSpeed(_speed);
-    }
-    else
-    {
-      basicMovement.setSpeed(1200.0);
-    }    
+    basicMovement.setDirection(0.0, -1.0);
+    basicMovement.setSpeed(bulletConfig.speed);
 
     spawner._m_controller = basicMovement;
+    spawner._m_bulletConfig = bulletConfig;
 
     return spawner;
+  }
+
+  setBulletConfiguration(_config : heroBasicBulletConfig)
+  : void
+  {
+    this._m_bulletConfig = _config;
+
+    this._m_controller.setSpeed(_config.speed);
+    return;
   }
 
   update(_dt: number)
@@ -102,7 +94,7 @@ export class HeroBasicBulletSpawner implements IBulletSpawner
 
     // Set properties.
 
-    bulletData.setAttackPoints(1);
+    bulletData.setAttackPoints(this._m_bulletConfig.collision_damage);
 
     // Set the controller.
 
@@ -175,6 +167,11 @@ export class HeroBasicBulletSpawner implements IBulletSpawner
    * Shared bullet controller.
    */
   private _m_controller : CmpBasicBulletController;
+
+  /**
+   * Bullet configuration.
+   */
+  private _m_bulletConfig : heroBasicBulletConfig;
 
   /**
    * Reference to the bullet manger.
