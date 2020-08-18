@@ -28,15 +28,7 @@ export class Test extends Phaser.Scene
     let gameManager = GameManager.GetInstance();
     gameManager.setGameScene(this);
 
-    let gameCache = this.game.cache;
-
-    ///////////////////////////////////
-    // Scene Configuration
-
-    let sceneConfig : LevelConfig 
-      = JSON.parse(this.game.cache.text.get('cnf_pilot_scene'));
-
-    gameManager.setCameraSpeed(sceneConfig.camera_speed);
+    let gameCache = this.game.cache;    
 
     ///////////////////////////////////
     // Score Manager
@@ -61,8 +53,8 @@ export class Test extends Phaser.Scene
     ///////////////////////////////////
     // Level Generator
 
-    let levelGenConfig : LevelGeneratorConfig 
-      = JSON.parse(this.game.cache.text.get('cnf_pilot'));
+    let levelGenConfig : LevelGeneratorConfig = new LevelGeneratorConfig();
+    levelGenConfig.map_key = "map_pilot";
 
     gameManager.initLevelGenerator(this, levelGenConfig);
 

@@ -1,5 +1,3 @@
-import { Game } from "phaser";
-import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
 
 /**
  * HummingFlight Software Technologies - 2020
@@ -11,6 +9,8 @@ import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameMana
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
  * @since August-11-2020
  */
+
+import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
 
 /**
  * This scene should called once in the game. Start the game manager module.

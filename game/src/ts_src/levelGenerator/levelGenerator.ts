@@ -13,6 +13,7 @@ import { CmdEnterBoss } from "../commands/levelCommands/cmdEnterBoss";
 import { CmdSpawnErrante } from "../commands/levelCommands/cmdSpawnErrante";
 import { ILevelCommand } from "../commands/levelCommands/iLevelCommands";
 import { Point, Ty_TileMap, Ty_TileObject } from "../commons/1942types";
+import { GameManager } from "../gameManager/gameManager";
 import { ILevelGenerator } from "./iLevelGenerator";
 import { LevelGeneratorConfig } from "./levelGeneratorConfig";
 
@@ -66,6 +67,31 @@ implements ILevelGenerator
 
     this.loadMap(map);
 
+    // Setup map properties.
+
+    let gameManager = GameManager.GetInstance();
+
+    let properties : any = map.properties as any;
+    let propertiesSize : number = properties.length;
+    let propertyIndex : number = 0;
+    let property : any;
+    let propertyName : string;
+    let propertyValue : any;
+
+    while(propertyIndex < propertiesSize)
+    {
+      property = properties[propertyIndex];
+
+      propertyName = property.name;
+      propertyValue = property.value;
+
+      if(propertyName == "camera_speed")
+      {
+        gameManager.setCameraSpeed(propertyValue as number);
+      }
+
+      ++propertyIndex;
+    }
     return;
   }
 
@@ -96,7 +122,7 @@ implements ILevelGenerator
     {
       layerName = aLayerNames.pop();
 
-      objectLayer = _map.getObjectLayer(layerName);
+      objectLayer = _map.getObjectLayer(layerName);      
 
       // Check if object layer exists.
 

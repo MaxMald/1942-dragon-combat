@@ -14,6 +14,8 @@ import { Ty_Text } from "../../../../../game/src/ts_src/commons/1942types";
 import { CnfBulletManager, CnfHero } from "../../../../../game/src/ts_src/commons/1942config";
 import { UIManager } from "../../../../../game/src/ts_src/uiManager/UIManager";
 import { IPlayerController } from "../../../../../game/src/ts_src/playerController/IPlayerController";
+import { heroBasicBulletConfig } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletConfig";
+import { EnemyBasicBulletConfig } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletConfig";
 
 
 export class Test extends Phaser.Scene
@@ -67,28 +69,11 @@ export class Test extends Phaser.Scene
      ///////////////////////////////////
     // Configuration Files
 
-    // Hero's configuration file.
-
-    this.load.text
+    this.load.pack
     (
-      'cnf_hero',
-      'configFiles/cnf_hero_001.json'
-    );
-
-    // Hero's BulletManager file.
-
-    this.load.text
-    (
-      'cnf_bulletManager_hero',
-      'configFiles/cnf_bulletManager_001.json'
-    );
-
-    // Ambient Generator file.
-
-    this.load.text
-    (
-      'cnf_ambient',
-      'configFiles/cnf_ambient_001.json'
+      'configuration_pilot_pack',
+      'packs/configuration_pack.json',
+      'pilot'
     );
     return;
   }
@@ -96,6 +81,8 @@ export class Test extends Phaser.Scene
   create()
   : void
   {
+    let gameCache = this.game.cache;
+
     ///////////////////////////////////
     // Prepare Modules
 
@@ -166,13 +153,17 @@ export class Test extends Phaser.Scene
 
     // BulletSpawner : Basic Bullet.
 
-    let heroBulletSpawner = HeroBasicBulletSpawner.Create
-    (
-      new Phaser.Math.Vector2(0.0, -1.0),
-      1200
-    );
+    let heroBulletSpawner = HeroBasicBulletSpawner.Create();
 
-    bulletMng.addSpawner(heroBulletSpawner);
+    if(gameCache.text.has('cnf_bullet_heroBasic'))
+    {
+      let heroBasicConfig : heroBasicBulletConfig 
+        = JSON.parse(gameCache.text.get('cnf_bullet_heroBasic'));
+
+      heroBulletSpawner.setBulletConfiguration(heroBasicConfig);
+    }
+
+    bulletMng.addSpawner(heroBulletSpawner); 
 
     this._m_bulletManager = bulletMng;
 
@@ -198,18 +189,37 @@ export class Test extends Phaser.Scene
     ///////////////////////////////////
     // Bullet Manager : Enemies
 
+    let cnfEnemiesBulletMng : CnfBulletManager 
+      = JSON.parse(gameCache.text.get('cnf_bulletManager_enemies'));
+
     let enim_bulletManager = BulletManager.Create();
+    let enim_padding = cnfEnemiesBulletMng.playzone_padding;
 
     enim_bulletManager.init
     (
       this,
-      cnfBulletMng.pool_size,
-      cnfBulletMng.texture_key,
-      new Phaser.Geom.Point(-padding, -padding),
-      new Phaser.Geom.Point(canvas.width + padding, canvas.height + padding)
+      cnfEnemiesBulletMng.pool_size,
+      cnfEnemiesBulletMng.texture_key,
+      new Phaser.Geom.Point(-enim_padding, -enim_padding),
+      new Phaser.Geom.Point
+      (
+        canvas.width + enim_padding, 
+        canvas.height + enim_padding
+      )
     );
 
+    ///////////////////////////////////
+    // Spawner : Enemy Basic Bullet
+
     let enemyBulletSpawner = EnemyBasicBulletSpawner.Create();
+
+    if(gameCache.text.has('cnf_bullet_enemyBasic'))
+    {
+      let enemyBasicConfig : EnemyBasicBulletConfig 
+        = JSON.parse(gameCache.text.get('cnf_bullet_enemyBasic'));
+
+      enemyBulletSpawner.setBulletConfiguartion(enemyBasicConfig);
+    }
 
     enim_bulletManager.addSpawner(enemyBulletSpawner);    
 
@@ -218,10 +228,8 @@ export class Test extends Phaser.Scene
 
     let enemiesManager : EnemiesManager = EnemiesManager.Create();
 
-    let enemiesManagerConfig = new EnemiesManagerConfig();
-
-    enemiesManagerConfig.pool_size = 10;
-    enemiesManagerConfig.texture_key = "target";
+    let enemiesManagerConfig 
+      = JSON.parse(this.game.cache.text.get('cnf_spawner_errante'));
 
     enemiesManager.init(this, enemiesManagerConfig);
 
@@ -235,9 +243,18 @@ export class Test extends Phaser.Scene
 
     bulletMng.collisionVsGroup(this, enemiesManager.getBodiesGroup());
 
-    // Errante Spawner
+    ///////////////////////////////////
+    // Spawner : Errante
 
     let erranteSpawner : ErranteSpawner = ErranteSpawner.Create();
+
+    if(this.game.cache.text.has('cnf_errante'))
+    {
+      let erranteConfig 
+        = JSON.parse(gameCache.text.get('cnf_errante'));
+
+      erranteSpawner.setErranteConfig(erranteConfig);
+    }
 
     enemiesManager.addSpawner(erranteSpawner);
 

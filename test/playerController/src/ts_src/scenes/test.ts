@@ -39,11 +39,12 @@ export class Test extends Phaser.Scene
       'button',
       'images/button.png'
     );
-
-    this.load.text
+    
+    this.load.pack
     (
-      'cnf_hero',
-      'configFiles/cnf_hero_001.json'
+      'configuration_pilot_pack',
+      'packs/configuration_pack.json',
+      'pilot'
     );
     return;
   }

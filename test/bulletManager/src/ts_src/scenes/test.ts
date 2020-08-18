@@ -11,6 +11,7 @@ import { HeroBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletMan
 import { CmpEnemyHealth } from "../../../../../game/src/ts_src/components/cmpEnemyHealth";
 import { CnfBulletManager, CnfHero } from "../../../../../game/src/ts_src/commons/1942config";
 import { IPlayerController } from "../../../../../game/src/ts_src/playerController/IPlayerController";
+import { heroBasicBulletConfig } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletConfig";
 
 
 export class Test extends Phaser.Scene
@@ -63,18 +64,11 @@ export class Test extends Phaser.Scene
 
     // Hero configuration file.
 
-    this.load.text
+    this.load.pack
     (
-      'cnf_hero',
-      'configFiles/hero/cnf_hero_001.json'
-    );
-
-    // Hero's BulletManager file.
-
-    this.load.text
-    (
-      'cnf_bulletManager_hero',
-      'configFiles/cnf_bulletManager_001.json'
+      'configuration_pilot_pack',
+      'packs/configuration_pack.json',
+      'pilot'
     );
 
     return;
@@ -83,6 +77,8 @@ export class Test extends Phaser.Scene
   create()
   : void
   {
+    let gameCache = this.game.cache;
+
     ///////////////////////////////////
     // Prepare Modules
 
@@ -170,13 +166,17 @@ export class Test extends Phaser.Scene
 
     // BulletSpawner : Basic Bullet.
 
-    let heroBulletSpawner = HeroBasicBulletSpawner.Create
-    (
-      new Phaser.Math.Vector2(0.0, -1.0),
-      1200
-    );
+    let heroBulletSpawner = HeroBasicBulletSpawner.Create();
 
-    bulletMng.addSpawner(heroBulletSpawner);
+    if(gameCache.text.has('cnf_bullet_heroBasic'))
+    {
+      let heroBasicConfig : heroBasicBulletConfig 
+        = JSON.parse(gameCache.text.get('cnf_bullet_heroBasic'));
+
+      heroBulletSpawner.setBulletConfiguration(heroBasicConfig);
+    }
+
+    bulletMng.addSpawner(heroBulletSpawner); 
 
     this._m_bulletManager = bulletMng;
 

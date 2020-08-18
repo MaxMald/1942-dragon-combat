@@ -11,7 +11,7 @@
   
   "score" : 0,
 
-  "movement_mode" : "MIXED",  
+  "movement_mode" : "RELATIVE",  
 
   "texture" : "DragonFlight",
   
