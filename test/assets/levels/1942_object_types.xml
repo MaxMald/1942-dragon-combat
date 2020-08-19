@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objecttypes>
+ <objecttype name="Boss" color="#000000"/>
+ <objecttype name="Errante" color="#a40002"/>
+ <objecttype name="Guide Line" color="#00007f"/>
+ <objecttype name="Prop" color="#0303a4">
+  <property name="image" type="string"/>
+ </objecttype>
+</objecttypes>

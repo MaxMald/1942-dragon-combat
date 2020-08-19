@@ -11,6 +11,7 @@
 
 import { BaseActor } from "../actors/baseActor";
 import { DC_COMPONENT_ID } from "../commons/1942enums";
+import { Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
 import { IAnimationState } from "../states/IAnimationState";
 import { IBaseState } from "../states/IBaseState";
 import { NullState } from "../states/nullState";
@@ -48,9 +49,10 @@ export class CmpAnimation implements IBaseComponent<Phaser.Physics.Arcade.Sprite
    * 
    * @param _actor Base Actor. 
    */
-  init(_actor: BaseActor<Phaser.Physics.Arcade.Sprite>)
+  init(_actor: Ty_physicsActor)
   : void 
   {
+    this._m_actor = _actor;
     this._m_sprite = _actor.getWrappedInstance();
     return;
   }
@@ -60,7 +62,7 @@ export class CmpAnimation implements IBaseComponent<Phaser.Physics.Arcade.Sprite
    * 
    * @param _actor 
    */
-  update(_actor: BaseActor<Phaser.Physics.Arcade.Sprite>)
+  update(_actor: Ty_physicsActor)
   : void 
   {
     this._m_activeState.update();
@@ -167,6 +169,17 @@ export class CmpAnimation implements IBaseComponent<Phaser.Physics.Arcade.Sprite
   }
 
   /**
+   * Get the physic actor wich this animation component is attached.
+   * 
+   * @returns actor.
+   */
+  getActor()
+  : Ty_physicsActor
+  {
+    return this._m_actor;
+  }
+
+  /**
    * Destroys all the animation states.
    */
   destroy()
@@ -185,6 +198,7 @@ export class CmpAnimation implements IBaseComponent<Phaser.Physics.Arcade.Sprite
     this._m_activeState = NullState.GetInstance();
 
     this._m_sprite = null;
+    this._m_actor = null;
     return;
   }
   
@@ -197,7 +211,12 @@ export class CmpAnimation implements IBaseComponent<Phaser.Physics.Arcade.Sprite
   /**
    * Reference to the physic sprite.
    */
-  private _m_sprite : Phaser.Physics.Arcade.Sprite;
+  private _m_sprite : Ty_physicsSprite;
+
+  /**
+   * Reference to the physic actor.
+   */
+  private _m_actor : Ty_physicsActor;
 
   /**
    * Map of animation states.

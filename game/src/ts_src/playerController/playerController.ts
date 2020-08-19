@@ -24,6 +24,9 @@ import { CmpNullCollisionController } from "../components/cmpNullCollisionContro
 import { Point, Ty_physicsActor, V2 } from "../commons/1942types";
 import { CnfHero } from "../commons/1942config";
 import { IPlayerController } from "./IPlayerController";
+import { CmpHeroController } from "../components/cmpHeroController";
+import { StateHeroBarrelRoll } from "../states/stateHeroBarrelRoll";
+import { SttHeroBarrelRoll } from "../states/heroController/sttHeroBarrelRoll";
 
 /**
  * Create and manage the hero's actor. It provides a friendly interface to control
@@ -87,6 +90,7 @@ implements IPlayerController
     hero.addComponent(CmpHeroData.Create());
     hero.addComponent(CmpHeroBulletController.Create());
     hero.addComponent(CmpNullCollisionController.GetInstance());
+    hero.addComponent(CmpHeroController.Create());
 
     hero.init();
 
@@ -100,6 +104,7 @@ implements IPlayerController
 
     anim.addState(new StateHeroFFlight());
     anim.addState(new StateHeroGlide());
+    anim.addState(new StateHeroBarrelRoll());
 
     anim.setActive('Hero_Forward_Flight');
 
@@ -125,6 +130,7 @@ implements IPlayerController
     this.setInputMode(_cnfHero.movement_mode);
     this.setHeroSpeed(_cnfHero.maximum_speed);
     this.setHeroFireRate(_cnfHero.fireRate);
+    this.setBarrelRollDuration(_cnfHero.barrel_roll_duration);
 
     let canvas = _scene.game.canvas;
 
@@ -301,6 +307,27 @@ implements IPlayerController
       );
 
     return bulletController.getFireRate();
+  }
+
+  /**
+   * Set the hero's barrel roll action duration in seconds.
+   * 
+   * @param _duration duration in seconds. 
+   */
+  setBarrelRollDuration(_duration : number)
+  : void
+  {
+    let heroController : CmpHeroController
+      = this._m_player.getComponent<CmpHeroController>
+      (
+        DC_COMPONENT_ID.kHeroController
+      );
+    
+    let barrelRollState : SttHeroBarrelRoll
+      = heroController.getState('barrelRoll') as SttHeroBarrelRoll;
+    
+    barrelRollState.setStateDuration(_duration);
+    return;
   }
 
   /**

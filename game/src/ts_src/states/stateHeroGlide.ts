@@ -48,8 +48,11 @@ export class StateHeroGlide implements IAnimationState
         this.m_component.setActive("Hero_Forward_Flight");
       return;
 
-      default:
-        
+      case DC_MESSAGE_ID.kEnterBarrelRoll:
+        this.m_component.setActive("Hero_Barrel_Roll");
+      return;
+
+      default:        
       return;
     }
   }

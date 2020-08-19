@@ -31,6 +31,7 @@ export class CnfHero
     this.health = 10;
     this.score = 0;
     this.fireRate = 8;    
+    this.barrel_roll_duration = 1.0;
     this.hero_playzone_padding = 100;
 
     this.bulletManager_key = "cnf_bulletManager_hero";
@@ -91,6 +92,11 @@ export class CnfHero
    * Number of bullets spawned per second.
    */
   fireRate : number;
+
+  /**
+   * 
+   */
+  barrel_roll_duration : number;
 
   /**
    * The base size of the playzone correspond to the game's canvas size, the 

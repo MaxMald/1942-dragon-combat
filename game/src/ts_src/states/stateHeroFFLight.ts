@@ -8,8 +8,10 @@
  * @since July-24-2020
  */
 
-import { DC_MESSAGE_ID } from "../commons/1942enums";
+import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
+import { Ty_physicsActor } from "../commons/1942types";
 import { CmpAnimation } from "../components/cmpAnimation";
+import { CmpHeroController } from "../components/cmpHeroController";
 import { IAnimationState } from "./IAnimationState";
 
 /**
@@ -24,7 +26,6 @@ export class StateHeroFFlight implements IAnimationState
   constructor()
   {
     this.m_id = "Hero_Forward_Flight";
-    this._m_isMoving = false;
     return;
   }
   
@@ -33,33 +34,28 @@ export class StateHeroFFlight implements IAnimationState
   { 
     let sprite = this.m_component.getSprite();
     sprite.play('D001_Flight');
-
-    this._m_isMoving = true;
     
-    sprite.anims.currentAnim.once('repeat', this._onRepeat, this);
-    
+    sprite.anims.currentAnim.once('repeat', this._onRepeat, this);    
     return;
   }
   
   onExit()
   : void 
-  { }
+  {
+    this._removeListener();
+    return;
+  }
 
   receive(_id: number, _obj: any)
   : void 
   { 
     switch(_id)
     {
-      case DC_MESSAGE_ID.kPointerPressed:
-        this._m_isMoving = true;
-      return;
-
-      case DC_MESSAGE_ID.kPointerReleased:
-        this._m_isMoving = false;
+      case DC_MESSAGE_ID.kEnterBarrelRoll:
+        this.m_component.setActive("Hero_Barrel_Roll");
       return;
 
       default:
-        
       return;
     }
   }
@@ -71,11 +67,7 @@ export class StateHeroFFlight implements IAnimationState
   destroy()
   : void 
   { 
-    // Remove listeners.
-
-    let sprite = this.m_component.getSprite();
-    sprite.anims.currentAnim.removeAllListeners('repeat');
-    
+    this._removeListener();
     return;
   }
   
@@ -86,11 +78,26 @@ export class StateHeroFFlight implements IAnimationState
   /****************************************************/
   /* Private                                          */
   /****************************************************/
+
+  /**
+   * Removew listeners from current animation.
+   */
+  private _removeListener()
+  : void
+  {
+    let sprite = this.m_component.getSprite();
+    sprite.anims.currentAnim.removeAllListeners('repeat');
+    return;
+  }
   
   private _onRepeat()
   : void
-  {    
-    if(this._m_isMoving) 
+  {
+    let actor : Ty_physicsActor = this.m_component.getActor();
+    let heroController : CmpHeroController 
+      = actor.getComponent<CmpHeroController>(DC_COMPONENT_ID.kHeroController);
+    
+    if(heroController.isPointerPressed()) 
     {
       let sprite = this.m_component.getSprite();
       sprite.anims.currentAnim.once('repeat', this._onRepeat, this);
@@ -101,6 +108,4 @@ export class StateHeroFFlight implements IAnimationState
     }    
     return;
   }
-
-  private _m_isMoving : boolean;
 }

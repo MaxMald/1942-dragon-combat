@@ -19,5 +19,7 @@
 
   "hero_playzone_padding" : 100,
   
-  "bulletManager_key" : "cnf_bulletManager_hero"
+  "bulletManager_key" : "cnf_bulletManager_hero",
+
+  "barrel_roll_duration" : 1.0
 }

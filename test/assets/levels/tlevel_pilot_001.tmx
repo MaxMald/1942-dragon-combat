@@ -19,7 +19,7 @@
   <object id="10" name="1920 px" type="Guide Line" x="0" y="1920" width="1088" height="1"/>
   <object id="11" name="0 px" type="Guide Line" x="0" y="0" width="1088" height="1"/>
  </objectgroup>
- <objectgroup id="2" name="First Wave" locked="1" offsetx="-3" offsety="6">
+ <objectgroup id="2" name="First Wave" offsetx="-3" offsety="6">
   <object id="2" name="Errante" type="Errante" x="188.788" y="9098.98">
    <point/>
   </object>
@@ -441,7 +441,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="4" name="Boss">
+ <objectgroup id="4" name="Boss" locked="1">
   <object id="318" name="Boss" type="Boss" x="560.061" y="1935.45">
    <point/>
   </object>

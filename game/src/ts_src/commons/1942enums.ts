@@ -179,7 +179,12 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpUIBossHealthControl
    */
-  kUIBossHealthControl : 21 as 21
+  kUIBossHealthControl : 21 as 21,
+
+  /**
+   * CmpHeroController.
+   */
+  kHeroController : 22 as 22
 });
 
 /****************************************************/
@@ -341,7 +346,21 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : number
    */
-  kSpeed : 519 as 519
+  kSpeed : 519 as 519,
+
+  /**
+   * Hero had been enter to barrel roll state.
+   * 
+   * msg : undefined.
+   */
+  kEnterBarrelRoll : 520 as 520,
+
+  /**
+   * Hero had been exit from barrel roll state.
+   * 
+   * msg : undefined.
+   */
+  kExitBarrelRoll : 521 as 521
 });
 
 /****************************************************/
@@ -380,6 +399,34 @@ export const DC_ANIMATION_ID = Object.freeze
    * Idle Animation.
    */
   kIdle : 4 as 4
+});
+
+/****************************************************/
+/* Hero State                                       */
+/****************************************************/
+
+/**
+ * Animation state identifier.
+ */
+
+export type DC_HERO_STATE = EnumLiteralsOf<typeof DC_HERO_STATE>;
+
+export const DC_HERO_STATE = Object.freeze
+({
+  /**
+   * Undefined state.
+   */
+  kUndefined : 0 as 0,
+
+  /**
+   * Normal state.
+   */
+  kNormal : 1 as 1,
+
+  /**
+   * Barrel Roll state.
+   */
+  kBarrelRoll : 2 as 2
 });
 
 /****************************************************/
