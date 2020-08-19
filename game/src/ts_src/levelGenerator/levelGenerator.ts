@@ -13,6 +13,7 @@ import { CmdEnterBoss } from "../commands/levelCommands/cmdEnterBoss";
 import { CmdSpawnErrante } from "../commands/levelCommands/cmdSpawnErrante";
 import { ILevelCommand } from "../commands/levelCommands/iLevelCommands";
 import { Point, Ty_TileMap, Ty_TileObject } from "../commons/1942types";
+import { CnfCadmio } from "../configObjects/cnfCadmio";
 import { GameManager } from "../gameManager/gameManager";
 import { ILevelGenerator } from "./iLevelGenerator";
 import { LevelGeneratorConfig } from "./levelGeneratorConfig";
@@ -38,6 +39,7 @@ implements ILevelGenerator
     // Default properties
 
     levelGenerator._m_cameraHeight = 1080;
+    levelGenerator._m_cadmioConfig = new CnfCadmio();
 
     return levelGenerator;
   }
@@ -103,8 +105,17 @@ implements ILevelGenerator
   loadMap(_map: Ty_TileMap)
   : void 
   {
-
     let map_height = _map.heightInPixels;
+
+    // Load the configuration objects from the configuration layer.
+
+    let objectLayer : Phaser.Tilemaps.ObjectLayer;
+    objectLayer = _map.getObjectLayer('ConfigurationObjects');
+
+    if(objectLayer != null)
+    {
+      this.loadConfigObjects(objectLayer);
+    }
 
     ////////////////////////////////////
     // Tile Objects
@@ -113,8 +124,7 @@ implements ILevelGenerator
     // created with objects that has valid types.
 
     let aLayerNames : string[] = _map.getObjectLayerNames();
-    let layerName : string;
-    let objectLayer : Phaser.Tilemaps.ObjectLayer;
+    let layerName : string;    
 
     // Iterate over each object layer.
 
@@ -171,7 +181,44 @@ implements ILevelGenerator
     this.orderCommands();
 
     return;
-  } 
+  }
+  
+  /**
+   * Search in the given object layer all the Tiled Objects that have valid
+   * types as "Configuartion Objecs". Then will set the level configuartion
+   * objects with the Tiled Objects data.
+   * 
+   * @param _layer : Object layer.
+   */
+  loadConfigObjects(_layer : Phaser.Tilemaps.ObjectLayer)
+  : void
+  {
+    let index : number = 0;
+    let object : Ty_TileObject;
+    let objectSize : number = _layer.objects.length;
+    let objectType : string;
+
+    while(index < objectSize)
+    {
+      object = _layer.objects[index];
+      objectType = object.type;
+
+      if(objectType != null && objectType != "")
+      {
+        switch(objectType)
+        {
+          // Cadmio Fruit Configuration Object.
+
+          case 'CadmioConfig' :
+          this._m_cadmioConfig.setFromObject(object);
+          break;
+        }
+      }
+      
+      ++index;
+    }
+    return;
+  }
 
   /**
    * Updates the LevelGenerator.
@@ -279,6 +326,17 @@ implements ILevelGenerator
   }
 
   /**
+   * Get the cadmio configuration object.
+   * 
+   * @returns cadmio config object.
+   */
+  getCadmioConfig()
+  : CnfCadmio
+  {
+    return this._m_cadmioConfig;
+  }
+
+  /**
    * Call the destroy() method of each member in this LeveGenerator. Destroy
    * this object's properties.
    */
@@ -343,4 +401,8 @@ implements ILevelGenerator
    */
   private _m_cameraHeight : number;
  
+  /**
+   * Cadmio configuartion object.
+   */
+  private _m_cadmioConfig : CnfCadmio;
 }

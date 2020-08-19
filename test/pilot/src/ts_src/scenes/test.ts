@@ -4,7 +4,6 @@ import { AmbienceGeneratorConfig } from "../../../../../game/src/ts_src/levelGen
 import { BulletManager } from "../../../../../game/src/ts_src/bulletManager/bulletManager";
 import { HeroBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletSpawner";
 import { LevelGeneratorConfig } from "../../../../../game/src/ts_src/levelGenerator/levelGeneratorConfig";
-import { LevelConfig } from "../../../../../game/src/ts_src/gameManager/levelConfig";
 import { EnemyBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletSpawner";
 import { EnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/enemiesManager";
 import { ErranteSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner";

@@ -1,4 +1,4 @@
-{ "compressionlevel":-1,
+{ "compressionlevel":0,
  "editorsettings":
     {
      "export":
@@ -94,6 +94,50 @@
                  "width":1088,
                  "x":0,
                  "y":0
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":7,
+         "name":"ConfigurationObjects",
+         "objects":[
+                {
+                 "gid":12,
+                 "height":57,
+                 "id":322,
+                 "name":"Cadmio Config",
+                 "properties":[
+                        {
+                         "name":"direction_x",
+                         "type":"float",
+                         "value":0
+                        }, 
+                        {
+                         "name":"direction_y",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":100
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"cadmio_fruit"
+                        }],
+                 "rotation":0,
+                 "type":"CadmioConfig",
+                 "visible":true,
+                 "width":65,
+                 "x":1219.01515151515,
+                 "y":9600.87878787879
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1796,6 +1840,29 @@
         }, 
         {
          "draworder":"topdown",
+         "id":6,
+         "name":"Items",
+         "objects":[
+                {
+                 "gid":1,
+                 "height":59,
+                 "id":321,
+                 "name":"Cadmio",
+                 "rotation":0,
+                 "type":"Cadmio",
+                 "visible":true,
+                 "width":59,
+                 "x":513.5,
+                 "y":4319.5
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":4,
          "name":"Boss",
          "objects":[
@@ -1817,8 +1884,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":6,
- "nextobjectid":319,
+ "nextlayerid":8,
+ "nextobjectid":323,
  "orientation":"orthogonal",
  "properties":[
         {
@@ -1827,11 +1894,100 @@
          "value":100
         }],
  "renderorder":"right-down",
- "tiledversion":"1.3.1",
+ "tiledversion":"1.4.2",
  "tileheight":32,
- "tilesets":[],
+ "tilesets":[
+        {
+         "columns":0,
+         "firstgid":1,
+         "grid":
+            {
+             "height":1,
+             "orientation":"orthogonal",
+             "width":1
+            },
+         "margin":0,
+         "name":"items_icons",
+         "spacing":0,
+         "tilecount":12,
+         "tileheight":59,
+         "tiles":[
+                {
+                 "id":0,
+                 "image":"level_icons\/cadmio_icon.png",
+                 "imageheight":59,
+                 "imagewidth":59
+                }, 
+                {
+                 "id":1,
+                 "image":"level_icons\/canus_icon.png",
+                 "imageheight":59,
+                 "imagewidth":59
+                }, 
+                {
+                 "id":2,
+                 "image":"level_icons\/config_black.png",
+                 "imageheight":57,
+                 "imagewidth":65
+                }, 
+                {
+                 "id":3,
+                 "image":"level_icons\/config_blue1.png",
+                 "imageheight":57,
+                 "imagewidth":65
+                }, 
+                {
+                 "id":4,
+                 "image":"level_icons\/config_blue2.png",
+                 "imageheight":57,
+                 "imagewidth":65
+                }, 
+                {
+                 "id":5,
+                 "image":"level_icons\/config_brown.png",
+                 "imageheight":57,
+                 "imagewidth":65
+                }, 
+                {
+                 "id":6,
+                 "image":"level_icons\/config_dark_purple.png",
+                 "imageheight":57,
+                 "imagewidth":65
+                }, 
+                {
+                 "id":7,
+                 "image":"level_icons\/config_green.png",
+                 "imageheight":57,
+                 "imagewidth":65
+                }, 
+                {
+                 "id":8,
+                 "image":"level_icons\/config_orange.png",
+                 "imageheight":57,
+                 "imagewidth":65
+                }, 
+                {
+                 "id":9,
+                 "image":"level_icons\/config_pink.png",
+                 "imageheight":57,
+                 "imagewidth":65
+                }, 
+                {
+                 "id":10,
+                 "image":"level_icons\/config_red.png",
+                 "imageheight":57,
+                 "imagewidth":65
+                }, 
+                {
+                 "id":11,
+                 "image":"level_icons\/config_yellow.png",
+                 "imageheight":57,
+                 "imagewidth":65
+                }],
+         "tilewidth":65
+        }],
  "tilewidth":32,
  "type":"map",
- "version":1.2,
+ "version":1.4,
  "width":34
 }

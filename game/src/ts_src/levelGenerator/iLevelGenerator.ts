@@ -9,6 +9,7 @@
  */
 
 import { Ty_TileMap } from "../commons/1942types";
+import { CnfCadmio } from "../configObjects/cnfCadmio";
 
 export interface ILevelGenerator
 {
@@ -37,6 +38,14 @@ export interface ILevelGenerator
    */
   setCameraHeigth(_height : number)
   : void;
+
+  /**
+   * Get the cadmio configuration object.
+   * 
+   * @returns cadmio config object.
+   */
+  getCadmioConfig()
+  : CnfCadmio;
 
   /**
    * Destroy the LevelGenerator.

@@ -8,6 +8,8 @@
  * @since August-07-2020
  */
 
+import { Ty_TileObject } from "./1942types";
+
 /****************************************************/
 /* Hero                                             */
 /****************************************************/
@@ -133,3 +135,4 @@ export class CnfBulletManager
    */
   playzone_padding : number;
 }
+

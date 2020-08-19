@@ -1,0 +1,13 @@
+{
+  "pilot" : 
+  {
+    "files" :
+    [
+      {
+        "type" : "image",
+        "key" : "dragon_fruits",
+        "url" : "images/dragon_fruit.png"
+      }
+    ]
+  }
+}

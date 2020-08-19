@@ -37,6 +37,7 @@ define("test/pilot/src/ts_src/scenes/preload", ["require", "exports"], function 
             this.load.image('enemy', 'images/enemy.png');
             this.load.image('spiderBoss', 'images/boss.png');
             this.load.pack('configuration_pilot_pack', 'packs/configuration_pack.json', 'pilot');
+            this.load.pack('art_pack_items', 'packs/art_pack_items.json', 'pilot');
             var tiledMapPack = JSON.parse(this.game.cache.text.get('TiledMap_Pack'));
             var tiledMap = tiledMapPack.pilot.files[0];
             this.load.tilemapTiledJSON(tiledMap.key, tiledMap.url);
@@ -53,7 +54,7 @@ define("test/pilot/src/ts_src/scenes/preload", ["require", "exports"], function 
 define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.DC_ACTOR_COMMAND = exports.DC_BULLET_TYPE = exports.DC_HERO_STATE = exports.DC_ANIMATION_ID = exports.DC_MESSAGE_ID = exports.DC_COMPONENT_ID = exports.DC_BOSS_ID = exports.DC_ENEMY_TYPE = void 0;
+    exports.DC_ACTOR_COMMAND = exports.DC_ITEM_TYPE = exports.DC_BULLET_TYPE = exports.DC_HERO_STATE = exports.DC_ANIMATION_ID = exports.DC_MESSAGE_ID = exports.DC_COMPONENT_ID = exports.DC_BOSS_ID = exports.DC_ENEMY_TYPE = void 0;
     exports.DC_ENEMY_TYPE = Object.freeze({
         kUndefined: -1,
         kErrante: 0,
@@ -86,7 +87,8 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
         kSpiderBossController: 19,
         kSimpleBulletControl: 20,
         kUIBossHealthControl: 21,
-        kHeroController: 22
+        kHeroController: 22,
+        kItemController: 23
     });
     exports.DC_MESSAGE_ID = Object.freeze({
         kUndefined: 499,
@@ -111,7 +113,8 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
         kDirection: 518,
         kSpeed: 519,
         kEnterBarrelRoll: 520,
-        kExitBarrelRoll: 521
+        kExitBarrelRoll: 521,
+        kCollisionItem: 522
     });
     exports.DC_ANIMATION_ID = Object.freeze({
         kForward: 0,
@@ -130,6 +133,10 @@ define("game/src/ts_src/commons/1942enums", ["require", "exports"], function (re
         kHeroBasic: 1,
         kEnemyBasic: 2,
         kSimple: 3
+    });
+    exports.DC_ITEM_TYPE = Object.freeze({
+        kCadmio: 0,
+        kCanus: 1,
     });
     exports.DC_ACTOR_COMMAND = Object.freeze({
         kRemoveComponent: 0
@@ -4612,6 +4619,65 @@ define("game/src/ts_src/levelGenerator/ambienceGenerator/nullAmbientGenerator", 
     }());
     exports.NullAmbientGenerator = NullAmbientGenerator;
 });
+define("game/src/ts_src/configObjects/cnfCadmio", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CnfCadmio = void 0;
+    var CnfCadmio = (function () {
+        function CnfCadmio() {
+            this.speed = 100.0;
+            this.texture_key = "dragon_fruit";
+            this.direction_x = 0.0;
+            this.direction_y = 1.0;
+            return;
+        }
+        CnfCadmio.prototype.setFromObject = function (_object) {
+            if (_object.x != undefined) {
+                if (_object.width != undefined) {
+                    this.x = _object.x - _object.width * 0.5;
+                }
+                else {
+                    this.x = _object.x;
+                }
+            }
+            if (_object.y != undefined) {
+                if (_object.height != undefined) {
+                    this.y = _object.y - _object.height * 0.5;
+                }
+                else {
+                    this.y = _object.y;
+                }
+            }
+            if (_object.properties != undefined) {
+                var aProperties = _object.properties;
+                var index = 0;
+                var property = void 0;
+                while (index < aProperties.length) {
+                    property = aProperties[index];
+                    switch (property.name) {
+                        case "speed":
+                            this.speed = property.value;
+                            break;
+                        case "texture":
+                            this.texture_key = property.value;
+                            break;
+                        case "direction_x":
+                            this.direction_x = property.value;
+                            break;
+                        case "direction_y":
+                            this.direction_y = property.value;
+                            break;
+                        default:
+                            break;
+                    }
+                    ++index;
+                }
+            }
+        };
+        return CnfCadmio;
+    }());
+    exports.CnfCadmio = CnfCadmio;
+});
 define("game/src/ts_src/levelGenerator/iLevelGenerator", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4699,7 +4765,7 @@ define("game/src/ts_src/levelGenerator/levelGeneratorConfig", ["require", "expor
     }());
     exports.LevelGeneratorConfig = LevelGeneratorConfig;
 });
-define("game/src/ts_src/levelGenerator/levelGenerator", ["require", "exports", "game/src/ts_src/commands/levelCommands/cmdEnterBoss", "game/src/ts_src/commands/levelCommands/cmdSpawnErrante", "game/src/ts_src/gameManager/gameManager"], function (require, exports, cmdEnterBoss_1, cmdSpawnErrante_1, gameManager_3) {
+define("game/src/ts_src/levelGenerator/levelGenerator", ["require", "exports", "game/src/ts_src/commands/levelCommands/cmdEnterBoss", "game/src/ts_src/commands/levelCommands/cmdSpawnErrante", "game/src/ts_src/configObjects/cnfCadmio", "game/src/ts_src/gameManager/gameManager"], function (require, exports, cmdEnterBoss_1, cmdSpawnErrante_1, cnfCadmio_1, gameManager_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.LevelGenerator = void 0;
@@ -4710,6 +4776,7 @@ define("game/src/ts_src/levelGenerator/levelGenerator", ["require", "exports", "
             var levelGenerator = new LevelGenerator();
             levelGenerator._m_aLevelCommands = new Array();
             levelGenerator._m_cameraHeight = 1080;
+            levelGenerator._m_cadmioConfig = new cnfCadmio_1.CnfCadmio();
             return levelGenerator;
         };
         LevelGenerator.prototype.init = function (_scene, _config) {
@@ -4739,9 +4806,13 @@ define("game/src/ts_src/levelGenerator/levelGenerator", ["require", "exports", "
         };
         LevelGenerator.prototype.loadMap = function (_map) {
             var map_height = _map.heightInPixels;
+            var objectLayer;
+            objectLayer = _map.getObjectLayer('ConfigurationObjects');
+            if (objectLayer != null) {
+                this.loadConfigObjects(objectLayer);
+            }
             var aLayerNames = _map.getObjectLayerNames();
             var layerName;
-            var objectLayer;
             while (aLayerNames.length) {
                 layerName = aLayerNames.pop();
                 objectLayer = _map.getObjectLayer(layerName);
@@ -4767,6 +4838,25 @@ define("game/src/ts_src/levelGenerator/levelGenerator", ["require", "exports", "
                 }
             }
             this.orderCommands();
+            return;
+        };
+        LevelGenerator.prototype.loadConfigObjects = function (_layer) {
+            var index = 0;
+            var object;
+            var objectSize = _layer.objects.length;
+            var objectType;
+            while (index < objectSize) {
+                object = _layer.objects[index];
+                objectType = object.type;
+                if (objectType != null && objectType != "") {
+                    switch (objectType) {
+                        case 'CadmioConfig':
+                            this._m_cadmioConfig.setFromObject(object);
+                            break;
+                    }
+                }
+                ++index;
+            }
             return;
         };
         LevelGenerator.prototype.update = function (_dt, _distance) {
@@ -4812,6 +4902,9 @@ define("game/src/ts_src/levelGenerator/levelGenerator", ["require", "exports", "
         LevelGenerator.prototype.setCameraHeigth = function (_height) {
             this._m_cameraHeight = _height;
         };
+        LevelGenerator.prototype.getCadmioConfig = function () {
+            return this._m_cadmioConfig;
+        };
         LevelGenerator.prototype.destroy = function () {
             var aCommands = this._m_aLevelCommands;
             var command;
@@ -4836,7 +4929,7 @@ define("game/src/ts_src/levelGenerator/levelGenerator", ["require", "exports", "
     }());
     exports.LevelGenerator = LevelGenerator;
 });
-define("game/src/ts_src/levelGenerator/nullLevelGenerator", ["require", "exports"], function (require, exports) {
+define("game/src/ts_src/levelGenerator/nullLevelGenerator", ["require", "exports", "game/src/ts_src/configObjects/cnfCadmio"], function (require, exports, cnfCadmio_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NullLevelGenerator = void 0;
@@ -4846,6 +4939,9 @@ define("game/src/ts_src/levelGenerator/nullLevelGenerator", ["require", "exports
         NullLevelGenerator.prototype.loadMap = function (_map) { };
         NullLevelGenerator.prototype.update = function (_dt, _distance) { };
         NullLevelGenerator.prototype.setCameraHeigth = function (_height) { };
+        NullLevelGenerator.prototype.getCadmioConfig = function () {
+            return new cnfCadmio_2.CnfCadmio();
+        };
         NullLevelGenerator.prototype.destroy = function () { };
         return NullLevelGenerator;
     }());
@@ -8484,7 +8580,95 @@ define("game/src/ts_src/playerController/playerControllerConfig", ["require", "e
     }());
     exports.PlayerControllerConfig = PlayerControllerConfig;
 });
-define("game/src/ts_src/components/cmpTargetController", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_48) {
+define("game/src/ts_src/components/iCmpItemController", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+define("game/src/ts_src/components/cmpCadmioController", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_48) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpCadmioController = void 0;
+    var CmpCadmioController = (function () {
+        function CmpCadmioController() {
+        }
+        CmpCadmioController.Create = function () {
+            var controller = new CmpCadmioController();
+            controller.m_id = _1942enums_48.DC_COMPONENT_ID.kItemController;
+            controller._m_direction = new Phaser.Math.Vector2();
+            controller._m_force = new Phaser.Math.Vector3();
+            return controller;
+        };
+        CmpCadmioController.prototype.config = function (_config) {
+            this.setSpeed(_config.speed);
+            this.setDirection(_config.direction_x, _config.direction_y);
+            return;
+        };
+        CmpCadmioController.prototype.getType = function () {
+            return _1942enums_48.DC_ITEM_TYPE.kCadmio;
+        };
+        CmpCadmioController.prototype.init = function (_actor) { };
+        CmpCadmioController.prototype.preUpdate = function (_dt) {
+            var mult = _dt * this._m_speed;
+            this._m_force.x = this._m_direction.x * mult;
+            this._m_force.y = this._m_direction.y * mult;
+            return;
+        };
+        CmpCadmioController.prototype.update = function (_actor) {
+            _actor.sendMessage(_1942enums_48.DC_MESSAGE_ID.kAgentMove, this._m_force);
+            return;
+        };
+        CmpCadmioController.prototype.receive = function (_id, _obj) { };
+        CmpCadmioController.prototype.setDirection = function (_x, _y) {
+            this._m_direction.setTo(_x, _y);
+            return;
+        };
+        CmpCadmioController.prototype.getDirection = function () {
+            return this._m_direction;
+        };
+        CmpCadmioController.prototype.setSpeed = function (_speed) {
+            this._m_speed = _speed;
+            return;
+        };
+        CmpCadmioController.prototype.getSpeed = function () {
+            return this._m_speed;
+        };
+        CmpCadmioController.prototype.destroy = function () {
+            this._m_direction = null;
+            this._m_force = null;
+            return;
+        };
+        return CmpCadmioController;
+    }());
+    exports.CmpCadmioController = CmpCadmioController;
+});
+define("game/src/ts_src/components/cmpItemCollisionController", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_49) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CmpItemCollisionController = void 0;
+    var CmpItemCollisionController = (function () {
+        function CmpItemCollisionController() {
+        }
+        CmpItemCollisionController.Create = function () {
+            var controller = new CmpItemCollisionController();
+            controller.m_id = _1942enums_49.DC_COMPONENT_ID.kCollisionController;
+            return controller;
+        };
+        CmpItemCollisionController.prototype.onCollision = function (_other, _this) {
+            var itemController = _this.getComponent(_1942enums_49.DC_COMPONENT_ID.kItemController);
+            if (itemController != null) {
+                _other.sendMessage(_1942enums_49.DC_MESSAGE_ID.kCollisionItem, itemController);
+            }
+            return;
+        };
+        CmpItemCollisionController.prototype.init = function (_actor) { };
+        CmpItemCollisionController.prototype.update = function (_actor) { };
+        CmpItemCollisionController.prototype.receive = function (_id, _obj) { };
+        CmpItemCollisionController.prototype.destroy = function () { };
+        return CmpItemCollisionController;
+    }());
+    exports.CmpItemCollisionController = CmpItemCollisionController;
+});
+define("game/src/ts_src/components/cmpTargetController", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_50) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CmpTargetController = void 0;
@@ -8493,7 +8677,7 @@ define("game/src/ts_src/components/cmpTargetController", ["require", "exports", 
         }
         CmpTargetController.Create = function () {
             var controller = new CmpTargetController();
-            controller.m_id = _1942enums_48.DC_COMPONENT_ID.kCollisionController;
+            controller.m_id = _1942enums_50.DC_COMPONENT_ID.kCollisionController;
             return controller;
         };
         CmpTargetController.prototype.init = function (_actor) {

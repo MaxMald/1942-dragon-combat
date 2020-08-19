@@ -102,10 +102,21 @@ extends Phaser.Scene
     ///////////////////////////////////
     // Pack
 
+    // Configuration files.
+
     this.load.pack
     (
       'configuration_pilot_pack',
       'packs/configuration_pack.json',
+      'pilot'
+    );
+
+    // Art pack : Items
+
+    this.load.pack
+    (
+      'art_pack_items',
+      'packs/art_pack_items.json',
       'pilot'
     );
 

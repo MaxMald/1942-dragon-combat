@@ -184,7 +184,12 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpHeroController.
    */
-  kHeroController : 22 as 22
+  kHeroController : 22 as 22,
+
+  /**
+   * ICmpItemController.
+   */
+  kItemController : 23 as 23
 });
 
 /****************************************************/
@@ -360,7 +365,14 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : undefined.
    */
-  kExitBarrelRoll : 521 as 521
+  kExitBarrelRoll : 521 as 521,
+
+  /**
+   * The actor had been collide with an item.
+   * 
+   * msg : ICmpItemController.
+   */
+  kCollisionItem : 522 as 522
 });
 
 /****************************************************/
@@ -460,6 +472,29 @@ export const DC_BULLET_TYPE = Object.freeze
    * A simple bullet.
    */
   kSimple : 3 as 3
+});
+
+/****************************************************/
+/* Item Type                                        */
+/****************************************************/
+
+/**
+ * Animation state identifier.
+ */
+
+export type DC_ITEM_TYPE = EnumLiteralsOf<typeof DC_ITEM_TYPE>;
+
+export const DC_ITEM_TYPE = Object.freeze
+({
+  /**
+   * Camdio item
+   */
+  kCadmio : 0 as 0,
+
+  /**
+   * Canus Item.
+   */
+  kCanus : 1 as 1,
 });
 
 /****************************************************/
