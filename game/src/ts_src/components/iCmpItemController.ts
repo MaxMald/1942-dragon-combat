@@ -27,6 +27,20 @@ extends IBaseComponent<Ty_physicsSprite>
   : number;
 
   /**
+   * Set the effect type of this item.
+   * 
+   * @param _type type identifier. 
+   */
+  setEffectType(_type : number)
+  : void;
+
+  /**
+   * Get the Effect Type of this item.
+   */
+  getEffectType()
+  : number;
+
+  /**
    * Set the Item Spawner of this controller.
    * 
    * @param _spawner Item spawner.

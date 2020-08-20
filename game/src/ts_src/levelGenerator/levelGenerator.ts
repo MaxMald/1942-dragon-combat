@@ -11,6 +11,7 @@
 
 import { CmdEnterBoss } from "../commands/levelCommands/cmdEnterBoss";
 import { CmdSpawnCadmio } from "../commands/levelCommands/cmdSpawnCadmio";
+import { CmdSpawnCanus } from "../commands/levelCommands/cmdSpawnCanus";
 import { CmdSpawnErrante } from "../commands/levelCommands/cmdSpawnErrante";
 import { ILevelCommand } from "../commands/levelCommands/iLevelCommands";
 import { Point, Ty_TileMap, Ty_TileObject } from "../commons/1942types";
@@ -68,13 +69,20 @@ implements ILevelGenerator
 
     let map : Ty_TileMap = _scene.add.tilemap(_config.map_key);
 
-    // Load map
+    let gameManager = GameManager.GetInstance();
+    
+    // Load Configuartion Objects.
+
+    let levelConfiguartion = gameManager.getLevelConfiguration();
+    levelConfiguartion.setFromMap(map, 'ConfigurationObjects');
+    
+    // Load Map Objects.
 
     this.loadMap(map);
 
     // Setup map properties.
 
-    let gameManager = GameManager.GetInstance();
+    
 
     let properties : any = map.properties as any;
     let propertiesSize : number = properties.length;
@@ -113,12 +121,6 @@ implements ILevelGenerator
     // Load the configuration objects from the configuration layer.
 
     let objectLayer : Phaser.Tilemaps.ObjectLayer;
-    objectLayer = _map.getObjectLayer('ConfigurationObjects');
-
-    if(objectLayer != null)
-    {
-      this.loadConfigObjects(objectLayer);
-    }
 
     ////////////////////////////////////
     // Tile Objects
@@ -183,43 +185,6 @@ implements ILevelGenerator
 
     this.orderCommands();
 
-    return;
-  }
-  
-  /**
-   * Search in the given object layer all the Tiled Objects that have valid
-   * types as "Configuartion Objecs". Then will set the level configuartion
-   * objects with the Tiled Objects data.
-   * 
-   * @param _layer : Object layer.
-   */
-  loadConfigObjects(_layer : Phaser.Tilemaps.ObjectLayer)
-  : void
-  {
-    let index : number = 0;
-    let object : Ty_TileObject;
-    let objectSize : number = _layer.objects.length;
-    let objectType : string;
-
-    while(index < objectSize)
-    {
-      object = _layer.objects[index];
-      objectType = object.type;
-
-      if(objectType != null && objectType != "")
-      {
-        switch(objectType)
-        {
-          // Cadmio Fruit Configuration Object.
-
-          case 'CadmioConfig' :
-          this._m_cadmioConfig.setFromObject(object);
-          break;
-        }
-      }
-      
-      ++index;
-    }
     return;
   }
 
@@ -317,6 +282,13 @@ implements ILevelGenerator
       this._createCadmioSpawnCommand(_object);
       return;
 
+      // Spawn a Canus Fruit.
+
+      case "Canus" :
+      
+      this._createCanusSpawnCommand(_object);
+      return;
+
       ///////////////////////////////////
       // Bosses
 
@@ -341,28 +313,6 @@ implements ILevelGenerator
   : void 
   {
     this._m_cameraHeight = _height;
-  }
-
-  /**
-   * Get the cadmio configuration object.
-   * 
-   * @returns cadmio config object.
-   */
-  getCadmioConfig()
-  : CnfCadmio
-  {
-    return this._m_cadmioConfig;
-  }
-
-  /**
-   * Get the item manager configuartion object.
-   * 
-   * @returns item manager config object.
-   */
-  getItemManagerConfig()
-  : CnfItemManager
-  {
-    return this._m_itemManagerConfig;
   }
 
   /**
@@ -426,17 +376,20 @@ implements ILevelGenerator
    */
   private _createCadmioSpawnCommand(_object : Ty_TileObject)
   : void
+  {   
+   this._adjustPositionByAnchor(_object, 0.5, 0.5); 
+
+    let command : CmdSpawnCadmio = new CmdSpawnCadmio(_object.x, _object.y);
+    this._m_aLevelCommands.push(command);
+    return;
+  }
+
+  private _createCanusSpawnCommand(_object : Ty_TileObject)
+  : void
   {
-    let x : number = _object.x;
-    let y : number = _object.y;
+    this._adjustPositionByAnchor(_object, 0.5, 0.5); 
 
-    if(_object.width !== undefined && _object.height !== undefined)
-    {
-      x -= _object.width * 0.5;
-      y -= _object.width * 0.5;
-    }
-
-    let command : CmdSpawnCadmio = new CmdSpawnCadmio(x, y);
+    let command : CmdSpawnCanus = new CmdSpawnCanus(_object.x, _object.y);
     this._m_aLevelCommands.push(command);
     return;
   }
@@ -448,6 +401,29 @@ implements ILevelGenerator
     command.setPosition(_object.x, _object.y);
 
     this._m_aLevelCommands.push(command);
+  }
+
+  /**
+   * Adjust the object position by the anchor point.
+   * 
+   * @param _object object position. 
+   * @param _anchorX anchor x value.
+   * @param _anchorY anchor y value.
+   */
+  private _adjustPositionByAnchor
+  (
+    _object : Ty_TileObject, 
+    _anchorX : number, 
+    _anchorY : number
+  )
+  : void
+  {
+    if(_object.width !== undefined && _object.height !== undefined)
+    {
+      _object.x -= _object.width * _anchorX;
+      _object.y -= _object.width * _anchorY;
+    }
+    return;
   }
 
   /**

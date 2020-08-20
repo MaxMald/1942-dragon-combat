@@ -3,20 +3,15 @@
  *
  * @summary 
  *
- * @file cnfCadmio.ts
+ * @file cnfCanus.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
- * @since August-19-2020
+ * @since August-20-2020
  */
 
 import { DC_CONFIG, DC_SECONDARY_ACTION } from "../commons/1942enums";
 import { Ty_TileObject } from "../commons/1942types";
-import { IConfigObject } from "./IConfigObject";
 
-/**
- * Cadmio configuration object.
- */
-export class CnfCadmio
-implements IConfigObject
+export class CnfCanus
 {
   /**
    * Create a configuration object with default values.
@@ -28,7 +23,6 @@ implements IConfigObject
     this.texture_key = "dragon_fruit";
     this.direction_x = 0.0;
     this.direction_y = 1.0;
-    this.effect_id = DC_SECONDARY_ACTION.kUndefined;
     return;
   }
 
@@ -105,7 +99,7 @@ implements IConfigObject
   getID()
   : DC_CONFIG 
   {
-    return DC_CONFIG.kCadmio;
+    return DC_CONFIG.kCanus;
   }
 
   /**
@@ -114,7 +108,7 @@ implements IConfigObject
   getConfigName()
   : string
   {
-    return "CadmioConfig";
+    return "CanusConfig";
   }
 
   /**

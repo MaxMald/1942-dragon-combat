@@ -22,6 +22,8 @@ import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
 import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
 import { IItemManager } from "../itemManager/IItemManager";
 import { NullItemManager } from "../itemManager/NullItemManager";
+import { ILevelConfiguration } from "../levelConfiguration/ILevelConfiguration";
+import { LevelConfiguration } from "../levelConfiguration/LevelConfiguration";
 import { AmbienceGenerator } from "../levelGenerator/ambienceGenerator/ambienceGenerator";
 import { AmbienceGeneratorConfig } from "../levelGenerator/ambienceGenerator/ambienceGeneratorConfig";
 import { IAmbientGenerator } from "../levelGenerator/ambienceGenerator/iAmbientGenerator";
@@ -172,6 +174,8 @@ export class GameManager
     this._m_cameraSpeed = 0.0;
     this.m_dt = 0.0;
 
+    this._m_levelConfiguration = new LevelConfiguration();
+
     this._m_itemManager = new NullItemManager();
     this._m_playerController = new NullPlayerController();
     this._m_basicBulletControlPool = new BasicBulletControlPool();
@@ -220,6 +224,9 @@ export class GameManager
 
     this._m_itemManager.destroy();
     this._m_itemManager = null;
+
+    this._m_levelConfiguration.destroy();
+    this._m_levelConfiguration = null;
 
     // Initalize the game manager
 
@@ -350,6 +357,17 @@ export class GameManager
     this._m_uiManager.receive(_id, _msg);
     this._m_bossManager.receive(_id, _msg);
     return;
+  }
+
+  /**
+   * Get the level configuration object.
+   * 
+   * @returns Level configuration.
+   */
+  getLevelConfiguration()
+  : ILevelConfiguration
+  {
+    return this._m_levelConfiguration;
   }
 
   /**
@@ -732,6 +750,11 @@ export class GameManager
    * Reference to the LevelGenerator.
    */
   private _m_levelGenerator : ILevelGenerator;
+
+  /**
+   * Reference to the LevelConfiguration.
+   */
+  private _m_levelConfiguration : ILevelConfiguration;
 
   /**
    * Reference to the ScoreManager.

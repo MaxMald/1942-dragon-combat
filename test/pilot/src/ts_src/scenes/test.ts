@@ -15,6 +15,7 @@ import { SimpleBulletSpawner } from "../../../../../game/src/ts_src/bulletManage
 import { EnemyBasicBulletConfig } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletConfig";
 import { heroBasicBulletConfig } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletConfig";
 import { ItemManager } from "../../../../../game/src/ts_src/itemManager/ItemManager";
+import { ILevelConfiguration } from "../../../../../game/src/ts_src/levelConfiguration/ILevelConfiguration";
 
 export class Test extends Phaser.Scene
 {
@@ -28,7 +29,15 @@ export class Test extends Phaser.Scene
     let gameManager = GameManager.GetInstance();
     gameManager.setGameScene(this);
 
-    let gameCache = this.game.cache;    
+    let gameCache = this.game.cache;   
+    
+    ///////////////////////////////////
+    // Level Configuration
+
+    let levelConfiguration : ILevelConfiguration 
+      = gameManager.getLevelConfiguration();
+
+    levelConfiguration.init(this, gameManager);
 
     ///////////////////////////////////
     // Score Manager

@@ -113,6 +113,11 @@
                  "name":"Cadmio Config",
                  "properties":[
                         {
+                         "name":"action",
+                         "type":"string",
+                         "value":"TRIPLE_SHOT"
+                        }, 
+                        {
                          "name":"direction_x",
                          "type":"float",
                          "value":0
@@ -125,7 +130,7 @@
                         {
                          "name":"speed",
                          "type":"float",
-                         "value":500
+                         "value":1000
                         }, 
                         {
                          "name":"texture",
@@ -136,8 +141,65 @@
                  "type":"CadmioConfig",
                  "visible":true,
                  "width":65,
-                 "x":1219.01515151515,
-                 "y":9586.87878787879
+                 "x":1112.02,
+                 "y":9596.88
+                }, 
+                {
+                 "gid":9,
+                 "height":57,
+                 "id":332,
+                 "name":"Canus Config",
+                 "properties":[
+                        {
+                         "name":"action",
+                         "type":"string",
+                         "value":"SHIELD"
+                        }, 
+                        {
+                         "name":"direction_x",
+                         "type":"float",
+                         "value":0
+                        }, 
+                        {
+                         "name":"direction_y",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":1000
+                        }, 
+                        {
+                         "name":"texture",
+                         "type":"string",
+                         "value":"canus_fruit"
+                        }],
+                 "rotation":0,
+                 "type":"CanusConfig",
+                 "visible":true,
+                 "width":65,
+                 "x":1221,
+                 "y":9597
+                }, 
+                {
+                 "height":41,
+                 "id":333,
+                 "name":"",
+                 "rotation":0,
+                 "text":
+                    {
+                     "bold":true,
+                     "fontfamily":"MS Shell Dlg 2",
+                     "pixelsize":32,
+                     "text":"Items Config",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":500,
+                 "x":1108.5,
+                 "y":9467.5
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1852,116 +1914,44 @@
                  "type":"Cadmio",
                  "visible":true,
                  "width":59,
-                 "x":513.651515151515,
-                 "y":9589.16666666667
+                 "x":781.652,
+                 "y":8926.50333333333
+                }, 
+                {
+                 "gid":2,
+                 "height":59,
+                 "id":335,
+                 "name":"Canus",
+                 "rotation":0,
+                 "type":"Canus",
+                 "visible":true,
+                 "width":59,
+                 "x":232.166666666667,
+                 "y":8931.16666666667
                 }, 
                 {
                  "gid":1,
                  "height":59,
-                 "id":323,
+                 "id":336,
                  "name":"Cadmio",
                  "rotation":0,
                  "type":"Cadmio",
                  "visible":true,
                  "width":59,
-                 "x":684.5,
-                 "y":9590.5
+                 "x":206.863636363636,
+                 "y":7534.13636363636
                 }, 
                 {
-                 "gid":1,
+                 "gid":2,
                  "height":59,
-                 "id":324,
-                 "name":"Cadmio",
+                 "id":337,
+                 "name":"Canus",
                  "rotation":0,
-                 "type":"Cadmio",
+                 "type":"Canus",
                  "visible":true,
                  "width":59,
-                 "x":318.5,
-                 "y":9589.5
-                }, 
-                {
-                 "gid":1,
-                 "height":59,
-                 "id":325,
-                 "name":"Cadmio",
-                 "rotation":0,
-                 "type":"Cadmio",
-                 "visible":true,
-                 "width":59,
-                 "x":867.5,
-                 "y":9593.5
-                }, 
-                {
-                 "gid":1,
-                 "height":59,
-                 "id":326,
-                 "name":"Cadmio",
-                 "rotation":0,
-                 "type":"Cadmio",
-                 "visible":true,
-                 "width":59,
-                 "x":99.5,
-                 "y":9588.5
-                }, 
-                {
-                 "gid":1,
-                 "height":59,
-                 "id":327,
-                 "name":"Cadmio",
-                 "rotation":0,
-                 "type":"Cadmio",
-                 "visible":true,
-                 "width":59,
-                 "x":527.652,
-                 "y":7497.33666666667
-                }, 
-                {
-                 "gid":1,
-                 "height":59,
-                 "id":328,
-                 "name":"Cadmio",
-                 "rotation":0,
-                 "type":"Cadmio",
-                 "visible":true,
-                 "width":59,
-                 "x":698.5,
-                 "y":7498.66666666667
-                }, 
-                {
-                 "gid":1,
-                 "height":59,
-                 "id":329,
-                 "name":"Cadmio",
-                 "rotation":0,
-                 "type":"Cadmio",
-                 "visible":true,
-                 "width":59,
-                 "x":332.5,
-                 "y":7497.66666666667
-                }, 
-                {
-                 "gid":1,
-                 "height":59,
-                 "id":330,
-                 "name":"Cadmio",
-                 "rotation":0,
-                 "type":"Cadmio",
-                 "visible":true,
-                 "width":59,
-                 "x":881.5,
-                 "y":7501.66666666667
-                }, 
-                {
-                 "gid":1,
-                 "height":59,
-                 "id":331,
-                 "name":"Cadmio",
-                 "rotation":0,
-                 "type":"Cadmio",
-                 "visible":true,
-                 "width":59,
-                 "x":113.5,
-                 "y":7496.66666666667
+                 "x":809.893939393939,
+                 "y":7515.95454545455
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1993,7 +1983,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":332,
+ "nextobjectid":338,
  "orientation":"orthogonal",
  "properties":[
         {

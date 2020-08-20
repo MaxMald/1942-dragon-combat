@@ -1,16 +1,16 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary Control the force of movement of the item.
+ * @summary 
  *
- * @file cmpCadmioController.ts
+ * @file cmpCanusController.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
- * @since August-19-2020
+ * @since August-20-2020
  */
 
 import { DC_COMPONENT_ID, DC_ITEM_TYPE, DC_MESSAGE_ID, DC_SECONDARY_ACTION } from "../commons/1942enums";
 import { Ty_physicsActor, V2, V3 } from "../commons/1942types";
-import { CnfCadmio } from "../configObjects/cnfCadmio";
+import { CnfCanus } from "../configObjects/cnfCanus";
 import { IItemManager } from "../itemManager/IItemManager";
 import { IItemSpawner } from "../itemManager/itemSpawner/IItemSpawner";
 import { NullItemSpawner } from "../itemManager/itemSpawner/nullItemSpawner";
@@ -20,7 +20,7 @@ import { ICmpItemController } from "./iCmpItemController";
 /**
  * Control the force of movement of the item.
  */
-export class CmpCadmioController
+export class CmpCanusController
 implements ICmpItemController
 {
 
@@ -32,9 +32,9 @@ implements ICmpItemController
    * Creates a Cadmio controller with default values.
    */
   static Create()
-  : CmpCadmioController
+  : CmpCanusController
   {
-    let controller = new CmpCadmioController();
+    let controller = new CmpCanusController();
 
     controller.m_id = DC_COMPONENT_ID.kItemController;
     controller._m_direction = new Phaser.Math.Vector2();
@@ -52,7 +52,7 @@ implements ICmpItemController
    * 
    * @param _config configuration object. 
    */
-  config(_config : CnfCadmio)
+  config(_config : CnfCanus)
   : void
   {
     this.setSpeed(_config.speed);
@@ -69,7 +69,7 @@ implements ICmpItemController
   getType()
   : number 
   { 
-    return DC_ITEM_TYPE.kCadmio;
+    return DC_ITEM_TYPE.kCanus;
   }
   
   init(_actor: Ty_physicsActor)
@@ -273,5 +273,5 @@ implements ICmpItemController
   /**
    * Reference to the IItemManager.
    */
-  private _m_itemManager : IItemManager;
+  private _m_itemManager : IItemManager;  
 }

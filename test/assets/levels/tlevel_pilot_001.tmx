@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="332">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="338">
  <editorsettings>
   <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
@@ -21,10 +21,14 @@
   <object id="11" name="0 px" type="Guide Line" x="0" y="0" width="1088" height="1"/>
  </objectgroup>
  <objectgroup id="7" name="ConfigurationObjects">
-  <object id="322" name="Cadmio Config" type="CadmioConfig" gid="12" x="1219.02" y="9586.88" width="65" height="57">
+  <object id="322" name="Cadmio Config" type="CadmioConfig" gid="12" x="1112.02" y="9596.88" width="65" height="57">
    <properties>
     <property name="speed" type="float" value="1000"/>
    </properties>
+  </object>
+  <object id="332" name="Canus Config" type="CanusConfig" gid="9" x="1221" y="9597" width="65" height="57"/>
+  <object id="333" x="1108.5" y="9467.5" width="500" height="41">
+   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Items Config</text>
   </object>
  </objectgroup>
  <objectgroup id="2" name="First Wave" locked="1" offsetx="-3" offsety="6">
@@ -450,16 +454,10 @@
   </object>
  </objectgroup>
  <objectgroup id="6" name="Items" locked="1">
-  <object id="321" name="Cadmio" type="Cadmio" gid="1" x="513.652" y="9589.17" width="59" height="59"/>
-  <object id="323" name="Cadmio" type="Cadmio" gid="1" x="684.5" y="9590.5" width="59" height="59"/>
-  <object id="324" name="Cadmio" type="Cadmio" gid="1" x="318.5" y="9589.5" width="59" height="59"/>
-  <object id="325" name="Cadmio" type="Cadmio" gid="1" x="867.5" y="9593.5" width="59" height="59"/>
-  <object id="326" name="Cadmio" type="Cadmio" gid="1" x="99.5" y="9588.5" width="59" height="59"/>
-  <object id="327" name="Cadmio" type="Cadmio" gid="1" x="527.652" y="7497.34" width="59" height="59"/>
-  <object id="328" name="Cadmio" type="Cadmio" gid="1" x="698.5" y="7498.67" width="59" height="59"/>
-  <object id="329" name="Cadmio" type="Cadmio" gid="1" x="332.5" y="7497.67" width="59" height="59"/>
-  <object id="330" name="Cadmio" type="Cadmio" gid="1" x="881.5" y="7501.67" width="59" height="59"/>
-  <object id="331" name="Cadmio" type="Cadmio" gid="1" x="113.5" y="7496.67" width="59" height="59"/>
+  <object id="321" name="Cadmio" type="Cadmio" gid="1" x="781.652" y="8926.5" width="59" height="59"/>
+  <object id="335" name="Canus" type="Canus" gid="2" x="232.167" y="8931.17" width="59" height="59"/>
+  <object id="336" name="Cadmio" type="Cadmio" gid="1" x="206.864" y="7534.14" width="59" height="59"/>
+  <object id="337" name="Canus" type="Canus" gid="2" x="809.894" y="7515.95" width="59" height="59"/>
  </objectgroup>
  <objectgroup id="4" name="Boss" locked="1">
   <object id="318" name="Boss" type="Boss" x="560.061" y="1935.45">

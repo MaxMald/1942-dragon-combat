@@ -3,23 +3,23 @@
  *
  * @summary 
  *
- * @file cadmioSpawner.ts
+ * @file canusSpawner.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
- * @since August-19-2020
+ * @since August-20-2020
  */
 
 import { DC_COMPONENT_ID, DC_CONFIG, DC_ITEM_TYPE, DC_MESSAGE_ID } from "../../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite } from "../../commons/1942types";
-import { CmpCadmioController } from "../../components/cmpCadmioController";
+import { CmpCanusController } from "../../components/cmpcanusController";
 import { CmpItemCollisionController } from "../../components/cmpItemCollisionController";
 import { CmpNullCollisionController } from "../../components/cmpNullCollisionController";
-import { CnfCadmio } from "../../configObjects/cnfCadmio";
+import { CnfCanus } from "../../configObjects/cnfCanus";
 import { GameManager } from "../../gameManager/gameManager";
 import { ILevelConfiguration } from "../../levelConfiguration/ILevelConfiguration";
 import { IItemManager } from "../IItemManager";
 import { IItemSpawner } from "./IItemSpawner";
 
-export class CadmioSpawner 
+export class CanusSpawner 
 implements IItemSpawner
 {
   /****************************************************/
@@ -41,32 +41,29 @@ implements IItemSpawner
   )
   : void
   {
-    // Create and configuration the Cadmio Controller.
+    // Create and configuration the Canus Controller.
 
-    let cadmioController = this._m_cadmioController;
+    let canusController = this._m_canusController;
 
-    if(this._m_cadmioController == null)
+    if(this._m_canusController == null)
     {
-      cadmioController = CmpCadmioController.Create();
-      this._m_cadmioController = cadmioController;
+      canusController = CmpCanusController.Create();
+      this._m_canusController = canusController;
     }
 
-    // Get configuration object
+    let levelConfig : ILevelConfiguration 
+      = _gameManager.getLevelConfiguration();
 
-    let levelConfig : ILevelConfiguration = _gameManager.getLevelConfiguration();
+    let canusConfig : CnfCanus 
+      = levelConfig.getConfig<CnfCanus>(DC_CONFIG.kCanus);
 
-    let cadmioConfig : CnfCadmio 
-      = levelConfig.getConfig<CnfCadmio>(DC_CONFIG.kCadmio);
-
-    if(cadmioConfig == null)
+    if(canusConfig == null)
     {
-      cadmioConfig = new CnfCadmio();
+      canusConfig = new CnfCanus();
     }
 
-    // Setup.
-
-    cadmioController.config(cadmioConfig);    
-    cadmioController.setItemSpawner(this);
+    canusController.config(canusConfig);
+    canusController.setItemSpawner(this);
 
     // Create and configuration the Item Collision Controller.
 
@@ -75,9 +72,9 @@ implements IItemSpawner
       this._m_itemCollisionController = CmpItemCollisionController.Create();
     }
 
-    this._m_cadmioController = cadmioController;
+    this._m_canusController = canusController;
 
-    this._m_config = cadmioConfig;
+    this._m_config = canusConfig;
     this.setItemManager(_itemManager);
     return;
   }
@@ -90,7 +87,7 @@ implements IItemSpawner
   update( _dt : number ) 
   : void
   {
-    this._m_cadmioController.preUpdate(_dt);
+    this._m_canusController.preUpdate(_dt);
     return;
   }
 
@@ -123,7 +120,7 @@ implements IItemSpawner
   assemble(_actor : Ty_physicsActor)
   : void
   {
-    _actor.addComponent(this._m_cadmioController);
+    _actor.addComponent(this._m_canusController);
     _actor.addComponent(this._m_itemCollisionController);
 
     let sprite : Ty_physicsSprite = _actor.getWrappedInstance();
@@ -152,7 +149,7 @@ implements IItemSpawner
   setItemManager(_manager : IItemManager)
   : void
   {
-    this._m_cadmioController.setItemManager(_manager);
+    this._m_canusController.setItemManager(_manager);
     this._m_itemManager = _manager;
     return;
   }
@@ -163,7 +160,7 @@ implements IItemSpawner
   getID()
   : DC_ITEM_TYPE
   {
-    return DC_ITEM_TYPE.kCadmio;
+    return DC_ITEM_TYPE.kCanus;
   }
 
   /**
@@ -172,10 +169,10 @@ implements IItemSpawner
   destroy()
   : void
   {
-    if(this._m_cadmioController != null)
+    if(this._m_canusController != null)
     {
-      this._m_cadmioController.destroy();
-      this._m_cadmioController = null;
+      this._m_canusController.destroy();
+      this._m_canusController = null;
     }
 
     if(this._m_itemCollisionController != null)
@@ -198,9 +195,9 @@ implements IItemSpawner
   private _m_itemManager : IItemManager;
 
   /**
-   * Reference to the configuration object.
+   * Reference to the canus configuration object.
    */
-  private _m_config : CnfCadmio;
+  private _m_config : CnfCanus;
 
   ///////////////////////////////////
   // Shared Components
@@ -208,7 +205,7 @@ implements IItemSpawner
   /**
    * Cadmio controller component.
    */
-  private _m_cadmioController : CmpCadmioController;
+  private _m_canusController : CmpCanusController;
 
   /**
    * Item collision controller component.

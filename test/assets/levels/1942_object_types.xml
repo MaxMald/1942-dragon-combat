@@ -3,10 +3,19 @@
  <objecttype name="Boss" color="#000000"/>
  <objecttype name="Cadmio" color="#ffff00"/>
  <objecttype name="CadmioConfig" color="#ffff00">
+  <property name="action" type="string" default="TRIPLE_SHOT"/>
   <property name="direction_x" type="float" default="0"/>
   <property name="direction_y" type="float" default="1"/>
   <property name="speed" type="float" default="100"/>
   <property name="texture" type="string" default="cadmio_fruit"/>
+ </objecttype>
+ <objecttype name="Canus" color="#ffaa00"/>
+ <objecttype name="CanusConfig" color="#ffaa00">
+  <property name="action" type="string" default="SHIELD"/>
+  <property name="direction_x" type="float" default="0"/>
+  <property name="direction_y" type="float" default="1"/>
+  <property name="speed" type="float" default="1000"/>
+  <property name="texture" type="string" default="canus_fruit"/>
  </objecttype>
  <objecttype name="Errante" color="#a40002"/>
  <objecttype name="Guide Line" color="#00007f"/>

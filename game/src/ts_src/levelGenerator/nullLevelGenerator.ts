@@ -9,8 +9,6 @@
  */
 
 import { Ty_TileMap } from "../commons/1942types";
-import { CnfCadmio } from "../configObjects/cnfCadmio";
-import { CnfItemManager } from "../configObjects/cnfItemManager";
 import { ILevelGenerator } from "./iLevelGenerator";
 
 export class NullLevelGenerator
@@ -45,29 +43,7 @@ implements ILevelGenerator
    */
   setCameraHeigth(_height: number)
   : void 
-  { }  
-
-  /**
-   * Get the cadmio configuration object.
-   * 
-   * @returns cadmio config object.
-   */
-  getCadmioConfig()
-  : CnfCadmio
-  {
-    return new CnfCadmio();
-  }
-
-  /**
-   * Get the item manager configuartion object.
-   * 
-   * @returns item manager config object.
-   */
-  getItemManagerConfig()
-  : CnfItemManager
-  {
-    return new CnfItemManager();
-  }
+  { }
 
   /**
    * No implementation.

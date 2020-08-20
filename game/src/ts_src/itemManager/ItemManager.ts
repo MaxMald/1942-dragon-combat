@@ -11,16 +11,19 @@
 import { MxObjectPool } from "optimization/mxObjectPool";
 import { MxPoolArgs } from "optimization/mxPoolArgs";
 import { BaseActor } from "../actors/baseActor";
-import { DC_COMPONENT_ID, DC_ITEM_TYPE } from "../commons/1942enums";
+import { DC_COMPONENT_ID, DC_CONFIG, DC_ITEM_TYPE } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsGroup, Ty_physicsSprite } from "../commons/1942types";
 import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
 import { CmpPhysicSpriteController } from "../components/cmpPhysicSpriteController";
 import { CmpPlayZone } from "../components/cmpPlayZone";
 import { ICmpCollisionController } from "../components/iCmpCollisionController";
+import { CnfCadmio } from "../configObjects/cnfCadmio";
+import { CnfItemManager } from "../configObjects/cnfItemManager";
 import { GameManager } from "../gameManager/gameManager";
-import { ILevelGenerator } from "../levelGenerator/iLevelGenerator";
+import { ILevelConfiguration } from "../levelConfiguration/ILevelConfiguration";
 import { IItemManager } from "./IItemManager";
 import { CadmioSpawner } from "./itemSpawner/cadmioSpawner";
+import { CanusSpawner } from "./itemSpawner/canusSpawner";
 import { IItemSpawner } from "./itemSpawner/IItemSpawner";
 
 export class ItemManager
@@ -35,10 +38,25 @@ implements IItemManager
   {
     this.destroy();    
 
-    let levelGenerator : ILevelGenerator = _gameManager.getLevelGenerator();
+    // Get configuration objects.
 
-    let cadmioConfig = levelGenerator.getCadmioConfig();
-    let itemManagerConfig = levelGenerator.getItemManagerConfig();
+    let levelConfig : ILevelConfiguration = _gameManager.getLevelConfiguration();
+
+    let cadmioConfig : CnfCadmio 
+      = levelConfig.getConfig<CnfCadmio>(DC_CONFIG.kCadmio);
+
+    if(cadmioConfig == null)
+    {
+      cadmioConfig = new CnfCadmio();
+    }
+    
+    let itemManagerConfig : CnfItemManager
+      = levelConfig.getConfig<CnfItemManager>(DC_CONFIG.kItemManager); 
+
+    if(itemManagerConfig == null)
+    {
+      itemManagerConfig = new CnfItemManager();
+    }
 
     // Create the Playzone component.
 
@@ -128,12 +146,22 @@ implements IItemManager
 
     this._hSpawner = new Map<DC_ITEM_TYPE, IItemSpawner>();
 
-    // Create Spawners
+    ///////////////////////////////////
+    // Create Items Spawners
+
+    // Cadmio Spawner
 
     let cadmioSpawner = new CadmioSpawner();
     cadmioSpawner.init(_scene, _gameManager, this);
 
     this.addSpawner(cadmioSpawner);
+
+    // Canus Spawner
+
+    let canusSpawner = new CanusSpawner();
+    canusSpawner.init(_scene, _gameManager, this);
+
+    this.addSpawner(canusSpawner);
     return;
   }
 

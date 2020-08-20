@@ -514,7 +514,7 @@ export const DC_ITEM_TYPE = Object.freeze
 /****************************************************/
 
 /**
- * Animation state identifier.
+ * Actor Command.
  */
 
 export type DC_ACTOR_COMMAND = EnumLiteralsOf<typeof DC_ACTOR_COMMAND>;
@@ -525,4 +525,61 @@ export const DC_ACTOR_COMMAND = Object.freeze
    * Remove a component
    */
   kRemoveComponent : 0 as 0
+});
+
+/****************************************************/
+/* Dragon Secundary Effects Type                   */
+/****************************************************/
+
+/**
+ * Dragon secundary acctions.
+ */
+
+export type DC_SECONDARY_ACTION = EnumLiteralsOf<typeof DC_SECONDARY_ACTION>;
+
+export const DC_SECONDARY_ACTION = Object.freeze
+({
+
+  /**
+   * Undefined secondary action.
+   */
+  kUndefined : -1 as -1,
+
+  /**
+   * Triple Shot.
+   */
+  KTripleShot : 0 as 0,
+
+  /**
+   * Dragon Shield.
+   */
+  kShield : 1 as 1
+});
+
+/****************************************************/
+/* Configuration Objects                            */
+/****************************************************/
+
+/**
+ * Configuration objects identifiers.
+ */
+
+export type DC_CONFIG = EnumLiteralsOf<typeof DC_CONFIG>;
+
+export const DC_CONFIG = Object.freeze
+({
+  /**
+   * Canus Configuration Object.
+   */
+  kCanus : 0 as 0,
+
+  /**
+   * Cadmio Configuration Object.
+   */
+  kCadmio : 1 as 1,
+
+  /**
+   * Item Manager configuration object.
+   */
+  kItemManager : 2 as 2
 });

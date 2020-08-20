@@ -8,10 +8,15 @@
  * @since August-19-2020
  */
 
+import { DC_CONFIG } from "../commons/1942enums";
+import { Ty_TileObject } from "../commons/1942types";
+import { IConfigObject } from "./IConfigObject";
+
  /**
   * Configuration object of the Item Manager.
   */
-export class CnfItemManager 
+export class CnfItemManager
+implements IConfigObject
 {
   /****************************************************/
   /* Public                                           */
@@ -26,6 +31,35 @@ export class CnfItemManager
     this.playZone_extrude = 100.0;
 
     return;
+  }
+
+  /**
+   * Set this configuration object from a tiled object.
+   * 
+   * @param _object tiled object. 
+   */
+  setFromObject(_object : Ty_TileObject)
+  : void
+  {
+    return;
+  }
+
+  /**
+   * Get the object identifier.
+   */
+  getID()
+  : DC_CONFIG
+  {
+    return DC_CONFIG.kItemManager;
+  }
+
+  /**
+   * Get the name of the configuration object.
+   */
+  getConfigName()
+  : string
+  {
+    return "ItemManagerConfig";
   }
 
   /**

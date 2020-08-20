@@ -7,6 +7,12 @@
         "type" : "image",
         "key" : "cadmio_fruit",
         "url" : "images/cadmio_fruit.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "canus_fruit",
+        "url" : "images/canus_fruit.png"
       }
     ]
   }
