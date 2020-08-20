@@ -10,6 +10,7 @@
 
 import { Ty_TileMap } from "../commons/1942types";
 import { CnfCadmio } from "../configObjects/cnfCadmio";
+import { CnfItemManager } from "../configObjects/cnfItemManager";
 import { ILevelGenerator } from "./iLevelGenerator";
 
 export class NullLevelGenerator
@@ -55,6 +56,17 @@ implements ILevelGenerator
   : CnfCadmio
   {
     return new CnfCadmio();
+  }
+
+  /**
+   * Get the item manager configuartion object.
+   * 
+   * @returns item manager config object.
+   */
+  getItemManagerConfig()
+  : CnfItemManager
+  {
+    return new CnfItemManager();
   }
 
   /**

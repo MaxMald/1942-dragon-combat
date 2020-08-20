@@ -8,12 +8,14 @@
  * @since August-18-2020
  */
 
+import { CnfHero } from "../commons/1942config";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
 import { SttHeroBarrelRoll } from "../states/heroController/sttHeroBarrelRoll";
 import { SttHeroNormal } from "../states/heroController/sttHeroNormal";
 import { ICmpState } from "../states/ICmpState";
 import { IBaseComponent } from "./iBaseComponent";
+import { ICmpItemController } from "./iCmpItemController";
 
 export class CmpHeroController
 implements IBaseComponent<Ty_physicsSprite>
@@ -36,6 +38,7 @@ implements IBaseComponent<Ty_physicsSprite>
     controller._m_activeState = new SttHeroNormal();
     controller.addState(controller._m_activeState);
 
+    controller._m_config = new CnfHero();
     return controller;
   }
   
@@ -89,6 +92,13 @@ implements IBaseComponent<Ty_physicsSprite>
        */
       case DC_MESSAGE_ID.kPointerReleased:
         this._m_pressingPointer = false;        
+      break;
+
+      /**
+       * A collision with an item had ocurred.
+       */
+      case DC_MESSAGE_ID.kCollisionItem:
+        this._onCollisionWithItem(_obj as ICmpItemController);
       break;
 
       default:
@@ -177,6 +187,18 @@ implements IBaseComponent<Ty_physicsSprite>
   }
 
   /**
+   * Set the configuration object.
+   * 
+   * @param _config configuration object. 
+   */
+  setConfiguration(_config : CnfHero)
+  : void
+  {
+    this._m_config = _config;
+    return;
+  }
+
+  /**
    * Destroys this component.
    */
   destroy()
@@ -192,11 +214,31 @@ implements IBaseComponent<Ty_physicsSprite>
   /* Private                                          */
   /****************************************************/
  
+  private _onCollisionWithItem(_itemController : ICmpItemController)
+  : void
+  {
+    // Restore health.
+
+    this._m_actor.sendMessage
+    (
+      DC_MESSAGE_ID.kSetHealthPoints,
+      this._m_config.health
+    )
+
+    console.log('collison with item');
+    return;
+  }
+
   /**
    * Private constructor.
    */
   private constructor()
   { }
+
+  /**
+   * Reference to the hero configuartion object.
+   */
+  private _m_config : CnfHero;
 
   /**
    * Reference to the hero actor.

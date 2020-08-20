@@ -372,7 +372,14 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : ICmpItemController.
    */
-  kCollisionItem : 522 as 522
+  kCollisionItem : 522 as 522,
+
+  /**
+   * Set the health points.
+   * 
+   * msg : integer.
+   */
+  kSetHealthPoints : 523 as 523,
 });
 
 /****************************************************/
@@ -486,6 +493,11 @@ export type DC_ITEM_TYPE = EnumLiteralsOf<typeof DC_ITEM_TYPE>;
 
 export const DC_ITEM_TYPE = Object.freeze
 ({
+  /**
+   * Undefined item.
+   */
+  kUndefined : -1 as -1,
+
   /**
    * Camdio item
    */

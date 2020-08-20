@@ -20,6 +20,8 @@ import { CmpNullEnemyController } from "../components/cmpNullEnemyController";
 import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
 import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
+import { IItemManager } from "../itemManager/IItemManager";
+import { NullItemManager } from "../itemManager/NullItemManager";
 import { AmbienceGenerator } from "../levelGenerator/ambienceGenerator/ambienceGenerator";
 import { AmbienceGeneratorConfig } from "../levelGenerator/ambienceGenerator/ambienceGeneratorConfig";
 import { IAmbientGenerator } from "../levelGenerator/ambienceGenerator/iAmbientGenerator";
@@ -170,6 +172,7 @@ export class GameManager
     this._m_cameraSpeed = 0.0;
     this.m_dt = 0.0;
 
+    this._m_itemManager = new NullItemManager();
     this._m_playerController = new NullPlayerController();
     this._m_basicBulletControlPool = new BasicBulletControlPool();
     this.setEnemiesManager(NullEnemiesManager.GetInstance());
@@ -214,6 +217,9 @@ export class GameManager
 
     this._m_basicBulletControlPool.destroy();
     this._m_basicBulletControlPool = null;
+
+    this._m_itemManager.destroy();
+    this._m_itemManager = null;
 
     // Initalize the game manager
 
@@ -324,6 +330,7 @@ export class GameManager
       this._m_playerController.update(_dt);
       this._m_enemiesManager.update(_dt);
       this._m_bossManager.update(_dt);
+      this._m_itemManager.update(_dt);
     }    
     
     this._m_scoreManager.update(_dt);
@@ -504,6 +511,29 @@ export class GameManager
   : IBossManager
   {
     return this._m_bossManager;
+  }
+
+  /**
+   * Set the item manager.
+   * 
+   * @param _itemManager item manager. 
+   */
+  setItemManager(_itemManager : IItemManager)
+  : void
+  {
+    this._m_itemManager = _itemManager;
+    return;
+  }
+
+  /**
+   * Get the Item Manager.
+   * 
+   * @returns item manager.
+   */
+  getItemManager()
+  : IItemManager
+  {
+    return this._m_itemManager;
   }
 
   /**
@@ -722,6 +752,11 @@ export class GameManager
    * Reference to the UIManager.
    */
   private _m_uiManager : IUIManager;
+
+  /**
+   * Reference to the ItemManager.
+   */
+  private _m_itemManager : IItemManager;
 
   /**
    * Reference to the basic bullet control pool.

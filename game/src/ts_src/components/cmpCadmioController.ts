@@ -11,6 +11,10 @@
 import { DC_COMPONENT_ID, DC_ITEM_TYPE, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, V2, V3 } from "../commons/1942types";
 import { CnfCadmio } from "../configObjects/cnfCadmio";
+import { IItemManager } from "../itemManager/IItemManager";
+import { IItemSpawner } from "../itemManager/itemSpawner/IItemSpawner";
+import { NullItemSpawner } from "../itemManager/itemSpawner/nullItemSpawner";
+import { NullItemManager } from "../itemManager/NullItemManager";
 import { ICmpItemController } from "./iCmpItemController";
 
 /**
@@ -35,6 +39,9 @@ implements ICmpItemController
     controller.m_id = DC_COMPONENT_ID.kItemController;
     controller._m_direction = new Phaser.Math.Vector2();
     controller._m_force = new Phaser.Math.Vector3();
+    
+    controller._m_itemManager = new NullItemManager();
+    controller._m_itemSpawner = new NullItemSpawner();
 
     return controller;
   }
@@ -100,7 +107,20 @@ implements ICmpItemController
 
   receive(_id: number, _obj: any)
   : void 
-  { }
+  { 
+    switch(_id)
+    {
+      case DC_MESSAGE_ID.kKill:
+
+      this._onConsume(_obj as Ty_physicsActor);
+      return;
+
+      case DC_MESSAGE_ID.kDesactive:
+
+      this._onConsume(_obj as Ty_physicsActor);
+      return;
+    }
+  }
 
   /**
    * Set the motion direction.
@@ -150,6 +170,30 @@ implements ICmpItemController
   }
 
   /**
+   * Set the Item Spawner of this controller.
+   * 
+   * @param _spawner Item spawner.
+   */
+  setItemSpawner(_spawner : IItemSpawner)
+  : void
+  {
+    this._m_itemSpawner = _spawner;
+    return;
+  }
+
+  /**
+   * Set the Item Manager of this controller.
+   * 
+   * @param _manager Item manager. 
+   */
+  setItemManager(_manager : IItemManager)
+  : void
+  {
+    this._m_itemManager = _manager;
+    return;
+  }
+
+  /**
    * Destroys the component.
    */
   destroy()
@@ -165,6 +209,18 @@ implements ICmpItemController
   /****************************************************/
   /* Private                                          */
   /****************************************************/
+
+  /**
+   * Called once when the actor is going to be killed.
+   */
+  private _onConsume(_actor : Ty_physicsActor)
+  : void
+  {
+    this._m_itemSpawner.disassemble(_actor);
+
+    this._m_itemManager.disableActor(_actor);
+    return;
+  }
   
   /**
    * Item speed in the world (pix./sec.).
@@ -180,4 +236,14 @@ implements ICmpItemController
    * motion force.
    */
   private _m_force : V3;
+
+  /**
+   * Reference to the IItemSpawner.
+   */
+  private _m_itemSpawner : IItemSpawner;
+
+  /**
+   * Reference to the IItemManager.
+   */
+  private _m_itemManager : IItemManager;
 }

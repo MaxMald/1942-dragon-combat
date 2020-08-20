@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objecttypes>
  <objecttype name="Boss" color="#000000"/>
- <objecttype name="Cadmio" color="#ffff00">
-  <property name="texture" type="string" default="dragon_fruits"/>
+ <objecttype name="Cadmio" color="#ffff00"/>
+ <objecttype name="CadmioConfig" color="#ffff00">
+  <property name="direction_x" type="float" default="0"/>
+  <property name="direction_y" type="float" default="1"/>
+  <property name="speed" type="float" default="100"/>
+  <property name="texture" type="string" default="cadmio_fruit"/>
  </objecttype>
  <objecttype name="Errante" color="#a40002"/>
  <objecttype name="Guide Line" color="#00007f"/>

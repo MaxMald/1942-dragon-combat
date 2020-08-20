@@ -10,6 +10,7 @@
 
 import { Ty_TileMap } from "../commons/1942types";
 import { CnfCadmio } from "../configObjects/cnfCadmio";
+import { CnfItemManager } from "../configObjects/cnfItemManager";
 
 export interface ILevelGenerator
 {
@@ -46,6 +47,14 @@ export interface ILevelGenerator
    */
   getCadmioConfig()
   : CnfCadmio;
+
+  /**
+   * Get the item manager configuartion object.
+   * 
+   * @returns item manager config object.
+   */
+  getItemManagerConfig()
+  : CnfItemManager;
 
   /**
    * Destroy the LevelGenerator.

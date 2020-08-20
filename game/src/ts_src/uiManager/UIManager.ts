@@ -76,6 +76,8 @@ implements IUIManager
         hpData.onHealthChanged, 
         hpData
       );
+
+      hpData.onHealthChanged(heroData, undefined);
     }
 
     ///////////////////////////////////

@@ -10,6 +10,8 @@
  */
 
 import { Ty_physicsSprite } from "../commons/1942types";
+import { IItemManager } from "../itemManager/IItemManager";
+import { IItemSpawner } from "../itemManager/itemSpawner/IItemSpawner";
 import { IBaseComponent } from "./iBaseComponent";
 
  /**
@@ -23,4 +25,20 @@ extends IBaseComponent<Ty_physicsSprite>
    */
   getType()
   : number;
+
+  /**
+   * Set the Item Spawner of this controller.
+   * 
+   * @param _spawner Item spawner.
+   */
+  setItemSpawner(_spawner : IItemSpawner)
+  : void;
+
+  /**
+   * Set the Item Manager of this controller.
+   * 
+   * @param _manager Item manager. 
+   */
+  setItemManager(_manager : IItemManager)
+  : void;
 }

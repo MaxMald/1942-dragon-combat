@@ -19,7 +19,6 @@ import { CmpBulletData } from "../components/cmpBulletData";
 import { CmpMovementBullet } from "../components/cmpMovementBullet";
 import { CmpPlayZone } from "../components/cmpPlayZone";
 import { ICmpCollisionController } from "../components/iCmpCollisionController";
-import { BulletManagerConfig } from "./bulletManagerConfig";
 import { IBulletSpawner } from "./bulletSpawner/iBulletSpawner";
 import { NullBulletSpawner } from "./bulletSpawner/nullBulletSpawner";
 import { IBulletManager } from "./iBulletManager";

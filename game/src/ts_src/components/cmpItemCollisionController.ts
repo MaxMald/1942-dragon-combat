@@ -53,6 +53,8 @@ implements ICmpCollisionController
         itemController
       );
     }
+
+    _this.sendMessage(DC_MESSAGE_ID.kDesactive, _this);
     return;
   }
 

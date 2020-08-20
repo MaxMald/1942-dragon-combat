@@ -14,6 +14,7 @@ import { SpiderBossManager } from "../../../../../game/src/ts_src/bossManager/sp
 import { SimpleBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/simpleBulletSpawner";
 import { EnemyBasicBulletConfig } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletConfig";
 import { heroBasicBulletConfig } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletConfig";
+import { ItemManager } from "../../../../../game/src/ts_src/itemManager/ItemManager";
 
 export class Test extends Phaser.Scene
 {
@@ -197,6 +198,14 @@ export class Test extends Phaser.Scene
 
     playercontroller.setBulletManager(bulletMng);
 
+    ///////////////////////////////////
+    // Item Manager
+
+    let itemManager : ItemManager = new ItemManager();
+
+    itemManager.init(this, gameManager);
+    gameManager.setItemManager(itemManager);
+
     /****************************************************/
     /* Collisions                                       */
     /****************************************************/
@@ -216,6 +225,11 @@ export class Test extends Phaser.Scene
     bulletMng.collisionVsGroup(this, enemiesManager.getBodiesGroup());
 
     this._m_gameManager = gameManager;
+
+    ///////////////////////////////////
+    // Items Bodies vs Hero Body
+
+    itemManager.collisionVsSprite(this, hero.getWrappedInstance());
 
     ////////////////////////////////////
     // Send hero to boss

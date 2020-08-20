@@ -10,10 +10,12 @@
  */
 
 import { CmdEnterBoss } from "../commands/levelCommands/cmdEnterBoss";
+import { CmdSpawnCadmio } from "../commands/levelCommands/cmdSpawnCadmio";
 import { CmdSpawnErrante } from "../commands/levelCommands/cmdSpawnErrante";
 import { ILevelCommand } from "../commands/levelCommands/iLevelCommands";
 import { Point, Ty_TileMap, Ty_TileObject } from "../commons/1942types";
 import { CnfCadmio } from "../configObjects/cnfCadmio";
+import { CnfItemManager } from "../configObjects/cnfItemManager";
 import { GameManager } from "../gameManager/gameManager";
 import { ILevelGenerator } from "./iLevelGenerator";
 import { LevelGeneratorConfig } from "./levelGeneratorConfig";
@@ -40,6 +42,7 @@ implements ILevelGenerator
 
     levelGenerator._m_cameraHeight = 1080;
     levelGenerator._m_cadmioConfig = new CnfCadmio();
+    levelGenerator._m_itemManagerConfig = new CnfItemManager();
 
     return levelGenerator;
   }
@@ -296,11 +299,26 @@ implements ILevelGenerator
 
     switch(type)
     {
+      ///////////////////////////////////
+      // Enemies
+
       // Spawn Errante in position.      
       case "Errante" :
 
       this._createErranteCommand(_object);
       return;
+
+      ///////////////////////////////////
+      // Items
+
+      // Spawn a Cadmio Fruit.
+      case "Cadmio" : 
+
+      this._createCadmioSpawnCommand(_object);
+      return;
+
+      ///////////////////////////////////
+      // Bosses
 
       // Boss enter in position.
       case "Boss":
@@ -337,6 +355,17 @@ implements ILevelGenerator
   }
 
   /**
+   * Get the item manager configuartion object.
+   * 
+   * @returns item manager config object.
+   */
+  getItemManagerConfig()
+  : CnfItemManager
+  {
+    return this._m_itemManagerConfig;
+  }
+
+  /**
    * Call the destroy() method of each member in this LeveGenerator. Destroy
    * this object's properties.
    */
@@ -370,6 +399,9 @@ implements ILevelGenerator
    * Creates a new level command from the tiled object. The is command spawns a
    * errante in the object position.
    * 
+   * The position of the Camdio Fruit will be -50 at y. The x value will the
+   * same as the command position x value.
+   * 
    * @param _object tiled object.
    */
   private _createErranteCommand(_object : Ty_TileObject)
@@ -379,6 +411,33 @@ implements ILevelGenerator
       = new CmdSpawnErrante(_object.x, _object.y);
 
     this._m_aLevelCommands.push(command);    
+    return;
+  }
+
+  /**
+   * Creates a new level command from the given tiled object. This command
+   * spawns a Cadmio Fruit when the game camera canvas reach the command height
+   * (position y component).
+   *
+   * The position of the Camdio Fruit will be -50 at y. The x value will the
+   * same as the command position x value.
+   *
+   * @param _object tiled object. 
+   */
+  private _createCadmioSpawnCommand(_object : Ty_TileObject)
+  : void
+  {
+    let x : number = _object.x;
+    let y : number = _object.y;
+
+    if(_object.width !== undefined && _object.height !== undefined)
+    {
+      x -= _object.width * 0.5;
+      y -= _object.width * 0.5;
+    }
+
+    let command : CmdSpawnCadmio = new CmdSpawnCadmio(x, y);
+    this._m_aLevelCommands.push(command);
     return;
   }
 
@@ -400,9 +459,17 @@ implements ILevelGenerator
    * Height of the camera (pix).
    */
   private _m_cameraHeight : number;
+
+  ///////////////////////////////////
+  // Configuration Objects
  
   /**
    * Cadmio configuartion object.
    */
   private _m_cadmioConfig : CnfCadmio;
+
+  /**
+   * Item Manager configuartion object.
+   */
+  private _m_itemManagerConfig : CnfItemManager;
 }

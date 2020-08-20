@@ -64,7 +64,11 @@ implements IBaseComponent<Ty_physicsSprite>
       case DC_MESSAGE_ID.kHit :
 
       this._onHit(_obj as integer);
+      return;
 
+      case DC_MESSAGE_ID.kSetHealthPoints :
+
+      this.setHealth(_obj as integer);
       return;
     }   
   }
@@ -78,6 +82,7 @@ implements IBaseComponent<Ty_physicsSprite>
   : void
   {
     this._m_health = _health;
+    this._m_listeners.call('onHealthChanged', this, undefined);
     return;
   }
 
@@ -169,9 +174,7 @@ implements IBaseComponent<Ty_physicsSprite>
       );
     } 
 
-    this._m_health = health;
-
-    this._m_listeners.call('onHealthChanged', this, undefined);
+    this.setHealth(health);    
     return;
   }
 

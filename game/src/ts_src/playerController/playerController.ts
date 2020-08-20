@@ -125,12 +125,12 @@ implements IPlayerController
     {
       this.setPointer(_scene.input.activePointer);
     }
+    
+    // Set the hero configuration.
 
-    this.setPosition(_cnfHero.x, _cnfHero.y);
-    this.setInputMode(_cnfHero.movement_mode);
-    this.setHeroSpeed(_cnfHero.maximum_speed);
-    this.setHeroFireRate(_cnfHero.fireRate);
-    this.setBarrelRollDuration(_cnfHero.barrel_roll_duration);
+    this.setHeroConfiguration(_cnfHero);
+
+    // Set the movement padding.
 
     let canvas = _scene.game.canvas;
 
@@ -241,6 +241,34 @@ implements IPlayerController
       = this._m_player.getComponent<CmpHeroInput>(DC_COMPONENT_ID.kHeroInput);
 
     return input.getMode();
+  }
+
+  setHeroConfiguration(_config : CnfHero)
+  : void
+  {
+    let heroController : CmpHeroController
+      = this._m_player.getComponent<CmpHeroController>(DC_COMPONENT_ID.kHeroController);
+
+    heroController.setConfiguration(_config);
+
+    this.setPosition(_config.x, _config.y);
+    this.setInputMode(_config.movement_mode);
+    this.setHeroSpeed(_config.maximum_speed);
+    this.setHeroFireRate(_config.fireRate);
+    this.setBarrelRollDuration(_config.barrel_roll_duration);
+    this.setHeroHealth(_config.health);
+    return;
+  }
+
+  setHeroHealth(_health : integer)
+  : void
+  {
+    this._m_player.sendMessage
+    (
+      DC_MESSAGE_ID.kSetHealthPoints,
+      _health
+    );
+    return;
   }
 
   /**
