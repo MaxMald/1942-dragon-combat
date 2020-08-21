@@ -91,23 +91,7 @@ export interface IPlayerController
    * @returns maximum speed in pixels per frame. 
    */
   getHeroSpeed()
-  : number;
-
-  /**
-   * Set the Hero's fire rate in bullets per second.
-   * 
-   * @param _fireRate Number of bullets spawned per second. 
-   */
-  setHeroFireRate(_fireRate : number)
-  : void;
-
-  /**
-   * Get the hero's fire rate in bullets per second.
-   * 
-   * @returns Number of bullets spawned per second. 
-   */
-  getHeroFireRate()
-  : number;
+  : number;  
 
   /**
    * Set the zone of free movement. The hero's position is limited by the 

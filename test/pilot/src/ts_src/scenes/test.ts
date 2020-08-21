@@ -13,10 +13,10 @@ import { ScoreManagerConfig } from "../../../../../game/src/ts_src/scoreManager/
 import { SpiderBossManager } from "../../../../../game/src/ts_src/bossManager/spiderBossManager";
 import { SimpleBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/simpleBulletSpawner";
 import { EnemyBasicBulletConfig } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletConfig";
-import { heroBasicBulletConfig } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletConfig";
 import { ItemManager } from "../../../../../game/src/ts_src/itemManager/ItemManager";
 import { ILevelConfiguration } from "../../../../../game/src/ts_src/levelConfiguration/ILevelConfiguration";
-
+import { heroTripleShotSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroTripleShotSpawner";
+  
 export class Test extends Phaser.Scene
 {
   /****************************************************/
@@ -180,15 +180,16 @@ export class Test extends Phaser.Scene
 
     let heroBulletSpawner = HeroBasicBulletSpawner.Create();
 
-    if(gameCache.text.has('cnf_bullet_heroBasic'))
-    {
-      let heroBasicConfig : heroBasicBulletConfig 
-        = JSON.parse(gameCache.text.get('cnf_bullet_heroBasic'));
-
-      heroBulletSpawner.setBulletConfiguration(heroBasicConfig);
-    }
-
+    heroBulletSpawner.init();
     bulletMng.addSpawner(heroBulletSpawner); 
+
+    ///////////////////////////////////
+    // Spawner : Triple Shot Bullet
+
+    let tripleShotSpawner = heroTripleShotSpawner.Create();
+
+    tripleShotSpawner.init();
+    bulletMng.addSpawner(tripleShotSpawner);
 
     ///////////////////////////////////
     // Player Controller

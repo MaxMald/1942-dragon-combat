@@ -24,6 +24,12 @@ export interface IBulletSpawner
   /****************************************************/
   /* Public                                           */
   /****************************************************/
+
+  /**
+   * Intialize this bullet spawner.
+   */
+  init()
+  : void;
   
   /**
    * Update the bullet spawner.

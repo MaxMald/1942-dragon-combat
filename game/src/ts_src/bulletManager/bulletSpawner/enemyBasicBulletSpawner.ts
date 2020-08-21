@@ -37,6 +37,13 @@ export class EnemyBasicBulletSpawner implements IBulletSpawner
     return spawner;
   }
 
+  /**
+   * Intialize this bullet spawner.
+   */
+  init()
+  : void
+  { }
+
   update(_dt: number)
   : void 
   {

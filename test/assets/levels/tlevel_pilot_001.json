@@ -141,8 +141,8 @@
                  "type":"CadmioConfig",
                  "visible":true,
                  "width":65,
-                 "x":1112.02,
-                 "y":9596.88
+                 "x":1228.02,
+                 "y":9598.21
                 }, 
                 {
                  "gid":9,
@@ -179,8 +179,8 @@
                  "type":"CanusConfig",
                  "visible":true,
                  "width":65,
-                 "x":1221,
-                 "y":9597
+                 "x":1337,
+                 "y":9598.33
                 }, 
                 {
                  "height":41,
@@ -198,8 +198,143 @@
                  "type":"",
                  "visible":true,
                  "width":500,
-                 "x":1108.5,
-                 "y":9467.5
+                 "x":1224.5,
+                 "y":9468.83
+                }, 
+                {
+                 "height":41,
+                 "id":338,
+                 "name":"",
+                 "rotation":0,
+                 "text":
+                    {
+                     "bold":true,
+                     "fontfamily":"MS Shell Dlg 2",
+                     "pixelsize":32,
+                     "text":"Hero Components",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":500,
+                 "x":1223.33,
+                 "y":9310.17
+                }, 
+                {
+                 "gid":11,
+                 "height":57,
+                 "id":339,
+                 "name":"Bullet State : Normal",
+                 "properties":[
+                        {
+                         "name":"frecuency",
+                         "type":"int",
+                         "value":7
+                        }],
+                 "rotation":0,
+                 "type":"Hero_bulletStateNormal",
+                 "visible":true,
+                 "width":65,
+                 "x":1221.33,
+                 "y":9438.33
+                }, 
+                {
+                 "height":41,
+                 "id":340,
+                 "name":"",
+                 "rotation":0,
+                 "text":
+                    {
+                     "bold":true,
+                     "fontfamily":"MS Shell Dlg 2",
+                     "pixelsize":32,
+                     "text":"Hero Bullets",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":500,
+                 "x":1218,
+                 "y":9159.5
+                }, 
+                {
+                 "gid":9,
+                 "height":57,
+                 "id":341,
+                 "name":"Basic",
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":1200
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"fireball"
+                        }],
+                 "rotation":0,
+                 "type":"HeroBasicBulletConfig",
+                 "visible":true,
+                 "width":65,
+                 "x":1214.66666666667,
+                 "y":9292.99666666667
+                }, 
+                {
+                 "gid":10,
+                 "height":57,
+                 "id":344,
+                 "name":"Triple Shot",
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":1600
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"fireball"
+                        }],
+                 "rotation":0,
+                 "type":"HeroTripleShotBulletConfig",
+                 "visible":true,
+                 "width":65,
+                 "x":1320,
+                 "y":9291.66666666667
+                }, 
+                {
+                 "gid":11,
+                 "height":57,
+                 "id":345,
+                 "name":"Bullet State : TripleShot",
+                 "properties":[
+                        {
+                         "name":"frecuency",
+                         "type":"int",
+                         "value":3
+                        }, 
+                        {
+                         "name":"opening",
+                         "type":"float",
+                         "value":15
+                        }],
+                 "rotation":0,
+                 "type":"Hero_bulletStateTripleShot",
+                 "visible":true,
+                 "width":65,
+                 "x":1383.5,
+                 "y":9436.83333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1915,7 +2050,7 @@
                  "visible":true,
                  "width":59,
                  "x":781.652,
-                 "y":8926.50333333333
+                 "y":8926.5
                 }, 
                 {
                  "gid":2,
@@ -1926,8 +2061,8 @@
                  "type":"Canus",
                  "visible":true,
                  "width":59,
-                 "x":232.166666666667,
-                 "y":8931.16666666667
+                 "x":232.167,
+                 "y":8931.17
                 }, 
                 {
                  "gid":1,
@@ -1938,8 +2073,8 @@
                  "type":"Cadmio",
                  "visible":true,
                  "width":59,
-                 "x":206.863636363636,
-                 "y":7534.13636363636
+                 "x":206.864,
+                 "y":7534.14
                 }, 
                 {
                  "gid":2,
@@ -1950,8 +2085,8 @@
                  "type":"Canus",
                  "visible":true,
                  "width":59,
-                 "x":809.893939393939,
-                 "y":7515.95454545455
+                 "x":809.894,
+                 "y":7515.95
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1983,7 +2118,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":338,
+ "nextobjectid":346,
  "orientation":"orthogonal",
  "properties":[
         {

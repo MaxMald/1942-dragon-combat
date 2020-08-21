@@ -380,6 +380,13 @@ export const DC_MESSAGE_ID = Object.freeze
    * msg : integer.
    */
   kSetHealthPoints : 523 as 523,
+
+  /**
+   * Set the bullet manager.
+   * 
+   * msg : IBulletManager
+   */
+  kSetBulletManager : 524 as 524, 
 });
 
 /****************************************************/
@@ -478,7 +485,12 @@ export const DC_BULLET_TYPE = Object.freeze
   /**
    * A simple bullet.
    */
-  kSimple : 3 as 3
+  kSimple : 3 as 3,
+
+  /**
+   * A bullet from the triple shot attack.
+   */
+  kTripleSHot : 4 as 4
 });
 
 /****************************************************/
@@ -581,5 +593,25 @@ export const DC_CONFIG = Object.freeze
   /**
    * Item Manager configuration object.
    */
-  kItemManager : 2 as 2
+  kItemManager : 2 as 2,
+
+  /**
+   * Hero bullet state : Normal, configuration object.
+   */
+  kHeroBulletStateNormal : 3 as 3,
+
+  /**
+   * Hero basic bullet configuration.
+   */
+  kHeroBasicBullet : 4 as 4,
+
+  /**
+   * Hero bullet from the triple shot.
+   */
+  kHeroTripleShotBullet : 5 as 5,
+
+  /**
+   * Hero bullet state : Triple Shot, configuration object.
+   */
+  kHeroBulletStateTriple : 6 as 6
 });

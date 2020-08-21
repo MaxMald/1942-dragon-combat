@@ -18,6 +18,7 @@ import { CmpBulletCollisionController } from "../components/cmpBulletCollisionCo
 import { CmpBulletData } from "../components/cmpBulletData";
 import { CmpMovementBullet } from "../components/cmpMovementBullet";
 import { CmpPlayZone } from "../components/cmpPlayZone";
+import { CmpSimpleBulletController } from "../components/cmpSimpleBulletControl";
 import { ICmpCollisionController } from "../components/iCmpCollisionController";
 import { IBulletSpawner } from "./bulletSpawner/iBulletSpawner";
 import { NullBulletSpawner } from "./bulletSpawner/nullBulletSpawner";
@@ -167,7 +168,8 @@ export class BulletManager implements IBulletManager
 
       // add common components.
 
-      bullet.addComponent(CmpMovementBullet.Create());      
+      bullet.addComponent(CmpMovementBullet.Create());
+      bullet.addComponent(CmpSimpleBulletController.Create());      
       bullet.addComponent(CmpBulletData.Create());
 
       // add shared components.

@@ -101,27 +101,7 @@ implements IPlayerController
   : number 
   {
     return 0;
-  }
-
-  /**
-   * No implementation.
-   * 
-   * @param _fireRate 
-   */
-  setHeroFireRate(_fireRate: number)
-  : void 
-  { }
-
-  /**
-   * No implementation.
-   * 
-   * @returns 0.
-   */
-  getHeroFireRate()
-  : number 
-  {
-    return 0;
-  }
+  } 
 
   /**
    * No implementation.

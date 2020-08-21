@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="338">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="346">
  <editorsettings>
   <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
@@ -21,14 +21,41 @@
   <object id="11" name="0 px" type="Guide Line" x="0" y="0" width="1088" height="1"/>
  </objectgroup>
  <objectgroup id="7" name="ConfigurationObjects">
-  <object id="322" name="Cadmio Config" type="CadmioConfig" gid="12" x="1112.02" y="9596.88" width="65" height="57">
+  <object id="322" name="Cadmio Config" type="CadmioConfig" gid="12" x="1228.02" y="9598.21" width="65" height="57">
    <properties>
     <property name="speed" type="float" value="1000"/>
    </properties>
   </object>
-  <object id="332" name="Canus Config" type="CanusConfig" gid="9" x="1221" y="9597" width="65" height="57"/>
-  <object id="333" x="1108.5" y="9467.5" width="500" height="41">
+  <object id="332" name="Canus Config" type="CanusConfig" gid="9" x="1337" y="9598.33" width="65" height="57"/>
+  <object id="333" x="1224.5" y="9468.83" width="500" height="41">
    <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Items Config</text>
+  </object>
+  <object id="338" x="1223.33" y="9310.17" width="500" height="41">
+   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Hero Components</text>
+  </object>
+  <object id="339" name="Bullet State : Normal" type="Hero_bulletStateNormal" gid="11" x="1221.33" y="9438.33" width="65" height="57">
+   <properties>
+    <property name="frecuency" type="int" value="7"/>
+   </properties>
+  </object>
+  <object id="340" x="1218" y="9159.5" width="500" height="41">
+   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Hero Bullets</text>
+  </object>
+  <object id="341" name="Basic" type="HeroBasicBulletConfig" gid="9" x="1214.67" y="9293" width="65" height="57">
+   <properties>
+    <property name="speed" type="float" value="1200"/>
+   </properties>
+  </object>
+  <object id="344" name="Triple Shot" type="HeroTripleShotBulletConfig" gid="10" x="1320" y="9291.67" width="65" height="57">
+   <properties>
+    <property name="speed" type="float" value="1600"/>
+   </properties>
+  </object>
+  <object id="345" name="Bullet State : TripleShot" type="Hero_bulletStateTripleShot" gid="11" x="1383.5" y="9436.83" width="65" height="57">
+   <properties>
+    <property name="frecuency" type="int" value="3"/>
+    <property name="opening" type="float" value="15"/>
+   </properties>
   </object>
  </objectgroup>
  <objectgroup id="2" name="First Wave" locked="1" offsetx="-3" offsety="6">

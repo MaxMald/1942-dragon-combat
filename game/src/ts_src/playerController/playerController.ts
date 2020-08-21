@@ -254,7 +254,6 @@ implements IPlayerController
     this.setPosition(_config.x, _config.y);
     this.setInputMode(_config.movement_mode);
     this.setHeroSpeed(_config.maximum_speed);
-    this.setHeroFireRate(_config.fireRate);
     this.setBarrelRollDuration(_config.barrel_roll_duration);
     this.setHeroHealth(_config.health);
     return;
@@ -300,42 +299,7 @@ implements IPlayerController
       = this._m_player.getComponent<CmpHeroInput>(DC_COMPONENT_ID.kHeroInput);
 
     return input.getSpeed();
-  }
-
-  /**
-   * Set the Hero's fire rate in bullets per second.
-   * 
-   * @param _fireRate Number of bullets spawned per second. 
-   */
-  setHeroFireRate(_fireRate : number)
-  : void
-  {
-    let bulletController : CmpHeroBulletController
-      = this._m_player.getComponent<CmpHeroBulletController>
-      (
-        DC_COMPONENT_ID.kHeroBulletController
-      );
-
-    bulletController.setFireRate(_fireRate);
-    return;
-  }
-
-  /**
-   * Get the hero's fire rate in bullets per second.
-   * 
-   * @returns Number of bullets spawned per second. 
-   */
-  getHeroFireRate()
-  : number
-  {
-    let bulletController : CmpHeroBulletController
-      = this._m_player.getComponent<CmpHeroBulletController>
-      (
-        DC_COMPONENT_ID.kHeroBulletController
-      );
-
-    return bulletController.getFireRate();
-  }
+  }  
 
   /**
    * Set the hero's barrel roll action duration in seconds.

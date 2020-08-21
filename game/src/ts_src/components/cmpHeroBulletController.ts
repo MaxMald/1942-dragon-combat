@@ -8,18 +8,24 @@
  * @since July-29-2020
  */
 
-import { BaseActor } from "../actors/baseActor";
 import { IBulletManager } from "../bulletManager/iBulletManager";
-import { NullBulletManager } from "../bulletManager/nullBulletManager";
-import { DC_BULLET_TYPE, DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
+import { DC_COMPONENT_ID, DC_CONFIG, DC_MESSAGE_ID } from "../commons/1942enums";
+import { Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
+import { CnfBulletStateNormal } from "../configObjects/cnfBulletStateNormal";
+import { CnfBulletStateTriple } from "../configObjects/cnfBulletStateTriple";
 import { GameManager } from "../gameManager/gameManager";
-import { IBaseComponent } from "./iBaseComponent";
+import { ILevelConfiguration } from "../levelConfiguration/ILevelConfiguration";
+import { SttHeroBulletNormal } from "../states/heroBulletController.ts/sttHeroBulletNormal";
+import { SttHeroBulletTriple } from "../states/heroBulletController.ts/sttHeroBulletTriple";
+import { IBaseState } from "../states/IBaseState";
+import { NullState } from "../states/nullState";
+import { cmpFSM } from "./cmpFSM";
 
 /**
  * Spwan bullets relative to the hero position. It needs a BulletManager.
  */
 export class CmpHeroBulletController 
-  implements IBaseComponent<Phaser.Physics.Arcade.Sprite>
+extends cmpFSM<Ty_physicsSprite>
 {
   /****************************************************/
   /* Public                                           */
@@ -32,24 +38,67 @@ export class CmpHeroBulletController
   : CmpHeroBulletController
   {
     let bulletController : CmpHeroBulletController = new CmpHeroBulletController();
-
+    
     bulletController.m_id = DC_COMPONENT_ID.kHeroBulletController;
-    bulletController._m_loadingMult = 0.0;
 
-    bulletController._m_bulletManager = NullBulletManager.GetInstance();
-
+    bulletController._m_active_state = NullState.GetInstance();
+    bulletController._m_hStates = new Map<string, IBaseState>();
+    
     return bulletController;
   }
   
   /**
    * Get the reference to the GameManager.
    */
-  init(_actor: BaseActor<Phaser.Physics.Arcade.Sprite>)
+  init(_actor: Ty_physicsActor)
   : void
   {
-    this._m_gameManager = GameManager.GetInstance();
     
-    this._m_loadingTime = 0.0;
+    let gameManager : GameManager = GameManager.GetInstance();
+    let levelConfig : ILevelConfiguration = gameManager.getLevelConfiguration();
+    
+    let stateNormal_config = levelConfig.getConfig<CnfBulletStateNormal>
+    (
+      DC_CONFIG.kHeroBulletStateNormal
+    );
+
+    if(stateNormal_config == null)
+    {
+      stateNormal_config = new CnfBulletStateNormal();
+    }
+
+    ///////////////////////////////////
+    // States
+
+    // Normal State.
+
+    let heroBulletManager =gameManager.getPlayerController().getBulletManager();
+
+    let stateNormal = new SttHeroBulletNormal();
+    stateNormal.init(_actor, this, heroBulletManager, stateNormal_config);
+
+    this.addState(stateNormal);
+
+    // Triple Shot State.
+
+    let stateTripleConfig = levelConfig.getConfig<CnfBulletStateTriple>
+    (
+      DC_CONFIG.kHeroBulletStateTriple
+    );
+
+    if(stateTripleConfig == null)
+    {
+      stateTripleConfig = new CnfBulletStateTriple();
+    }
+
+    let stateTriple = new SttHeroBulletTriple();
+    stateTriple.init(_actor, this, heroBulletManager, stateTripleConfig);
+
+    this.addState(stateTriple);
+
+    // default state.
+
+    this.setActiveState('Normal');
     return;
   }
 
@@ -61,133 +110,20 @@ export class CmpHeroBulletController
   setBulletManager(_bulletManager : IBulletManager)
   : void
   {
-    this._m_bulletManager = _bulletManager;
-    return;
-  }
-
-  /**
-   * Spawn bullets.
-   * 
-   * @param _actor 
-   */
-  update(_actor: BaseActor<Phaser.Physics.Arcade.Sprite>)
-  : void 
-  {
-    let loading : number = this._m_loadingTime;
-
-    loading += (this._m_gameManager.m_dt * this._m_loadingMult);
-    
-    if(loading >= this._m_frecuency)
-    {
-      let sprite = _actor.getWrappedInstance();
-
-      this._m_bulletManager.spawn
-      (
-        sprite.x , 
-        sprite.y - 110.0, 
-        DC_BULLET_TYPE.kHeroBasic
-      );
-      
-      loading = 0.0;
-    }
-    
-    this._m_loadingTime = loading;
-    return;
-  }
-
-  /**
-   * 
-   * @param _id 
-   * @param _obj 
-   */
-  receive(_id: number, _obj: any)
-  : void 
-  {
-    switch(_id)
-    {
-      case DC_MESSAGE_ID.kPointerPressed :
-
-      this._m_loadingMult = 1.0;
-      return;
-
-      case DC_MESSAGE_ID.kPointerReleased : 
-
-      this._m_loadingMult = 0.0;
-      return;
-    }
-    return;
-  }
-
-  /**
-   * Set the fire rate in bullets per second.
-   * 
-   * @param _fireRate Number of bullets spawned per second. 
-   */
-  setFireRate(_fireRate : number)
-  : void
-  {
-    if(_fireRate == 0.0)
-    {
-      this._m_frecuency = 10000.0;
-    }
-    else
-    {
-      this._m_frecuency = 1.0 / _fireRate;
-    }
-
-    return;
-  }
-
-  /**
-   * Get the number of bullets spawned per second.
-   * 
-   * @returns Number of bullets spawned per second.
-   */
-  getFireRate()
-  : number
-  {
-    return this._m_frecuency;
-  }
-
-  /**
-   * Safely destroys this component.
-   */
-  destroy()
-  : void 
-  {
-    this._m_bulletManager = null;
-    this._m_gameManager = null;
+    this._m_hStates.forEach
+    (
+      function(state : IBaseState)
+      {
+        state.receive
+        (
+          DC_MESSAGE_ID.kSetBulletManager,
+          _bulletManager
+        );
+        return;
+      }
+    );
     return;
   }
 
   m_id: number;
-  
-  /****************************************************/
-  /* Private                                          */
-  /****************************************************/
-  
-  /**
-   * Reference to the BulletManager.
-   */
-  private _m_bulletManager : IBulletManager;
-
-  /**
-   * Referenc to the GameManager.
-   */
-  private _m_gameManager : GameManager;
-
-  /**
-   * Frecuency of fire (bullets per second).
-   */
-  private _m_frecuency : number;
-
-  /**
-   * Loading time since the last time that a bullet had spawn.
-   */
-  private _m_loadingTime : number;
-
-  /**
-   * Loading multiplier.
-   */
-  private _m_loadingMult : number;
 }

@@ -33,6 +33,13 @@ implements IBulletSpawner
 
     return bulletSpawner;
   }
+
+  /**
+   * Intialize this bullet spawner.
+   */
+  init()
+  : void
+  { }
   
   update(_dt: number)
   : void 

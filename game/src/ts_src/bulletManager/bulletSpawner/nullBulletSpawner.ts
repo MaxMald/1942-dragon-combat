@@ -46,6 +46,13 @@ export class NullBulletSpawner implements IBulletSpawner
   }
 
   /**
+   * Intialize this bullet spawner.
+   */
+  init()
+  : void
+  { }
+
+  /**
    * No implementation.
    * 
    * @param _dt 

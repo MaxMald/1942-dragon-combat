@@ -3,22 +3,23 @@
  *
  * @summary 
  *
- * @file heroBasicBulletSpawner.ts
+ * @file heroTripleShotSpawner.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
- * @since August-04-2020
+ * @since August-20-2020
  */
 
 import { DC_BULLET_TYPE, DC_COMPONENT_ID, DC_CONFIG, DC_MESSAGE_ID } from "../../commons/1942enums";
-import { Ty_physicsActor, V2 } from "../../commons/1942types";
-import { CmpBasicBulletController } from "../../components/cmpBasicBulletController";
+import { Ty_physicsActor } from "../../commons/1942types";
 import { CmpBulletData } from "../../components/cmpBulletData";
-import { CnfHeroBasicBullet } from "../../configObjects/cnfHeroBasicBullet";
+import { CnfBulletProperties } from "../../configObjects/cnfBulletProperties";
+import { CnfHeroTripleShotBullet } from "../../configObjects/cnfHeroTripleShotBullet";
 import { GameManager } from "../../gameManager/gameManager";
 import { IBulletManager } from "../iBulletManager";
 import { IBulletSpawner } from "./iBulletSpawner";
 import { NullBulletSpawner } from "./nullBulletSpawner";
 
-export class HeroBasicBulletSpawner implements IBulletSpawner
+export class heroTripleShotSpawner
+implements IBulletSpawner
 {
   /****************************************************/
   /* Public                                           */
@@ -33,15 +34,15 @@ export class HeroBasicBulletSpawner implements IBulletSpawner
     let gameManager = GameManager.GetInstance();
     let levelConfiguration = gameManager.getLevelConfiguration();
 
-    let config : CnfHeroBasicBullet 
-      = levelConfiguration.getConfig<CnfHeroBasicBullet>
+    let config : CnfHeroTripleShotBullet 
+      = levelConfiguration.getConfig<CnfHeroTripleShotBullet>
       (
-        DC_CONFIG.kHeroBasicBullet
+        DC_CONFIG.kHeroTripleShotBullet
       );
     
     if(config == null)
     {
-      config = new CnfHeroBasicBullet();
+      config = new CnfHeroTripleShotBullet();
     }
 
     this.setBulletConfiguration(config);
@@ -57,15 +58,15 @@ export class HeroBasicBulletSpawner implements IBulletSpawner
    * @returns HeroBasiBulletSpawner
    */
   static Create()
-  : HeroBasicBulletSpawner
+  : heroTripleShotSpawner
   {
-    let spawner = new HeroBasicBulletSpawner;
+    let spawner = new heroTripleShotSpawner;
     
-    spawner.setBulletConfiguration(new CnfHeroBasicBullet());
+    spawner.setBulletConfiguration(new CnfHeroTripleShotBullet());
     return spawner;
   }
 
-  setBulletConfiguration(_config : CnfHeroBasicBullet)
+  setBulletConfiguration(_config : CnfHeroTripleShotBullet)
   : void
   {
     this._m_bulletConfig = _config;
@@ -74,7 +75,7 @@ export class HeroBasicBulletSpawner implements IBulletSpawner
 
   update(_dt: number)
   : void 
-  {
+  {    
     return;
   }
 
@@ -82,6 +83,16 @@ export class HeroBasicBulletSpawner implements IBulletSpawner
   : void 
   {
     this.assemble(_actor);
+
+    let bulletProperties : CnfBulletProperties;
+    if(_data !== undefined)
+    {
+      bulletProperties = _data as CnfBulletProperties;
+    }
+    else
+    {
+      bulletProperties = new CnfBulletProperties();
+    }
 
     _actor.sendMessage
     (
@@ -92,8 +103,8 @@ export class HeroBasicBulletSpawner implements IBulletSpawner
     _actor.sendMessage
     (
       DC_MESSAGE_ID.kDirection,
-      new Phaser.Math.Vector2(0.0, -1.0)
-    );
+      bulletProperties.direction
+    )
 
     _actor.sendMessage
     (
@@ -154,7 +165,7 @@ export class HeroBasicBulletSpawner implements IBulletSpawner
 
   getID(): DC_BULLET_TYPE 
   {
-    return DC_BULLET_TYPE.kHeroBasic;
+    return DC_BULLET_TYPE.kTripleSHot;
   }
 
   destroy()
@@ -173,12 +184,12 @@ export class HeroBasicBulletSpawner implements IBulletSpawner
    * private constructor.
    */
   private constructor()
-  { } 
+  { }
 
   /**
    * Bullet configuration.
    */
-  private _m_bulletConfig : CnfHeroBasicBullet;
+  private _m_bulletConfig : CnfHeroTripleShotBullet;
 
   /**
    * Reference to the bullet manger.

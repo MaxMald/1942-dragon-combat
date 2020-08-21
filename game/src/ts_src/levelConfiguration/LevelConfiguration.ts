@@ -11,8 +11,12 @@
 
 import { DC_CONFIG } from "../commons/1942enums";
 import { Ty_TileMap, Ty_TileObject } from "../commons/1942types";
+import { CnfBulletStateNormal } from "../configObjects/cnfBulletStateNormal";
+import { CnfBulletStateTriple } from "../configObjects/cnfBulletStateTriple";
 import { CnfCadmio } from "../configObjects/cnfCadmio";
 import { CnfCanus } from "../configObjects/cnfCanus";
+import { CnfHeroBasicBullet } from "../configObjects/cnfHeroBasicBullet";
+import { CnfHeroTripleShotBullet } from "../configObjects/cnfHeroTripleShotBullet";
 import { CnfItemManager } from "../configObjects/cnfItemManager";
 import { IConfigObject } from "../configObjects/IConfigObject";
 import { GameManager } from "../gameManager/gameManager";
@@ -48,6 +52,10 @@ implements ILevelConfiguration
     this.addConfig(new CnfCanus());
     this.addConfig(new CnfCadmio());
     this.addConfig(new CnfItemManager());
+    this.addConfig(new CnfBulletStateNormal());
+    this.addConfig(new CnfBulletStateTriple());
+    this.addConfig(new CnfHeroBasicBullet());
+    this.addConfig(new CnfHeroTripleShotBullet());
 
     return;
   }

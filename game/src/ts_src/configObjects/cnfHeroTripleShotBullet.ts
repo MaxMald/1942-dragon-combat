@@ -3,19 +3,16 @@
  *
  * @summary 
  *
- * @file cnfCadmio.ts
+ * @file cnfHeroTripleShotBullet.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
- * @since August-19-2020
+ * @since August-20-2020
  */
 
-import { DC_CONFIG, DC_SECONDARY_ACTION } from "../commons/1942enums";
+import { DC_CONFIG } from "../commons/1942enums";
 import { Ty_TileObject } from "../commons/1942types";
 import { IConfigObject } from "./IConfigObject";
 
-/**
- * Cadmio configuration object.
- */
-export class CnfCadmio
+export class CnfHeroTripleShotBullet
 implements IConfigObject
 {
   /**
@@ -24,11 +21,9 @@ implements IConfigObject
   constructor()
   {
     
-    this.speed = 100.0;
-    this.texture_key = "dragon_fruit";
-    this.direction_x = 0.0;
-    this.direction_y = 1.0;
-    this.effect_id = DC_SECONDARY_ACTION.kUndefined;
+    this.collision_damage = 1.0;
+    this.speed = 1200.0;
+    this.texture_key = "fireball";
     return;
   }
 
@@ -57,41 +52,19 @@ implements IConfigObject
           this.speed = property.value as number;
           break;
 
-          case "texture":
+          case "texture_key":
 
           this.texture_key = property.value as string;
           break;
 
-          case "direction_x":
+          case "collision_damage":
 
-          this.direction_x = property.value as number;
-          break;
-
-          case "direction_y":
-
-          this.direction_y = property.value as number;
-          break;
-
-          case "action" :
-
-          {
-            let value = property.value as string;
-            
-            if(value === 'SHIELD')
-            {
-              this.effect_id = DC_SECONDARY_ACTION.kShield;
-            }
-            else if(value === 'TRIPLE_SHOT')
-            {
-              this.effect_id = DC_SECONDARY_ACTION.KTripleShot;
-            }
-          }
+          this.collision_damage = property.value as number;
           break;
 
           default:
           break;
         }
-
         ++index;
       }
     }
@@ -106,7 +79,7 @@ implements IConfigObject
   getID()
   : DC_CONFIG 
   {
-    return DC_CONFIG.kCadmio;
+    return DC_CONFIG.kHeroTripleShotBullet;
   }
 
   /**
@@ -115,7 +88,7 @@ implements IConfigObject
   getConfigName()
   : string
   {
-    return "CadmioConfig";
+    return "HeroTripleShotBulletConfig";
   }
 
   /**
@@ -124,22 +97,12 @@ implements IConfigObject
   texture_key : string;
 
   /**
-   * The speed of the item in the world (pix./sec.).
+   * Collision Damage.
+   */
+  collision_damage : number;
+
+  /**
+   * Bullet’s speed in the world (pix./sec.)
    */
   speed : number;
-
-  /**
-   * X component of the force direction.
-   */
-  direction_x : number;
-
-  /**
-   * Y component of the force direction.
-   */
-  direction_y : number;
-
-  /**
-   * ID of the secondary action.
-   */
-  effect_id : DC_SECONDARY_ACTION;
 }
