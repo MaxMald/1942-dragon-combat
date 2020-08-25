@@ -4,7 +4,7 @@
   <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
  <properties>
-  <property name="camera_speed" type="float" value="100"/>
+  <property name="camera_speed" type="float" value="50"/>
  </properties>
  <tileset firstgid="1" source="level_tilesets/items_icons.tsx"/>
  <layer id="1" name="Gruid [KEEP LOCKED]" width="34" height="300" locked="1">

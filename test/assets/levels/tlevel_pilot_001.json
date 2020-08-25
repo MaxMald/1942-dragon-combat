@@ -383,6 +383,37 @@
                  "width":65,
                  "x":1527,
                  "y":9438
+                }, 
+                {
+                 "height":41,
+                 "id":347,
+                 "name":"",
+                 "rotation":0,
+                 "text":
+                    {
+                     "bold":true,
+                     "fontfamily":"MS Shell Dlg 2",
+                     "pixelsize":32,
+                     "text":"Minions",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":500,
+                 "x":1214.83,
+                 "y":9001.83
+                }, 
+                {
+                 "gid":9,
+                 "height":57,
+                 "id":348,
+                 "name":"Ranger",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":65,
+                 "x":1213.33,
+                 "y":9126.33
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2166,13 +2197,13 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":347,
+ "nextobjectid":349,
  "orientation":"orthogonal",
  "properties":[
         {
          "name":"camera_speed",
          "type":"float",
-         "value":100
+         "value":50
         }],
  "renderorder":"right-down",
  "tiledversion":"1.4.2",
