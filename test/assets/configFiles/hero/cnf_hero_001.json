@@ -21,5 +21,5 @@
   
   "bulletManager_key" : "cnf_bulletManager_hero",
 
-  "barrel_roll_duration" : 1.0
+  "barrel_roll_duration" : 0.3
 }

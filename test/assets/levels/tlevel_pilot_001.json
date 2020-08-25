@@ -2203,7 +2203,7 @@
         {
          "name":"camera_speed",
          "type":"float",
-         "value":100
+         "value":50
         }],
  "renderorder":"right-down",
  "tiledversion":"1.4.2",
