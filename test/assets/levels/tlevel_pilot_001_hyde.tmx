@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="349">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="353">
  <editorsettings>
   <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
@@ -23,10 +23,14 @@
  <objectgroup id="7" name="ConfigurationObjects">
   <object id="322" name="Cadmio Config" type="CadmioConfig" gid="12" x="1228.02" y="9598.21" width="65" height="57">
    <properties>
-    <property name="speed" type="float" value="50"/>
+    <property name="speed" type="float" value="200"/>
    </properties>
   </object>
-  <object id="332" name="Canus Config" type="CanusConfig" gid="9" x="1337" y="9598.33" width="65" height="57"/>
+  <object id="332" name="Canus Config" type="CanusConfig" gid="9" x="1337" y="9598.33" width="65" height="57">
+   <properties>
+    <property name="speed" type="float" value="200"/>
+   </properties>
+  </object>
   <object id="333" x="1224.5" y="9468.83" width="500" height="41">
    <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Items Configuration</text>
   </object>
@@ -35,7 +39,7 @@
   </object>
   <object id="339" name="Bullet State : Normal" type="Hero_bulletStateNormal" gid="11" x="1221.33" y="9438.33" width="65" height="57">
    <properties>
-    <property name="frecuency" type="int" value="7"/>
+    <property name="frecuency" type="int" value="3"/>
    </properties>
   </object>
   <object id="340" x="1218" y="9159.5" width="500" height="41">
@@ -43,6 +47,7 @@
   </object>
   <object id="341" name="Basic" type="HeroBasicBulletConfig" gid="9" x="1214.67" y="9293" width="65" height="57">
    <properties>
+    <property name="collision_damage" type="int" value="1"/>
     <property name="speed" type="float" value="1200"/>
    </properties>
   </object>
@@ -70,7 +75,7 @@
   </object>
   <object id="348" name="Ranger" gid="9" x="1213.33" y="9126.33" width="65" height="57"/>
  </objectgroup>
- <objectgroup id="2" name="First Wave" locked="1" offsetx="-3" offsety="6">
+ <objectgroup id="2" name="First Wave" offsetx="-3" offsety="6">
   <object id="2" name="Errante" type="Errante" x="188.788" y="9098.98">
    <point/>
   </object>
@@ -317,9 +322,6 @@
   <object id="219" name="Errante" type="Errante" x="61.3333" y="3158.85">
    <point/>
   </object>
-  <object id="238" name="Errante" type="Errante" x="542.667" y="9442.67">
-   <point/>
-  </object>
   <object id="252" name="Errante" type="Errante" x="543" y="7784">
    <point/>
   </object>
@@ -491,15 +493,19 @@
   <object id="315" name="Errante" type="Errante" x="284" y="108">
    <point/>
   </object>
+  <object id="349" name="Errante" type="Errante" x="540.541" y="9437.26">
+   <point/>
+  </object>
  </objectgroup>
- <objectgroup id="6" name="Items" locked="1">
-  <object id="321" name="Cadmio" type="Cadmio" gid="1" x="781.652" y="8926.5" width="59" height="59"/>
-  <object id="335" name="Canus" type="Canus" gid="2" x="232.167" y="8931.17" width="59" height="59"/>
+ <objectgroup id="6" name="Items">
   <object id="336" name="Cadmio" type="Cadmio" gid="1" x="206.864" y="7534.14" width="59" height="59"/>
   <object id="337" name="Canus" type="Canus" gid="2" x="809.894" y="7515.95" width="59" height="59"/>
+  <object id="350" name="Cadmio" type="Cadmio" gid="1" x="516.718" y="9260.03" width="59" height="59"/>
+  <object id="351" name="Cadmio" type="Cadmio" gid="1" x="784.098" y="9214.2" width="59" height="62.8197"/>
+  <object id="352" name="Cadmio" type="Cadmio" gid="1" x="234.06" y="9176" width="59" height="59"/>
  </objectgroup>
- <objectgroup id="4" name="Boss" locked="1">
-  <object id="318" name="Boss" type="Boss" x="560.061" y="1935.45">
+ <objectgroup id="4" name="Boss">
+  <object id="318" name="Boss" type="Boss" x="549.952" y="500">
    <point/>
   </object>
  </objectgroup>

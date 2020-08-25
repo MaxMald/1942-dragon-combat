@@ -130,7 +130,7 @@
                         {
                          "name":"speed",
                          "type":"float",
-                         "value":50
+                         "value":200
                         }, 
                         {
                          "name":"texture",
@@ -168,7 +168,7 @@
                         {
                          "name":"speed",
                          "type":"float",
-                         "value":1000
+                         "value":200
                         }, 
                         {
                          "name":"texture",
@@ -229,7 +229,7 @@
                         {
                          "name":"frecuency",
                          "type":"int",
-                         "value":7
+                         "value":3
                         }],
                  "rotation":0,
                  "type":"Hero_bulletStateNormal",
@@ -1412,18 +1412,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":238,
-                 "name":"Errante",
-                 "point":true,
-                 "rotation":0,
-                 "type":"Errante",
-                 "visible":true,
-                 "width":0,
-                 "x":542.667,
-                 "y":9442.67
-                }, 
-                {
-                 "height":0,
                  "id":252,
                  "name":"Errante",
                  "point":true,
@@ -2105,6 +2093,18 @@
                  "width":0,
                  "x":284,
                  "y":108
+                }, 
+                {
+                 "height":0,
+                 "id":349,
+                 "name":"Errante",
+                 "point":true,
+                 "rotation":0,
+                 "type":"Errante",
+                 "visible":true,
+                 "width":0,
+                 "x":540.540540540541,
+                 "y":9437.26335030683
                 }],
          "offsetx":-3,
          "offsety":6,
@@ -2119,30 +2119,6 @@
          "id":6,
          "name":"Items",
          "objects":[
-                {
-                 "gid":1,
-                 "height":59,
-                 "id":321,
-                 "name":"Cadmio",
-                 "rotation":0,
-                 "type":"Cadmio",
-                 "visible":true,
-                 "width":59,
-                 "x":781.652,
-                 "y":8926.5
-                }, 
-                {
-                 "gid":2,
-                 "height":59,
-                 "id":335,
-                 "name":"Canus",
-                 "rotation":0,
-                 "type":"Canus",
-                 "visible":true,
-                 "width":59,
-                 "x":232.167,
-                 "y":8931.17
-                }, 
                 {
                  "gid":1,
                  "height":59,
@@ -2166,6 +2142,42 @@
                  "width":59,
                  "x":809.894,
                  "y":7515.95
+                }, 
+                {
+                 "gid":1,
+                 "height":59,
+                 "id":350,
+                 "name":"Cadmio",
+                 "rotation":0,
+                 "type":"Cadmio",
+                 "visible":true,
+                 "width":59,
+                 "x":516.718487394958,
+                 "y":9260.03399541635
+                }, 
+                {
+                 "gid":1,
+                 "height":62.819709702062,
+                 "id":351,
+                 "name":"Cadmio",
+                 "rotation":0,
+                 "type":"Cadmio",
+                 "visible":true,
+                 "width":59,
+                 "x":784.098166539343,
+                 "y":9214.1974789916
+                }, 
+                {
+                 "gid":1,
+                 "height":59,
+                 "id":352,
+                 "name":"Cadmio",
+                 "rotation":0,
+                 "type":"Cadmio",
+                 "visible":true,
+                 "width":59,
+                 "x":234.059969442322,
+                 "y":9176.00038197097
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2187,8 +2199,8 @@
                  "type":"Boss",
                  "visible":true,
                  "width":0,
-                 "x":560.061,
-                 "y":1935.45
+                 "x":549.951505701725,
+                 "y":500
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2197,13 +2209,13 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":349,
+ "nextobjectid":353,
  "orientation":"orthogonal",
  "properties":[
         {
          "name":"camera_speed",
          "type":"float",
-         "value":50
+         "value":100
         }],
  "renderorder":"right-down",
  "tiledversion":"1.4.2",
