@@ -18,6 +18,7 @@ import { CnfCanus } from "../configObjects/cnfCanus";
 import { CnfHeroBasicBullet } from "../configObjects/cnfHeroBasicBullet";
 import { CnfHeroTripleShotBullet } from "../configObjects/cnfHeroTripleShotBullet";
 import { CnfItemManager } from "../configObjects/cnfItemManager";
+import { CnfPowerShield } from "../configObjects/cnfPowerShield";
 import { IConfigObject } from "../configObjects/IConfigObject";
 import { GameManager } from "../gameManager/gameManager";
 import { ILevelConfiguration } from "./ILevelConfiguration";
@@ -56,6 +57,7 @@ implements ILevelConfiguration
     this.addConfig(new CnfBulletStateTriple());
     this.addConfig(new CnfHeroBasicBullet());
     this.addConfig(new CnfHeroTripleShotBullet());
+    this.addConfig(new CnfPowerShield());
 
     return;
   }

@@ -72,6 +72,13 @@ implements IPlayerController
   : void 
   { }
 
+  getPowerShield()
+  : Ty_physicsActor
+  {
+    return null;
+  }
+
+
   /**
    * No implementation.
    * 

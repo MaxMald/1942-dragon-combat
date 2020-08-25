@@ -1,0 +1,13 @@
+{
+  "pilot" : 
+  {
+    "files" :
+    [
+      {
+        "type" : "image",
+        "key" : "dragon_shield",
+        "url" : "images/dragon_shield.png"
+      }
+    ]
+  }
+}

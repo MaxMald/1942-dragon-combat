@@ -189,7 +189,17 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * ICmpItemController.
    */
-  kItemController : 23 as 23
+  kItemController : 23 as 23,
+
+  /**
+   * CmpPowerShieldController
+   */
+  kPowerShieldComponent : 24 as 24,
+
+  /**
+   * CmpPowerShieldCollisionController
+   */
+  kPowerShieldCollisionController : 25 as 25
 });
 
 /****************************************************/
@@ -387,6 +397,27 @@ export const DC_MESSAGE_ID = Object.freeze
    * msg : IBulletManager
    */
   kSetBulletManager : 524 as 524, 
+
+  /**
+   * Active the actor.
+   * 
+   * msg : undefined.
+   */
+  kActive : 525 as 525,
+
+  /**
+   * The power shield had been activated.
+   * 
+   * msg : Power shield actor.
+   */
+  kPowerShieldActivated : 526 as 526,
+
+  /**
+   * The power shield had been desactivated.
+   * 
+   * msg : Poser shield actor.
+   */
+  kPowerShieldDesactivated : 527 as 527
 });
 
 /****************************************************/
@@ -613,5 +644,10 @@ export const DC_CONFIG = Object.freeze
   /**
    * Hero bullet state : Triple Shot, configuration object.
    */
-  kHeroBulletStateTriple : 6 as 6
+  kHeroBulletStateTriple : 6 as 6,
+
+  /**
+   * Hero power shield config object.
+   */
+  kHeroPowerShield : 7 as 7
 });

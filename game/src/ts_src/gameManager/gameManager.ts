@@ -14,9 +14,10 @@ import { NullBossManager } from "../bossManager/NullBossManager";
 import { NullBulletSpawner } from "../bulletManager/bulletSpawner/nullBulletSpawner";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { CnfHero } from "../commons/1942config";
-import { DC_MESSAGE_ID } from "../commons/1942enums";
+import { DC_CONFIG, DC_MESSAGE_ID } from "../commons/1942enums";
 import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
 import { CmpNullEnemyController } from "../components/cmpNullEnemyController";
+import { CnfPowerShield } from "../configObjects/cnfPowerShield";
 import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
 import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
@@ -311,7 +312,13 @@ export class GameManager
     let playerController : PlayerController;
 
     playerController = new PlayerController();
-    playerController.init(_scene, _cnfHero);   
+
+    let shieldConfig : CnfPowerShield 
+      = this._m_levelConfiguration.getConfig<CnfPowerShield>
+      (
+        DC_CONFIG.kHeroPowerShield
+      );
+    playerController.init(_scene, _cnfHero, shieldConfig);   
 
     this._m_playerController = playerController;
     

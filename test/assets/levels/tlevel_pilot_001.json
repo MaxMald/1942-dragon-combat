@@ -192,7 +192,7 @@
                      "bold":true,
                      "fontfamily":"MS Shell Dlg 2",
                      "pixelsize":32,
-                     "text":"Items Config",
+                     "text":"Items Configuration",
                      "wrap":true
                     },
                  "type":"",
@@ -211,12 +211,12 @@
                      "bold":true,
                      "fontfamily":"MS Shell Dlg 2",
                      "pixelsize":32,
-                     "text":"Hero Components",
+                     "text":"Hero Components, States & Sub Actors",
                      "wrap":true
                     },
                  "type":"",
                  "visible":true,
-                 "width":500,
+                 "width":698,
                  "x":1223.33,
                  "y":9310.17
                 }, 
@@ -282,8 +282,8 @@
                  "type":"HeroBasicBulletConfig",
                  "visible":true,
                  "width":65,
-                 "x":1214.66666666667,
-                 "y":9292.99666666667
+                 "x":1214.67,
+                 "y":9293
                 }, 
                 {
                  "gid":10,
@@ -311,7 +311,7 @@
                  "visible":true,
                  "width":65,
                  "x":1320,
-                 "y":9291.66666666667
+                 "y":9291.67
                 }, 
                 {
                  "gid":11,
@@ -333,8 +333,56 @@
                  "type":"Hero_bulletStateTripleShot",
                  "visible":true,
                  "width":65,
-                 "x":1383.5,
-                 "y":9436.83333333333
+                 "x":1382.83,
+                 "y":9436.83
+                }, 
+                {
+                 "gid":10,
+                 "height":57,
+                 "id":346,
+                 "name":"Power Shield",
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":10000
+                        }, 
+                        {
+                         "name":"explosion_radius",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"explosion_time",
+                         "type":"float",
+                         "value":0.3
+                        }, 
+                        {
+                         "name":"max_radius",
+                         "type":"float",
+                         "value":150
+                        }, 
+                        {
+                         "name":"min_radius",
+                         "type":"float",
+                         "value":15
+                        }, 
+                        {
+                         "name":"shield_max_time",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"dragon_shield"
+                        }],
+                 "rotation":0,
+                 "type":"HeroPowerShieldConfig",
+                 "visible":true,
+                 "width":65,
+                 "x":1527,
+                 "y":9438
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2118,7 +2166,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":346,
+ "nextobjectid":347,
  "orientation":"orthogonal",
  "properties":[
         {

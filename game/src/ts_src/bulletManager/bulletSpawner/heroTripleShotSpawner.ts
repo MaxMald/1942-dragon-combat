@@ -39,7 +39,7 @@ implements IBulletSpawner
       (
         DC_CONFIG.kHeroTripleShotBullet
       );
-    
+        
     if(config == null)
     {
       config = new CnfHeroTripleShotBullet();
@@ -75,7 +75,7 @@ implements IBulletSpawner
 
   update(_dt: number)
   : void 
-  {    
+  {     
     return;
   }
 

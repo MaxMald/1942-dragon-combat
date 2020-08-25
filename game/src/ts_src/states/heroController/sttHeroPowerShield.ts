@@ -3,37 +3,54 @@
  *
  * @summary 
  *
- * @file SttHeroNormal.ts
+ * @file sttHeroPowerShield.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
- * @since August-18-2020
+ * @since August-24-2020
  */
 
-import { DC_MESSAGE_ID, DC_SECONDARY_ACTION } from "../../commons/1942enums";
+import { DC_MESSAGE_ID } from "../../commons/1942enums";
+import { Ty_physicsActor, Ty_physicsSprite } from "../../commons/1942types";
 import { CmpHeroController } from "../../components/cmpHeroController";
 import { ICmpState } from "../ICmpState";
 
-export class SttHeroNormal
+export class SttHeroPowerShield
 implements ICmpState<CmpHeroController>
-{  
+{
   /****************************************************/
   /* Public                                           */
-  /****************************************************/  
+  /****************************************************/
 
   constructor()
   {
-    this.m_id = "normal";
+    this.m_id = "powerShield";    
+    this._reset();
     return;
   }
 
   onEnter()
   : void 
   {
+    if(this._m_controller != null)
+    {
+      let actor : Ty_physicsActor =  this._m_controller.getActor();
+      let sprite : Ty_physicsSprite = actor.getWrappedInstance();
+      
+      sprite.body.enable = false;
+    }
+    this._reset();
     return;
   }
 
   onExit()
   : void 
   {
+    if(this._m_controller != null)
+    {
+      let actor : Ty_physicsActor = this._m_controller.getActor();
+      let sprite : Ty_physicsSprite = actor.getWrappedInstance();
+      
+      sprite.body.enable = true;
+    }
     return;
   }
 
@@ -42,30 +59,11 @@ implements ICmpState<CmpHeroController>
   {
     switch(_id)
     {
-      case DC_MESSAGE_ID.kPointerReleased:
-      
-      if(this._m_controller.getSecondaryAction() == DC_SECONDARY_ACTION.kShield)
-      {
-        this._m_controller.getPowerShieldActor().sendMessage
-        (
-          DC_MESSAGE_ID.kActive,
-          undefined
-        );
-      }
-      else
-      {
-        this._m_controller.setActive("barrelRoll");
-      }      
-      return;
-
-      case DC_MESSAGE_ID.kPowerShieldActivated:
-
-      this._m_controller.setActive('powerShield');
-      return;
-
-      default:
+      case DC_MESSAGE_ID.kPowerShieldDesactivated:      
+      this._m_controller.setActive('normal');
       return;
     }
+    return;
   }
 
   update()
@@ -102,7 +100,7 @@ implements ICmpState<CmpHeroController>
    */
   destroy()
   : void 
-  { 
+  {
     this._m_controller = null;
     return;
   }
@@ -112,9 +110,15 @@ implements ICmpState<CmpHeroController>
   /****************************************************/
   /* Private                                          */
   /****************************************************/
+
+  _reset()
+  : void
+  {
+    return;
+  }
   
   /**
    * Reference to the state main component.
    */
-  _m_controller : CmpHeroController;  
+  private _m_controller : CmpHeroController;
 }

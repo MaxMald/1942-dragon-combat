@@ -8,11 +8,11 @@
  * @since August-18-2020
  */
 
-import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
-import { Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
-import { CmpAnimation } from "../components/cmpAnimation";
-import { CmpHeroController } from "../components/cmpHeroController";
-import { IAnimationState } from "./IAnimationState";
+import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../../commons/1942enums";
+import { Ty_physicsActor, Ty_physicsSprite } from "../../commons/1942types";
+import { CmpAnimation } from "../../components/cmpAnimation";
+import { CmpHeroController } from "../../components/cmpHeroController";
+import { IAnimationState } from "../IAnimationState";
 
 export class StateHeroBarrelRoll
 implements IAnimationState

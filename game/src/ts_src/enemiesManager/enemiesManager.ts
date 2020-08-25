@@ -351,6 +351,30 @@ export class EnemiesManager implements IEnemiesManager
   }
 
   /**
+   * Add a collision detection against a group.
+   * 
+   * @param _scene The scene wich the physic engine.
+   * @param _body The Physics Body.
+   */
+  collisionVsBody
+  (
+    _scene : Phaser.Scene, 
+    _body : Ty_physicsSprite
+  )
+  : void
+  {
+    _scene.physics.add.collider
+    (
+      _body,
+      this._m_bodiesGroup,
+      this._onCollision, 
+      undefined, 
+      this
+    );
+    return;
+  }
+
+  /**
    * Clears this EnemyManager. Destroy the list of bodies group. Clear the pool.
    * Destroy and clear the map of spawners.
    */

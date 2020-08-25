@@ -1,4 +1,3 @@
-
 /**
  * HummingFlight Software Technologies - 2020
  *

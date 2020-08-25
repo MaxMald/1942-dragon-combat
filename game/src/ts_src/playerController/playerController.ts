@@ -13,20 +13,24 @@ import { BaseActor } from "../actors/baseActor";
 import { CmpHeroInput } from "../components/cmpHeroInput"
 import { CmpMovement } from "../components/cmpMovement";
 import { CmpAnimation } from "../components/cmpAnimation";
-import { StateHeroFFlight } from "../states/stateHeroFFLight";
-import { StateHeroGlide } from "../states/stateHeroGlide";
+import { StateHeroFFlight } from "../states/heroAnimations/stateHeroFFLight";
+import { StateHeroGlide } from "../states/heroAnimations/stateHeroGlide";
 import { CmpHeroBulletController } from "../components/cmpHeroBulletController";
 import { IBulletManager } from "../bulletManager/iBulletManager";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { CmpHeroData } from "../components/cmpHeroData";
 import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
-import { Point, Ty_physicsActor, V2 } from "../commons/1942types";
+import { Ty_physicsActor, Ty_physicsSprite, V2 } from "../commons/1942types";
 import { CnfHero } from "../commons/1942config";
 import { IPlayerController } from "./IPlayerController";
 import { CmpHeroController } from "../components/cmpHeroController";
-import { StateHeroBarrelRoll } from "../states/stateHeroBarrelRoll";
+import { StateHeroBarrelRoll } from "../states/heroAnimations/stateHeroBarrelRoll";
 import { SttHeroBarrelRoll } from "../states/heroController/sttHeroBarrelRoll";
+import { CnfPowerShield } from "../configObjects/cnfPowerShield";
+import { CmpPowerShieldController } from "../components/cmpPowerShieldController";
+import { CmpPowerShieldCollisionController } from "../components/cmpPowerShieldCollisionController";
+import { StateHeroPowerShield } from "../states/heroAnimations/stateHeroPowerShield";
 
 /**
  * Create and manage the hero's actor. It provides a friendly interface to control
@@ -58,7 +62,8 @@ implements IPlayerController
   init
   (
     _scene : Phaser.Scene,
-    _cnfHero : CnfHero
+    _cnfHero : CnfHero,
+    _cnfPowerShield : CnfPowerShield
   ) : void
   {
     ///////////////////////////////////
@@ -96,6 +101,38 @@ implements IPlayerController
 
     this.setPlayer(hero);
 
+
+    ///////////////////////////////////
+    // Hero Power Shield
+
+    let powerShieldSprite : Ty_physicsSprite = _scene.physics.add.sprite
+    (
+      _scene.game.canvas.width * 0.5, 
+      _scene.game.canvas.height * 0.5, 
+      _cnfPowerShield.texture_key
+    );
+
+    let powerShield = BaseActor.Create
+    (
+      powerShieldSprite,
+      'Hero Power Shield'
+    );
+
+    powerShieldSprite.setData('actor', powerShield);
+
+    let cmpShieldController = CmpPowerShieldController.Create();    
+    powerShield.addComponent(cmpShieldController);
+
+    let cmpShieldCollision = CmpPowerShieldCollisionController.Create();
+    powerShield.addComponent(cmpShieldCollision);
+
+    powerShield.init();    
+
+    // Setup the shield controller.
+
+    cmpShieldController.setHeroActor(hero);
+    cmpShieldController.setConfiguration(_cnfPowerShield);    
+
     ///////////////////////////////////
     // Animations
 
@@ -105,6 +142,7 @@ implements IPlayerController
     anim.addState(new StateHeroFFlight());
     anim.addState(new StateHeroGlide());
     anim.addState(new StateHeroBarrelRoll());
+    anim.addState(new StateHeroPowerShield());
 
     anim.setActive('Hero_Forward_Flight');
 
@@ -140,8 +178,28 @@ implements IPlayerController
       _cnfHero.hero_playzone_padding,
       canvas.width - _cnfHero.hero_playzone_padding,
       canvas.height - _cnfHero.hero_playzone_padding
-    );    
+    );
+
+    this.setPowerShieldActor(powerShield);
+    cmpShieldController.activeDesactiveState();
     return;
+  }
+
+  setPowerShieldActor(_actor : Ty_physicsActor)
+  : void
+  {
+    let heroController : CmpHeroController
+      = this._m_player.getComponent<CmpHeroController>(DC_COMPONENT_ID.kHeroController);
+
+    heroController.setPowerShieldActor(_actor);
+    this._m_shield = _actor;
+    return;
+  }
+
+  getPowerShield()
+  : Ty_physicsActor
+  {
+    return this._m_shield;
   }
 
   /**
@@ -224,7 +282,7 @@ implements IPlayerController
   }
 
   /**
-   * Get the movement mode of the hero. The mode defines the behaviour wich the
+   * Get the movement mode of the hero. The mode defines the behaviour which the
    * actor react to the events of the pointer
    * 
    * * ABSOLUTE : The hero moves to the pointer position.
@@ -428,6 +486,7 @@ implements IPlayerController
     // Update logic
 
     this._m_player.update();
+    this._m_shield.update();
 
     this._m_bulletManager.update(_dt);
 
@@ -462,6 +521,11 @@ implements IPlayerController
    * Reference to the Hero.
    */
   private _m_player : Ty_physicsActor;
+
+  /**
+   * Reference to the Hero's Power Shield.
+   */
+  private _m_shield : Ty_physicsActor;
 
   /**
    * Reference to the bullet manager.

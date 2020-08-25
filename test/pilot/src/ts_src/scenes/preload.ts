@@ -100,7 +100,7 @@ extends Phaser.Scene
     );   
 
     ///////////////////////////////////
-    // Pack
+    // Packs
 
     // Configuration files.
 
@@ -117,6 +117,13 @@ extends Phaser.Scene
     (
       'art_pack_items',
       'packs/art_pack_items.json',
+      'pilot'
+    );
+
+    this.load.pack
+    (
+      'art_pack_kalebio',
+      'packs/art_pack_kalebio.json',
       'pilot'
     );
 

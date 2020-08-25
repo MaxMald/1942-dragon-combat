@@ -19,6 +19,23 @@
  </objecttype>
  <objecttype name="Errante" color="#a40002"/>
  <objecttype name="Guide Line" color="#00007f"/>
+ <objecttype name="Hero_bulletStateNormal" color="#ff0000">
+  <property name="frecuency" type="int" default="8"/>
+ </objecttype>
+ <objecttype name="Hero_bulletStateTripleShot" color="#ff0000">
+  <property name="frecuency" type="int" default="6"/>
+  <property name="opening" type="float" default="30"/>
+ </objecttype>
+ <objecttype name="HeroBasicBulletConfig" color="#ff5500">
+  <property name="collision_damage" type="int" default="1"/>
+  <property name="speed" type="float" default="1200"/>
+  <property name="texture_key" type="string" default="fireball"/>
+ </objecttype>
+ <objecttype name="HeroTripleShotBulletConfig" color="#ff01ff">
+  <property name="collision_damage" type="int" default="1"/>
+  <property name="speed" type="float" default="1200"/>
+  <property name="texture_key" type="string" default="fireball"/>
+ </objecttype>
  <objecttype name="Prop" color="#0303a4">
   <property name="image" type="string"/>
  </objecttype>

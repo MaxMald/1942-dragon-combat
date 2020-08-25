@@ -8,11 +8,11 @@
  * @since July-24-2020
  */
 
-import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
-import { Ty_physicsActor } from "../commons/1942types";
-import { CmpAnimation } from "../components/cmpAnimation";
-import { CmpHeroController } from "../components/cmpHeroController";
-import { IAnimationState } from "./IAnimationState";
+import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../../commons/1942enums";
+import { Ty_physicsActor } from "../../commons/1942types";
+import { CmpAnimation } from "../../components/cmpAnimation";
+import { CmpHeroController } from "../../components/cmpHeroController";
+import { IAnimationState } from "./../IAnimationState";
 
 /**
  * Forward fly animation.
@@ -53,6 +53,10 @@ export class StateHeroFFlight implements IAnimationState
     {
       case DC_MESSAGE_ID.kEnterBarrelRoll:
         this.m_component.setActive("Hero_Barrel_Roll");
+      return;
+
+      case DC_MESSAGE_ID.kPowerShieldActivated:
+        this.m_component.setActive("Hero_PowerShield");
       return;
 
       default:

@@ -1,21 +1,22 @@
-import { DC_MESSAGE_ID } from "../commons/1942enums";
 /**
  * HummingFlight Software Technologies - 2020
  *
  * @summary 
  *
- * @file stateHeroGlide.ts
+ * @file stateHeroPowerShield.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
- * @since July-24-2020
+ * @since August-24-2020
  */
 
-import { CmpAnimation } from "../components/cmpAnimation";
-import { IAnimationState } from "./IAnimationState";
+import { DC_MESSAGE_ID } from "../../commons/1942enums";
+import { CmpAnimation } from "../../components/cmpAnimation";
+import { IAnimationState } from "./../IAnimationState";
 
 /**
  * Glide animation.
  */
-export class StateHeroGlide implements IAnimationState
+export class StateHeroPowerShield 
+implements IAnimationState
 {  
   /****************************************************/
   /* Public                                           */
@@ -23,7 +24,7 @@ export class StateHeroGlide implements IAnimationState
 
   constructor()
   {
-    this.m_id = "Hero_Glide";
+    this.m_id = "Hero_PowerShield";
     return;
   }
   
@@ -31,28 +32,33 @@ export class StateHeroGlide implements IAnimationState
   : void 
   { 
     let sprite = this.m_component.getSprite();
-    sprite.play('D001_Glide');
+    sprite.setAlpha(0.3);
     return;
   }
   
   onExit()
   : void 
-  { }
+  { 
+    let sprite = this.m_component.getSprite();
+    sprite.setAlpha(1.0);
+    return;
+  }
 
   receive(_id: number, _obj: any)
   : void 
   { 
     switch(_id)
-    {
-      case DC_MESSAGE_ID.kPointerPressed:
-        this.m_component.setActive("Hero_Forward_Flight");
-      return;
-
+    {  
       case DC_MESSAGE_ID.kEnterBarrelRoll:
         this.m_component.setActive("Hero_Barrel_Roll");
       return;
 
-      default:        
+      case DC_MESSAGE_ID.kPowerShieldDesactivated:
+        this.m_component.setActive('Hero_Forward_Flight');
+      return;
+      
+
+      default:
       return;
     }
   }

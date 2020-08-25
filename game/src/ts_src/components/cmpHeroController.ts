@@ -9,10 +9,11 @@
  */
 
 import { CnfHero } from "../commons/1942config";
-import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
+import { DC_COMPONENT_ID, DC_MESSAGE_ID, DC_SECONDARY_ACTION } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
 import { SttHeroBarrelRoll } from "../states/heroController/sttHeroBarrelRoll";
 import { SttHeroNormal } from "../states/heroController/sttHeroNormal";
+import { SttHeroPowerShield } from "../states/heroController/sttHeroPowerShield";
 import { ICmpState } from "../states/ICmpState";
 import { IBaseComponent } from "./iBaseComponent";
 import { ICmpItemController } from "./iCmpItemController";
@@ -32,8 +33,10 @@ implements IBaseComponent<Ty_physicsSprite>
     controller.m_id = DC_COMPONENT_ID.kHeroController;
     controller._m_hStates = new Map<string, ICmpState<CmpHeroController>>();
     controller._m_pressingPointer = false;
+    controller._m_secondary_action = DC_SECONDARY_ACTION.kUndefined;
 
     controller.addState(new SttHeroBarrelRoll());
+    controller.addState(new SttHeroPowerShield());
 
     controller._m_activeState = new SttHeroNormal();
     controller.addState(controller._m_activeState);
@@ -176,6 +179,15 @@ implements IBaseComponent<Ty_physicsSprite>
   }
 
   /**
+   * Get the secondary action.
+   */
+  getSecondaryAction()
+  : DC_SECONDARY_ACTION
+  {
+    return this._m_secondary_action;
+  }
+
+  /**
    * Check if the pointer is been pressed.
    * 
    * @returns true if the pointer is pressed.
@@ -196,6 +208,19 @@ implements IBaseComponent<Ty_physicsSprite>
   {
     this._m_config = _config;
     return;
+  }
+
+  setPowerShieldActor(_powerShield : Ty_physicsActor)
+  : void
+  {
+    this._m_powerShieldActor = _powerShield;
+    return;
+  }
+
+  getPowerShieldActor()
+  : Ty_physicsActor
+  {
+    return this._m_powerShieldActor;
   }
 
   /**
@@ -225,7 +250,8 @@ implements IBaseComponent<Ty_physicsSprite>
       this._m_config.health
     )
 
-    console.log('collison with item');
+    this._m_secondary_action 
+      = _itemController.getEffectType() as DC_SECONDARY_ACTION;
     return;
   }
 
@@ -244,6 +270,16 @@ implements IBaseComponent<Ty_physicsSprite>
    * Reference to the hero actor.
    */
   private _m_actor : Ty_physicsActor;
+
+  /**
+   * Reference to the power shield actor.
+   */
+  private _m_powerShieldActor : Ty_physicsActor;
+
+  /**
+   * Indicates the secondary action.
+   */
+  private _m_secondary_action : DC_SECONDARY_ACTION;
 
   /**
    * Active state.

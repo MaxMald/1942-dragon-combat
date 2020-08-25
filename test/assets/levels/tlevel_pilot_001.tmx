@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="346">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="349">
  <editorsettings>
   <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
@@ -28,10 +28,10 @@
   </object>
   <object id="332" name="Canus Config" type="CanusConfig" gid="9" x="1337" y="9598.33" width="65" height="57"/>
   <object id="333" x="1224.5" y="9468.83" width="500" height="41">
-   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Items Config</text>
+   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Items Configuration</text>
   </object>
-  <object id="338" x="1223.33" y="9310.17" width="500" height="41">
-   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Hero Components</text>
+  <object id="338" x="1223.33" y="9310.17" width="698" height="41">
+   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Hero Components, States &amp; Sub Actors</text>
   </object>
   <object id="339" name="Bullet State : Normal" type="Hero_bulletStateNormal" gid="11" x="1221.33" y="9438.33" width="65" height="57">
    <properties>
@@ -51,12 +51,24 @@
     <property name="speed" type="float" value="1600"/>
    </properties>
   </object>
-  <object id="345" name="Bullet State : TripleShot" type="Hero_bulletStateTripleShot" gid="11" x="1383.5" y="9436.83" width="65" height="57">
+  <object id="345" name="Bullet State : TripleShot" type="Hero_bulletStateTripleShot" gid="11" x="1382.83" y="9436.83" width="65" height="57">
    <properties>
     <property name="frecuency" type="int" value="3"/>
     <property name="opening" type="float" value="15"/>
    </properties>
   </object>
+  <object id="346" name="Power Shield" type="HeroPowerShieldConfig" gid="10" x="1527" y="9438" width="65" height="57">
+   <properties>
+    <property name="explosion_radius" type="float" value="200"/>
+    <property name="explosion_time" type="float" value="0.3"/>
+    <property name="max_radius" type="float" value="150"/>
+    <property name="shield_max_time" type="float" value="1"/>
+   </properties>
+  </object>
+  <object id="347" x="1214.83" y="9001.83" width="500" height="41">
+   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Minions</text>
+  </object>
+  <object id="348" name="Ranger" gid="9" x="1213.33" y="9126.33" width="65" height="57"/>
  </objectgroup>
  <objectgroup id="2" name="First Wave" locked="1" offsetx="-3" offsety="6">
   <object id="2" name="Errante" type="Errante" x="188.788" y="9098.98">

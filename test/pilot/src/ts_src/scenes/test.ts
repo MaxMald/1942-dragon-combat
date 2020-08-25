@@ -237,6 +237,24 @@ export class Test extends Phaser.Scene
     this._m_gameManager = gameManager;
 
     ///////////////////////////////////
+    // Hero Shield vs Enemies Bodies
+
+    enemiesManager.collisionVsBody
+    (
+      this, 
+      playercontroller.getPowerShield().getWrappedInstance()
+    );
+    
+    ///////////////////////////////////
+    // Hero Shield vs Enemies bullets
+
+    enim_bulletManager.collisionVsSprite
+    (
+      this, 
+      playercontroller.getPowerShield().getWrappedInstance()
+    );
+
+    ///////////////////////////////////
     // Items Bodies vs Hero Body
 
     itemManager.collisionVsSprite(this, hero.getWrappedInstance());

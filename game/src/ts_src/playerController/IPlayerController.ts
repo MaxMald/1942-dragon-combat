@@ -150,6 +150,11 @@ export interface IPlayerController
   getPosition()
   : V2;
 
+  
+  getPowerShield()
+  : Ty_physicsActor;
+
+
   /**
    * Handle the pointer events and update the actor components.
    * 
