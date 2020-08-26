@@ -67,7 +67,7 @@ export class NullEnemySpawner implements IEnemySpawner
    * @param _x 
    * @param _y 
    */
-  spawn(_actor : Ty_physicsActor, _x: number, _y: number)
+  spawn(_actor : Ty_physicsActor, _x: number, _y: number, _data ?: any)
   : void 
   {
     return;
@@ -127,7 +127,7 @@ export class NullEnemySpawner implements IEnemySpawner
    * 
    * @param _actor Actor. 
    */
-  assemble(_actor : Ty_physicsActor)
+  assemble(_actor : Ty_physicsActor, _data ?: any)
   : void
   { }
 

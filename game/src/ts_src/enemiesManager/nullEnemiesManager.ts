@@ -114,7 +114,7 @@ export class NullEnemiesManager implements IEnemiesManager
    * @param _y 
    * @param _type 
    */
-  spawn(_x: number, _y: number, _type: DC_ENEMY_TYPE)
+  spawn(_x: number, _y: number, _type: DC_ENEMY_TYPE, _data ?: any)
   : void 
   {
     console.log("NullEnemiesManager : spawn. ");

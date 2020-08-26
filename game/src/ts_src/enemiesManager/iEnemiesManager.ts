@@ -74,8 +74,9 @@ export interface IEnemiesManager
    * @param _x position in x axis.
    * @param _y position in y axis.
    * @param _type enemy type.
+   * @param _data optional data.
    */
-  spawn(_x : number, _y : number, _type : DC_ENEMY_TYPE) 
+  spawn(_x : number, _y : number, _type : DC_ENEMY_TYPE, _data ?: any) 
   : void;
 
   /**

@@ -20,7 +20,6 @@ import { IBulletManager } from "../bulletManager/iBulletManager";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { CmpHeroData } from "../components/cmpHeroData";
-import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
 import { Ty_physicsActor, Ty_physicsSprite, V2 } from "../commons/1942types";
 import { CnfHero } from "../commons/1942config";
 import { IPlayerController } from "./IPlayerController";
@@ -31,6 +30,7 @@ import { CnfPowerShield } from "../configObjects/cnfPowerShield";
 import { CmpPowerShieldController } from "../components/cmpPowerShieldController";
 import { CmpPowerShieldCollisionController } from "../components/cmpPowerShieldCollisionController";
 import { StateHeroPowerShield } from "../states/heroAnimations/stateHeroPowerShield";
+import { CmpHeroCollision } from "../components/cmpHeroCollision";
 
 /**
  * Create and manage the hero's actor. It provides a friendly interface to control
@@ -94,7 +94,7 @@ implements IPlayerController
     hero.addComponent(CmpAnimation.Create());
     hero.addComponent(CmpHeroData.Create());
     hero.addComponent(CmpHeroBulletController.Create());
-    hero.addComponent(CmpNullCollisionController.GetInstance());
+    hero.addComponent(CmpHeroCollision.Create());
     hero.addComponent(CmpHeroController.Create());
 
     hero.init();

@@ -16,6 +16,10 @@ import { EnemyBasicBulletConfig } from "../../../../../game/src/ts_src/bulletMan
 import { ItemManager } from "../../../../../game/src/ts_src/itemManager/ItemManager";
 import { ILevelConfiguration } from "../../../../../game/src/ts_src/levelConfiguration/ILevelConfiguration";
 import { heroTripleShotSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroTripleShotSpawner";
+import { RangerSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/rangerSpawner";
+import { CnfRangerConfig } from "../../../../../game/src/ts_src/configObjects/cnfRangerConfig";
+import { DC_CONFIG } from "../../../../../game/src/ts_src/commons/1942enums";
+import { CnfRangerSpawner } from "../../../../../game/src/ts_src/configObjects/cnfRangerSpawnerConfig";
   
 export class Test extends Phaser.Scene
 {
@@ -157,6 +161,18 @@ export class Test extends Phaser.Scene
     enemiesManager.addSpawner(erranteSpawner);
 
     ///////////////////////////////////
+    // Spawner : Ranger
+
+    let rangerSpawner : RangerSpawner = RangerSpawner.Create();
+    let rangerSpawnerConfig = levelConfiguration.getConfig<CnfRangerSpawner>
+    (
+      DC_CONFIG.kRangerSpawner
+    );    
+    rangerSpawner.init(rangerSpawnerConfig);
+
+    enemiesManager.addSpawner(rangerSpawner);
+
+    ///////////////////////////////////
     // Hero's Bullet Manager
 
     let cnfBulletMng : CnfBulletManager 
@@ -228,6 +244,11 @@ export class Test extends Phaser.Scene
     let hero = heroController.getPlayer();
 
     enim_bulletManager.collisionVsSprite(this, hero.getWrappedInstance());
+
+    ///////////////////////////////////
+    // Enemy Bodies vs Hero Body
+
+    enemiesManager.collisionVsBody(this, hero.getWrappedInstance());
 
     ///////////////////////////////////
     // Hero Bullets Bodies vs Enemies Bodies

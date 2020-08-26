@@ -66,8 +66,12 @@ export class CmpEnemyHealth implements IBaseComponent<Ty_physicsSprite>
     {
       case DC_MESSAGE_ID.kHit:
       
-      this.hit(_obj as integer);
-      
+      this.hit(_obj as integer);      
+      return;
+
+      case DC_MESSAGE_ID.kSetHealthPoints:
+
+      this.setHP(_obj as number);
       return;
     }
     return;
