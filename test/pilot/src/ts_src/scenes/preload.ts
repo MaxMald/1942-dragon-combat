@@ -127,6 +127,13 @@ extends Phaser.Scene
       'pilot'
     );
 
+    this.load.pack
+    (
+      'art_pack_minions',
+      'packs/art_pack_minions.json',
+      'pilot'
+    );
+
     let tiledMapPack = JSON.parse(this.game.cache.text.get('TiledMap_Pack'));
     let tiledMap = tiledMapPack.pilot.files[0];
 

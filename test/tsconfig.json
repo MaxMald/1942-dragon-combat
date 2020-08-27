@@ -5,15 +5,6 @@
       "path": "./ambienceGenerator"
     },
     {
-      "path": "./bulletManager"
-    },
-    {
-      "path": "./dragonErrante"
-    },
-    {
-      "path": "./playerController"
-    },
-    {
       "path": "./pilot"
     }
   ]

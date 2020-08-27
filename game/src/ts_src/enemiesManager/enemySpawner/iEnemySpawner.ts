@@ -40,8 +40,9 @@ export interface IEnemySpawner
    * @param _actor : actor where the components are going to be assembled.
    * @param _x x position. 
    * @param _y y position.
+   * @param _data optional data.
    */
-  spawn(_actor : Ty_physicsActor, _x : number, _y : number)
+  spawn(_actor : Ty_physicsActor, _x : number, _y : number, _data ?: any)
   : void;
 
   /**
@@ -83,7 +84,7 @@ export interface IEnemySpawner
    * 
    * @param _actor Actor. 
    */
-  assemble(_actor : Ty_physicsActor)
+  assemble(_actor : Ty_physicsActor, _data ?: any)
   : void;
 
   /**

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <objecttypes>
  <objecttype name="Boss" color="#000000"/>
@@ -54,72 +53,21 @@
   <property name="explosion_radius" type="float" default="200"/>
   <property name="health" type="float" default="2"/>
   <property name="life_time" type="float" default="7"/>
+  <property name="mass" type="float" default="30"/>
   <property name="score" type="float" default="5"/>
-  <property name="speed" type="float" default="300"/>
+  <property name="speed" type="float" default="200"/>
   <property name="steer_force" type="float" default="200"/>
   <property name="texture_key" type="string" default="enemy_ranger"/>
  </objecttype>
-</objecttypes>
-=======
-<?xml version="1.0" encoding="UTF-8"?>
-<objecttypes>
- <objecttype name="Boss" color="#000000"/>
- <objecttype name="Cadmio" color="#ffff00"/>
- <objecttype name="CadmioConfig" color="#ffff00">
-  <property name="action" type="string" default="TRIPLE_SHOT"/>
-  <property name="direction_x" type="float" default="0"/>
-  <property name="direction_y" type="float" default="1"/>
-  <property name="speed" type="float" default="100"/>
-  <property name="texture" type="string" default="cadmio_fruit"/>
- </objecttype>
- <objecttype name="Canus" color="#ffaa00"/>
- <objecttype name="CanusConfig" color="#ffaa00">
-  <property name="action" type="string" default="SHIELD"/>
-  <property name="direction_x" type="float" default="0"/>
-  <property name="direction_y" type="float" default="1"/>
-  <property name="speed" type="float" default="1000"/>
-  <property name="texture" type="string" default="canus_fruit"/>
- </objecttype>
- <objecttype name="Errante" color="#a40002"/>
- <objecttype name="Guide Line" color="#00007f"/>
- <objecttype name="Hero_bulletStateNormal" color="#ff0000">
-  <property name="frecuency" type="int" default="8"/>
- </objecttype>
- <objecttype name="Hero_bulletStateTripleShot" color="#ff0000">
-  <property name="frecuency" type="int" default="6"/>
-  <property name="opening" type="float" default="30"/>
- </objecttype>
- <objecttype name="HeroBasicBulletConfig" color="#ff5500">
-  <property name="collision_damage" type="int" default="1"/>
-  <property name="speed" type="float" default="1200"/>
-  <property name="texture_key" type="string" default="fireball"/>
- </objecttype>
- <objecttype name="HeroPowerShieldConfig" color="#ff007f">
-  <property name="collision_damage" type="float" default="10000"/>
-  <property name="explosion_radius" type="float" default="600"/>
-  <property name="explosion_time" type="float" default="1"/>
-  <property name="max_radius" type="float" default="300"/>
-  <property name="min_radius" type="float" default="15"/>
-  <property name="shield_max_time" type="float" default="3"/>
-  <property name="texture_key" type="string" default="dragon_shield"/>
- </objecttype>
- <objecttype name="HeroTripleShotBulletConfig" color="#ff01ff">
-  <property name="collision_damage" type="int" default="1"/>
-  <property name="speed" type="float" default="1200"/>
-  <property name="texture_key" type="string" default="fireball"/>
- </objecttype>
- <objecttype name="Prop" color="#0303a4">
-  <property name="image" type="string"/>
- </objecttype>
- <objecttype name="Ranger" color="#ff5500">
+ <objecttype name="Sonic" color="#ffff00">
   <property name="collision_damage" type="float" default="5"/>
-  <property name="explosion_radius" type="float" default="200"/>
+  <property name="coord_x" type="float" default="0"/>
+  <property name="coord_y" type="float" default="0"/>
   <property name="health" type="float" default="2"/>
-  <property name="life_time" type="float" default="7"/>
-  <property name="score" type="float" default="5"/>
-  <property name="speed" type="float" default="300"/>
-  <property name="steer_force" type="float" default="200"/>
-  <property name="texture_key" type="string" default="enemy_ranger"/>
+  <property name="mass" type="float" default="30"/>
+  <property name="score" type="float" default="10"/>
+  <property name="speed" type="float" default="1300"/>
+  <property name="steer_force" type="float" default="20"/>
+  <property name="texture_key" type="string" default="enemy"/>
  </objecttype>
 </objecttypes>
->>>>>>> b087fff2b195171d241aa5e74bfb545efd9e78bd

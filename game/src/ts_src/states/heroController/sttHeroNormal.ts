@@ -63,6 +63,15 @@ implements ICmpState<CmpHeroController>
       this._m_controller.setActive('powerShield');
       return;
 
+      case DC_MESSAGE_ID.kRangerExplosionHit:
+
+      this._m_controller.getActor().sendMessage
+      (
+        DC_MESSAGE_ID.kHit,
+        _obj
+      );
+      return;
+
       default:
       return;
     }

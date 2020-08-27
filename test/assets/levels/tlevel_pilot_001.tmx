@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="349">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="371">
  <editorsettings>
   <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
@@ -20,7 +20,7 @@
   <object id="10" name="1920 px" type="Guide Line" x="0" y="1920" width="1088" height="1"/>
   <object id="11" name="0 px" type="Guide Line" x="0" y="0" width="1088" height="1"/>
  </objectgroup>
- <objectgroup id="7" name="ConfigurationObjects">
+ <objectgroup id="7" name="ConfigurationObjects" locked="1">
   <object id="322" name="Cadmio Config" type="CadmioConfig" gid="12" x="1228.02" y="9598.21" width="65" height="57">
    <properties>
     <property name="speed" type="float" value="50"/>
@@ -68,9 +68,8 @@
   <object id="347" x="1214.83" y="9001.83" width="500" height="41">
    <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Minions</text>
   </object>
-  <object id="348" name="Ranger" gid="9" x="1213.33" y="9126.33" width="65" height="57"/>
  </objectgroup>
- <objectgroup id="2" name="First Wave" locked="1" offsetx="-3" offsety="6">
+ <objectgroup id="2" name="Errantes" locked="1" offsetx="-3" offsety="6">
   <object id="2" name="Errante" type="Errante" x="188.788" y="9098.98">
    <point/>
   </object>
@@ -489,6 +488,60 @@
    <point/>
   </object>
   <object id="315" name="Errante" type="Errante" x="284" y="108">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="8" name="Rangers" locked="1">
+  <object id="352" name="Ranger" type="Ranger" x="532" y="8286.67">
+   <point/>
+  </object>
+  <object id="353" name="Ranger" type="Ranger" x="865.333" y="7904">
+   <point/>
+  </object>
+  <object id="354" name="Ranger" type="Ranger" x="218.667" y="7584">
+   <point/>
+  </object>
+  <object id="355" name="Ranger" type="Ranger" x="770.667" y="6794.67">
+   <point/>
+  </object>
+  <object id="356" name="Ranger" type="Ranger" x="302" y="6796">
+   <point/>
+  </object>
+  <object id="357" name="Ranger" type="Ranger" x="540" y="5960">
+   <point/>
+  </object>
+  <object id="358" name="Ranger" type="Ranger" x="750" y="1666">
+   <point/>
+  </object>
+  <object id="359" name="Ranger" type="Ranger" x="390" y="1666">
+   <point/>
+  </object>
+  <object id="360" name="Ranger" type="Ranger" x="537" y="9358">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="9" name="Sonics">
+  <object id="365" name="Sonic" type="Sonic" x="507.333" y="9534">
+   <point/>
+  </object>
+  <object id="366" name="Sonic" type="Sonic" x="565.333" y="9534.33">
+   <properties>
+    <property name="coord_x" type="float" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="369" name="Sonic" type="Sonic" x="521" y="8912.33">
+   <properties>
+    <property name="coord_x" type="float" value="1"/>
+    <property name="coord_y" type="float" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="370" name="Sonic" type="Sonic" x="577.333" y="8913.33">
+   <properties>
+    <property name="coord_x" type="float" value="0"/>
+    <property name="coord_y" type="float" value="1"/>
+   </properties>
    <point/>
   </object>
  </objectgroup>

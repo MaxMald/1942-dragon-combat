@@ -1,0 +1,13 @@
+{
+  "pilot" : 
+  {
+    "files" :
+    [
+      {
+        "type" : "image",
+        "key" : "enemy_ranger",
+        "url" : "images/ranger.png"
+      }
+    ]
+  }
+}

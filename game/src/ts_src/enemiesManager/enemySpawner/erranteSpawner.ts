@@ -1,6 +1,3 @@
-import { BulletManager } from "../../bulletManager/bulletManager";
-import { IBulletManager } from "../../bulletManager/iBulletManager";
-import { NullBulletManager } from "../../bulletManager/nullBulletManager";
 /**
  * HummingFlight Software Technologies - 2020
  *
@@ -11,6 +8,8 @@ import { NullBulletManager } from "../../bulletManager/nullBulletManager";
  * @since July-31-2020
  */
 
+import { IBulletManager } from "../../bulletManager/iBulletManager";
+import { NullBulletManager } from "../../bulletManager/nullBulletManager";
 import { DC_COMPONENT_ID, DC_ENEMY_TYPE, DC_MESSAGE_ID } from "../../commons/1942enums";
 import { Ty_physicsActor} from "../../commons/1942types";
 import { CmpEnemyHealth } from "../../components/cmpEnemyHealth";
@@ -92,7 +91,7 @@ export class ErranteSpawner implements IEnemySpawner
     return;
   }
 
-  spawn(_actor: Ty_physicsActor, _x: number, _y: number)
+  spawn(_actor: Ty_physicsActor, _x: number, _y: number, _data ?: any)
   : void 
   {
     this.assemble(_actor);    
@@ -129,7 +128,7 @@ export class ErranteSpawner implements IEnemySpawner
    * 
    * @param _actor Actor. 
    */
-  assemble(_actor : Ty_physicsActor)
+  assemble(_actor : Ty_physicsActor, _data ?: any)
   : void
   {
     // Health component.

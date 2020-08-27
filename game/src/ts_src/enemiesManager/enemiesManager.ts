@@ -269,8 +269,9 @@ export class EnemiesManager implements IEnemiesManager
    * @param _x position in x axis.
    * @param _y position in y axis.
    * @param _type enemy type.
+   * @param _data optional data.
    */
-  spawn(_x: number, _y: number, _type: DC_ENEMY_TYPE)
+  spawn(_x: number, _y: number, _type: DC_ENEMY_TYPE, _data ?: any)
   : void 
   {
     
@@ -283,7 +284,7 @@ export class EnemiesManager implements IEnemiesManager
 
       if(actor != null)
       {
-        hSpawner.get(_type).spawn(actor, _x, _y);
+        hSpawner.get(_type).spawn(actor, _x, _y, _data);
       }      
     }
     else
