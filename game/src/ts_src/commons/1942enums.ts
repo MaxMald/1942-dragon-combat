@@ -194,12 +194,7 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpPowerShieldController
    */
-  kPowerShieldComponent : 24 as 24,
-
-  /**
-   * CmpPowerShieldCollisionController
-   */
-  kPowerShieldCollisionController : 25 as 25
+  kPowerShieldComponent : 24 as 24
 });
 
 /****************************************************/
@@ -417,7 +412,21 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : Poser shield actor.
    */
-  kPowerShieldDesactivated : 527 as 527
+  kPowerShieldDesactivated : 527 as 527,
+
+  /**
+   * Collision with the hero.
+   * 
+   * msg : Actor of the Hero.
+   */
+  kCollisionWithHero : 528 as 528,
+
+  /**
+   * Hit by the ranger explosion.
+   * 
+   * msg : hit points.
+   */
+  kRangerExplosionHit : 529 as 529
 });
 
 /****************************************************/
@@ -649,5 +658,15 @@ export const DC_CONFIG = Object.freeze
   /**
    * Hero power shield config object.
    */
-  kHeroPowerShield : 7 as 7
+  kHeroPowerShield : 7 as 7,
+
+  /**
+   * Ranger Configuration object.
+   */
+  kRanger : 8 as 8,
+
+  /**
+   * Ranger Spawner config object.
+   */
+  kRangerSpawner : 9 as 9
 });

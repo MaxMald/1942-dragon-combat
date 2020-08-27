@@ -130,7 +130,7 @@
                         {
                          "name":"speed",
                          "type":"float",
-                         "value":200
+                         "value":1000
                         }, 
                         {
                          "name":"texture",
@@ -168,7 +168,7 @@
                         {
                          "name":"speed",
                          "type":"float",
-                         "value":200
+                         "value":1000
                         }, 
                         {
                          "name":"texture",
@@ -229,7 +229,7 @@
                         {
                          "name":"frecuency",
                          "type":"int",
-                         "value":3
+                         "value":7
                         }],
                  "rotation":0,
                  "type":"Hero_bulletStateNormal",
@@ -402,18 +402,6 @@
                  "width":500,
                  "x":1214.83,
                  "y":9001.83
-                }, 
-                {
-                 "gid":9,
-                 "height":57,
-                 "id":348,
-                 "name":"Ranger",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":65,
-                 "x":1213.33,
-                 "y":9126.33
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -424,7 +412,7 @@
         {
          "draworder":"topdown",
          "id":2,
-         "name":"First Wave",
+         "name":"Errantes",
          "objects":[
                 {
                  "height":0,
@@ -1412,6 +1400,18 @@
                 }, 
                 {
                  "height":0,
+                 "id":238,
+                 "name":"Errante",
+                 "point":true,
+                 "rotation":0,
+                 "type":"Errante",
+                 "visible":true,
+                 "width":0,
+                 "x":542.667,
+                 "y":9442.67
+                }, 
+                {
+                 "height":0,
                  "id":252,
                  "name":"Errante",
                  "point":true,
@@ -2093,18 +2093,6 @@
                  "width":0,
                  "x":284,
                  "y":108
-                }, 
-                {
-                 "height":0,
-                 "id":349,
-                 "name":"Errante",
-                 "point":true,
-                 "rotation":0,
-                 "type":"Errante",
-                 "visible":true,
-                 "width":0,
-                 "x":540.540540540541,
-                 "y":9437.26335030683
                 }],
          "offsetx":-3,
          "offsety":6,
@@ -2116,9 +2104,566 @@
         }, 
         {
          "draworder":"topdown",
+         "id":8,
+         "name":"Rangers",
+         "objects":[
+                {
+                 "height":0,
+                 "id":352,
+                 "name":"Ranger",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"explosion_radius",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"life_time",
+                         "type":"float",
+                         "value":7
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"enemy_ranger"
+                        }],
+                 "rotation":0,
+                 "type":"Ranger",
+                 "visible":true,
+                 "width":0,
+                 "x":532,
+                 "y":8286.66666666667
+                }, 
+                {
+                 "height":0,
+                 "id":353,
+                 "name":"Ranger",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"explosion_radius",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"life_time",
+                         "type":"float",
+                         "value":7
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"enemy_ranger"
+                        }],
+                 "rotation":0,
+                 "type":"Ranger",
+                 "visible":true,
+                 "width":0,
+                 "x":865.333333333333,
+                 "y":7904
+                }, 
+                {
+                 "height":0,
+                 "id":354,
+                 "name":"Ranger",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"explosion_radius",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"life_time",
+                         "type":"float",
+                         "value":7
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"enemy_ranger"
+                        }],
+                 "rotation":0,
+                 "type":"Ranger",
+                 "visible":true,
+                 "width":0,
+                 "x":218.666666666667,
+                 "y":7584
+                }, 
+                {
+                 "height":0,
+                 "id":355,
+                 "name":"Ranger",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"explosion_radius",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"life_time",
+                         "type":"float",
+                         "value":7
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"enemy_ranger"
+                        }],
+                 "rotation":0,
+                 "type":"Ranger",
+                 "visible":true,
+                 "width":0,
+                 "x":770.666666666667,
+                 "y":6794.66666666667
+                }, 
+                {
+                 "height":0,
+                 "id":356,
+                 "name":"Ranger",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"explosion_radius",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"life_time",
+                         "type":"float",
+                         "value":7
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"enemy_ranger"
+                        }],
+                 "rotation":0,
+                 "type":"Ranger",
+                 "visible":true,
+                 "width":0,
+                 "x":302,
+                 "y":6796
+                }, 
+                {
+                 "height":0,
+                 "id":357,
+                 "name":"Ranger",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"explosion_radius",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"life_time",
+                         "type":"float",
+                         "value":7
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"enemy_ranger"
+                        }],
+                 "rotation":0,
+                 "type":"Ranger",
+                 "visible":true,
+                 "width":0,
+                 "x":540,
+                 "y":5960
+                }, 
+                {
+                 "height":0,
+                 "id":358,
+                 "name":"Ranger",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"explosion_radius",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"life_time",
+                         "type":"float",
+                         "value":7
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"enemy_ranger"
+                        }],
+                 "rotation":0,
+                 "type":"Ranger",
+                 "visible":true,
+                 "width":0,
+                 "x":750,
+                 "y":1666
+                }, 
+                {
+                 "height":0,
+                 "id":359,
+                 "name":"Ranger",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"explosion_radius",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"life_time",
+                         "type":"float",
+                         "value":7
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"enemy_ranger"
+                        }],
+                 "rotation":0,
+                 "type":"Ranger",
+                 "visible":true,
+                 "width":0,
+                 "x":390,
+                 "y":1666
+                }, 
+                {
+                 "height":0,
+                 "id":360,
+                 "name":"Ranger",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"explosion_radius",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"life_time",
+                         "type":"float",
+                         "value":7
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"enemy_ranger"
+                        }],
+                 "rotation":0,
+                 "type":"Ranger",
+                 "visible":true,
+                 "width":0,
+                 "x":537,
+                 "y":9358
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":6,
          "name":"Items",
          "objects":[
+                {
+                 "gid":1,
+                 "height":59,
+                 "id":321,
+                 "name":"Cadmio",
+                 "rotation":0,
+                 "type":"Cadmio",
+                 "visible":true,
+                 "width":59,
+                 "x":781.652,
+                 "y":8926.5
+                }, 
+                {
+                 "gid":2,
+                 "height":59,
+                 "id":335,
+                 "name":"Canus",
+                 "rotation":0,
+                 "type":"Canus",
+                 "visible":true,
+                 "width":59,
+                 "x":232.167,
+                 "y":8931.17
+                }, 
                 {
                  "gid":1,
                  "height":59,
@@ -2142,42 +2687,6 @@
                  "width":59,
                  "x":809.894,
                  "y":7515.95
-                }, 
-                {
-                 "gid":1,
-                 "height":59,
-                 "id":350,
-                 "name":"Cadmio",
-                 "rotation":0,
-                 "type":"Cadmio",
-                 "visible":true,
-                 "width":59,
-                 "x":516.718487394958,
-                 "y":9260.03399541635
-                }, 
-                {
-                 "gid":1,
-                 "height":62.819709702062,
-                 "id":351,
-                 "name":"Cadmio",
-                 "rotation":0,
-                 "type":"Cadmio",
-                 "visible":true,
-                 "width":59,
-                 "x":784.098166539343,
-                 "y":9214.1974789916
-                }, 
-                {
-                 "gid":1,
-                 "height":59,
-                 "id":352,
-                 "name":"Cadmio",
-                 "rotation":0,
-                 "type":"Cadmio",
-                 "visible":true,
-                 "width":59,
-                 "x":234.059969442322,
-                 "y":9176.00038197097
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2199,8 +2708,8 @@
                  "type":"Boss",
                  "visible":true,
                  "width":0,
-                 "x":549.951505701725,
-                 "y":500
+                 "x":560.061,
+                 "y":1935.45
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2208,8 +2717,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":8,
- "nextobjectid":353,
+ "nextlayerid":9,
+ "nextobjectid":365,
  "orientation":"orthogonal",
  "properties":[
         {

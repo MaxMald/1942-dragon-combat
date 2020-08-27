@@ -89,6 +89,7 @@ export class CnfCanus
         ++index;
       }
     }
+    return;
   }
 
   /**
