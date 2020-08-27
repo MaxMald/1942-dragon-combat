@@ -1,13 +1,13 @@
 {
   "speed" : 500,
 
-  "fire_rate" : 0.5,
+  "fire_rate" : 0.2,
 
-  "collision_damage" : 1,
+  "collision_damage" : 5,
 
-  "health" : 2,
+  "health" : 5,
 
-  "score" : 1,
+  "score" : 5,
 
   "texture_key" : "enemy",
 
