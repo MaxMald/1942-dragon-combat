@@ -20,6 +20,8 @@ import { RangerSpawner } from "../../../../../game/src/ts_src/enemiesManager/ene
 import { CnfRangerConfig } from "../../../../../game/src/ts_src/configObjects/cnfRangerConfig";
 import { DC_CONFIG } from "../../../../../game/src/ts_src/commons/1942enums";
 import { CnfRangerSpawner } from "../../../../../game/src/ts_src/configObjects/cnfRangerSpawnerConfig";
+import { SonicSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/sonicSpawner";
+import { CnfSonicSpawner } from "../../../../../game/src/ts_src/configObjects/cnfSonicSpawner";
   
 export class Test extends Phaser.Scene
 {
@@ -171,6 +173,18 @@ export class Test extends Phaser.Scene
     rangerSpawner.init(rangerSpawnerConfig);
 
     enemiesManager.addSpawner(rangerSpawner);
+
+    ///////////////////////////////////
+    // Spawner : Sonic
+
+    let sonicSpawner : SonicSpawner = SonicSpawner.Create();
+    let sonicSpawnerConfig = levelConfiguration.getConfig<CnfSonicSpawner>
+    (
+      DC_CONFIG.kSonicSpawner
+    );
+    sonicSpawner.init(sonicSpawnerConfig);
+
+    enemiesManager.addSpawner(sonicSpawner);
 
     ///////////////////////////////////
     // Hero's Bullet Manager

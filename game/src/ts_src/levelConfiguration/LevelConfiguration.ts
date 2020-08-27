@@ -20,6 +20,7 @@ import { CnfHeroTripleShotBullet } from "../configObjects/cnfHeroTripleShotBulle
 import { CnfItemManager } from "../configObjects/cnfItemManager";
 import { CnfPowerShield } from "../configObjects/cnfPowerShield";
 import { CnfRangerSpawner } from "../configObjects/cnfRangerSpawnerConfig";
+import { CnfSonicSpawner } from "../configObjects/cnfSonicSpawner";
 import { IConfigObject } from "../configObjects/IConfigObject";
 import { GameManager } from "../gameManager/gameManager";
 import { ILevelConfiguration } from "./ILevelConfiguration";
@@ -60,6 +61,7 @@ implements ILevelConfiguration
     this.addConfig(new CnfHeroTripleShotBullet());
     this.addConfig(new CnfPowerShield());
     this.addConfig(new CnfRangerSpawner());
+    this.addConfig(new CnfSonicSpawner());
 
     return;
   }

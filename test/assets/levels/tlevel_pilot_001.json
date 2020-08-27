@@ -2163,7 +2163,7 @@
                  "visible":true,
                  "width":0,
                  "x":532,
-                 "y":8286.66666666667
+                 "y":8286.67
                 }, 
                 {
                  "height":0,
@@ -2220,7 +2220,7 @@
                  "type":"Ranger",
                  "visible":true,
                  "width":0,
-                 "x":865.333333333333,
+                 "x":865.333,
                  "y":7904
                 }, 
                 {
@@ -2278,7 +2278,7 @@
                  "type":"Ranger",
                  "visible":true,
                  "width":0,
-                 "x":218.666666666667,
+                 "x":218.667,
                  "y":7584
                 }, 
                 {
@@ -2336,8 +2336,8 @@
                  "type":"Ranger",
                  "visible":true,
                  "width":0,
-                 "x":770.666666666667,
-                 "y":6794.66666666667
+                 "x":770.667,
+                 "y":6794.67
                 }, 
                 {
                  "height":0,
@@ -2637,6 +2637,249 @@
         }, 
         {
          "draworder":"topdown",
+         "id":9,
+         "name":"Sonics",
+         "objects":[
+                {
+                 "height":0,
+                 "id":365,
+                 "name":"Sonic",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"coord_x",
+                         "type":"float",
+                         "value":0
+                        }, 
+                        {
+                         "name":"coord_y",
+                         "type":"float",
+                         "value":0
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"float",
+                         "value":10
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":1300
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":20
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"enemy"
+                        }],
+                 "rotation":0,
+                 "type":"Sonic",
+                 "visible":true,
+                 "width":0,
+                 "x":507.333333333333,
+                 "y":9534
+                }, 
+                {
+                 "height":0,
+                 "id":366,
+                 "name":"Sonic",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"coord_x",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"coord_y",
+                         "type":"float",
+                         "value":0
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"float",
+                         "value":10
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":1300
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":20
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"enemy"
+                        }],
+                 "rotation":0,
+                 "type":"Sonic",
+                 "visible":true,
+                 "width":0,
+                 "x":565.333333333333,
+                 "y":9534.33333333333
+                }, 
+                {
+                 "height":0,
+                 "id":369,
+                 "name":"Sonic",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"coord_x",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"coord_y",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"float",
+                         "value":10
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":1300
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":20
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"enemy"
+                        }],
+                 "rotation":0,
+                 "type":"Sonic",
+                 "visible":true,
+                 "width":0,
+                 "x":521.000333333333,
+                 "y":8912.33333333333
+                }, 
+                {
+                 "height":0,
+                 "id":370,
+                 "name":"Sonic",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"coord_x",
+                         "type":"float",
+                         "value":0
+                        }, 
+                        {
+                         "name":"coord_y",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"float",
+                         "value":10
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":1300
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":20
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"enemy"
+                        }],
+                 "rotation":0,
+                 "type":"Sonic",
+                 "visible":true,
+                 "width":0,
+                 "x":577.333333333333,
+                 "y":8913.33333333333
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":6,
          "name":"Items",
          "objects":[
@@ -2717,8 +2960,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":9,
- "nextobjectid":365,
+ "nextlayerid":10,
+ "nextobjectid":371,
  "orientation":"orthogonal",
  "properties":[
         {
