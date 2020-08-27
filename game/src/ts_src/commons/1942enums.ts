@@ -668,5 +668,15 @@ export const DC_CONFIG = Object.freeze
   /**
    * Ranger Spawner config object.
    */
-  kRangerSpawner : 9 as 9
+  kRangerSpawner : 9 as 9,
+
+  /**
+   * Sonic configuration object.
+   */
+  kSonic : 10 as 10,
+
+  /**
+   * Sonic Spawner config object.
+   */
+  kSonicSpawner : 10 as 10
 });

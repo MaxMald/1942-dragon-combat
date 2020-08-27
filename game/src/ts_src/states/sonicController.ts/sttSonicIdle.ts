@@ -3,18 +3,18 @@
  *
  * @summary 
  *
- * @file sttRangerIdle.ts
+ * @file sttSonicIdle.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
  * @since August-25-2020
  */
 
 import { Ty_physicsActor } from "../../commons/1942types";
-import { CmpRangerController } from "../../components/cmpRangerController";
-import { CnfRangerConfig } from "../../configObjects/cnfRangerConfig";
-import { IRangerState } from "./iRangerState";
+import { CmpSonicController } from "../../components/cmpSonicController";
+import { CnfSonic } from "../../configObjects/cnfSonic";
+import { ISonicState } from "./iSonicState";
 
-export class SttRangerIdle 
-implements IRangerState
+export class SttSonicIdle 
+implements ISonicState
 {
   /****************************************************/
   /* Public                                           */
@@ -28,7 +28,7 @@ implements IRangerState
 
   init
   ( 
-    _controller : CmpRangerController, 
+    _controller : CmpSonicController, 
     _actor : Ty_physicsActor
   ) 
   : void
@@ -38,7 +38,7 @@ implements IRangerState
     return;
   }
 
-  setConfig(_config : CnfRangerConfig)
+  setConfig(_config : CnfSonic)
   : void
   {
     this._m_config = _config;
@@ -76,9 +76,9 @@ implements IRangerState
   /* Private                                          */
   /****************************************************/
   
-  private _m_config : CnfRangerConfig;
+  private _m_config : CnfSonic;
 
-  private _m_controller : CmpRangerController;
+  private _m_controller : CmpSonicController;
 
   private _m_actor : Ty_physicsActor;
 }

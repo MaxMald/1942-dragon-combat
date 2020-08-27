@@ -3,26 +3,26 @@
  *
  * @summary 
  *
- * @file sttRangerPursuit.ts
+ * @file sttSonicPursuit.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
  * @since August-25-2020
  */
 
 import { DC_MESSAGE_ID } from "../../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite, V3 } from "../../commons/1942types";
-import { CmpRangerController } from "../../components/cmpRangerController";
-import { CnfRangerConfig } from "../../configObjects/cnfRangerConfig";
+import { CmpSonicController } from "../../components/cmpSonicController";
+import { CnfSonic } from "../../configObjects/cnfSonic";
 import { GameManager } from "../../gameManager/gameManager";
 import { IPlayerController } from "../../playerController/IPlayerController";
-import { IRangerState } from "./iRangerState";
+import { ISonicState } from "./iSonicState";
 
-export class SttRangerPursuit 
-implements IRangerState
+export class SttSonicPursuit 
+implements ISonicState
 {
   /****************************************************/
   /* Public                                           */
   /****************************************************/
-
+  
   constructor()
   {
     this._m_gameManager = GameManager.GetInstance();
@@ -34,8 +34,12 @@ implements IRangerState
     this._m_steerForce = new Phaser.Math.Vector3();
     return;
   }
-  
-  init( _controller : CmpRangerController, _actor : Ty_physicsActor) 
+
+  init
+  ( 
+    _controller : CmpSonicController, 
+    _actor : Ty_physicsActor
+  ) 
   : void
   {
     this._m_controller = _controller;
@@ -43,29 +47,34 @@ implements IRangerState
 
     let playerControl : IPlayerController 
       = this._m_gameManager.getPlayerController(); 
-    this._m_target = playerControl.getPlayer();
-
-    this._m_direction.set(0.0, -1.0);
+    this._m_target = playerControl.getPlayer();    
     return;
   }
 
-  setConfig(_config : CnfRangerConfig)
+  setConfig(_config : CnfSonic)
   : void
   {
     this._m_config = _config;
-    return;
   }
 
   onEnter()
   : void 
-  {
-    this._m_time = 0.0;
+  { 
+    let heroSprite = this._m_target.getWrappedInstance();
+    let selfSprite = this._m_actor.getWrappedInstance();
+
+    this._m_direction.set
+    (
+      heroSprite.x - selfSprite.x,
+      heroSprite.y - selfSprite.y
+    );
+    this._m_direction.normalize();    
     return;
   }
 
   onExit()
   : void 
-  {
+  { 
     return;
   }
 
@@ -74,19 +83,20 @@ implements IRangerState
   {
     switch(_id)
     {
+      case DC_MESSAGE_ID.kDesactive:
+
+      this._explode();
+      return;
+
       case DC_MESSAGE_ID.kKill :
 
-      GameManager.ReceiveMessage
-      (
-        DC_MESSAGE_ID.kAddScorePoints,
-        this._m_config.score 
-      );
-
+      this._onKill();
       this._explode();
       return;
 
       case DC_MESSAGE_ID.kCollisionWithHero:
 
+      this._onHeroCollision();
       this._explode();
       return;
 
@@ -100,16 +110,7 @@ implements IRangerState
   {
     let deltaTime = this._m_gameManager.m_dt;
 
-    let time = this._m_time + deltaTime;
-    this._m_time = time;
-
     let config = this._m_config;
-
-    if(time >= config.life_time)
-    {
-      this._explode();
-      return;
-    }
 
     // Pursuit player
 
@@ -224,29 +225,32 @@ implements IRangerState
   /* Private                                          */
   /****************************************************/
 
-  private _explode()
+  private _onKill()
+  : void
+  {
+    GameManager.ReceiveMessage
+    (
+      DC_MESSAGE_ID.kAddScorePoints,
+      this._m_config.score 
+    );
+    return;
+  }
+
+  private _onHeroCollision()
   : void
   {
     let hero = this._m_target;
-    let heroSprite = this._m_target.getWrappedInstance();
-    let selfSprite = this._m_actor.getWrappedInstance();
-
-    let vecToPlayer = new Phaser.Math.Vector2
+    hero.sendMessage
     (
-      heroSprite.x - selfSprite.x,
-      heroSprite.y - selfSprite.y
+      DC_MESSAGE_ID.kHit,
+      this._m_config.collision_damage
     );
-
-    let config = this._m_config;
-    if(vecToPlayer.length() <= config.explosion_radius)
-    {
-      this._m_target.sendMessage
-      (
-        DC_MESSAGE_ID.kRangerExplosionHit,
-        config.collision_damage
-      );
-    }
-
+    return;
+  }
+  
+  private _explode()
+  : void
+  {
     this._m_controller.desactiveActor();
     this._m_controller.setActiveState('idle');
     return;
@@ -260,15 +264,13 @@ implements IRangerState
 
   private _m_steerForce : V3;
 
-  private _m_time : number;
-
   private _m_gameManager : GameManager;
 
   private _m_target : Ty_physicsActor;
 
-  private _m_config : CnfRangerConfig;
+  private _m_config : CnfSonic;
 
-  private _m_controller : CmpRangerController;
+  private _m_controller : CmpSonicController;
 
   private _m_actor : Ty_physicsActor;
 }
