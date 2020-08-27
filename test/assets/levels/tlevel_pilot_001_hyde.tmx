@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="16" height="160" tilewidth="68" tileheight="60" infinite="0" nextlayerid="10" nextobjectid="482">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="16" height="160" tilewidth="68" tileheight="60" infinite="0" nextlayerid="10" nextobjectid="578">
  <editorsettings>
-  <export target="tlevel_pilot_001.json" format="json"/>
+  <export target="tlevel_pilot_001_hyde.json" format="json"/>
  </editorsettings>
  <properties>
   <property name="camera_speed" type="float" value="100"/>
@@ -68,7 +68,7 @@
   </object>
   <object id="341" name="Basic" type="HeroBasicBulletConfig" gid="9" x="1214.67" y="9293" width="65" height="57">
    <properties>
-    <property name="collision_damage" type="int" value="1"/>
+    <property name="collision_damage" type="int" value="5"/>
     <property name="speed" type="float" value="1000"/>
    </properties>
   </object>
@@ -91,25 +91,117 @@
     <property name="shield_max_time" type="float" value="3"/>
    </properties>
   </object>
-  <object id="347" x="1214.83" y="9001.83" width="500" height="41">
-   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Minions</text>
-  </object>
-  <object id="348" name="Ranger" gid="9" x="1213.33" y="9126.33" width="65" height="57"/>
  </objectgroup>
  <objectgroup id="2" name="First Wave" offsetx="-3" offsety="6">
-  <object id="477" name="Errante" type="Errante" x="816" y="9240">
+  <object id="529" name="Ranger" type="Ranger" x="544" y="8880">
    <point/>
   </object>
-  <object id="478" name="Errante" type="Errante" x="816" y="9060">
+  <object id="541" name="Errante" type="Errante" x="136" y="8638.49">
    <point/>
   </object>
-  <object id="479" name="Errante" type="Errante" x="816" y="8880">
+  <object id="542" name="Errante" type="Errante" x="405.722" y="8579">
    <point/>
   </object>
-  <object id="480" name="Errante" type="Errante" x="816" y="8700">
+  <object id="543" name="Errante" type="Errante" x="945.167" y="8460">
    <point/>
   </object>
-  <object id="481" name="Errante" type="Errante" x="816" y="8520">
+  <object id="544" name="Errante" type="Errante" x="675.445" y="8519.5">
+   <point/>
+  </object>
+  <object id="545" name="Errante" type="Errante" x="201.722" y="7979">
+   <point/>
+  </object>
+  <object id="546" name="Errante" type="Errante" x="881.722" y="7979">
+   <point/>
+  </object>
+  <object id="547" name="Errante" type="Errante" x="541.722" y="7979">
+   <point/>
+  </object>
+  <object id="548" name="Errante" type="Errante" x="201.722" y="8099">
+   <point/>
+  </object>
+  <object id="549" name="Errante" type="Errante" x="201.722" y="8159">
+   <point/>
+  </object>
+  <object id="550" name="Errante" type="Errante" x="201.722" y="8219">
+   <point/>
+  </object>
+  <object id="551" name="Errante" type="Errante" x="201.722" y="8279">
+   <point/>
+  </object>
+  <object id="552" name="Errante" type="Errante" x="204" y="7799.49">
+   <point/>
+  </object>
+  <object id="553" name="Errante" type="Errante" x="473.722" y="7740">
+   <point/>
+  </object>
+  <object id="554" name="Errante" type="Errante" x="1013.17" y="7621">
+   <point/>
+  </object>
+  <object id="555" name="Errante" type="Errante" x="743.445" y="7680.5">
+   <point/>
+  </object>
+  <object id="556" name="Errante" type="Errante" x="269.722" y="7140">
+   <point/>
+  </object>
+  <object id="557" name="Errante" type="Errante" x="949.722" y="7140">
+   <point/>
+  </object>
+  <object id="558" name="Errante" type="Errante" x="609.722" y="7140">
+   <point/>
+  </object>
+  <object id="559" name="Errante" type="Errante" x="269.722" y="7260">
+   <point/>
+  </object>
+  <object id="560" name="Errante" type="Errante" x="269.722" y="7320">
+   <point/>
+  </object>
+  <object id="561" name="Errante" type="Errante" x="269.722" y="7380">
+   <point/>
+  </object>
+  <object id="562" name="Errante" type="Errante" x="269.722" y="7440">
+   <point/>
+  </object>
+  <object id="563" name="Errante" type="Errante" x="204" y="7019.49">
+   <point/>
+  </object>
+  <object id="564" name="Errante" type="Errante" x="473.722" y="6960">
+   <point/>
+  </object>
+  <object id="565" name="Errante" type="Errante" x="1013.17" y="6841">
+   <point/>
+  </object>
+  <object id="566" name="Errante" type="Errante" x="743.445" y="6900.5">
+   <point/>
+  </object>
+  <object id="567" name="Errante" type="Errante" x="269.722" y="6360">
+   <point/>
+  </object>
+  <object id="568" name="Errante" type="Errante" x="949.722" y="6360">
+   <point/>
+  </object>
+  <object id="569" name="Errante" type="Errante" x="609.722" y="6360">
+   <point/>
+  </object>
+  <object id="570" name="Errante" type="Errante" x="269.722" y="6480">
+   <point/>
+  </object>
+  <object id="571" name="Errante" type="Errante" x="269.722" y="6540">
+   <point/>
+  </object>
+  <object id="572" name="Errante" type="Errante" x="269.722" y="6600">
+   <point/>
+  </object>
+  <object id="573" name="Errante" type="Errante" x="269.722" y="6660">
+   <point/>
+  </object>
+  <object id="574" name="Ranger" type="Ranger" x="544" y="8280">
+   <point/>
+  </object>
+  <object id="575" name="Ranger" type="Ranger" x="544" y="7740">
+   <point/>
+  </object>
+  <object id="577" name="Ranger" type="Ranger" x="544" y="7200">
    <point/>
   </object>
  </objectgroup>

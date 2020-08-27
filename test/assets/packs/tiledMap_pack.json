@@ -4,7 +4,7 @@
       {
         "type" : "tilemapJSON",
         "key" : "map_pilot",
-        "url" : "levels/tlevel_pilot_001.json"
+        "url" : "levels/tlevel_pilot_001_hyde.json"
       }
     ]
   }
