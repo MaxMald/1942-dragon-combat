@@ -9,7 +9,7 @@
  */
 
 import { DC_MESSAGE_ID } from "../../commons/1942enums";
-import { Ty_physicsActor, Ty_physicsSprite, V3 } from "../../commons/1942types";
+import { Point, Ty_physicsActor, Ty_physicsSprite, V3 } from "../../commons/1942types";
 import { CmpRangerController } from "../../components/cmpRangerController";
 import { CnfRangerConfig } from "../../configObjects/cnfRangerConfig";
 import { GameManager } from "../../gameManager/gameManager";
@@ -32,6 +32,10 @@ implements IRangerState
     this._m_currentForce = new Phaser.Math.Vector3();
     this._m_desireForce = new Phaser.Math.Vector3();
     this._m_steerForce = new Phaser.Math.Vector3();
+
+    this._m_cam_p1 = new Phaser.Geom.Point();
+    this._m_cam_p2 = new Phaser.Geom.Point();
+
     return;
   }
   
@@ -46,6 +50,10 @@ implements IRangerState
     this._m_target = playerControl.getPlayer();
 
     this._m_direction.set(0.0, -1.0);
+
+    let canvas = this._m_gameManager.getGameScene().game.canvas;
+    this._m_cam_p2.setTo(canvas.width, canvas.height);
+
     return;
   }
 
@@ -100,8 +108,22 @@ implements IRangerState
   {
     let deltaTime = this._m_gameManager.m_dt;
 
-    let time = this._m_time + deltaTime;
+    let time : number
+    
+    // Count down only if the ranger is inside the camera canvas.
+
+    if(this._insideCanvas())
+    {
+      time = this._m_time + deltaTime;
+    }
+    else
+    {
+      time = this._m_time;
+    }
+    
     this._m_time = time;
+
+    // Explode if the time reach the max time.
 
     let config = this._m_config;
 
@@ -251,6 +273,18 @@ implements IRangerState
     this._m_controller.setActiveState('idle');
     return;
   }
+
+  private _insideCanvas()
+  : boolean
+  {
+    let p1 = this._m_cam_p1;
+    let p2 = this._m_cam_p2;
+
+    let sprite = this._m_actor.getWrappedInstance();
+
+    return (p1.x < sprite.x && sprite.x < p2.x) 
+           && (p1.y < sprite.y && sprite.y < p2.y);
+  }
   
   private _m_direction : V3;
 
@@ -271,4 +305,8 @@ implements IRangerState
   private _m_controller : CmpRangerController;
 
   private _m_actor : Ty_physicsActor;
+
+  private _m_cam_p1 : Point;
+
+  private _m_cam_p2 : Point;
 }

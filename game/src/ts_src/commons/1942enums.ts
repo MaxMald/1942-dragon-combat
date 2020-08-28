@@ -214,7 +214,12 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpArponBulletController
    */
-  kArponBulletController : 27 as 27
+  kArponBulletController : 27 as 27,
+
+  /**
+   * CmpUIPowerShieldController
+   */
+  kUIPowerShieldController : 28 as 28
 });
 
 /****************************************************/
@@ -460,7 +465,19 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : texture key (string).
    */
-  kSetTexture : 531 as 531
+  kSetTexture : 531 as 531,
+
+  /**
+   * The powershield had been explode.
+   * 
+   * msg : CmpPowerShieldController
+   */
+  kPowerShieldExplodes : 532 as 532,
+
+  /**
+   * Desctive the power ups.
+   */
+  kDesactivePowerUps : 533 as 533
 });
 
 /****************************************************/
@@ -737,5 +754,20 @@ export const DC_CONFIG = Object.freeze
   /**
    * Arpon Bullet Spanwer config object.
    */
-  kArponBulletSpawner : 14 as 14
+  kArponBulletSpawner : 14 as 14,
+
+  /**
+   * Errante enemy config object.
+   */
+  kErrante : 15 as 15,
+
+  /**
+   * Errante Spanwer config object.
+   */
+  kErranteSpawner : 16 as 16,
+
+  /**
+   * Enemy basic bullet config object.
+   */
+  kEnemyBasicBullet : 17 as 17
 });

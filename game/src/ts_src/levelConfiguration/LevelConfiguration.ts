@@ -18,6 +18,8 @@ import { CnfBulletStateNormal } from "../configObjects/cnfBulletStateNormal";
 import { CnfBulletStateTriple } from "../configObjects/cnfBulletStateTriple";
 import { CnfCadmio } from "../configObjects/cnfCadmio";
 import { CnfCanus } from "../configObjects/cnfCanus";
+import { CnfEnemyBasicBullet } from "../configObjects/cnfEnemyBasicBullet";
+import { CnfErranteSpawner } from "../configObjects/cnfErranteSpawner";
 import { CnfHeroBasicBullet } from "../configObjects/cnfHeroBasicBullet";
 import { CnfHeroTripleShotBullet } from "../configObjects/cnfHeroTripleShotBullet";
 import { CnfItemManager } from "../configObjects/cnfItemManager";
@@ -68,6 +70,8 @@ implements ILevelConfiguration
     this.addConfig(new CnfArponShipSpawner());
     this.addConfig(new CnfArponBullet());
     this.addConfig(new CnfArponBulletSpawner());
+    this.addConfig(new CnfErranteSpawner());
+    this.addConfig(new CnfEnemyBasicBullet());
 
     return;
   }

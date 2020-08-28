@@ -34,7 +34,7 @@
     "../../game/src/ts_src/bossManager/**/*",
     "../../game/src/ts_src/pools/**/*",
     "../../game/src/ts_src/itemManager/**/*",
-    "../../game/src/ts_src/levelConfiguration/**/*"
+    "../../game/src/ts_src/levelConfiguration/**/*", "../../game/src/ts_src/configObjects/enemyBasicBulletConfig.ts"
   ],
 
   "exclude": 

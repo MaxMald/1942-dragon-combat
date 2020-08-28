@@ -74,7 +74,7 @@ implements IBaseState
       }
 
       let force = this._m_bulletForce;
-      force.setTo(1200.0, 0.0);
+      force.setTo(1.0, 0.0);
 
       let cosA = Math.cos(angle);
       let sinA = Math.sin(angle);
@@ -89,13 +89,14 @@ implements IBaseState
       (
         this._m_spiderSprite.x,
         this._m_spiderSprite.y + 100,
-        DC_BULLET_TYPE.kSimple,
+        DC_BULLET_TYPE.kEnemyBasic,
         force
       )
 
       this._m_angle = angle;
       time = 0;
     }
+    
     this._m_t = time;
     return;
   }

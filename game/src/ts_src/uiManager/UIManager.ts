@@ -12,13 +12,17 @@ import { BaseActor } from "../actors/baseActor";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_Image, Ty_Text } from "../commons/1942types";
 import { CmpActorGroupImage } from "../components/cmpActorGroup";
+import { CmpHeroController } from "../components/cmpHeroController";
 import { CmpHeroData } from "../components/cmpHeroData";
+import { CmpPowerShieldController } from "../components/cmpPowerShieldController";
 import { CmpUIBossHealthControl } from "../components/cmpUIBossHealthControl";
 import { CmpUIHealthController } from "../components/cmpUIHealthController";
+import { CmpUIPowerShieldController } from "../components/cmpUIPowerShieldController";
 import { CmpUIScoreController } from "../components/cmpUIScoreController";
 import { FCUIBossHealth } from "../factories/fcUIBossHealth";
 import { FcUIHealth } from "../factories/fcUIHealth";
 import { FcUIMessage } from "../factories/fcUIMessage";
+import { FcUIPowerShield } from "../factories/fcUIPowerShield";
 import { FcUIScore } from "../factories/fcUIScore";
 import { GameManager } from "../gameManager/gameManager";
 import { IUIManager } from "./IUIManager";
@@ -101,6 +105,54 @@ implements IUIManager
     );
 
     ///////////////////////////////////
+    // Heros's Power Shield
+
+    let powerShieldUI = FcUIPowerShield.Create(_scene);
+    this._m_powerShield = powerShieldUI;
+
+    let heroController = hero.getComponent<CmpHeroController>
+    (
+      DC_COMPONENT_ID.kHeroController
+    );
+
+    let powerShield = heroController.getPowerShieldActor();
+
+    let powerShieldController = powerShield.getComponent<CmpPowerShieldController>
+    (
+      DC_COMPONENT_ID.kPowerShieldComponent
+    );
+
+    let powerShieldUIController 
+      = powerShieldUI.getComponent<CmpUIPowerShieldController>
+      (
+        DC_COMPONENT_ID.kUIPowerShieldController
+      )
+
+    powerShieldController.on
+    (
+      'active',
+      'powerShieldUI',
+      powerShieldUIController.onPowerShieldActivated,
+      powerShieldUIController
+    );
+
+    powerShieldController.on
+    (
+      'desactive',
+      'powerShieldUI',
+      powerShieldUIController.onPowerShieldDesactivated,
+      powerShieldUIController
+    );
+
+    powerShieldController.on
+    (
+      'progress',
+      'powerShieldUI',
+      powerShieldUIController.onProgress,
+      powerShieldUIController
+    );
+
+    ///////////////////////////////////
     // Boss Score
 
     this._m_bossScore = FCUIBossHealth.Create(_scene);    
@@ -174,6 +226,26 @@ implements IUIManager
     (
       DC_MESSAGE_ID.kToPosition,
       new Phaser.Math.Vector3(600, 20)
+    );
+
+    ///////////////////////////////////
+    // Power Shield UI
+
+    if(this._m_powerShield == null)
+    {
+      this._m_powerShield = FcUIPowerShield.Create(_scene);
+    }
+
+    this._m_powerShield.sendMessage
+    (
+      DC_MESSAGE_ID.kToPosition,
+      new Phaser.Math.Vector3(20, 75)
+    );
+
+    this._m_powerShield.sendMessage
+    (
+      DC_MESSAGE_ID.kClose,
+      undefined
     );
 
     ///////////////////////////////////
@@ -254,6 +326,7 @@ implements IUIManager
     this._m_heroScore.update();
     this._m_bossScore.update();
     this._m_dialogBox.update();
+    this._m_powerShield.update();
 
     return;
   }
@@ -275,6 +348,9 @@ implements IUIManager
 
     this._m_bossScore.destroy();
     this._m_dialogBox = null;
+
+    this._m_powerShield.destroy();
+    this._m_powerShield = null;
 
     return;
   }
@@ -347,4 +423,9 @@ implements IUIManager
    * Reference to the dialog box.
    */
   private _m_dialogBox : BaseActor<Ty_Image>;
+
+  /**
+   * Hero's power shield UI actor.
+   */
+  private _m_powerShield : BaseActor<Ty_Text>;
 }

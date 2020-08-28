@@ -20,6 +20,7 @@ import { ILevelCommand } from "../commands/levelCommands/iLevelCommands";
 import { Point, Ty_TileMap, Ty_TileObject } from "../commons/1942types";
 import { CnfArponShip } from "../configObjects/cnfArponShip";
 import { CnfCadmio } from "../configObjects/cnfCadmio";
+import { CnfErrante } from "../configObjects/cnfErrante";
 import { CnfItemManager } from "../configObjects/cnfItemManager";
 import { CnfRangerConfig } from "../configObjects/cnfRangerConfig";
 import { CnfSonic } from "../configObjects/cnfSonic";
@@ -380,8 +381,11 @@ implements ILevelGenerator
   private _createErranteCommand(_object : Ty_TileObject)
   : void
   { 
+    let config : CnfErrante = new CnfErrante();
+    config.setFromObject(_object);
+
     let command : CmdSpawnErrante 
-      = new CmdSpawnErrante(_object.x, _object.y);
+      = new CmdSpawnErrante(_object.x, _object.y, config);
 
     this._m_aLevelCommands.push(command);    
     return;

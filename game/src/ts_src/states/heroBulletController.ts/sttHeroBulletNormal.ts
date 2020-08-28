@@ -34,6 +34,7 @@ implements ISttHeroBullet
     this._m_loadingTime = 0.0;
     this._m_bulletManager = NullBulletManager.GetInstance();
     this._m_gameManager = GameManager.GetInstance();
+    this._m_disable = false;
 
     return;
   }
@@ -101,6 +102,7 @@ implements ISttHeroBullet
   : void 
   {
     this._m_loadingTime = 0.0;
+    this._m_disable = false;
 
     let heroController = this._m_actor.getComponent<CmpHeroController>
     (
@@ -141,6 +143,16 @@ implements ISttHeroBullet
       this._m_loadingMult = 0.0;
       return;
 
+      case DC_MESSAGE_ID.kEnterBarrelRoll :
+
+      this._m_disable = true;
+      return;
+
+      case DC_MESSAGE_ID.kExitBarrelRoll :
+
+      this._m_disable = false;
+      return;
+
       /**
        * Set the hero bullet manager.
        */
@@ -166,6 +178,11 @@ implements ISttHeroBullet
   update()
   : void 
   {
+    if(this._m_disable)
+    {
+      return;
+    }
+
     let loading : number = this._m_loadingTime;
 
     loading += (this._m_gameManager.m_dt * this._m_loadingMult);
@@ -248,6 +265,11 @@ implements ISttHeroBullet
    * Loading multiplier.
    */
   private _m_loadingMult : number;
+
+  /**
+   * Indicates if the Fire mechanism is disbale
+   */
+  private _m_disable : boolean;
   
   /**
    * Reference to the physic actor.

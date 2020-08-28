@@ -9,11 +9,11 @@
  */
 
 import { DC_BULLET_TYPE, DC_COMPONENT_ID, DC_MESSAGE_ID } from "../../commons/1942enums";
-import { Ty_physicsActor } from "../../commons/1942types";
+import { Ty_physicsActor, V2 } from "../../commons/1942types";
 import { CmpBasicBulletController } from "../../components/cmpBasicBulletController";
 import { CmpBulletData } from "../../components/cmpBulletData";
+import { CnfEnemyBasicBullet } from "../../configObjects/cnfEnemyBasicBullet";
 import { IBulletManager } from "../iBulletManager";
-import { EnemyBasicBulletConfig } from "./enemyBasicBulletConfig";
 import { IBulletSpawner } from "./iBulletSpawner";
 import { NullBulletSpawner } from "./nullBulletSpawner";
 
@@ -30,11 +30,12 @@ implements IBulletSpawner
     let spawner = new EnemyBasicBulletSpawner;
 
     let basicMovement = CmpBasicBulletController.Create();
-    basicMovement.setDirection(0.0, 1.0);   
+    basicMovement.setDirection(0.0, 1.0);
     
     spawner._m_controller = basicMovement;
+    spawner._m_direction = new Phaser.Math.Vector2(0.0, 1.0);
 
-    spawner.setBulletConfiguartion(new EnemyBasicBulletConfig());
+    spawner.setBulletConfig(new CnfEnemyBasicBullet());
     return spawner;
   }
 
@@ -47,8 +48,7 @@ implements IBulletSpawner
 
   update(_dt: number)
   : void 
-  {
-    this._m_controller.resetForce(_dt);
+  {    
     return;
   }
 
@@ -57,7 +57,7 @@ implements IBulletSpawner
    * 
    * @param _config conguratio object. 
    */
-  setBulletConfiguartion(_config : EnemyBasicBulletConfig)
+  setBulletConfig(_config : CnfEnemyBasicBullet)
   : void
   {
     this._m_controller.setConfiguartion(_config);
@@ -68,17 +68,17 @@ implements IBulletSpawner
   spawn(_actor: Ty_physicsActor, _x: number, _y: number, _data ?: any)
   : void 
   {
-    this.assemble(_actor);
-
     _actor.sendMessage
     (
       DC_MESSAGE_ID.kToPosition,
       new Phaser.Math.Vector3(_x, _y, 0.0) 
     );
+
+    this.assemble(_actor, _data);    
     return;
   }
 
-  assemble(_actor: Ty_physicsActor)
+  assemble(_actor: Ty_physicsActor, _data ?: any)
   : void 
   {
     // Tint sprite.
@@ -113,6 +113,21 @@ implements IBulletSpawner
 
     _actor.addComponent(this._m_controller);
 
+    // Direction and Speed.
+
+    let direction : V2 = _data as V2;
+
+    _actor.sendMessage
+    (
+      DC_MESSAGE_ID.kDirection,
+      direction
+    );
+
+    _actor.sendMessage
+    (
+      DC_MESSAGE_ID.kSpeed,
+      this._m_bulletConfig.speed
+    );
     return;
   }
 
@@ -185,9 +200,14 @@ implements IBulletSpawner
   { } 
 
   /**
+   * Direction of the bullet.
+   */
+  private _m_direction : V2;
+
+  /**
    * Bullet configuartion object.
    */
-  private _m_bulletConfig : EnemyBasicBulletConfig;
+  private _m_bulletConfig : CnfEnemyBasicBullet;
 
   /**
    * Reference to the bullet manger.

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objecttypes>
- <objecttype name="ArponBulletConfig" color="#ff007f">
+ <objecttype name="ArponBulletConfig" color="#ff00ff">
   <property name="collider_offset" type="float" default="25"/>
   <property name="collider_radius" type="float" default="25"/>
   <property name="collision_damage" type="float" default="1"/>
@@ -35,7 +35,22 @@
   <property name="speed" type="float" default="1000"/>
   <property name="texture" type="string" default="canus_fruit"/>
  </objecttype>
- <objecttype name="Errante" color="#a40002"/>
+ <objecttype name="EnemyBasicBulletConfig" color="#ff0000">
+  <property name="collision_damage" type="int" default="1"/>
+  <property name="health" type="int" default="1"/>
+  <property name="speed" type="float" default="1200"/>
+  <property name="texture_key" type="string" default="fireball"/>
+ </objecttype>
+ <objecttype name="Errante" color="#a40002">
+  <property name="collision_damage" type="float" default="1"/>
+  <property name="fire_rate" type="float" default="0.5"/>
+  <property name="has_weapon" type="bool" default="true"/>
+  <property name="health" type="float" default="2"/>
+  <property name="init_time" type="float" default="1.5"/>
+  <property name="score" type="int" default="1"/>
+  <property name="speed" type="float" default="500"/>
+  <property name="texture_key" type="string" default="enemy"/>
+ </objecttype>
  <objecttype name="Guide Line" color="#00007f"/>
  <objecttype name="Hero_bulletStateNormal" color="#ff0000">
   <property name="frecuency" type="int" default="8"/>
