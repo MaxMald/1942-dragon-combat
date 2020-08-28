@@ -75,24 +75,6 @@
 =======
 <?xml version="1.0" encoding="UTF-8"?>
 <objecttypes>
- <objecttype name="ArponBulletConfig" color="#ff007f">
-  <property name="collider_offset" type="float" default="25"/>
-  <property name="collider_radius" type="float" default="25"/>
-  <property name="collision_damage" type="float" default="1"/>
-  <property name="speed" type="float" default="2000"/>
-  <property name="texture_key" type="string" default="arpon_bullet"/>
- </objecttype>
- <objecttype name="ArponShip" color="#aa00ff">
-  <property name="collision_damage" type="float" default="5"/>
-  <property name="fire_rate" type="float" default="0.5"/>
-  <property name="health" type="float" default="2"/>
-  <property name="mass" type="float" default="15"/>
-  <property name="score" type="int" default="5"/>
-  <property name="speed" type="float" default="200"/>
-  <property name="steer_force" type="float" default="20"/>
-  <property name="texture_key" type="string" default="arpon_ship"/>
-  <property name="weapon_texture_key" type="string" default="arpon_weapon"/>
- </objecttype>
  <objecttype name="Boss" color="#000000"/>
  <objecttype name="Cadmio" color="#ffff00"/>
  <objecttype name="CadmioConfig" color="#ffff00">
