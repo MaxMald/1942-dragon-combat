@@ -7,6 +7,18 @@
         "type" : "image",
         "key" : "enemy_ranger",
         "url" : "images/ranger.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "arpon_ship",
+        "url" : "images/arpon_ship.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "arpon_weapon",
+        "url" : "images/arpon_weapon.png"
       }
     ]
   }

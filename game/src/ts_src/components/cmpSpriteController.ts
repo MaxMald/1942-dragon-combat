@@ -3,41 +3,41 @@
  *
  * @summary 
  *
- * @file cmpImageController.ts
+ * @file cmpSpriteController.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
- * @since August-10-2020
+ * @since August-27-2020
  */
 
 import { BaseActor } from "../actors/baseActor";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
-import { Ty_Image, V3 } from "../commons/1942types";
+import { Ty_Sprite, V3 } from "../commons/1942types";
 import { IBaseComponent } from "./iBaseComponent";
 
-export class CmpImageController 
-implements IBaseComponent<Ty_Image>
+export class CmpSpriteController 
+implements IBaseComponent<Ty_Sprite>
 {
   /****************************************************/
   /* Public                                           */
   /****************************************************/
 
   static Create()
-  : CmpImageController
+  : CmpSpriteController
   {
-    let controller = new CmpImageController();
+    let controller = new CmpSpriteController();
 
-    controller.m_id = DC_COMPONENT_ID.kImageController;
+    controller.m_id = DC_COMPONENT_ID.kSpriteController;
 
     return controller;
   }
 
-  init(_actor: BaseActor<Ty_Image>)
+  init(_actor: BaseActor<Ty_Sprite>)
   : void 
   {
-    this._m_image = _actor.getWrappedInstance();
+    this._m_sprite = _actor.getWrappedInstance();
     return;
   }
 
-  update(_actor: BaseActor<Ty_Image>)
+  update(_actor: BaseActor<Ty_Sprite>)
   : void 
   {
     return;
@@ -52,7 +52,7 @@ implements IBaseComponent<Ty_Image>
 
       {
         let position = _obj as V3;
-        this._m_image.setPosition(position.x, position.y);
+        this._m_sprite.setPosition(position.x, position.y);
       }
 
       return;
@@ -62,19 +62,19 @@ implements IBaseComponent<Ty_Image>
       {
         let move = _obj as V3;
         
-        this._m_image.x += move.x;
-        this._m_image.y += move.y;
+        this._m_sprite.x += move.x;
+        this._m_sprite.y += move.y;
       }
       return;
 
       case DC_MESSAGE_ID.kSetAngle:
 
-      this._m_image.setAngle(_obj as number);
+      this._m_sprite.setAngle(_obj as number);
       return;
 
       case DC_MESSAGE_ID.kSetTexture:
 
-      this._m_image.setTexture(_obj as string);
+      this._m_sprite.setTexture(_obj as string);
       return;
 
       case DC_MESSAGE_ID.kShow :
@@ -103,8 +103,8 @@ implements IBaseComponent<Ty_Image>
   destroy()
   : void 
   {
-    this._m_image.destroy();
-    this._m_image = null;
+    this._m_sprite.destroy();
+    this._m_sprite = null;
     
     return;
   }
@@ -118,21 +118,21 @@ implements IBaseComponent<Ty_Image>
   private _desactive()
   : void
   {
-    this._m_image.setActive(false);
-    this._m_image.setVisible(false);
+    this._m_sprite.setActive(false);
+    this._m_sprite.setVisible(false);
     return;
   }
 
   private _active()
   : void
   {
-    this._m_image.setActive(true);
-    this._m_image.setVisible(true);
+    this._m_sprite.setActive(true);
+    this._m_sprite.setVisible(true);
     return;
   }
   
   /**
    * Reference to the image.
    */
-  _m_image : Ty_Image;
+  _m_sprite : Ty_Sprite;
 }

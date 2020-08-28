@@ -3,27 +3,30 @@
  *
  * @summary 
  *
- * @file sonicSpawner.ts
+ * @file arponShipSpawner.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
- * @since August-26-2020
+ * @since August-27-2020
  */
 
 import { MxObjectPool } from "optimization/mxObjectPool";
+import { BaseActor } from "../../actors/baseActor";
 import { IBulletManager } from "../../bulletManager/iBulletManager";
 import { NullBulletManager } from "../../bulletManager/nullBulletManager";
 import { DC_COMPONENT_ID, DC_ENEMY_TYPE, DC_MESSAGE_ID } from "../../commons/1942enums";
-import { Ty_physicsActor } from "../../commons/1942types";
+import { Ty_physicsActor, Ty_Sprite } from "../../commons/1942types";
+import { CmpArponShipController } from "../../components/cmpArponShipController";
+import { CmpArponWeaponController } from "../../components/cmpArponWeaponController";
 import { CmpNullEnemyController } from "../../components/cmpNullEnemyController";
 import { CmpPlayZone } from "../../components/cmpPlayZone";
-import { CmpSonicController } from "../../components/cmpSonicController";
-import { CnfSonic } from "../../configObjects/cnfSonic";
-import { CnfSonicSpawner } from "../../configObjects/cnfSonicSpawner";
+import { CmpSpriteController } from "../../components/cmpSpriteController";
+import { CnfArponShip } from "../../configObjects/cnfArponShip";
+import { CnfArponShipSpawner } from "../../configObjects/cnfArponShipSpawner";
 import { GameManager } from "../../gameManager/gameManager";
 import { IEnemiesManager } from "../iEnemiesManager";
 import { NullEnemiesManager } from "../nullEnemiesManager";
 import { IEnemySpawner } from "./iEnemySpawner";
 
-export class SonicSpawner 
+export class ArponShipSpawner 
 implements IEnemySpawner
 {
   /****************************************************/
@@ -31,25 +34,29 @@ implements IEnemySpawner
   /****************************************************/
   
   static Create()
-  : SonicSpawner
+  : ArponShipSpawner
   {
-    let spawner : SonicSpawner = new SonicSpawner();
+    let spawner : ArponShipSpawner = new ArponShipSpawner();
 
     spawner._m_enemiesManager = NullEnemiesManager.GetInstance();
+
     return spawner;
   }
  
-  init(_config ?: CnfSonicSpawner)
+  init(_config ?: CnfArponShipSpawner)
   : void
   {
     if(_config === undefined)
     {
       // Use default properties.
-      _config = new CnfSonicSpawner();
+      _config = new CnfArponShipSpawner();
     }
 
     let scene : Phaser.Scene = GameManager.GetInstance().getGameScene();
     let canvas = scene.game.canvas;
+
+    ///////////////////////////////////
+    // PlayZone
 
     this._m_playZone = CmpPlayZone.Create();
     this._m_playZone.setBoundings
@@ -67,21 +74,51 @@ implements IEnemySpawner
       poolController.destroy();
     }   
     
-    let aControllers : CmpSonicController[] = new Array<CmpSonicController>();
-    let controller : CmpSonicController;
+    let aControllers : CmpArponShipController[] = new Array<CmpArponShipController>();
+    let controller : CmpArponShipController;   
 
     let index : number = 0;
     while(index < _config.pool_size)
     {
-      controller = CmpSonicController.Create();
+      controller = CmpArponShipController.Create();
 
       controller.setSpawner(this);
 
       aControllers.push(controller);
+
+      ///////////////////////////////////
+      // Arpon Actor
+
+      let weaponActor : BaseActor<Ty_Sprite> = BaseActor.Create<Ty_Sprite>
+      (
+        scene.add.sprite
+        (
+          0.0,
+          0.0,
+          'enemy'
+        ),
+        'ArponWeapon_' + index.toString()
+      );
+
+      weaponActor.addComponent(CmpSpriteController.Create());
+      weaponActor.addComponent(CmpArponWeaponController.Create());
+
+      weaponActor.init();
+
+      weaponActor.sendMessage
+      (
+        DC_MESSAGE_ID.kDesactive,
+        weaponActor
+      );
+
+      // Add weapon actor to controller
+
+      controller.setWeapon(weaponActor);
+      
       ++index;
     }
 
-    poolController = MxObjectPool.Create<CmpSonicController>();
+    poolController = MxObjectPool.Create<CmpArponShipController>();
     poolController.init(aControllers);
 
     this._m_poolController = poolController;
@@ -111,6 +148,7 @@ implements IEnemySpawner
     );
 
     this.assemble(_actor, _data);
+
     return;
   }
 
@@ -120,7 +158,7 @@ implements IEnemySpawner
   getID()
   : DC_ENEMY_TYPE 
   {
-    return DC_ENEMY_TYPE.kSonico;
+    return DC_ENEMY_TYPE.kArponShip;
   }
 
   /**
@@ -134,7 +172,7 @@ implements IEnemySpawner
     let controller = this._m_poolController.get();
     if(controller != null)
     {
-      let config = _data as CnfSonic;
+      let config = _data as CnfArponShip;
 
       _actor.addComponent(controller);
       
@@ -142,21 +180,19 @@ implements IEnemySpawner
       controller.setEnemiesManager(this._m_enemiesManager);
       controller.setConfig(config);
 
-      controller.setActiveState('pursuit');
-
       // Set Texture.
 
       let sprite = _actor.getWrappedInstance();
       sprite.setTexture(config.texture_key);
-      sprite.setTint(0xD4D06A);
     
-      let circle_radius = sprite.height * 0.5;
-      sprite.body.setCircle
+      sprite.body.setSize
       (
-        circle_radius, 
-        (sprite.width * 0.5) - circle_radius,
-        (sprite.height * 0.5) - circle_radius
+        sprite.height, 
+        sprite.width,
+        true 
       );
+
+      sprite.setAngle(-90.0);
 
       // Health Points.
 
@@ -169,6 +205,10 @@ implements IEnemySpawner
       // PlayZOne Padding
 
       _actor.addComponent(this._m_playZone);
+
+      // Send "Active" msg. Active Arpon Weapon.
+
+      _actor.sendMessage(DC_MESSAGE_ID.kActive, _actor);
     }
     else
     {
@@ -187,23 +227,20 @@ implements IEnemySpawner
   {
     // Desactive controller.
 
-    let controller = _actor.getComponent<CmpSonicController>
+    let controller = _actor.getComponent<CmpArponShipController>
     (
       DC_COMPONENT_ID.kEnemyController
     );
 
     this._m_poolController.desactive(controller);
 
+    // Errante controller.
+
     _actor.addComponent(CmpNullEnemyController.GetInstance());
 
     // Remove playzone component.
 
     _actor.removeComponent(DC_COMPONENT_ID.kPlayZone);
-
-    // Sonic Color
-
-    let sprite = _actor.getWrappedInstance();
-    sprite.setTint(0xffffff);
     return;
   }
 
@@ -257,13 +294,10 @@ implements IEnemySpawner
   /**
    * The controller pool.
    */
-  private _m_poolController : MxObjectPool<CmpSonicController>;
+  private _m_poolController : MxObjectPool<CmpArponShipController>;
 
   ///////////////////////////////////
   // Shared components
 
-  /**
-   * Referece to the playzone component.
-   */
   private _m_playZone : CmpPlayZone;
 }

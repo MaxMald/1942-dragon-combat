@@ -69,6 +69,12 @@ implements IBaseComponent<Ty_physicsSprite>
     return;
   }
 
+  getDirection()
+  : V2
+  {
+    return this._m_direction;
+  }
+
   /**
    * Set the bullet speed.
    * 

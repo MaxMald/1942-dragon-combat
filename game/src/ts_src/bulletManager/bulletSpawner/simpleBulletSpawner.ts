@@ -106,6 +106,16 @@ implements IBulletSpawner
 
     _actor.addComponent(cmp);
 
+    let sprite = _actor.getWrappedInstance();
+
+    let circle_radius = sprite.height * 0.5;
+    sprite.body.setCircle
+    (
+      circle_radius, 
+      (sprite.width * 0.5) - circle_radius,
+      (sprite.height * 0.5) - circle_radius
+    );
+
     return;
   }
 

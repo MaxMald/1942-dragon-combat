@@ -102,7 +102,13 @@ export class ErranteSpawner implements IEnemySpawner
     sprite.setTexture(this._m_erranteConfig.texture_key);
     sprite.setAngle(90.0);
     
-    sprite.body.setCircle(sprite.height * 0.5, -10.0, 0.0);   
+    let circle_radius = sprite.height * 0.5;
+    sprite.body.setCircle
+    (
+      circle_radius, 
+      (sprite.width * 0.5) - circle_radius,
+      (sprite.height * 0.5) - circle_radius
+    );
 
     // Set position.
 

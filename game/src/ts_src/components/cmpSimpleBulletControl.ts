@@ -58,6 +58,12 @@ implements IBaseComponent<Ty_physicsSprite>
     return;
   }
 
+  getDirection()
+  : V2
+  {
+    return this._m_direction;
+  }
+
   /**
    * Set the bullet speed.
    * 
@@ -79,6 +85,10 @@ implements IBaseComponent<Ty_physicsSprite>
     this._m_force.y = this._m_direction.y * mult;
 
     _actor.sendMessage(DC_MESSAGE_ID.kAgentMove, this._m_force);
+
+    let sprite = _actor.getWrappedInstance();
+
+    sprite.setAngle(Phaser.Math.RadToDeg(this._m_direction.angle()));
     return;
   }
 
