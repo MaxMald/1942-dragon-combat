@@ -136,7 +136,13 @@ implements IEnemySpawner
       let sprite = _actor.getWrappedInstance();
       sprite.setTexture(config.texture_key);
     
-      sprite.body.setCircle(sprite.height * 0.5, 35);
+      let circle_radius = sprite.height * 0.5;
+      sprite.body.setCircle
+      (
+        circle_radius, 
+        (sprite.width * 0.5) - circle_radius,
+        (sprite.height * 0.5) - circle_radius
+      );
 
       // Health Points.
 

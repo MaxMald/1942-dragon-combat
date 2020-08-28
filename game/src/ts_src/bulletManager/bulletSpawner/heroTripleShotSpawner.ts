@@ -129,6 +129,16 @@ implements IBulletSpawner
     // Set properties.
 
     bulletData.setAttackPoints(this._m_bulletConfig.collision_damage);
+
+    let sprite = _actor.getWrappedInstance();
+
+    let circle_radius = sprite.height * 0.5;
+    sprite.body.setCircle
+    (
+      circle_radius, 
+      (sprite.width * 0.5) - circle_radius,
+      (sprite.height * 0.5) - circle_radius
+    );
     return;
   }
 

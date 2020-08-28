@@ -394,7 +394,7 @@
                      "bold":true,
                      "fontfamily":"MS Shell Dlg 2",
                      "pixelsize":32,
-                     "text":"Minions",
+                     "text":"Enemy Bullets",
                      "wrap":true
                     },
                  "type":"",
@@ -402,6 +402,44 @@
                  "width":500,
                  "x":1214.83,
                  "y":9001.83
+                }, 
+                {
+                 "gid":10,
+                 "height":57,
+                 "id":373,
+                 "name":"Arpon Bullet Config",
+                 "properties":[
+                        {
+                         "name":"collider_offset",
+                         "type":"float",
+                         "value":25
+                        }, 
+                        {
+                         "name":"collider_radius",
+                         "type":"float",
+                         "value":25
+                        }, 
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":2000
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"arpon_bullet"
+                        }],
+                 "rotation":0,
+                 "type":"ArponBulletConfig",
+                 "visible":true,
+                 "width":65,
+                 "x":1216,
+                 "y":9126.33333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1407,8 +1445,8 @@
                  "type":"Errante",
                  "visible":true,
                  "width":0,
-                 "x":542.667,
-                 "y":9442.67
+                 "x":541.667,
+                 "y":9088.67
                 }, 
                 {
                  "height":0,
@@ -2626,8 +2664,8 @@
                  "type":"Ranger",
                  "visible":true,
                  "width":0,
-                 "x":537,
-                 "y":9358
+                 "x":542,
+                 "y":9023
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2640,122 +2678,6 @@
          "id":9,
          "name":"Sonics",
          "objects":[
-                {
-                 "height":0,
-                 "id":365,
-                 "name":"Sonic",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"collision_damage",
-                         "type":"float",
-                         "value":5
-                        }, 
-                        {
-                         "name":"coord_x",
-                         "type":"float",
-                         "value":0
-                        }, 
-                        {
-                         "name":"coord_y",
-                         "type":"float",
-                         "value":0
-                        }, 
-                        {
-                         "name":"health",
-                         "type":"float",
-                         "value":2
-                        }, 
-                        {
-                         "name":"mass",
-                         "type":"float",
-                         "value":30
-                        }, 
-                        {
-                         "name":"score",
-                         "type":"float",
-                         "value":10
-                        }, 
-                        {
-                         "name":"speed",
-                         "type":"float",
-                         "value":1300
-                        }, 
-                        {
-                         "name":"steer_force",
-                         "type":"float",
-                         "value":20
-                        }, 
-                        {
-                         "name":"texture_key",
-                         "type":"string",
-                         "value":"enemy"
-                        }],
-                 "rotation":0,
-                 "type":"Sonic",
-                 "visible":true,
-                 "width":0,
-                 "x":507.333333333333,
-                 "y":9534
-                }, 
-                {
-                 "height":0,
-                 "id":366,
-                 "name":"Sonic",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"collision_damage",
-                         "type":"float",
-                         "value":5
-                        }, 
-                        {
-                         "name":"coord_x",
-                         "type":"float",
-                         "value":1
-                        }, 
-                        {
-                         "name":"coord_y",
-                         "type":"float",
-                         "value":0
-                        }, 
-                        {
-                         "name":"health",
-                         "type":"float",
-                         "value":2
-                        }, 
-                        {
-                         "name":"mass",
-                         "type":"float",
-                         "value":30
-                        }, 
-                        {
-                         "name":"score",
-                         "type":"float",
-                         "value":10
-                        }, 
-                        {
-                         "name":"speed",
-                         "type":"float",
-                         "value":1300
-                        }, 
-                        {
-                         "name":"steer_force",
-                         "type":"float",
-                         "value":20
-                        }, 
-                        {
-                         "name":"texture_key",
-                         "type":"string",
-                         "value":"enemy"
-                        }],
-                 "rotation":0,
-                 "type":"Sonic",
-                 "visible":true,
-                 "width":0,
-                 "x":565.333333333333,
-                 "y":9534.33333333333
-                }, 
                 {
                  "height":0,
                  "id":369,
@@ -2811,8 +2733,8 @@
                  "type":"Sonic",
                  "visible":true,
                  "width":0,
-                 "x":521.000333333333,
-                 "y":8912.33333333333
+                 "x":521,
+                 "y":8912.33
                 }, 
                 {
                  "height":0,
@@ -2869,8 +2791,135 @@
                  "type":"Sonic",
                  "visible":true,
                  "width":0,
-                 "x":577.333333333333,
-                 "y":8913.33333333333
+                 "x":577.333,
+                 "y":8913.33
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":10,
+         "name":"ArponShip",
+         "objects":[
+                {
+                 "height":0,
+                 "id":371,
+                 "name":"ArponShip",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"fire_rate",
+                         "type":"float",
+                         "value":0.5
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":15
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"int",
+                         "value":5
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":20
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"arpon_ship"
+                        }, 
+                        {
+                         "name":"weapon_texture_key",
+                         "type":"string",
+                         "value":"arpon_weapon"
+                        }],
+                 "rotation":0,
+                 "type":"ArponShip",
+                 "visible":true,
+                 "width":0,
+                 "x":286.666666666667,
+                 "y":9534.66666666667
+                }, 
+                {
+                 "height":0,
+                 "id":372,
+                 "name":"ArponShip",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"fire_rate",
+                         "type":"float",
+                         "value":0.5
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"float",
+                         "value":2
+                        }, 
+                        {
+                         "name":"mass",
+                         "type":"float",
+                         "value":15
+                        }, 
+                        {
+                         "name":"score",
+                         "type":"int",
+                         "value":5
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":200
+                        }, 
+                        {
+                         "name":"steer_force",
+                         "type":"float",
+                         "value":20
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"arpon_ship"
+                        }, 
+                        {
+                         "name":"weapon_texture_key",
+                         "type":"string",
+                         "value":"arpon_weapon"
+                        }],
+                 "rotation":0,
+                 "type":"ArponShip",
+                 "visible":true,
+                 "width":0,
+                 "x":812,
+                 "y":9533.33333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -2960,8 +3009,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":10,
- "nextobjectid":371,
+ "nextlayerid":11,
+ "nextobjectid":374,
  "orientation":"orthogonal",
  "properties":[
         {

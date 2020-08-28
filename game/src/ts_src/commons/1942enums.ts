@@ -38,7 +38,12 @@ export const DC_ENEMY_TYPE = Object.freeze
   /**
    * Dragón ranger.
    */
-  kRanger : 2 as 2
+  kRanger : 2 as 2,
+
+  /**
+   * Arpon ship.
+   */
+  kArponShip : 3 as 3
 });
 
 /****************************************************/
@@ -194,7 +199,22 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpPowerShieldController
    */
-  kPowerShieldComponent : 24 as 24
+  kPowerShieldComponent : 24 as 24,
+
+  /**
+   * CmpSpriteController
+   */
+  kSpriteController : 25 as 25,
+
+  /**
+   * CmpArponWeaponController
+   */
+  kArponWeaponController : 26 as 26,
+
+  /**
+   * CmpArponBulletController
+   */
+  kArponBulletController : 27 as 27
 });
 
 /****************************************************/
@@ -426,7 +446,21 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : hit points.
    */
-  kRangerExplosionHit : 529 as 529
+  kRangerExplosionHit : 529 as 529,
+
+  /**
+   * Set the angle of the actor.
+   * 
+   * msg : degrees (number).
+   */
+  kSetAngle : 530 as 530,
+
+  /**
+   * Set the texture key of the actor.
+   * 
+   * msg : texture key (string).
+   */
+  kSetTexture : 531 as 531
 });
 
 /****************************************************/
@@ -530,7 +564,12 @@ export const DC_BULLET_TYPE = Object.freeze
   /**
    * A bullet from the triple shot attack.
    */
-  kTripleSHot : 4 as 4
+  kTripleSHot : 4 as 4,
+
+  /**
+   * Arpon bullet.
+   */
+  kArpon : 5 as 5
 });
 
 /****************************************************/
@@ -678,5 +717,25 @@ export const DC_CONFIG = Object.freeze
   /**
    * Sonic Spawner config object.
    */
-  kSonicSpawner : 10 as 10
+  kSonicSpawner : 10 as 10,
+
+  /**
+   * Arpon Ship config object.
+   */
+  kArponShip : 11 as 11,
+
+  /**
+   * Arpon Ship Spawner config object.
+   */
+  kArponShipSpawner : 12 as 12,
+
+  /**
+   * Arpon Bullet config object.
+   */
+  kArponBullet : 13 as 13,
+
+  /**
+   * Arpon Bullet Spanwer config object.
+   */
+  kArponBulletSpawner : 14 as 14
 });

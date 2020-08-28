@@ -1,0 +1,13 @@
+{
+  "pilot" : 
+  {
+    "files" :
+    [
+      {
+        "type" : "image",
+        "key" : "arpon_bullet",
+        "url" : "images/arpon_bullet.png"
+      }
+    ]
+  }
+}

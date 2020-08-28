@@ -17,7 +17,8 @@ import { EnemyBasicBulletConfig } from "./enemyBasicBulletConfig";
 import { IBulletSpawner } from "./iBulletSpawner";
 import { NullBulletSpawner } from "./nullBulletSpawner";
 
-export class EnemyBasicBulletSpawner implements IBulletSpawner
+export class EnemyBasicBulletSpawner 
+implements IBulletSpawner
 {
   /****************************************************/
   /* Public                                           */
@@ -86,6 +87,14 @@ export class EnemyBasicBulletSpawner implements IBulletSpawner
 
     sprite.setTint(0xff0000);
     sprite.setTexture(this._m_bulletConfig.texture_key);
+
+    let circle_radius = sprite.height * 0.5;
+    sprite.body.setCircle
+    (
+      circle_radius, 
+      (sprite.width * 0.5) - circle_radius,
+      (sprite.height * 0.5) - circle_radius
+    );
 
     // Set the bullet spawner.
 

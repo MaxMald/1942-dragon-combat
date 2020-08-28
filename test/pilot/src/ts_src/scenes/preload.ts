@@ -134,6 +134,13 @@ extends Phaser.Scene
       'pilot'
     );
 
+    this.load.pack
+    (
+      'art_pack_bullets',
+      'packs/art_pack_bullets.json',
+      'pilot'
+    );
+
     let tiledMapPack = JSON.parse(this.game.cache.text.get('TiledMap_Pack'));
     let tiledMap = tiledMapPack.pilot.files[0];
 

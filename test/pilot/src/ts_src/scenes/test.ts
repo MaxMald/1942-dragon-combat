@@ -22,6 +22,9 @@ import { DC_CONFIG } from "../../../../../game/src/ts_src/commons/1942enums";
 import { CnfRangerSpawner } from "../../../../../game/src/ts_src/configObjects/cnfRangerSpawnerConfig";
 import { SonicSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/sonicSpawner";
 import { CnfSonicSpawner } from "../../../../../game/src/ts_src/configObjects/cnfSonicSpawner";
+import { ArponShipSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/arponShipSpawner";
+import { CnfArponShipSpawner } from "../../../../../game/src/ts_src/configObjects/cnfArponShipSpawner";
+import { ArponBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/arponBulletSpawner";
   
 export class Test extends Phaser.Scene
 {
@@ -134,6 +137,15 @@ export class Test extends Phaser.Scene
     bossManager.setBulletManager(enim_bulletManager);
 
     ///////////////////////////////////
+    // Spawner : Arpon
+
+    let arponSpawner = ArponBulletSpawner.Create();
+
+    arponSpawner.init();
+
+    enim_bulletManager.addSpawner(arponSpawner);
+
+    ///////////////////////////////////
     // Enemies Manager
 
     let enemiesManager : EnemiesManager = EnemiesManager.Create();
@@ -185,6 +197,18 @@ export class Test extends Phaser.Scene
     sonicSpawner.init(sonicSpawnerConfig);
 
     enemiesManager.addSpawner(sonicSpawner);
+
+    ///////////////////////////////////
+    // Spawner : Arpon Ship
+
+    let arponShipSpawner : ArponShipSpawner = ArponShipSpawner.Create();
+    let arponShipSpanwerConfig = levelConfiguration.getConfig<CnfArponShipSpawner>
+    (
+      DC_CONFIG.kArponShipSpawner
+    );
+    arponShipSpawner.init(arponShipSpanwerConfig);
+
+    enemiesManager.addSpawner(arponShipSpawner);
 
     ///////////////////////////////////
     // Hero's Bullet Manager

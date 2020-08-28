@@ -11,6 +11,9 @@
 
 import { DC_CONFIG } from "../commons/1942enums";
 import { Ty_TileMap, Ty_TileObject } from "../commons/1942types";
+import { CnfArponBullet } from "../configObjects/cnfArponBullet";
+import { CnfArponBulletSpawner } from "../configObjects/cnfArponBulletSpawner";
+import { CnfArponShipSpawner } from "../configObjects/cnfArponShipSpawner";
 import { CnfBulletStateNormal } from "../configObjects/cnfBulletStateNormal";
 import { CnfBulletStateTriple } from "../configObjects/cnfBulletStateTriple";
 import { CnfCadmio } from "../configObjects/cnfCadmio";
@@ -62,6 +65,9 @@ implements ILevelConfiguration
     this.addConfig(new CnfPowerShield());
     this.addConfig(new CnfRangerSpawner());
     this.addConfig(new CnfSonicSpawner());
+    this.addConfig(new CnfArponShipSpawner());
+    this.addConfig(new CnfArponBullet());
+    this.addConfig(new CnfArponBulletSpawner());
 
     return;
   }

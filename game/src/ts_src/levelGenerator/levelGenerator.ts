@@ -10,6 +10,7 @@
  */
 
 import { CmdEnterBoss } from "../commands/levelCommands/cmdEnterBoss";
+import { CmdSpawnArponShip } from "../commands/levelCommands/cmdSpawnArponShip";
 import { CmdSpawnCadmio } from "../commands/levelCommands/cmdSpawnCadmio";
 import { CmdSpawnCanus } from "../commands/levelCommands/cmdSpawnCanus";
 import { CmdSpawnErrante } from "../commands/levelCommands/cmdSpawnErrante";
@@ -17,6 +18,7 @@ import { CmdSpawnRanger } from "../commands/levelCommands/cmdSpawnRanger";
 import { CmdSpawnSonic } from "../commands/levelCommands/cmdSpawnSonic";
 import { ILevelCommand } from "../commands/levelCommands/iLevelCommands";
 import { Point, Ty_TileMap, Ty_TileObject } from "../commons/1942types";
+import { CnfArponShip } from "../configObjects/cnfArponShip";
 import { CnfCadmio } from "../configObjects/cnfCadmio";
 import { CnfItemManager } from "../configObjects/cnfItemManager";
 import { CnfRangerConfig } from "../configObjects/cnfRangerConfig";
@@ -289,6 +291,11 @@ implements ILevelGenerator
       this._createSonicCommand(_object);
       return;
 
+      case "ArponShip":
+
+      this._createArponShipCommand(_object);
+      break;
+
       ///////////////////////////////////
       // Items
 
@@ -401,6 +408,19 @@ implements ILevelGenerator
 
     let command : CmdSpawnSonic
      = new CmdSpawnSonic(_object.x, _object.y, config);
+
+    this._m_aLevelCommands.push(command);
+    return;
+  }
+
+  private _createArponShipCommand(_object : Ty_TileObject)
+  : void
+  {
+    let config : CnfArponShip = new CnfArponShip();
+    config.setFromObject(_object);
+
+    let command : CmdSpawnArponShip
+     = new CmdSpawnArponShip(_object.x, _object.y, config);
 
     this._m_aLevelCommands.push(command);
     return;
