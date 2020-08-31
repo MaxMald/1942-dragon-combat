@@ -471,8 +471,45 @@
                  "type":"EnemyBasicBulletConfig",
                  "visible":true,
                  "width":65,
-                 "x":1333.33333333333,
+                 "x":1333.33,
                  "y":9129
+                }, 
+                {
+                 "height":41,
+                 "id":375,
+                 "name":"",
+                 "rotation":0,
+                 "text":
+                    {
+                     "bold":true,
+                     "fontfamily":"MS Shell Dlg 2",
+                     "pixelsize":32,
+                     "text":"Score Manager",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":500,
+                 "x":1215.33333333333,
+                 "y":8854.16666666667
+                }, 
+                {
+                 "gid":12,
+                 "height":57,
+                 "id":376,
+                 "name":"Score Config",
+                 "properties":[
+                        {
+                         "name":"kills_for_add",
+                         "type":"int",
+                         "value":1
+                        }],
+                 "rotation":0,
+                 "type":"ScoreManagerConfig",
+                 "visible":true,
+                 "width":65,
+                 "x":1216.66666666667,
+                 "y":8977
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -588,8 +625,8 @@
                  "type":"Errante",
                  "visible":true,
                  "width":0,
-                 "x":860.514666666667,
-                 "y":9093.33666666667
+                 "x":860.515,
+                 "y":9093.34
                 }, 
                 {
                  "height":0,
@@ -8793,7 +8830,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":375,
+ "nextobjectid":377,
  "orientation":"orthogonal",
  "properties":[
         {

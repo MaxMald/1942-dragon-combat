@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="375">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="377">
  <editorsettings>
   <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
@@ -78,6 +78,10 @@
     <property name="speed" type="float" value="1200"/>
    </properties>
   </object>
+  <object id="375" x="1215.33" y="8854.17" width="500" height="41">
+   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Score Manager</text>
+  </object>
+  <object id="376" name="Score Config" type="ScoreManagerConfig" gid="12" x="1216.67" y="8977" width="65" height="57"/>
  </objectgroup>
  <objectgroup id="2" name="Errantes" offsetx="-3" offsety="6">
   <object id="2" name="Errante" type="Errante" x="188.788" y="9098.98">
@@ -126,6 +130,9 @@
    <point/>
   </object>
   <object id="33" name="Errante" type="Errante" x="300.516" y="8378.67">
+   <properties>
+    <property name="init_time" type="float" value="1.5"/>
+   </properties>
    <point/>
   </object>
   <object id="34" name="Errante" type="Errante" x="812.848" y="8128.67">
