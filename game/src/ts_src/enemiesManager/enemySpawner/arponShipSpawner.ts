@@ -209,6 +209,10 @@ implements IEnemySpawner
       // Send "Active" msg. Active Arpon Weapon.
 
       _actor.sendMessage(DC_MESSAGE_ID.kActive, _actor);
+
+      // Enemies counter.
+
+      this._m_enemiesManager.addEnemies(1);
     }
     else
     {

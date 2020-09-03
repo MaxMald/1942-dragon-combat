@@ -174,6 +174,10 @@ export class ErranteSpawner implements IEnemySpawner
         (sprite.width * 0.5) - circle_radius,
         (sprite.height * 0.5) - circle_radius
       );
+
+      // Enemies counter.
+
+      this._m_enemiesManager.addEnemies(1);
     }
     else
     {

@@ -10,9 +10,14 @@
 
 import { MxListener } from "listeners/mxListener";
 import { MxListenerManager } from "listeners/mxListenerManager";
+import { DC_COMPONENT_ID, DC_ENEMY_TYPE } from "../commons/1942enums";
+import { Ty_physicsActor } from "../commons/1942types";
+import { CmpHeroData } from "../components/cmpHeroData";
+import { CnfScoreManager } from "../configObjects/cnfScoreManager";
+import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
 import { GameManager } from "../gameManager/gameManager";
+import { IPlayerController } from "../playerController/IPlayerController";
 import { IScoreManager } from "./iScoreManager";
-import { ScoreManagerConfig } from "./scoreManagerConfig";
 
  /**
   * 
@@ -36,7 +41,19 @@ implements IScoreManager
 
     // default properties.
 
-    scoreManager._m_score = 0.0;
+    scoreManager._m_score = 0;
+
+    scoreManager._m_mult = 1;
+
+    scoreManager._m_killCount = 0;
+
+    scoreManager._m_healthBonus = 1;
+
+    scoreManager._m_killBonus = 1;
+
+    scoreManager._m_totalScore = 0;
+
+    scoreManager._m_starsNum = 0;
     
     // Create the event manager.
 
@@ -44,6 +61,7 @@ implements IScoreManager
       = new MxListenerManager<IScoreManager, undefined>();
 
     scoreManager._m_listener.addEvent('scoreChanged');
+    scoreManager._m_listener.addEvent('multiplierChanged');
 
     return scoreManager;
   }
@@ -54,7 +72,7 @@ implements IScoreManager
    * @param _scene phaser scene.
    * @param _config configuration file.
    */
-  init(_scene : Phaser.Scene, _config : ScoreManagerConfig)
+  init(_scene : Phaser.Scene, _config : CnfScoreManager)
   : void
   { 
     this._m_config = _config;
@@ -77,10 +95,18 @@ implements IScoreManager
   {    
     if(this._m_config == null)
     {
-      this._m_config = new ScoreManagerConfig();
+      this._m_config = new CnfScoreManager();
     }
 
-    this.setScore(this._m_config.init_score);
+    this._m_mult = 1;
+    this._m_killCount = 0;
+    this._m_healthBonus = 1;
+    this._m_killBonus = 1;
+    this._m_totalScore = 0;
+    this._m_starsNum = 0;
+
+    this.setScore(0.0);
+    this.setMultiplier(1);
     return;
   }
 
@@ -99,6 +125,7 @@ implements IScoreManager
    * Events:
    * 
    * I) scoreChanged : triggered when the score changed.
+   * II) multiplerChanged : triggered when the multiplier changed.
    * 
    * @param _event event key.
    * @param _username username.
@@ -164,6 +191,30 @@ implements IScoreManager
   }
 
   /**
+   * Get the score multiplier.
+   * 
+   * @returns multiplier
+   */
+  getMultiplier()
+  : integer
+  {
+    return this._m_mult;
+  }
+
+  /**
+   * Set the score multiplier.
+   * 
+   * @param _mult multiplier 
+   */
+  setMultiplier(_mult : integer)
+  : void
+  {
+    this._m_mult = _mult;
+    this._m_listener.call("multiplierChanged", this, undefined);
+    return;
+  }
+
+  /**
    * Add score points.
    * 
    * @param _points score points. 
@@ -171,11 +222,123 @@ implements IScoreManager
   addScore(_points : integer)
   : void
   {
-    this._m_score += _points;
+    this._m_score += _points * this._m_mult;
 
     this._m_listener.call("scoreChanged", this, undefined);
     return;
   }
+
+  /**
+   * Called when mision in completed.
+   */
+  onMisionComplete()
+  : void
+  {    
+    ///////////////////////////////////
+    // Kill Bonus
+
+    let gm : GameManager = GameManager.GetInstance();
+
+    let playerController : IPlayerController = gm.getPlayerController();
+
+    let killsCount : number = playerController.getKillCount();
+
+    let enemiesManager : IEnemiesManager = gm.getEnemiesManager();
+
+    let enemyCount : number = enemiesManager.getEnemiesCount();
+
+    // Calculate the player kills range.
+
+    let range = 100 * ( killsCount / enemyCount);
+
+    let config = this._m_config;
+
+    // Check the player range.
+
+    if(range >= config.range_A_min)
+    {
+      this._m_killBonus = config.range_A_mult;
+    }
+    else if(range >= config.range_B_min)
+    {
+      this._m_killBonus = config.range_B_mult;
+    }
+    else if(range >= config.range_C_min)
+    {
+      this._m_killBonus = config.range_C_mult;
+    }
+    else
+    {
+      this._m_killBonus = 1;
+    }
+
+    ///////////////////////////////////
+    // Health Bonus
+
+    let hero = playerController.getPlayer();
+
+    let heroData = hero.getComponent<CmpHeroData>(DC_COMPONENT_ID.kHeroData);
+
+    range = heroData.getHealth();
+
+    // Check the player range.
+
+    if(range >= config.range_A_min)
+    {
+      this._m_healthBonus = config.range_A_mult;
+    }
+    else if(range >= config.range_B_min)
+    {
+      this._m_healthBonus = config.range_B_mult;
+    }
+    else if(range >= config.range_C_min)
+    {
+      this._m_healthBonus = config.range_C_mult;
+    }
+    else
+    {
+      this._m_healthBonus = 1;
+    }
+
+    ///////////////////////////////////
+    // Total Score
+
+    let totalScore : integer 
+      = this._m_score 
+      * this._m_healthBonus 
+      * this._m_killBonus;
+      
+    this._m_totalScore = totalScore; 
+
+    ///////////////////////////////////
+    // Stars
+
+    if(totalScore >= this._m_config.stars_AAA_min)
+    {
+      this._m_starsNum = 3;
+    }
+    else if(totalScore >= this._m_config.stars_AA_min)
+    {
+      this._m_starsNum = 2;
+    }
+    else if(totalScore >= this._m_config.stars_A_min)
+    {
+      this._m_starsNum = 1;
+    }
+    else
+    {
+      this._m_starsNum = 0;
+    }
+
+    return;
+  }
+
+  /**
+   * Called when mision failed.
+   */
+  onMisionFailed()
+  : void
+  { }
 
   /**
    * Safely destroys the score manager.
@@ -185,6 +348,66 @@ implements IScoreManager
   {
     this._m_listener.destroy();
     return;
+  }
+
+  /**
+   * Called when an enemy is killed.
+   */
+  onEnemyKilled(_enemy : DC_ENEMY_TYPE)
+  : void
+  {
+    ++this._m_killCount;
+
+    let mult = 1 + Math.floor(this._m_killCount / this._m_config.kill_for_add);
+
+    this.setMultiplier(mult);
+    return;
+  }
+
+  /**
+   * Called when the hero had been hit.
+   */
+  onHeroHit(_actor : Ty_physicsActor)
+  : void
+  {
+    this._m_killCount = 0;
+    this.setMultiplier(1);
+    return;
+  }
+
+  /**
+   * Get the final multiplier.
+   * 
+   * @returns;
+   */
+  getKillsBonus()
+  : number
+  {
+    return this._m_killBonus;
+  }
+
+  getHealthBonus()
+  : number
+  {
+    return this._m_healthBonus;
+  }
+
+  /**
+   * Get the total score.
+   */
+  getTotalScore()
+  : integer
+  {
+    return this._m_totalScore;
+  }
+
+  /**
+   * Get the number of stars achived.
+   */
+  getStarsNum()
+  : integer
+  {
+    return this._m_starsNum;
   }
 
   /****************************************************/
@@ -203,9 +426,39 @@ implements IScoreManager
   private _m_score : integer;
 
   /**
+   * Hero's final score. Score + health bonus + kills bonus.
+   */
+  private _m_totalScore : integer;
+
+  /**
+   * Score multiplier (kills).
+   */
+  private _m_mult : integer;
+
+  /**
+   * Number of kills.
+   */
+  private _m_killCount : integer;
+
+  /**
+   * Kill bonus multiplier.
+   */
+  private _m_killBonus : integer;
+
+  /**
+   * Health bonus multiplier.
+   */
+  private _m_healthBonus : integer;
+
+  /**
+   * Number of stars achived.
+   */
+  private _m_starsNum : integer;
+
+  /**
    * The score manager configuration file.
    */
-  private _m_config : ScoreManagerConfig;
+  private _m_config : CnfScoreManager;
 
   /**
    * ScoreManager listeners.

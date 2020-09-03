@@ -9,14 +9,12 @@ import { EnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/en
 import { ErranteSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner";
 import { UIManager } from "../../../../../game/src/ts_src/uiManager/UIManager";
 import { ScoreManager } from "../../../../../game/src/ts_src/scoreManager/scoreManager";
-import { ScoreManagerConfig } from "../../../../../game/src/ts_src/scoreManager/scoreManagerConfig";
 import { SpiderBossManager } from "../../../../../game/src/ts_src/bossManager/spiderBossManager";
 import { CnfEnemyBasicBullet } from "../../../../../game/src/ts_src/configObjects/cnfEnemyBasicBullet";
 import { ItemManager } from "../../../../../game/src/ts_src/itemManager/ItemManager";
 import { ILevelConfiguration } from "../../../../../game/src/ts_src/levelConfiguration/ILevelConfiguration";
 import { heroTripleShotSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroTripleShotSpawner";
 import { RangerSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/rangerSpawner";
-import { CnfRangerConfig } from "../../../../../game/src/ts_src/configObjects/cnfRangerConfig";
 import { DC_CONFIG } from "../../../../../game/src/ts_src/commons/1942enums";
 import { CnfRangerSpawner } from "../../../../../game/src/ts_src/configObjects/cnfRangerSpawnerConfig";
 import { SonicSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/sonicSpawner";
@@ -25,8 +23,10 @@ import { ArponShipSpawner } from "../../../../../game/src/ts_src/enemiesManager/
 import { CnfArponShipSpawner } from "../../../../../game/src/ts_src/configObjects/cnfArponShipSpawner";
 import { ArponBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/arponBulletSpawner";
 import { CnfErranteSpawner } from "../../../../../game/src/ts_src/configObjects/cnfErranteSpawner";
+import { CnfScoreManager } from "../../../../../game/src/ts_src/configObjects/cnfScoreManager";
   
-export class Test extends Phaser.Scene
+export class Test 
+extends Phaser.Scene
 {
   /****************************************************/
   /* Public                                           */
@@ -53,8 +53,11 @@ export class Test extends Phaser.Scene
 
     let scoreManager : ScoreManager = ScoreManager.Create();
 
-    let scoreManagerConfig : ScoreManagerConfig
-      = JSON.parse(this.game.cache.text.get('cnf_scoreManager'));
+    let scoreManagerConfig : CnfScoreManager 
+      = levelConfiguration.getConfig<CnfScoreManager>
+      (
+        DC_CONFIG.kScoreManager
+      );
 
     scoreManager.init(this, scoreManagerConfig);    
 

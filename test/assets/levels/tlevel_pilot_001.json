@@ -333,8 +333,8 @@
                  "type":"Hero_bulletStateTripleShot",
                  "visible":true,
                  "width":65,
-                 "x":1382.83,
-                 "y":9436.83
+                 "x":1354.83,
+                 "y":9436.16333333333
                 }, 
                 {
                  "gid":10,
@@ -381,8 +381,8 @@
                  "type":"HeroPowerShieldConfig",
                  "visible":true,
                  "width":65,
-                 "x":1527,
-                 "y":9438
+                 "x":1488.33333333333,
+                 "y":9436.66666666667
                 }, 
                 {
                  "height":41,
@@ -490,8 +490,8 @@
                  "type":"",
                  "visible":true,
                  "width":500,
-                 "x":1215.33333333333,
-                 "y":8854.16666666667
+                 "x":1215.33,
+                 "y":8854.17
                 }, 
                 {
                  "gid":12,
@@ -508,7 +508,7 @@
                  "type":"ScoreManagerConfig",
                  "visible":true,
                  "width":65,
-                 "x":1216.66666666667,
+                 "x":1216.67,
                  "y":8977
                 }],
          "opacity":1,

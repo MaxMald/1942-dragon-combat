@@ -219,7 +219,22 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpUIPowerShieldController
    */
-  kUIPowerShieldController : 28 as 28
+  kUIPowerShieldController : 28 as 28,
+
+  /**
+   * CmpUIScoreMultiplier
+   */
+  kUIScoreMultiplier : 29 as 29,
+
+  /**
+   * CmpActorChildrenController
+   */
+  kCmpActorChildrenController : 30 as 30,
+
+  /**
+   * CmpImageInteractive
+   */
+  kCmpImageInteractive : 31 as 31
 });
 
 /****************************************************/
@@ -477,7 +492,47 @@ export const DC_MESSAGE_ID = Object.freeze
   /**
    * Desctive the power ups.
    */
-  kDesactivePowerUps : 533 as 533
+  kDesactivePowerUps : 533 as 533,
+
+  /**
+   * Set the Prefab
+   */
+  kSetPrefab : 534 as 534,
+
+  /**
+   * Pointer down.
+   * 
+   * msg : MsgInputEvent
+   */
+  kPointerDown : 535 as 535,
+
+  /**
+   * Pointer upd.
+   * 
+   * msg : MsgInputEvent
+   */
+  kPointerUp : 536 as 536,
+
+  /**
+   * Pointer over.
+   * 
+   * msg : MsgInputEvent
+   */
+  kPointerOver : 537 as 537,
+
+  /**
+   * Pointer move.
+   * 
+   * msg : MsgInputEvent
+   */
+  kPointerMove : 538 as 538,
+
+  /**
+   * Pointer out.
+   * 
+   * msg : MsgInputEvent
+   */
+  kPointerOut : 539 as 539,
 });
 
 /****************************************************/
@@ -769,5 +824,10 @@ export const DC_CONFIG = Object.freeze
   /**
    * Enemy basic bullet config object.
    */
-  kEnemyBasicBullet : 17 as 17
+  kEnemyBasicBullet : 17 as 17,
+
+  /**
+   * Score Manager config object.
+   */
+  kScoreManager : 18 as 18
 });

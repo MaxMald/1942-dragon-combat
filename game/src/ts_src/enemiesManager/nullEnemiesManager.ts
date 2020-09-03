@@ -142,6 +142,30 @@ export class NullEnemiesManager implements IEnemiesManager
   }
 
   /**
+   * Add enemies to the enemies counter.
+   * 
+   * @param _number number or enemies.
+   * 
+   * @returns Number of enemies, after addition. 
+   */
+  addEnemies(_number : integer)
+  : number
+  {
+    return 0;
+  }
+
+  /**
+   * Get the total of enemies spawned by this Enemies Manager.
+   * 
+   * @returns Number of enemies.
+   */
+  getEnemiesCount()
+  : number
+  {
+    return 0;
+  }
+
+  /**
    * No implementation.
    */
   destroy()

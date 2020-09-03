@@ -169,6 +169,10 @@ implements IEnemySpawner
       // PlayZOne Padding
 
       _actor.addComponent(this._m_playZone);
+
+      // Enemies counter.
+
+      this._m_enemiesManager.addEnemies(1);
     }
     else
     {

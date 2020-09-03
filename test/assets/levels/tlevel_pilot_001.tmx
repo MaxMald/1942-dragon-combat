@@ -51,13 +51,13 @@
     <property name="speed" type="float" value="1600"/>
    </properties>
   </object>
-  <object id="345" name="Bullet State : TripleShot" type="Hero_bulletStateTripleShot" gid="11" x="1382.83" y="9436.83" width="65" height="57">
+  <object id="345" name="Bullet State : TripleShot" type="Hero_bulletStateTripleShot" gid="11" x="1354.83" y="9436.16" width="65" height="57">
    <properties>
     <property name="frecuency" type="int" value="3"/>
     <property name="opening" type="float" value="15"/>
    </properties>
   </object>
-  <object id="346" name="Power Shield" type="HeroPowerShieldConfig" gid="10" x="1527" y="9438" width="65" height="57">
+  <object id="346" name="Power Shield" type="HeroPowerShieldConfig" gid="10" x="1488.33" y="9436.67" width="65" height="57">
    <properties>
     <property name="explosion_radius" type="float" value="200"/>
     <property name="explosion_time" type="float" value="0.3"/>

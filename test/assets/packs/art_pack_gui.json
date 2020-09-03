@@ -1,0 +1,74 @@
+{
+  "pilot" : 
+  {
+    "files" :
+    [
+      {
+        "type" : "image",
+        "key" : "gui_bg",
+        "url" : "images/gui/bg.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "gui_bg_small",
+        "url" : "images/gui/bg_small.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "gui_header_win",
+        "url" : "images/gui/header_win.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "gui_header_lose",
+        "url" : "images/gui/header_lose.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "gui_star_1",
+        "url" : "images/gui/star_1.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "gui_star_2",
+        "url" : "images/gui/star_2.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "gui_star_3",
+        "url" : "images/gui/star_3.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "gui_star_4",
+        "url" : "images/gui/star_4.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "gui_table",
+        "url" : "images/gui/table.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "gui_table_small",
+        "url" : "images/gui/table_small.png"
+      },
+
+
+      {
+        "type" : "image",
+        "key" : "gui_restart_button",
+        "url" : "images/gui/restart.png"
+      }
+    ]
+  }
+}

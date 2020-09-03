@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objecttypes>
+ <objecttype name="ph_Image" color="#0055ff">
+  <property name="frame_index" type="int" default="0"/>
+  <property name="frame_key" type="string"/>
+  <property name="texture" type="string"/>
+ </objecttype>
+ <objecttype name="ph_Text" color="#000000">
+  <property name="font_color" type="color" default="#ff000000"/>
+ </objecttype>
+</objecttypes>

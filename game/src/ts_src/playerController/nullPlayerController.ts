@@ -189,6 +189,30 @@ implements IPlayerController
   { }
 
   /**
+   * Add kills to the kill count.
+   * 
+   * @param _kills number of kills to add.
+   * 
+   * @returns returns the number of kills, after addition. 
+   */
+  addKills(_kills : integer)
+  : integer
+  {
+    return 0;
+  }
+
+  /**
+   * Get the kill counter.
+   * 
+   * @returns number of kills.
+   */
+  getKillCount()
+  : integer
+  {
+    return 0;
+  }
+
+  /**
    * No implementation.
    */
   destroy()

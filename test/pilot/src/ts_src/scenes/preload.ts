@@ -141,6 +141,13 @@ extends Phaser.Scene
       'pilot'
     );
 
+    this.load.pack
+    (
+      'art_pack_gui',
+      'packs/art_pack_gui.json',
+      'pilot'
+    )
+
     let tiledMapPack = JSON.parse(this.game.cache.text.get('TiledMap_Pack'));
     let tiledMap = tiledMapPack.pilot.files[0];
 
@@ -148,6 +155,21 @@ extends Phaser.Scene
     (
       tiledMap.key,
       tiledMap.url
+    );
+
+    ///////////////////////////////////
+    // Prefabs
+
+    this.load.tilemapTiledJSON
+    (
+      'prefab_score_popup',
+      'prefabs/gui/prefab_ui_scoreBox_A.json'
+    );
+
+    this.load.tilemapTiledJSON
+    (
+      'prefab_lose_popup',
+      'prefabs/gui/prefab_ui_loseBox_A.json'
     );
 
     return;

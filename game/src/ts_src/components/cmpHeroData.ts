@@ -15,6 +15,7 @@ import { Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
 import { MxListenerManager } from "listeners/mxListenerManager";
 import { MxListener } from "listeners/mxListener";
 import { GameManager } from "../gameManager/gameManager";
+import { IScoreManager } from "../scoreManager/iScoreManager";
 
 /**
  * Save the score and health of the hero.
@@ -160,8 +161,9 @@ implements IBaseComponent<Ty_physicsSprite>
   private _onHit( _hitPoints : number)
   : void
   {
+
     let health = this._m_health -= _hitPoints;
-    
+
     if(health <= 0)
     {
       this._m_actor.sendMessage(DC_MESSAGE_ID.kKill, this._m_actor);
@@ -174,7 +176,16 @@ implements IBaseComponent<Ty_physicsSprite>
       );
     } 
 
-    this.setHealth(health);    
+    this.setHealth(health);
+
+    // Score Manager : On Actor Hit.
+
+    let gameManager : GameManager = GameManager.GetInstance();
+
+    let scoreManager : IScoreManager = gameManager.getScoreManager();
+
+    scoreManager.onHeroHit(this._m_actor);
+
     return;
   }
 
