@@ -11464,7 +11464,7 @@ define("game/src/ts_src/uiManager/UIManager", ["require", "exports", "game/src/t
             var acHealthBonus = popupScore.getChild('health_multiplier');
             acHealthBonus.sendMessage(_1942enums_85.DC_MESSAGE_ID.kSetText, 'x' + scoreManager.getHealthBonus().toString());
             var acTotalPoints = popupScore.getChild('total_points');
-            acTotalPoints.sendMessage(_1942enums_85.DC_MESSAGE_ID.kSetText, 'x' + scoreManager.getTotalScore().toString());
+            acTotalPoints.sendMessage(_1942enums_85.DC_MESSAGE_ID.kSetText, scoreManager.getTotalScore().toString());
             var starsNum = scoreManager.getStarsNum();
             var textureKey;
             if (starsNum == 0) {

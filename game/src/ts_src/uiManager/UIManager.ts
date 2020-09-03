@@ -459,7 +459,7 @@ implements IUIManager
     acTotalPoints.sendMessage
     (
       DC_MESSAGE_ID.kSetText,
-      'x' + scoreManager.getTotalScore().toString()
+      scoreManager.getTotalScore().toString()
     );
 
     // Stars
