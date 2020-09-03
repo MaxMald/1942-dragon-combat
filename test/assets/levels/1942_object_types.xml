@@ -92,6 +92,18 @@
   <property name="steer_force" type="float" default="200"/>
   <property name="texture_key" type="string" default="enemy_ranger"/>
  </objecttype>
+ <objecttype name="ScoreManagerConfig" color="#ffff00">
+  <property name="kills_for_add" type="int" default="1"/>
+  <property name="range_A_min" type="int" default="95"/>
+  <property name="range_A_mult" type="int" default="4"/>
+  <property name="range_B_min" type="int" default="75"/>
+  <property name="range_B_mult" type="int" default="3"/>
+  <property name="range_C_min" type="int" default="50"/>
+  <property name="range_C_mult" type="int" default="2"/>
+  <property name="stars_AAA_min" type="int" default="1000"/>
+  <property name="stars_AA_min" type="int" default="750"/>
+  <property name="stars_A_min" type="int" default="500"/>
+ </objecttype>
  <objecttype name="Sonic" color="#ffff00">
   <property name="collision_damage" type="float" default="5"/>
   <property name="coord_x" type="float" default="0"/>

@@ -91,6 +91,21 @@ implements IConfigObject
           this.range_C_mult = property.value as number;
           break;
 
+          case 'stars_AAA_min' :
+
+          this.stars_AAA_min = property.value as number;
+          break;
+
+          case 'stars_AA_min' :
+
+          this.stars_AA_min = property.value as number;
+          break;
+
+          case 'stars_A_min' :
+
+          this.stars_A_min = property.value as number;
+          break;
+
           default:
           break;
         }
