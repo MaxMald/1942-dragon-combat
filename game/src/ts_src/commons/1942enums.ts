@@ -829,5 +829,15 @@ export const DC_CONFIG = Object.freeze
   /**
    * Score Manager config object.
    */
-  kScoreManager : 18 as 18
+  kScoreManager : 18 as 18,
+
+  /**
+   * Balsaru initialization.
+   */
+  kBalsaruInit : 19 as 19,
+
+  /**
+   * Balsaru Idle.
+   */
+  kBalsaruIdle : 20 as 20
 });

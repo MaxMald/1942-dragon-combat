@@ -6,6 +6,13 @@
 	],
 	"settings": {
 		"editor.tabSize": 2,
-		"editor.rulers": [80,95]
+		"editor.rulers": [
+			80,
+			95
+		],
+		"cSpell.enabled": false,
+		"cSpell.words": [
+			"balsaru"
+		]
 	}
 }

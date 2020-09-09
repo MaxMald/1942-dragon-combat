@@ -14,6 +14,8 @@ import { Ty_TileMap, Ty_TileObject } from "../commons/1942types";
 import { CnfArponBullet } from "../configObjects/cnfArponBullet";
 import { CnfArponBulletSpawner } from "../configObjects/cnfArponBulletSpawner";
 import { CnfArponShipSpawner } from "../configObjects/cnfArponShipSpawner";
+import { CnfBalsaruIdle } from "../configObjects/cnfBalsaruIdle";
+import { CnfBalsaruInit } from "../configObjects/cnfBalsaruInit";
 import { CnfBulletStateNormal } from "../configObjects/cnfBulletStateNormal";
 import { CnfBulletStateTriple } from "../configObjects/cnfBulletStateTriple";
 import { CnfCadmio } from "../configObjects/cnfCadmio";
@@ -74,6 +76,8 @@ implements ILevelConfiguration
     this.addConfig(new CnfErranteSpawner());
     this.addConfig(new CnfEnemyBasicBullet());
     this.addConfig(new CnfScoreManager());
+    this.addConfig(new CnfBalsaruInit());
+    this.addConfig(new CnfBalsaruIdle());
 
     return;
   }
@@ -92,7 +96,7 @@ implements ILevelConfiguration
 
     if(objectLayer == null)
     {
-      console.warn("LevelConfiguartion : Layer don't found : " + _layerName);
+      console.warn("LevelConfiguration : Layer don't found : " + _layerName);
       return;
     }
 
@@ -162,7 +166,7 @@ implements ILevelConfiguration
   }
 
   /**
-   * Removes the level configuartion objects.
+   * Removes the level configuration objects.
    */
   clear()
   : void

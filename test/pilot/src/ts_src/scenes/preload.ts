@@ -146,7 +146,14 @@ extends Phaser.Scene
       'art_pack_gui',
       'packs/art_pack_gui.json',
       'pilot'
-    )
+    );
+
+    this.load.pack
+    (
+      'art_pack_balsaru',
+      'packs/art_pack_balsaru.json',
+      'pilot'
+    );
 
     let tiledMapPack = JSON.parse(this.game.cache.text.get('TiledMap_Pack'));
     let tiledMap = tiledMapPack.pilot.files[0];
