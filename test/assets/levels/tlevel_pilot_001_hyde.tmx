@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="16" height="160" tilewidth="68" tileheight="60" infinite="0" nextlayerid="10" nextobjectid="578">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="16" height="160" tilewidth="68" tileheight="60" infinite="0" nextlayerid="10" nextobjectid="598">
  <editorsettings>
-  <export target="tlevel_pilot_001_hyde.json" format="json"/>
+  <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
  <properties>
   <property name="camera_speed" type="float" value="100"/>
@@ -91,9 +91,53 @@
     <property name="shield_max_time" type="float" value="3"/>
    </properties>
   </object>
+  <object id="578" x="1224" y="8880" width="500" height="41">
+   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Score Manager</text>
+  </object>
+  <object id="579" name="Score Config" type="ScoreManagerConfig" gid="12" x="1225.34" y="9002.83" width="65" height="57"/>
+  <object id="580" x="1224" y="9000" width="500" height="41">
+   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Enemy Bullets</text>
+  </object>
+  <object id="581" name="Arpon Bullet" type="ArponBulletConfig" gid="10" x="1225.17" y="9128.5" width="65" height="57">
+   <properties>
+    <property name="speed" type="float" value="1000"/>
+   </properties>
+  </object>
+  <object id="582" name="Basic" type="EnemyBasicBulletConfig" gid="11" x="1342.5" y="9127.17" width="65" height="57">
+   <properties>
+    <property name="speed" type="float" value="1200"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="2" name="First Wave" offsetx="-3" offsety="6">
-  <object id="529" name="Ranger" type="Ranger" x="408" y="9120">
+  <object id="591" name="Arpon Ship" type="Errante" x="272" y="9419">
+   <properties>
+    <property name="has_weapon" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="594" name="Arpon Ship" type="Errante" x="272" y="9300">
+   <properties>
+    <property name="has_weapon" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="595" name="Arpon Ship" type="Errante" x="272" y="9180">
+   <properties>
+    <property name="has_weapon" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="596" name="Arpon Ship" type="Errante" x="272" y="9060">
+   <properties>
+    <property name="has_weapon" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="597" name="Arpon Ship" type="Errante" x="272" y="8940">
+   <properties>
+    <property name="has_weapon" type="bool" value="true"/>
+   </properties>
    <point/>
   </object>
  </objectgroup>

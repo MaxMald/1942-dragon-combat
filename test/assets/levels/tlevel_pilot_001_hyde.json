@@ -519,6 +519,178 @@
                  "width":65,
                  "x":1527,
                  "y":9438
+                }, 
+                {
+                 "height":41,
+                 "id":578,
+                 "name":"",
+                 "rotation":0,
+                 "text":
+                    {
+                     "bold":true,
+                     "fontfamily":"MS Shell Dlg 2",
+                     "pixelsize":32,
+                     "text":"Score Manager",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":500,
+                 "x":1224,
+                 "y":8880
+                }, 
+                {
+                 "gid":12,
+                 "height":57,
+                 "id":579,
+                 "name":"Score Config",
+                 "properties":[
+                        {
+                         "name":"kills_for_add",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"range_A_min",
+                         "type":"int",
+                         "value":95
+                        }, 
+                        {
+                         "name":"range_A_mult",
+                         "type":"int",
+                         "value":4
+                        }, 
+                        {
+                         "name":"range_B_min",
+                         "type":"int",
+                         "value":75
+                        }, 
+                        {
+                         "name":"range_B_mult",
+                         "type":"int",
+                         "value":3
+                        }, 
+                        {
+                         "name":"range_C_min",
+                         "type":"int",
+                         "value":50
+                        }, 
+                        {
+                         "name":"range_C_mult",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"stars_AAA_min",
+                         "type":"int",
+                         "value":1000
+                        }, 
+                        {
+                         "name":"stars_AA_min",
+                         "type":"int",
+                         "value":750
+                        }, 
+                        {
+                         "name":"stars_A_min",
+                         "type":"int",
+                         "value":500
+                        }],
+                 "rotation":0,
+                 "type":"ScoreManagerConfig",
+                 "visible":true,
+                 "width":65,
+                 "x":1225.34,
+                 "y":9002.83
+                }, 
+                {
+                 "height":41,
+                 "id":580,
+                 "name":"",
+                 "rotation":0,
+                 "text":
+                    {
+                     "bold":true,
+                     "fontfamily":"MS Shell Dlg 2",
+                     "pixelsize":32,
+                     "text":"Enemy Bullets",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":500,
+                 "x":1224,
+                 "y":9000
+                }, 
+                {
+                 "gid":10,
+                 "height":57,
+                 "id":581,
+                 "name":"Arpon Bullet",
+                 "properties":[
+                        {
+                         "name":"collider_offset",
+                         "type":"float",
+                         "value":25
+                        }, 
+                        {
+                         "name":"collider_radius",
+                         "type":"float",
+                         "value":25
+                        }, 
+                        {
+                         "name":"collision_damage",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":2000
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"arpon_bullet"
+                        }],
+                 "rotation":0,
+                 "type":"ArponBulletConfig",
+                 "visible":true,
+                 "width":65,
+                 "x":1225.17,
+                 "y":9128.5
+                }, 
+                {
+                 "gid":11,
+                 "height":57,
+                 "id":582,
+                 "name":"Basic",
+                 "properties":[
+                        {
+                         "name":"collision_damage",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"health",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"speed",
+                         "type":"float",
+                         "value":1200
+                        }, 
+                        {
+                         "name":"texture_key",
+                         "type":"string",
+                         "value":"fireball"
+                        }],
+                 "rotation":0,
+                 "type":"EnemyBasicBulletConfig",
+                 "visible":true,
+                 "width":65,
+                 "x":1342.5,
+                 "y":9127.17
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -550,12 +722,12 @@
                         {
                          "name":"health",
                          "type":"float",
-                         "value":20
+                         "value":2
                         }, 
                         {
                          "name":"life_time",
                          "type":"float",
-                         "value":14
+                         "value":7
                         }, 
                         {
                          "name":"mass",
@@ -575,7 +747,7 @@
                         {
                          "name":"steer_force",
                          "type":"float",
-                         "value":1500
+                         "value":200
                         }, 
                         {
                          "name":"texture_key",
@@ -620,7 +792,7 @@
          "y":0
         }],
  "nextlayerid":10,
- "nextobjectid":578,
+ "nextobjectid":583,
  "orientation":"orthogonal",
  "properties":[
         {
