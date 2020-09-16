@@ -9,9 +9,9 @@
  */
 
 import { DC_ENEMY_TYPE, DC_MESSAGE_ID } from "../../commons/1942enums";
+import { CnfErrante } from "../../configObjects/cnfErrante";
 import { GameManager } from "../../gameManager/gameManager";
 import { ILevelGenerator } from "../../levelGenerator/iLevelGenerator";
-import { MsgEnemySpawn } from "../../messages/msgEnemySpawn";
 import { ILevelCommand } from "./iLevelCommands";
 
 /**
@@ -24,9 +24,10 @@ implements ILevelCommand
   /* Public                                           */
   /****************************************************/
 
-  constructor(_x : number, _y : number)
+  constructor(_x : number, _y : number, _config : CnfErrante)
   {
     this._m_position = new Phaser.Geom.Point(_x, _y);
+    this._m_config = _config;
     return;
   }
   
@@ -38,17 +39,17 @@ implements ILevelCommand
   exec(_levelGenerator: ILevelGenerator)
   : void 
   {
-    GameManager.ReceiveMessage
-    (
-      DC_MESSAGE_ID.KSpawnEnemy,
-      new MsgEnemySpawn
-      (
-        DC_ENEMY_TYPE.kErrante,
-        this._m_position.x,
-        -50.0
-      )
-    );
+    let gameManager = GameManager.GetInstance();
 
+    let enemiesManager = gameManager.getEnemiesManager();
+
+    enemiesManager.spawn
+    (
+      this._m_position.x,
+        -50.0,
+        DC_ENEMY_TYPE.kErrante,
+        this._m_config
+    );
     return;
   }
 
@@ -78,4 +79,9 @@ implements ILevelCommand
    * The position of this command in the world.
    */
   _m_position : Phaser.Geom.Point;
+
+  /**
+   * config object.
+   */
+  _m_config : CnfErrante;
 }

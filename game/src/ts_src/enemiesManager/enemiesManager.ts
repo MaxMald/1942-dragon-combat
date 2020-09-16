@@ -97,6 +97,10 @@ export class EnemiesManager implements IEnemiesManager
 
     this.clear();
 
+    // Reset the enemies counter.
+
+    this._m_enemiesCount = 0;
+
     // Create the physics bodies group.
 
     let bodiesGroup = this._m_bodiesGroup;
@@ -414,6 +418,31 @@ export class EnemiesManager implements IEnemiesManager
   }
 
   /**
+   * Add enemies to the enemies counter.
+   * 
+   * @param _number number or enemies.
+   * 
+   * @returns Number of enemies, after addition. 
+   */
+  addEnemies(_number : integer)
+  : number
+  {
+    this._m_enemiesCount += _number;
+    return this._m_enemiesCount;
+  }
+
+  /**
+   * Get the total of enemies spawned by this Enemies Manager.
+   * 
+   * @returns Number of enemies.
+   */
+  getEnemiesCount()
+  : number
+  {
+    return this._m_enemiesCount;
+  }
+
+  /**
    * Safely destroys this object.
    */
   destroy()
@@ -602,4 +631,9 @@ export class EnemiesManager implements IEnemiesManager
    * delta time.
    */
   private _m_dt : number;
+
+  /**
+   * Number of enemies spawned by this manager.
+   */
+  private _m_enemiesCount : number;
 }

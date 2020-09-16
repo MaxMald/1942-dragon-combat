@@ -9,8 +9,10 @@
  * @since August-06-2020
  */
 
+import { DC_ENEMY_TYPE } from "../commons/1942enums";
+import { Ty_physicsActor } from "../commons/1942types";
+import { CnfScoreManager } from "../configObjects/cnfScoreManager";
 import { GameManager } from "../gameManager/gameManager";
-import { ScoreManagerConfig } from "./scoreManagerConfig";
 
  /**
   * The score manager has the count of credit points that the player had take
@@ -28,7 +30,7 @@ export interface IScoreManager
    * @param _scene phaser scene. 
    * @param _config configuration file.
    */
-  init(_scene : Phaser.Scene, _config : ScoreManagerConfig)
+  init(_scene : Phaser.Scene, _config : CnfScoreManager)
   : void;
 
   /**
@@ -90,12 +92,77 @@ export interface IScoreManager
   : void;
 
   /**
+   * Get the score multiplier.
+   * 
+   * @returns multiplier
+   */
+  getMultiplier()
+  : integer;
+
+  /**
+   * Set the score multiplier.
+   * 
+   * @param _mult multiplier 
+   */
+  setMultiplier(_mult : integer)
+  : void;
+
+
+  /**
    * Add score points.
    * 
    * @param _points score points. 
    */
   addScore(_points : integer)
   : void;
+
+  /**
+   * Called when an enemy is killed.
+   */
+  onEnemyKilled(_enemy : DC_ENEMY_TYPE)
+  : void;
+
+  /**
+   * Called when the hero had been hit.
+   */
+  onHeroHit(_actor : Ty_physicsActor)
+  : void;
+
+  /**
+   * Get the health bonus multiplier.
+   */
+  getHealthBonus()
+  : number;
+
+  /**
+   * Get kill bonus multiplier.
+   */
+  getKillsBonus()
+  : number;
+
+  /**
+   * Get the total score.
+   */
+  getTotalScore()
+  : integer;
+
+  /**
+   * Get the number of stars achived.
+   */
+  getStarsNum()
+  : integer;
+
+  /**
+   * Called when mision in completed.
+   */
+  onMisionComplete()
+  : void;
+
+  /**
+   * Called when mision failed.
+   */
+  onMisionFailed()
+  : void;  
 
   /**
    * Destroy the score manager.

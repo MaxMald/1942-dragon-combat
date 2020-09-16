@@ -66,6 +66,8 @@ implements IPlayerController
     _cnfPowerShield : CnfPowerShield
   ) : void
   {
+    this._m_kill_count = 0;
+
     ///////////////////////////////////
     // Hero
 
@@ -494,6 +496,31 @@ implements IPlayerController
   }
 
   /**
+   * Add kills to the kill count.
+   * 
+   * @param _kills number of kills to add.
+   * 
+   * @returns returns the number of kills, after addition. 
+   */
+  addKills(_kills : integer)
+  : integer
+  {
+    this._m_kill_count += _kills;
+    return this._m_kill_count;
+  }
+
+  /**
+   * Get the kill counter.
+   * 
+   * @returns number of kills.
+   */
+  getKillCount()
+  : integer
+  {
+    return this._m_kill_count;
+  }
+
+  /**
    * Safely destroys this game controller.
    */
   destroy()
@@ -517,6 +544,11 @@ implements IPlayerController
   /* Private                                          */
   /****************************************************/
   
+  /**
+   * Number of kills.
+   */
+  private _m_kill_count : integer;
+
   /**
    * Reference to the Hero.
    */

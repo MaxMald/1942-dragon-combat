@@ -86,6 +86,24 @@ export interface IEnemiesManager
   : Ty_physicsActor;
 
   /**
+   * Add enemies to the enemies counter.
+   * 
+   * @param _number number or enemies.
+   * 
+   * @returns Number of enemies, after addition. 
+   */
+  addEnemies(_number : integer)
+  : number;
+
+  /**
+   * Get the total of enemies spawned by this Enemies Manager.
+   * 
+   * @returns Number of enemies.
+   */
+  getEnemiesCount()
+  : number;
+
+  /**
    * Disable an actor.
    * 
    * @param _actor Actor. 

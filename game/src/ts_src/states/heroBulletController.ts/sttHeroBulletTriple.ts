@@ -38,6 +38,7 @@ implements ISttHeroBullet
     this._m_loadingTime = 0.0;
     this._m_bulletManager = NullBulletManager.GetInstance();
     this._m_gameManager = GameManager.GetInstance();
+    this._m_disable = false;
 
     return;
   }
@@ -106,6 +107,7 @@ implements ISttHeroBullet
   : void 
   {
     this._m_loadingTime = 0.0;
+    this._m_disable = false;
 
     let heroController = this._m_actor.getComponent<CmpHeroController>
     (
@@ -146,6 +148,16 @@ implements ISttHeroBullet
       this._m_loadingMult = 0.0;
       return;
 
+      case DC_MESSAGE_ID.kEnterBarrelRoll :
+
+      this._m_disable = true;
+      return;
+
+      case DC_MESSAGE_ID.kExitBarrelRoll :
+
+      this._m_disable = false;
+      return;
+
       /**
        * Set the hero bullet manager.
        */
@@ -161,6 +173,26 @@ implements ISttHeroBullet
 
       this._onItemCollision(_obj as ICmpItemController);
       return;
+
+      /**
+       * If hit, desactive power ups.
+       */
+      case DC_MESSAGE_ID.kHit : 
+
+      this._m_actor.sendMessage
+      (
+        DC_MESSAGE_ID.kDesactivePowerUps,
+        undefined
+      );
+      return;
+
+      /**
+       * Desactive all power ups.
+       */
+      case DC_MESSAGE_ID.kDesactivePowerUps:
+
+      this._m_bulletController.setActiveState('Normal');
+      return;
     }
     return;
   }
@@ -171,6 +203,11 @@ implements ISttHeroBullet
   update()
   : void 
   {
+    if(this._m_disable)
+    {
+      return;
+    }
+
     let loading : number = this._m_loadingTime; 
 
     loading += (this._m_gameManager.m_dt * this._m_loadingMult);
@@ -273,6 +310,11 @@ implements ISttHeroBullet
    * Referenc to the GameManager.
    */
   private _m_gameManager : GameManager;
+
+  /**
+   * Indicates if the Fire mechanism is disbale
+   */
+  private _m_disable : boolean;
 
   /**
    * Configuration object.

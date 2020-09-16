@@ -71,6 +71,7 @@ implements IBaseComponent<Ty_physicsSprite>
   }
 
   /**
+   * * hola 
    * 
    * @param _id message id
    * @param _obj message.
@@ -81,10 +82,21 @@ implements IBaseComponent<Ty_physicsSprite>
     switch(_id)
     {
       /**
-       * Register when the pointer is pressed.
+       * -> Register when the pointer is pressed. 
+       * -> Desacive shield.
        */
       case DC_MESSAGE_ID.kPointerPressed:
         this._m_pressingPointer = true;
+
+        if(this._m_secondary_action == DC_SECONDARY_ACTION.kShield)
+        {
+          this._m_powerShieldActor.sendMessage
+          (
+            DC_MESSAGE_ID.kDesactive,
+            this._m_powerShieldActor
+          );
+          return
+        }
       break;
 
       /**
@@ -94,7 +106,7 @@ implements IBaseComponent<Ty_physicsSprite>
        * secondary action.
        */
       case DC_MESSAGE_ID.kPointerReleased:
-        this._m_pressingPointer = false;        
+        this._m_pressingPointer = false;
       break;
 
       /**
@@ -102,6 +114,22 @@ implements IBaseComponent<Ty_physicsSprite>
        */
       case DC_MESSAGE_ID.kCollisionItem:
         this._onCollisionWithItem(_obj as ICmpItemController);
+      break;
+
+      /**
+       * The powershield had been explode and is lost.
+       */
+      case DC_MESSAGE_ID.kPowerShieldExplodes:
+
+      this._m_secondary_action = DC_SECONDARY_ACTION.kUndefined;
+      break;
+
+      /**
+       * Desactive the power ups.
+       */
+      case DC_MESSAGE_ID.kDesactivePowerUps:
+
+      this._m_secondary_action = DC_SECONDARY_ACTION.kUndefined;
       break;
 
       default:

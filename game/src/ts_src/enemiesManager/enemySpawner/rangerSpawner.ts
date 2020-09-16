@@ -151,6 +151,10 @@ implements IEnemySpawner
         DC_MESSAGE_ID.kSetHealthPoints,
         config.health
       );
+
+      // Enemies counter.
+
+      this._m_enemiesManager.addEnemies(1);
     }
     else
     {

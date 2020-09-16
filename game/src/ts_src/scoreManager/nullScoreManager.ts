@@ -8,9 +8,11 @@
  * @since August-06-2020
  */
 
+import { DC_ENEMY_TYPE } from "../commons/1942enums";
+import { Ty_physicsActor } from "../commons/1942types";
+import { CnfScoreManager } from "../configObjects/cnfScoreManager";
 import { GameManager } from "../gameManager/gameManager";
 import { IScoreManager } from "./iScoreManager";
-import { ScoreManagerConfig } from "./scoreManagerConfig";
 
 /**
  * Score manager without implemenation.
@@ -34,7 +36,7 @@ implements IScoreManager
    * @param _scene 
    * @param _config 
    */
-  init(_scene : Phaser.Scene, _config : ScoreManagerConfig)
+  init(_scene : Phaser.Scene, _config : CnfScoreManager)
   : void
   { }
 
@@ -119,6 +121,64 @@ implements IScoreManager
     console.log( "NullScoreManager : setScore");
     return;
   }
+
+  /**
+   * Get the score multiplier.
+   * 
+   * @returns multiplier
+   */
+  getMultiplier()
+  : integer
+  {
+    return 0;
+  }
+
+  /**
+   * Get the health bonus multiplier.
+   */
+  getHealthBonus()
+  : number
+  {
+    return 1;
+  }
+
+  /**
+   * Get kill bonus multiplier.
+   */
+  getKillsBonus()
+  : number
+  {
+    return 1;
+  }
+
+  /**
+   * Get the total score.
+   */
+  getTotalScore()
+  : integer
+  {
+    return 0;
+  }
+
+  /**
+   * Get the number of stars achived.
+   */
+  getStarsNum()
+  : integer
+  {
+    return 0;
+  }
+
+  /**
+   * Set the score multiplier.
+   * 
+   * @param _mult multiplier 
+   */
+  setMultiplier(_mult : integer)
+  : void
+  {;
+    return;
+  }
   
   /**
    * No implementation.
@@ -131,6 +191,43 @@ implements IScoreManager
     console.log( "NullScoreManager : addScore");
     return;
   }
+
+  /**
+   * Called when an enemy is killed.
+   */
+  onEnemyKilled(_enemy : DC_ENEMY_TYPE)
+  : void
+  {
+
+    console.log("NullScoreManager : Enemy Killed.");
+    return;
+  }
+
+  /**
+   * Called when the hero had been hit.
+   */
+  onHeroHit(_actor : Ty_physicsActor)
+  : void
+  {
+    // TODO.
+
+    console.log("NullScoreManager: Hero Hit!");
+    return;
+  }
+  
+  /**
+   * Called when mision in completed.
+   */
+  onMisionComplete()
+  : void
+  { }
+
+  /**
+   * Called when mision failed.
+   */
+  onMisionFailed()
+  : void
+  { }
 
   /**
    * No implementation. 

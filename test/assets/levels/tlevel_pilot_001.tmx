@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="374">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="377">
  <editorsettings>
   <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
@@ -51,13 +51,13 @@
     <property name="speed" type="float" value="1600"/>
    </properties>
   </object>
-  <object id="345" name="Bullet State : TripleShot" type="Hero_bulletStateTripleShot" gid="11" x="1382.83" y="9436.83" width="65" height="57">
+  <object id="345" name="Bullet State : TripleShot" type="Hero_bulletStateTripleShot" gid="11" x="1354.83" y="9436.16" width="65" height="57">
    <properties>
     <property name="frecuency" type="int" value="3"/>
     <property name="opening" type="float" value="15"/>
    </properties>
   </object>
-  <object id="346" name="Power Shield" type="HeroPowerShieldConfig" gid="10" x="1527" y="9438" width="65" height="57">
+  <object id="346" name="Power Shield" type="HeroPowerShieldConfig" gid="10" x="1488.33" y="9436.67" width="65" height="57">
    <properties>
     <property name="explosion_radius" type="float" value="200"/>
     <property name="explosion_time" type="float" value="0.3"/>
@@ -68,17 +68,32 @@
   <object id="347" x="1214.83" y="9001.83" width="500" height="41">
    <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Enemy Bullets</text>
   </object>
-  <object id="373" name="Arpon Bullet Config" type="ArponBulletConfig" gid="10" x="1216" y="9126.33" width="65" height="57">
+  <object id="373" name="Arpon Bullet" type="ArponBulletConfig" gid="10" x="1216" y="9130.33" width="65" height="57">
    <properties>
     <property name="speed" type="float" value="2000"/>
    </properties>
   </object>
+  <object id="374" name="Basic" type="EnemyBasicBulletConfig" gid="11" x="1333.33" y="9129" width="65" height="57">
+   <properties>
+    <property name="speed" type="float" value="1200"/>
+   </properties>
+  </object>
+  <object id="375" x="1215.33" y="8854.17" width="500" height="41">
+   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Score Manager</text>
+  </object>
+  <object id="376" name="Score Config" type="ScoreManagerConfig" gid="12" x="1216.67" y="8977" width="65" height="57"/>
  </objectgroup>
  <objectgroup id="2" name="Errantes" offsetx="-3" offsety="6">
   <object id="2" name="Errante" type="Errante" x="188.788" y="9098.98">
+   <properties>
+    <property name="has_weapon" type="bool" value="false"/>
+   </properties>
    <point/>
   </object>
-  <object id="12" name="Errante" type="Errante" x="857.848" y="9106.67">
+  <object id="12" name="Errante" type="Errante" x="860.515" y="9093.34">
+   <properties>
+    <property name="has_weapon" type="bool" value="false"/>
+   </properties>
    <point/>
   </object>
   <object id="13" name="Errante" type="Errante" x="954.91" y="8834.25">
@@ -94,6 +109,9 @@
    <point/>
   </object>
   <object id="20" name="Errante" type="Errante" x="784.516" y="8377.34">
+   <properties>
+    <property name="hasWeapon" type="bool" value="true"/>
+   </properties>
    <point/>
   </object>
   <object id="21" name="Errante" type="Errante" x="882.516" y="8457.34">
@@ -112,12 +130,18 @@
    <point/>
   </object>
   <object id="33" name="Errante" type="Errante" x="300.516" y="8378.67">
+   <properties>
+    <property name="init_time" type="float" value="1.5"/>
+   </properties>
    <point/>
   </object>
   <object id="34" name="Errante" type="Errante" x="812.848" y="8128.67">
    <point/>
   </object>
   <object id="35" name="Errante" type="Errante" x="885.516" y="8129.34">
+   <properties>
+    <property name="hasWeapon" type="bool" value="true"/>
+   </properties>
    <point/>
   </object>
   <object id="36" name="Errante" type="Errante" x="960.848" y="8130.67">
@@ -496,7 +520,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="8" name="Rangers">
+ <objectgroup id="8" name="Rangers" locked="1">
   <object id="352" name="Ranger" type="Ranger" x="532" y="8286.67">
    <point/>
   </object>
@@ -522,10 +546,13 @@
    <point/>
   </object>
   <object id="360" name="Ranger" type="Ranger" x="542" y="9023">
+   <properties>
+    <property name="health" type="float" value="100"/>
+   </properties>
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="9" name="Sonics">
+ <objectgroup id="9" name="Sonics" locked="1">
   <object id="369" name="Sonic" type="Sonic" x="521" y="8912.33">
    <properties>
     <property name="coord_x" type="float" value="1"/>
@@ -541,7 +568,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="10" name="ArponShip">
+ <objectgroup id="10" name="ArponShip" locked="1">
   <object id="371" name="ArponShip" type="ArponShip" x="286.667" y="9534.67">
    <point/>
   </object>

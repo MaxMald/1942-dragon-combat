@@ -8,6 +8,7 @@
  * @since July-31-2020
  */
 
+import { MxObjectPool } from "optimization/mxObjectPool";
 import { IBulletManager } from "../../bulletManager/iBulletManager";
 import { NullBulletManager } from "../../bulletManager/nullBulletManager";
 import { DC_COMPONENT_ID, DC_ENEMY_TYPE, DC_MESSAGE_ID } from "../../commons/1942enums";
@@ -16,9 +17,11 @@ import { CmpEnemyHealth } from "../../components/cmpEnemyHealth";
 import { CmpErranteController } from "../../components/cmpErranteController";
 import { CmpNullEnemyController } from "../../components/cmpNullEnemyController";
 import { CmpPlayZone } from "../../components/cmpPlayZone";
+import { CnfErrante } from "../../configObjects/cnfErrante";
+import { CnfErranteSpawner } from "../../configObjects/cnfErranteSpawner";
+import { GameManager } from "../../gameManager/gameManager";
 import { IEnemiesManager } from "../iEnemiesManager";
 import { NullEnemiesManager } from "../nullEnemiesManager";
-import { ErranteConfig } from "./erranteConfig";
 import { IEnemySpawner } from "./iEnemySpawner";
 
 export class ErranteSpawner implements IEnemySpawner
@@ -35,12 +38,9 @@ export class ErranteSpawner implements IEnemySpawner
     spawner._m_enemiesManager = NullEnemiesManager.GetInstance();
     spawner._m_bulletManager = NullBulletManager.GetInstance();
 
-    spawner._m_controller = CmpErranteController.Create();
-    spawner._m_controller.setSpawner(spawner);
-    spawner._m_controller.setConfiguration(new ErranteConfig());
+    spawner._m_poolControllers = MxObjectPool.Create<CmpErranteController>();
 
     spawner._m_playZone = CmpPlayZone.Create();
-    spawner._m_playZone.setBoundings(-100, -100, 1180, 2020);
 
     return spawner;
   }
@@ -52,30 +52,47 @@ export class ErranteSpawner implements IEnemySpawner
    * 
    * @param _config configuration object. 
    */
-  init(_config ?: ErranteConfig)
+  init(_config ?: CnfErranteSpawner)
   : void
   {
     if(_config === undefined)
     {
       // Use default properties.
-      _config = new ErranteConfig();
+      _config = new CnfErranteSpawner();
     }
 
-    this.setErranteConfig(_config);
-    return;
-  }
+    // Define playzone boundings
 
-  /**
-   * Set the errante configuration object. This defines the initial properties
-   * of the actor.
-   * 
-   * @param _config configuration object. 
-   */
-  setErranteConfig(_config : ErranteConfig)
-  : void
-  {
-    this._m_controller.setConfiguration(_config);
-    this._m_erranteConfig = _config;    
+    let gameManager = GameManager.GetInstance();
+
+    let scene : Phaser.Scene = gameManager.getGameScene();
+    
+    let canvas = scene.game.canvas;
+    
+    this._m_playZone.setBoundings
+    (
+      -_config.playZone_padding, 
+      -_config.playZone_padding, 
+      canvas.width + _config.playZone_padding, 
+      canvas.height + _config.playZone_padding
+    );
+
+    // controllers pools
+
+    let aControllers = new Array<CmpErranteController>();
+
+    let index : number = 0;
+    while(index < _config.pool_size)
+    {
+      let controller : CmpErranteController = CmpErranteController.Create();
+
+      controller.setSpawner(this);
+
+      aControllers.push(controller);
+      ++index;
+    }
+
+    this._m_poolControllers.init(aControllers);
     return;
   }
 
@@ -87,36 +104,19 @@ export class ErranteSpawner implements IEnemySpawner
   update(_dt: number)
   : void 
   { 
-    this._m_controller.setDeltaTime(_dt);
     return;
   }
 
   spawn(_actor: Ty_physicsActor, _x: number, _y: number, _data ?: any)
   : void 
   {
-    this.assemble(_actor);    
-
-    // Set Texture.
-
-    let sprite = _actor.getWrappedInstance();
-    sprite.setTexture(this._m_erranteConfig.texture_key);
-    sprite.setAngle(90.0);
-    
-    let circle_radius = sprite.height * 0.5;
-    sprite.body.setCircle
-    (
-      circle_radius, 
-      (sprite.width * 0.5) - circle_radius,
-      (sprite.height * 0.5) - circle_radius
-    );
-
-    // Set position.
-
     _actor.sendMessage
     (
       DC_MESSAGE_ID.kToPosition, 
       new Phaser.Math.Vector3(_x, _y)
     );
+
+    this.assemble(_actor, _data);   
     return;
   }
 
@@ -137,19 +137,52 @@ export class ErranteSpawner implements IEnemySpawner
   assemble(_actor : Ty_physicsActor, _data ?: any)
   : void
   {
-    // Health component.
+    let config : CnfErrante = _data as CnfErrante;
+    
+    let controller = this._m_poolControllers.get();
 
-    let healthComponent 
-      = _actor.getComponent<CmpEnemyHealth>(DC_COMPONENT_ID.kEnemyHealth);
-    healthComponent.setHP(this._m_erranteConfig.health);
+    if(controller != null)
+    {
+      // Health component.
 
-    // Errante Controller.
+      let healthComponent 
+        = _actor.getComponent<CmpEnemyHealth>(DC_COMPONENT_ID.kEnemyHealth);
+      healthComponent.setHP(config.health);
 
-    _actor.addComponent(this._m_controller);
+      // Setup controller
 
-    // Playzone component.
+      controller.setConfiguration(config);
 
-    _actor.addComponent(this._m_playZone);
+      _actor.addComponent(controller);
+
+      controller.init(_actor);
+
+      // Playzone component.
+
+      _actor.addComponent(this._m_playZone);
+
+      // Sprite Configuration.
+
+      let sprite = _actor.getWrappedInstance();
+      sprite.setTexture(config.texture_key);
+      sprite.setAngle(90.0);
+    
+      let circle_radius = sprite.height * 0.5;
+      sprite.body.setCircle
+      (
+        circle_radius, 
+        (sprite.width * 0.5) - circle_radius,
+        (sprite.height * 0.5) - circle_radius
+      );
+
+      // Enemies counter.
+
+      this._m_enemiesManager.addEnemies(1);
+    }
+    else
+    {
+      this._m_enemiesManager.disableActor(_actor);
+    }    
     return;
   }
 
@@ -163,6 +196,13 @@ export class ErranteSpawner implements IEnemySpawner
   {
     // Errante controller.
 
+    let controller = _actor.getComponent<CmpErranteController>
+    (
+      DC_COMPONENT_ID.kEnemyController
+    );
+
+    this._m_poolControllers.desactive(controller);
+
     _actor.addComponent(CmpNullEnemyController.GetInstance());
 
     // Remove playzone component.
@@ -175,7 +215,16 @@ export class ErranteSpawner implements IEnemySpawner
   : void
   {
     this._m_enemiesManager = _enemiesManager;
-    this._m_controller.setEnemiesManager(_enemiesManager);
+    
+    this._m_poolControllers.forEach
+    (
+      function(_cmp : CmpErranteController)
+      : void
+      {
+        _cmp.setEnemiesManager(_enemiesManager);
+        return;
+      }
+    );
     return;
   }
 
@@ -183,7 +232,16 @@ export class ErranteSpawner implements IEnemySpawner
   : void 
   {
     this._m_bulletManager = _bulletManager;
-    this._m_controller.setBulletManager(_bulletManager);
+    
+    this._m_poolControllers.forEach
+    (
+      function(_cmp : CmpErranteController)
+      : void
+      {
+        _cmp.setBulletManager(_bulletManager);
+        return;
+      }
+    );
     return;
   }
 
@@ -202,14 +260,22 @@ export class ErranteSpawner implements IEnemySpawner
   destroy()
   : void 
   {
-    this._m_controller.destroy();
-    this._m_controller = null;
-
     this._m_playZone.destroy();
     this._m_playZone = null;
 
     this._m_enemiesManager = null;
-    this._m_erranteConfig = null;
+
+    this._m_poolControllers.forEach
+    (
+      function(_cmp : CmpErranteController)
+      : void
+      {
+        _cmp.destroy();
+        return;
+      }
+    );
+    this._m_poolControllers.clear();
+    this._m_poolControllers = null;
     return;
   }
   
@@ -234,17 +300,12 @@ export class ErranteSpawner implements IEnemySpawner
   private _m_bulletManager : IBulletManager;
 
   /**
-   * Errante configuration object.
+   * Errante controlles, object pool
    */
-  private _m_erranteConfig : ErranteConfig;
+  private _m_poolControllers : MxObjectPool<CmpErranteController>;
 
   ///////////////////////////////////
   // Shared components
-
-  /**
-   * Reference to the controller.
-   */
-  private _m_controller : CmpErranteController;
 
   /**
    * Referece to the playzone component.

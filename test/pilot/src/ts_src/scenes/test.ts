@@ -9,15 +9,12 @@ import { EnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/en
 import { ErranteSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner";
 import { UIManager } from "../../../../../game/src/ts_src/uiManager/UIManager";
 import { ScoreManager } from "../../../../../game/src/ts_src/scoreManager/scoreManager";
-import { ScoreManagerConfig } from "../../../../../game/src/ts_src/scoreManager/scoreManagerConfig";
 import { SpiderBossManager } from "../../../../../game/src/ts_src/bossManager/spiderBossManager";
-import { SimpleBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/simpleBulletSpawner";
-import { EnemyBasicBulletConfig } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletConfig";
+import { CnfEnemyBasicBullet } from "../../../../../game/src/ts_src/configObjects/cnfEnemyBasicBullet";
 import { ItemManager } from "../../../../../game/src/ts_src/itemManager/ItemManager";
 import { ILevelConfiguration } from "../../../../../game/src/ts_src/levelConfiguration/ILevelConfiguration";
 import { heroTripleShotSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroTripleShotSpawner";
 import { RangerSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/rangerSpawner";
-import { CnfRangerConfig } from "../../../../../game/src/ts_src/configObjects/cnfRangerConfig";
 import { DC_CONFIG } from "../../../../../game/src/ts_src/commons/1942enums";
 import { CnfRangerSpawner } from "../../../../../game/src/ts_src/configObjects/cnfRangerSpawnerConfig";
 import { SonicSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/sonicSpawner";
@@ -25,8 +22,11 @@ import { CnfSonicSpawner } from "../../../../../game/src/ts_src/configObjects/cn
 import { ArponShipSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/arponShipSpawner";
 import { CnfArponShipSpawner } from "../../../../../game/src/ts_src/configObjects/cnfArponShipSpawner";
 import { ArponBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/arponBulletSpawner";
+import { CnfErranteSpawner } from "../../../../../game/src/ts_src/configObjects/cnfErranteSpawner";
+import { CnfScoreManager } from "../../../../../game/src/ts_src/configObjects/cnfScoreManager";
   
-export class Test extends Phaser.Scene
+export class Test 
+extends Phaser.Scene
 {
   /****************************************************/
   /* Public                                           */
@@ -53,8 +53,11 @@ export class Test extends Phaser.Scene
 
     let scoreManager : ScoreManager = ScoreManager.Create();
 
-    let scoreManagerConfig : ScoreManagerConfig
-      = JSON.parse(this.game.cache.text.get('cnf_scoreManager'));
+    let scoreManagerConfig : CnfScoreManager 
+      = levelConfiguration.getConfig<CnfScoreManager>
+      (
+        DC_CONFIG.kScoreManager
+      );
 
     scoreManager.init(this, scoreManagerConfig);    
 
@@ -114,28 +117,21 @@ export class Test extends Phaser.Scene
       )
     );
 
+    bossManager.setBulletManager(enim_bulletManager);
+
     ///////////////////////////////////
     // Spawner : Enemy Basic Bullet
 
     let enemyBulletSpawner = EnemyBasicBulletSpawner.Create();
 
-    if(gameCache.text.has('cnf_bullet_enemyBasic'))
-    {
-      let enemyBasicConfig : EnemyBasicBulletConfig 
-        = JSON.parse(gameCache.text.get('cnf_bullet_enemyBasic'));
+    let enemyBasicBulletConfig = levelConfiguration.getConfig<CnfEnemyBasicBullet>
+    (
+      DC_CONFIG.kEnemyBasicBullet
+    );
 
-      enemyBulletSpawner.setBulletConfiguartion(enemyBasicConfig);
-    }
-
-    enim_bulletManager.addSpawner(enemyBulletSpawner);
-
-    ///////////////////////////////////
-    // Spawner : Simple Bullet Spawner
-
-    enim_bulletManager.addSpawner(SimpleBulletSpawner.Create()); 
-    
-    bossManager.setBulletManager(enim_bulletManager);
-
+    enemyBulletSpawner.setBulletConfig(enemyBasicBulletConfig);
+    enim_bulletManager.addSpawner(enemyBulletSpawner);    
+  
     ///////////////////////////////////
     // Spawner : Arpon
 
@@ -164,13 +160,12 @@ export class Test extends Phaser.Scene
 
     let erranteSpawner : ErranteSpawner = ErranteSpawner.Create();
 
-    if(this.game.cache.text.has('cnf_errante'))
-    {
-      let erranteConfig 
-        = JSON.parse(gameCache.text.get('cnf_errante'));
+    let erranteSpawnerConfig = levelConfiguration.getConfig<CnfErranteSpawner>
+    (
+      DC_CONFIG.kErranteSpawner
+    );    
 
-      erranteSpawner.setErranteConfig(erranteConfig);
-    }
+    erranteSpawner.init(erranteSpawnerConfig);
 
     enemiesManager.addSpawner(erranteSpawner);
 

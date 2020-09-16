@@ -711,6 +711,7 @@ export class GameManager
   private _onMisionCompleted()
   : void
   {
+    this._m_scoreManager.onMisionComplete();
     this._m_uiManager.receive(DC_MESSAGE_ID.kMisionCompleted, this);
     this._m_gameplayStop = true;
     return;
@@ -722,6 +723,7 @@ export class GameManager
   private _onMisionFailure()
   : void
   {
+    this._m_scoreManager.onMisionFailed();
     this._m_uiManager.receive(DC_MESSAGE_ID.kMisionFailure, this);
     this._m_gameplayStop = true;
     return;

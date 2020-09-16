@@ -10,6 +10,7 @@
 
 import { DC_MESSAGE_ID, DC_SECONDARY_ACTION } from "../../commons/1942enums";
 import { CmpHeroController } from "../../components/cmpHeroController";
+import { ItemManager } from "../../itemManager/ItemManager";
 import { ICmpState } from "../ICmpState";
 
 export class SttHeroNormal
@@ -42,6 +43,9 @@ implements ICmpState<CmpHeroController>
   {
     switch(_id)
     {
+      /**
+       * Activate the power shield or make the barrel roll.
+       */
       case DC_MESSAGE_ID.kPointerReleased:
       
       if(this._m_controller.getSecondaryAction() == DC_SECONDARY_ACTION.kShield)

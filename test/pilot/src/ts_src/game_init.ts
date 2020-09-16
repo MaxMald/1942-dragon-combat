@@ -16,6 +16,7 @@ class GameInit
     var config = 
     {
       type: Phaser.WEBGL,
+      
       scale: 
       {
         parent: 'phaser-game',

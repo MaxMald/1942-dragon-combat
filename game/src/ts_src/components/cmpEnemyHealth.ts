@@ -9,8 +9,11 @@
  * @since July-31-2020
  */
 
-import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
+import { DC_COMPONENT_ID, DC_ENEMY_TYPE, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
+import { GameManager } from "../gameManager/gameManager";
+import { IPlayerController } from "../playerController/IPlayerController";
+import { IScoreManager } from "../scoreManager/iScoreManager";
 import { IBaseComponent } from "./iBaseComponent";
 
 /**
@@ -113,7 +116,15 @@ export class CmpEnemyHealth implements IBaseComponent<Ty_physicsSprite>
       hp = 0;
 
       let actor = this._m_actor;
+
+      let gameManager = GameManager.GetInstance();
+      let scoreManager : IScoreManager = gameManager.getScoreManager();      
+
       actor.sendMessage(DC_MESSAGE_ID.kKill, actor);
+      scoreManager.onEnemyKilled(DC_ENEMY_TYPE.kUndefined);
+
+      let playerController : IPlayerController = gameManager.getPlayerController();
+      playerController.addKills(1);
     }
 
     this._m_iHP = hp;

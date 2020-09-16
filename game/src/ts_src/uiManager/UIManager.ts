@@ -9,18 +9,28 @@
  */
 
 import { BaseActor } from "../actors/baseActor";
+import { PrefabActor } from "../actors/prefabActor";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_Image, Ty_Text } from "../commons/1942types";
-import { CmpActorGroupImage } from "../components/cmpActorGroup";
+import { CmpHeroController } from "../components/cmpHeroController";
 import { CmpHeroData } from "../components/cmpHeroData";
+import { CmpPowerShieldController } from "../components/cmpPowerShieldController";
 import { CmpUIBossHealthControl } from "../components/cmpUIBossHealthControl";
 import { CmpUIHealthController } from "../components/cmpUIHealthController";
+import { CmpUIPowerShieldController } from "../components/cmpUIPowerShieldController";
 import { CmpUIScoreController } from "../components/cmpUIScoreController";
+import { CmpUIScoreMultiplier } from "../components/cmpUIScoreMultiplier";
 import { FCUIBossHealth } from "../factories/fcUIBossHealth";
 import { FcUIHealth } from "../factories/fcUIHealth";
 import { FcUIMessage } from "../factories/fcUIMessage";
+import { FcUIPowerShield } from "../factories/fcUIPowerShield";
 import { FcUIScore } from "../factories/fcUIScore";
+import { FcUIScoreMultiplier } from "../factories/fcUIScoreMultiplier";
+import { FcUIScorePopup } from "../factories/fcUIScorePopup";
+import { FcUILosePopup } from "../factories/fcUILosePopup";
 import { GameManager } from "../gameManager/gameManager";
+import { PrefabBuilder } from "../prefabBuilder/prefabBuilder";
+import { IScoreManager } from "../scoreManager/iScoreManager";
 import { IUIManager } from "./IUIManager";
 
 /**
@@ -56,6 +66,7 @@ implements IUIManager
     // Hero health points
 
     let heroHealth = FcUIHealth.Create(_scene);
+    this._m_heroHealth = heroHealth;
 
     let playerController = _gameManager.getPlayerController();
     let hero = playerController.getPlayer();
@@ -84,6 +95,7 @@ implements IUIManager
     // Hero's score points
 
     let heroScore = FcUIScore.Create(_scene);
+    this._m_heroScore = heroScore;
 
     let scoreController = heroScore.getComponent<CmpUIScoreController>
     (
@@ -98,6 +110,73 @@ implements IUIManager
       "scoreUI", 
       scoreController.onScoreChanged, 
       scoreController
+    );
+
+    ///////////////////////////////////
+    // Score Multiplier
+
+    let scoreMult = FcUIScoreMultiplier.Create(_scene);
+    this._m_scoreMultiplier = scoreMult;
+
+    let scoreMultController = scoreMult.getComponent<CmpUIScoreMultiplier>
+    (
+      DC_COMPONENT_ID.kUIScoreMultiplier
+    );
+
+    scoreManager.suscribe
+    (
+      'multiplierChanged',
+      'ScoreMultiplerUI',
+      scoreMultController.onMultiplierChange,
+      scoreMultController
+    );
+
+    ///////////////////////////////////
+    // Heros's Power Shield
+
+    let powerShieldUI = FcUIPowerShield.Create(_scene);
+    this._m_powerShield = powerShieldUI;
+
+    let heroController = hero.getComponent<CmpHeroController>
+    (
+      DC_COMPONENT_ID.kHeroController
+    );
+
+    let powerShield = heroController.getPowerShieldActor();
+
+    let powerShieldController = powerShield.getComponent<CmpPowerShieldController>
+    (
+      DC_COMPONENT_ID.kPowerShieldComponent
+    );
+
+    let powerShieldUIController 
+      = powerShieldUI.getComponent<CmpUIPowerShieldController>
+      (
+        DC_COMPONENT_ID.kUIPowerShieldController
+      )
+
+    powerShieldController.on
+    (
+      'active',
+      'powerShieldUI',
+      powerShieldUIController.onPowerShieldActivated,
+      powerShieldUIController
+    );
+
+    powerShieldController.on
+    (
+      'desactive',
+      'powerShieldUI',
+      powerShieldUIController.onPowerShieldDesactivated,
+      powerShieldUIController
+    );
+
+    powerShieldController.on
+    (
+      'progress',
+      'powerShieldUI',
+      powerShieldUIController.onProgress,
+      powerShieldUIController
     );
 
     ///////////////////////////////////
@@ -125,14 +204,25 @@ implements IUIManager
       bossManager.getBossHealth()
     );
 
-    ///////////////////////////////////
-    // Dialog Box.
+    /****************************************************/
+    /* PREFABS                                          */
+    /****************************************************/
 
-    let dialogBox = FcUIMessage.Create(_scene);
-    
-    this._m_heroScore = heroScore;
-    this._m_heroHealth = heroHealth;
-    this._m_dialogBox = dialogBox;
+    let builder = new PrefabBuilder();
+    builder.init();
+
+    ///////////////////////////////////
+    // Score Popup    
+
+    this._m_popupScore = FcUIScorePopup.Create(_scene, builder);
+    this._m_popupScore.sendMessage(DC_MESSAGE_ID.kClose, undefined);
+
+    ///////////////////////////////////
+    // Lose Popup
+
+    this._m_losePopup = FcUILosePopup.Create(_scene, builder);
+    this._m_losePopup.sendMessage(DC_MESSAGE_ID.kClose, undefined);
+
     return;
   }
   
@@ -177,6 +267,40 @@ implements IUIManager
     );
 
     ///////////////////////////////////
+    // Score Multiplier
+
+    if(this._m_scoreMultiplier == null)
+    {
+      this._m_scoreMultiplier = FcUIScore.Create(_scene);
+    }
+
+    this._m_scoreMultiplier.sendMessage
+    (
+      DC_MESSAGE_ID.kToPosition,
+      new Phaser.Math.Vector3(600, 75)
+    );
+
+    ///////////////////////////////////
+    // Power Shield UI
+
+    if(this._m_powerShield == null)
+    {
+      this._m_powerShield = FcUIPowerShield.Create(_scene);
+    }
+
+    this._m_powerShield.sendMessage
+    (
+      DC_MESSAGE_ID.kToPosition,
+      new Phaser.Math.Vector3(20, 75)
+    );
+
+    this._m_powerShield.sendMessage
+    (
+      DC_MESSAGE_ID.kClose,
+      undefined
+    );
+
+    ///////////////////////////////////
     // Boss Health UI
 
     this._m_bossScore.sendMessage
@@ -190,21 +314,6 @@ implements IUIManager
       DC_MESSAGE_ID.kClose,
       null
     );
-
-    ////////////////////////////////////
-    // Dialog Box
-
-    let canvas = _scene.game.canvas;
-
-    let dialogImage = this._m_dialogBox.getWrappedInstance();
-    let movement = new Phaser.Math.Vector3
-    (
-      canvas.width * 0.5 - dialogImage.x,
-      canvas.height * 0.5 - dialogImage.y
-    );
-
-    this._m_dialogBox.sendMessage(DC_MESSAGE_ID.kAgentMove, movement);
-    this._m_dialogBox.sendMessage(DC_MESSAGE_ID.kClose, null);
 
     return;
   }
@@ -253,7 +362,7 @@ implements IUIManager
     this._m_heroHealth.update();
     this._m_heroScore.update();
     this._m_bossScore.update();
-    this._m_dialogBox.update();
+    this._m_powerShield.update();
 
     return;
   }
@@ -270,11 +379,17 @@ implements IUIManager
     this._m_heroScore.destroy();
     this._m_heroScore = null;
 
-    this._m_dialogBox.destroy();
-    this._m_dialogBox = null;
-
     this._m_bossScore.destroy();
-    this._m_dialogBox = null;
+    this._m_bossScore = null;
+
+    this._m_powerShield.destroy();
+    this._m_powerShield = null;
+
+    this._m_popupScore.destroy();
+    this._m_popupScore = null;
+
+    this._m_losePopup.destroy();
+    this._m_losePopup = null;
 
     return;
   }
@@ -291,17 +406,91 @@ implements IUIManager
   private _onMissionCompleted(_gameManager : GameManager)
   : void
   {
+    // Display Popup.
 
-    let actorGroup = this._m_dialogBox.getComponent<CmpActorGroupImage>
+    let popupScore = this._m_popupScore;
+
+    popupScore.sendMessage
     (
-      DC_COMPONENT_ID.kActorGroup
+      DC_MESSAGE_ID.kShow,
+      undefined
     );
 
-    let boxMsgActor = actorGroup.getActor("box_message");
+    // Score Manager.
 
-    boxMsgActor.sendMessage(DC_MESSAGE_ID.kSetText, "Mision Completed");
+    let gm : GameManager = GameManager.GetInstance();
 
-    this._m_dialogBox.sendMessage(DC_MESSAGE_ID.kShow, null);
+    let scoreManager : IScoreManager = gm.getScoreManager();
+
+    // Score Points.
+
+    let acScorePoints = popupScore.getChild<BaseActor<Ty_Text>>('score_points');
+    
+    acScorePoints.sendMessage
+    (
+      DC_MESSAGE_ID.kSetText, 
+      scoreManager.getScore().toString()
+    );
+
+    // Kill Bonus
+
+    let acKillBonus = popupScore.getChild<BaseActor<Ty_Text>>('kill_multiplier');
+
+    acKillBonus.sendMessage
+    (
+      DC_MESSAGE_ID.kSetText,
+      'x' + scoreManager.getKillsBonus().toString()
+    );
+
+    // Health Bonus
+
+    let acHealthBonus = popupScore.getChild<BaseActor<Ty_Text>>('health_multiplier');
+
+    acHealthBonus.sendMessage
+    (
+      DC_MESSAGE_ID.kSetText,
+      'x' + scoreManager.getHealthBonus().toString()
+    );
+
+    // Total Points
+
+    let acTotalPoints = popupScore.getChild<BaseActor<Ty_Text>>('total_points');
+
+    acTotalPoints.sendMessage
+    (
+      DC_MESSAGE_ID.kSetText,
+      scoreManager.getTotalScore().toString()
+    );
+
+    // Stars
+
+    let starsNum : integer = scoreManager.getStarsNum();
+    let textureKey : string;
+
+    if(starsNum == 0)
+    {
+      textureKey = 'gui_star_4';
+    }
+    else if(starsNum == 1)
+    {
+      textureKey = 'gui_star_3';
+    }
+    else if(starsNum == 2)
+    {
+      textureKey = 'gui_star_2';
+    }
+    else
+    {
+      textureKey = 'gui_star_1';
+    }
+
+    let acStars = popupScore.getChild<BaseActor<Ty_Image>>('stars');
+
+    acStars.sendMessage
+    (
+      DC_MESSAGE_ID.kSetTexture,
+      textureKey
+    );
 
     return;
   }
@@ -314,17 +503,11 @@ implements IUIManager
   private _onMissionFailure(_gameManager : GameManager)
   : void
   {
-    let actorGroup = this._m_dialogBox.getComponent<CmpActorGroupImage>
+    this._m_losePopup.sendMessage
     (
-      DC_COMPONENT_ID.kActorGroup
+      DC_MESSAGE_ID.kShow,
+      undefined
     );
-
-    let boxMsgActor = actorGroup.getActor("box_message");
-
-    boxMsgActor.sendMessage(DC_MESSAGE_ID.kSetText, "Mision Failure");
-
-    this._m_dialogBox.sendMessage(DC_MESSAGE_ID.kShow, null);
-
     return;
   }
   
@@ -344,7 +527,22 @@ implements IUIManager
   private _m_bossScore : BaseActor<Ty_Text>;
 
   /**
-   * Reference to the dialog box.
+   * Hero's power shield UI actor.
    */
-  private _m_dialogBox : BaseActor<Ty_Image>;
+  private _m_powerShield : BaseActor<Ty_Text>;
+
+  /**
+   * Score Multiplier.
+   */
+  private _m_scoreMultiplier : BaseActor<Ty_Text>;
+
+  /**
+   * Score Final Results popup.
+   */
+  private _m_popupScore : PrefabActor;
+
+  /**
+   * Lose Popup.
+   */
+  private _m_losePopup: PrefabActor;
 }

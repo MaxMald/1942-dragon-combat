@@ -8,6 +8,8 @@
  * @since August-21-2020
  */
 
+import { MxListener } from "listeners/mxListener";
+import { MxListenerManager } from "listeners/mxListenerManager";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
 import { CnfPowerShield } from "../configObjects/cnfPowerShield";
@@ -32,6 +34,13 @@ implements IBaseComponent<Ty_physicsSprite>
     controller.m_id = DC_COMPONENT_ID.kPowerShieldComponent;
     controller._m_activeState = controller._updateDesactive;
     controller._m_gameManager = GameManager.GetInstance();
+
+    controller._m_listeners 
+      = new MxListenerManager<CmpPowerShieldController, any>();
+
+    controller._m_listeners.addEvent('active');
+    controller._m_listeners.addEvent('desactive');
+    controller._m_listeners.addEvent('progress');
 
     return controller;
   }
@@ -100,6 +109,36 @@ implements IBaseComponent<Ty_physicsSprite>
     return;
   }
 
+  /**
+   * Events:
+   * 
+   * * active : Trigger when the power shield had been activated.
+   * * desactive : Trigger when the power shield had been desactivated.
+   * * progress : Trigger every time the power time had changed. Sends a value
+   * between 0.0 and 1.0 as argument.
+   * 
+   * @param _event event key.
+   * @param _username username.
+   * @param _fn function.
+   * @param _context context.
+   */
+  on
+  (
+    _event : string, 
+    _username : string, 
+    _fn : ( _sender : CmpPowerShieldController, _args : any) => void,
+    _context : any
+  )
+  {
+    this._m_listeners.suscribe
+    (
+      _event, 
+      _username, 
+      new MxListener<CmpPowerShieldController, any>(_fn, _context)
+    );
+    return;
+  }
+
   receive(_id: number, _obj: any)
   : void 
   {
@@ -107,7 +146,10 @@ implements IBaseComponent<Ty_physicsSprite>
     {
       case DC_MESSAGE_ID.kDesactive : 
       
-      this.activeDesactiveState();
+      if(this._m_activeState != this._updateExplosion)
+      {
+        this.activeDesactiveState();
+      }      
       return;
 
       case DC_MESSAGE_ID.kActive : 
@@ -136,6 +178,9 @@ implements IBaseComponent<Ty_physicsSprite>
     );
 
     this._m_activeState = this._updateDesactive;
+
+    this._m_listeners.call('desactive', this, null);
+
     return;
   }
 
@@ -162,6 +207,9 @@ implements IBaseComponent<Ty_physicsSprite>
     );
 
     this._m_activeState = this._updateGrowing;
+
+    this._m_listeners.call('active', this, null);
+
     return;
   }
 
@@ -180,6 +228,12 @@ implements IBaseComponent<Ty_physicsSprite>
 
     this._m_growing_time = 0.0;    
 
+    this._m_heroActor.sendMessage
+    (
+      DC_MESSAGE_ID.kPowerShieldExplodes,
+      this
+    );
+
     this._m_activeState = this._updateExplosion;
     return;
   }
@@ -189,6 +243,10 @@ implements IBaseComponent<Ty_physicsSprite>
   {
     this._m_config = null;
     this._m_gameManager = null;
+    this._m_heroActor = null;
+    
+    this._m_listeners.destroy();
+    this._m_listeners = null;
     return;
   }
 
@@ -220,8 +278,11 @@ implements IBaseComponent<Ty_physicsSprite>
     let time = this._m_growing_time + this._m_gameManager.m_dt;
     this._m_growing_time = time;
     
-    if(time > this._m_config.shield_max_time)
+    let config = this._m_config;
+
+    if(time > config.shield_max_time)
     {
+      time = config.shield_max_time;
       this.activeExplodeState();
     }
     else 
@@ -236,6 +297,9 @@ implements IBaseComponent<Ty_physicsSprite>
       
       sprite.setScale(minScale + (deltaScale * lerp));
     }
+
+    this._m_listeners.call('progress', this, time / config.shield_max_time );
+
     return;
   }
 
@@ -253,7 +317,7 @@ implements IBaseComponent<Ty_physicsSprite>
     
     if(time > config.explosion_time)
     {
-      this.activeDesactiveState();
+      this.activeDesactiveState();      
     }
     else
     {
@@ -321,4 +385,9 @@ implements IBaseComponent<Ty_physicsSprite>
    * Reference to the shield.
    */
   private _m_shieldActor : Ty_physicsActor;
+
+  /**
+   * Listener Managers
+   */
+  private _m_listeners : MxListenerManager<CmpPowerShieldController, any>;
 }

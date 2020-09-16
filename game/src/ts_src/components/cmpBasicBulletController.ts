@@ -9,7 +9,7 @@
  */
 
 import { BaseActor } from "../actors/baseActor";
-import { EnemyBasicBulletConfig } from "../bulletManager/bulletSpawner/enemyBasicBulletConfig";
+import { CnfEnemyBasicBullet } from "../configObjects/cnfEnemyBasicBullet";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite, V2, V3 } from "../commons/1942types";
 import { CmpBulletData } from "./cmpBulletData";
@@ -32,7 +32,7 @@ implements IBaseComponent<Ty_physicsSprite>
 
     controller._m_direction = new Phaser.Math.Vector2(1.0, 0.0);
     controller._m_force = new Phaser.Math.Vector3();
-    controller._m_config = new EnemyBasicBulletConfig();
+    controller._m_config = new CnfEnemyBasicBullet();
 
     controller.m_id = DC_COMPONENT_ID.kBasicBulletController;
     
@@ -48,7 +48,7 @@ implements IBaseComponent<Ty_physicsSprite>
    * 
    * @param _config configuartion object. 
    */
-  setConfiguartion(_config : EnemyBasicBulletConfig)
+  setConfiguartion(_config : CnfEnemyBasicBullet)
   : void
   {
     this._m_config = _config;
@@ -87,26 +87,10 @@ implements IBaseComponent<Ty_physicsSprite>
     return;
   }
 
-  /**
-   * Recalculate the force with the given delta time.
-   * 
-   * @param _dt delta time.
-   */
-  resetForce(_dt : number)
-  : void
-  {
-    let mult = _dt * this._m_config.speed;
-
-    this._m_force.x = this._m_direction.x * mult;
-    this._m_force.y = this._m_direction.y * mult;
-
-    return;
-  }
-
   update(_actor: BaseActor<Ty_physicsSprite>)
   : void 
   { 
-    _actor.sendMessage(DC_MESSAGE_ID.kAgentMove, this._m_force);
+    //_actor.sendMessage(DC_MESSAGE_ID.kAgentMove, this._m_force);
     return;
   }
 
@@ -165,13 +149,7 @@ implements IBaseComponent<Ty_physicsSprite>
   private _onKill(_actor : Ty_physicsActor)
   : void
   {
-    let data = _actor.getComponent<CmpBulletData>
-    (
-      DC_COMPONENT_ID.kBulletData
-    );
-
-    data.getSpawner().disassemble(_actor);
-
+    // TODO Effect
     return;
   }
 
@@ -188,5 +166,5 @@ implements IBaseComponent<Ty_physicsSprite>
   /**
    * Configuartion object.
    */
-  private _m_config : EnemyBasicBulletConfig;
+  private _m_config : CnfEnemyBasicBullet;
 }

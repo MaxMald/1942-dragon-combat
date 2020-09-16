@@ -18,11 +18,14 @@ import { CnfBulletStateNormal } from "../configObjects/cnfBulletStateNormal";
 import { CnfBulletStateTriple } from "../configObjects/cnfBulletStateTriple";
 import { CnfCadmio } from "../configObjects/cnfCadmio";
 import { CnfCanus } from "../configObjects/cnfCanus";
+import { CnfEnemyBasicBullet } from "../configObjects/cnfEnemyBasicBullet";
+import { CnfErranteSpawner } from "../configObjects/cnfErranteSpawner";
 import { CnfHeroBasicBullet } from "../configObjects/cnfHeroBasicBullet";
 import { CnfHeroTripleShotBullet } from "../configObjects/cnfHeroTripleShotBullet";
 import { CnfItemManager } from "../configObjects/cnfItemManager";
 import { CnfPowerShield } from "../configObjects/cnfPowerShield";
 import { CnfRangerSpawner } from "../configObjects/cnfRangerSpawnerConfig";
+import { CnfScoreManager } from "../configObjects/cnfScoreManager";
 import { CnfSonicSpawner } from "../configObjects/cnfSonicSpawner";
 import { IConfigObject } from "../configObjects/IConfigObject";
 import { GameManager } from "../gameManager/gameManager";
@@ -68,6 +71,9 @@ implements ILevelConfiguration
     this.addConfig(new CnfArponShipSpawner());
     this.addConfig(new CnfArponBullet());
     this.addConfig(new CnfArponBulletSpawner());
+    this.addConfig(new CnfErranteSpawner());
+    this.addConfig(new CnfEnemyBasicBullet());
+    this.addConfig(new CnfScoreManager());
 
     return;
   }

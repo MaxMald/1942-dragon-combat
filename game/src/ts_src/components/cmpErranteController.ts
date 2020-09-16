@@ -11,8 +11,8 @@
 import { IBulletManager } from "../bulletManager/iBulletManager";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { DC_BULLET_TYPE, DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
-import { Ty_physicsActor, V3 } from "../commons/1942types";
-import { ErranteConfig } from "../enemiesManager/enemySpawner/erranteConfig";
+import { Ty_physicsActor, V2, V3 } from "../commons/1942types";
+import { CnfErrante } from "../configObjects/cnfErrante";
 import { IEnemySpawner } from "../enemiesManager/enemySpawner/iEnemySpawner";
 import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
@@ -36,17 +36,18 @@ implements ICmpEnemyController
 
     controller._m_direction = new Phaser.Math.Vector3(0.0, 1.0);
     controller._m_force = new Phaser.Math.Vector3();
+    controller._m_bullet_direction = new Phaser.Math.Vector2(0.0, 1.0);
     
-    // default properties
+    // Default properties
 
-    controller._m_config = new ErranteConfig();
+    controller._m_config = new CnfErrante();
     controller._m_time = 0.0;
 
     controller._m_bulletManager = NullBulletManager.GetInstance();
     controller._m_enemiesManager = NullEnemiesManager.GetInstance();
     controller._m_spawner = NullEnemySpawner.GetInstance();
 
-    controller.setDeltaTime(0.0);
+    controller._m_gameManager = GameManager.GetInstance();
 
     return controller;
   }
@@ -54,62 +55,53 @@ implements ICmpEnemyController
   init(_actor: Ty_physicsActor)
   : void 
   {
+    this._actor = _actor;
+    this._m_time = this._m_config.init_time;
     return;
   }
 
   update(_actor: Ty_physicsActor)
   : void 
   {
-    _actor.sendMessage(DC_MESSAGE_ID.kAgentMove, this._m_force);
-
-    if(this._m_time >= this._m_config._fire_rate_sec)
-    {
-      
-      let sprite = _actor.getWrappedInstance();
-
-      this._m_bulletManager.spawn
-      (
-        sprite.x, 
-        sprite.y + 100, 
-        DC_BULLET_TYPE.kEnemyBasic
-      );
-
-    }
-    return;
-  }
-
-  /**
-   * Reset the movement force with the given delta time value. Adds one step to
-   * the fire mecanism time.
-   * 
-   * @param _dt delta time. 
-   */
-  setDeltaTime(_dt : number)
-  : void
-  {
     let config = this._m_config;
+    let deltaTime = this._m_gameManager.m_dt
 
-    // Reset the movement force.
+    // Movement
 
     let force = this._m_force;
     let direction = this._m_direction;
-    let mult = config.speed * _dt;
+    let mult = config.speed * deltaTime;
 
     force.x = direction.x * mult;
     force.y = direction.y * mult;
 
+    _actor.sendMessage(DC_MESSAGE_ID.kAgentMove, force);
+
     // Fire mecanism
 
-    if(this._m_time >= config._fire_rate_sec)
+    if(config.hasWeapon)
     {
-      this._m_time = _dt;
-    }
-    else
-    {
-      this._m_time += _dt;
-    }
+      let time = this._m_time + deltaTime;
+
+      if(time >= config.secondsPerBullet)
+      {
+        time = 0.0;
+
+        let sprite = _actor.getWrappedInstance();
+
+        this._m_bulletManager.spawn
+        (
+          sprite.x, 
+          sprite.y + 100, 
+          DC_BULLET_TYPE.kEnemyBasic,
+          this._m_bullet_direction
+        );
+      }
+
+      this._m_time = time;
+    }        
     return;
-  }
+  }  
 
   receive(_id: number, _obj: any)
   : void 
@@ -146,12 +138,12 @@ implements ICmpEnemyController
    * 
    * @param _config configuarion object.
    */
-  setConfiguration(_config : ErranteConfig)
+  setConfiguration(_config : CnfErrante)
   : void
   {
-    _config._fire_rate_sec = 1.0 / _config.fire_rate;
-
     this._m_config = _config;
+
+    this._m_time = _config.init_time;
     return;
   }
 
@@ -275,9 +267,19 @@ implements ICmpEnemyController
   }
 
   /**
+   * Errante actor.
+   */
+  private _actor : Ty_physicsActor;
+
+  /**
    * Direction vector.
    */
   private _m_direction : V3;
+
+  /**
+   * Direction of the bullet.
+   */
+  private _m_bullet_direction : V2;
 
   /**
    * Force vector.
@@ -292,7 +294,7 @@ implements ICmpEnemyController
   /**
    * Configuration object.
    */
-  private _m_config : ErranteConfig;
+  private _m_config : CnfErrante;
 
   /**
    * Reference ot the Errante Spawner.
@@ -308,4 +310,9 @@ implements ICmpEnemyController
    * Reference to the bullet manager.
    */
   private _m_bulletManager : IBulletManager;
+
+  /**
+   * Game Manager.
+   */
+  private _m_gameManager : GameManager;
 }
