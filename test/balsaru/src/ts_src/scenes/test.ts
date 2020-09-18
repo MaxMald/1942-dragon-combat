@@ -9,7 +9,6 @@ import { EnemiesManager } from "../../../../../game/src/ts_src/enemiesManager/en
 import { ErranteSpawner } from "../../../../../game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner";
 import { UIManager } from "../../../../../game/src/ts_src/uiManager/UIManager";
 import { ScoreManager } from "../../../../../game/src/ts_src/scoreManager/scoreManager";
-import { SpiderBossManager } from "../../../../../game/src/ts_src/bossManager/spiderBossManager";
 import { CnfEnemyBasicBullet } from "../../../../../game/src/ts_src/configObjects/cnfEnemyBasicBullet";
 import { ItemManager } from "../../../../../game/src/ts_src/itemManager/ItemManager";
 import { ILevelConfiguration } from "../../../../../game/src/ts_src/levelConfiguration/ILevelConfiguration";
@@ -25,7 +24,6 @@ import { ArponBulletSpawner } from "../../../../../game/src/ts_src/bulletManager
 import { CnfErranteSpawner } from "../../../../../game/src/ts_src/configObjects/cnfErranteSpawner";
 import { CnfScoreManager } from "../../../../../game/src/ts_src/configObjects/cnfScoreManager";
 import { BalsaruManager } from "../../../../../game/src/ts_src/bossManager/balsaruManager";
-import { NullBossManager } from "../../../../../game/src/ts_src/bossManager/NullBossManager";
 import { CnfKalebio } from "../../../../../game/src/ts_src/configObjects/cnfKalebio";
   
 export class Test 
@@ -87,7 +85,7 @@ extends Phaser.Scene
 
     let canvas = this.game.canvas;
 
-    let bossManager : SpiderBossManager = new SpiderBossManager();
+    let bossManager : BalsaruManager = new BalsaruManager();
 
     bossManager.init(this, gameManager);
 

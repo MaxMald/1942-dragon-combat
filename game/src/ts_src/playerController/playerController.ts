@@ -50,7 +50,7 @@ implements IPlayerController
   }
   
   /**
-   * Creates the hero's actor and setup the properties of the hero behaviour with
+   * Creates the hero's actor and setup the properties of the hero behavior with
    * a configuration object.
    * 
    * @param _scene The phaser scene that will create the hero.
