@@ -11,9 +11,13 @@
 import { BaseActor } from "../actors/baseActor";
 import { PrefabActor } from "../actors/prefabActor";
 import { Ty_Image, Ty_physicsSprite } from "../commons/1942types";
+import { CmpBalsaruBulletController } from "../components/cmpBalsaruBulletController";
+import { CmpBalsaruController } from "../components/cmpBalsaruControllert";
+import { CmpDbgBalsaruHead } from "../components/cmpDbgBalsaruHead";
 import { CmpImageController } from "../components/cmpImageController";
 import { CmpNeckController } from "../components/cmpNeckController";
 import { CmpSpriteController } from "../components/cmpSpriteController";
+import { CnfBalsaruHead } from "../configObjects/cnfBalsaruHead";
 import { CnfBalsaruInit } from "../configObjects/cnfBalsaruInit";
 
 export class FcBalsaru
@@ -22,7 +26,12 @@ export class FcBalsaru
   /* Public                                           */
   /****************************************************/
   
-  static Create(_scene : Phaser.Scene, _cnf_init : CnfBalsaruInit)
+  static Create
+  (
+    _scene : Phaser.Scene, 
+    _cnf_init : CnfBalsaruInit,
+    _cnf_head : CnfBalsaruHead
+  )
   : PrefabActor
   {
     let prefabActor : PrefabActor = PrefabActor.Create('Balsaru');
@@ -88,11 +97,28 @@ export class FcBalsaru
 
     // Neck Controller
 
-    let neckController : CmpNeckController = CmpNeckController.Create();
+    let neckController : CmpNeckController = CmpNeckController.Create(_scene);
 
-    neckController.setup(head_sprite, shipSprite, aNeckBalls, _cnf_init);
+    neckController.setup
+    (
+      head_sprite, 
+      shipSprite,
+      aNeckBalls,
+      _cnf_init,
+      _cnf_head
+    );
 
     head.addComponent(neckController);
+    head.addComponent(CmpBalsaruController.Create());
+    head.addComponent(CmpBalsaruBulletController.Create());
+
+    // Head Debugging
+
+    let headDebug = CmpDbgBalsaruHead.Create();
+
+    headDebug.setup(_scene, _cnf_head, head_sprite, shipSprite);
+
+    head.addComponent(headDebug);
 
     // Init head.
 

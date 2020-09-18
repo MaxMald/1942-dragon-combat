@@ -1,5 +1,5 @@
 import { GameManager } from "../../../../../game/src/ts_src/gameManager/gameManager";
-import { CnfBulletManager, CnfHero } from "../../../../../game/src/ts_src/commons/1942config";
+import { CnfBulletManager } from "../../../../../game/src/ts_src/commons/1942config";
 import { AmbienceGeneratorConfig } from "../../../../../game/src/ts_src/levelGenerator/ambienceGenerator/ambienceGeneratorConfig";
 import { BulletManager } from "../../../../../game/src/ts_src/bulletManager/bulletManager";
 import { HeroBasicBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletSpawner";
@@ -25,6 +25,8 @@ import { ArponBulletSpawner } from "../../../../../game/src/ts_src/bulletManager
 import { CnfErranteSpawner } from "../../../../../game/src/ts_src/configObjects/cnfErranteSpawner";
 import { CnfScoreManager } from "../../../../../game/src/ts_src/configObjects/cnfScoreManager";
 import { BalsaruManager } from "../../../../../game/src/ts_src/bossManager/balsaruManager";
+import { NullBossManager } from "../../../../../game/src/ts_src/bossManager/NullBossManager";
+import { CnfKalebio } from "../../../../../game/src/ts_src/configObjects/cnfKalebio";
   
 export class Test 
 extends Phaser.Scene
@@ -86,6 +88,7 @@ extends Phaser.Scene
     let canvas = this.game.canvas;
 
     let bossManager : BalsaruManager = new BalsaruManager();
+
     bossManager.init(this, gameManager);
 
     bossManager.setPosition
@@ -243,12 +246,11 @@ extends Phaser.Scene
 
     ///////////////////////////////////
     // Player Controller
-       
-    let heroConfig : CnfHero 
-      = JSON.parse(this.game.cache.text.get('cnf_hero'));
-
-    heroConfig.x = this.game.canvas.width * 0.5;
-    heroConfig.y = this.game.canvas.height * 0.5;
+     
+    let heroConfig = levelConfiguration.getConfig<CnfKalebio>
+    (
+      DC_CONFIG.kKalebio
+    );
     
     gameManager.initHero(this, heroConfig);
 

@@ -21,7 +21,6 @@ import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../commons/1942enums";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { CmpHeroData } from "../components/cmpHeroData";
 import { Ty_physicsActor, Ty_physicsSprite, V2 } from "../commons/1942types";
-import { CnfHero } from "../commons/1942config";
 import { IPlayerController } from "./IPlayerController";
 import { CmpHeroController } from "../components/cmpHeroController";
 import { StateHeroBarrelRoll } from "../states/heroAnimations/stateHeroBarrelRoll";
@@ -31,6 +30,7 @@ import { CmpPowerShieldController } from "../components/cmpPowerShieldController
 import { CmpPowerShieldCollisionController } from "../components/cmpPowerShieldCollisionController";
 import { StateHeroPowerShield } from "../states/heroAnimations/stateHeroPowerShield";
 import { CmpHeroCollision } from "../components/cmpHeroCollision";
+import { CnfKalebio } from "../configObjects/cnfKalebio";
 
 /**
  * Create and manage the hero's actor. It provides a friendly interface to control
@@ -62,7 +62,7 @@ implements IPlayerController
   init
   (
     _scene : Phaser.Scene,
-    _cnfHero : CnfHero,
+    _cnfHero : CnfKalebio,
     _cnfPowerShield : CnfPowerShield
   ) : void
   {
@@ -76,8 +76,8 @@ implements IPlayerController
     let heroSprite : Phaser.Physics.Arcade.Sprite 
       = _scene.physics.add.sprite
       (
-        _scene.game.canvas.width * 0.5, 
-        _scene.game.canvas.height * 0.5, 
+        0, 
+        0, 
         _cnfHero.texture, 
         _cnfHero.frame
       );
@@ -102,7 +102,6 @@ implements IPlayerController
     hero.init();
 
     this.setPlayer(hero);
-
 
     ///////////////////////////////////
     // Hero Power Shield
@@ -165,10 +164,6 @@ implements IPlayerController
     {
       this.setPointer(_scene.input.activePointer);
     }
-    
-    // Set the hero configuration.
-
-    this.setHeroConfiguration(_cnfHero);
 
     // Set the movement padding.
 
@@ -181,9 +176,24 @@ implements IPlayerController
       canvas.width - _cnfHero.hero_playzone_padding,
       canvas.height - _cnfHero.hero_playzone_padding
     );
+    
+    // Set the hero configuration.
+
+    this.setHeroConfiguration(_cnfHero);    
 
     this.setPowerShieldActor(powerShield);
     cmpShieldController.activeDesactiveState();
+
+    // Set the hero Collider.
+
+    heroSprite.body.setSize(_cnfHero.collider_width, _cnfHero.collider_height);
+
+    heroSprite.body.offset.setTo
+    (
+      ((heroSprite.width - _cnfHero.collider_width) * 0.5) + _cnfHero.collider_x,
+      ((heroSprite.height - _cnfHero.collider_height) * 0.5) + _cnfHero.collider_y,
+    );
+
     return;
   }
 
@@ -303,7 +313,7 @@ implements IPlayerController
     return input.getMode();
   }
 
-  setHeroConfiguration(_config : CnfHero)
+  setHeroConfiguration(_config : CnfKalebio)
   : void
   {
     let heroController : CmpHeroController

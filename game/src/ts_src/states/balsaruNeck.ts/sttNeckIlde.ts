@@ -8,11 +8,12 @@
  * @since September-08-2020
  */
 
-import { Ty_Image, V2 } from "../../commons/1942types";
+import { V2 } from "../../commons/1942types";
 import { CmpNeckController } from "../../components/cmpNeckController";
 import { CnfBalsaruIdle } from "../../configObjects/cnfBalsaruIdle";
 import { GameManager } from "../../gameManager/gameManager";
 import { ICmpState } from "../ICmpState";
+import { NeckBallKey } from "./neckBallKey";
 
 export class SttNeckIdle 
 implements ICmpState<CmpNeckController>
@@ -32,6 +33,8 @@ implements ICmpState<CmpNeckController>
 
     this._m_v_A = new Phaser.Math.Vector2();
     this._m_v_B = new Phaser.Math.Vector2();
+
+    this._m_neckKey = new NeckBallKey();
     
     return;
   }
@@ -105,7 +108,7 @@ implements ICmpState<CmpNeckController>
       startPosition,
       direction,
       offset,
-      neckControl.m_aPosition_A
+      neckControl.m_keys_A
     );    
 
     // Formation B : Wave formation.
@@ -118,7 +121,7 @@ implements ICmpState<CmpNeckController>
       config.neck_amplitude,
       config.neck_period,
       time,
-      neckControl.m_aPosition_B
+      neckControl.m_keys_B
     );
 
     /**
@@ -133,12 +136,12 @@ implements ICmpState<CmpNeckController>
 
     while(index < size)
     {
-      neckControl.vecInterpolation
+      neckControl.neckKeyLinearInterpolation
       (
-        neckControl.m_aPosition_A[index],
-        neckControl.m_aPosition_B[index],
+        neckControl.m_keys_A[index],
+        neckControl.m_keys_B[index],
         (offset * index) / distance,
-        neckControl.m_aPosition_C[index]
+        neckControl.m_keys_C[index]
       );
 
       ++index;
@@ -149,13 +152,7 @@ implements ICmpState<CmpNeckController>
      * neck ball to produce a more natural effect.
     */
 
-    // Get result position list.
-
-    let aNeckPosition = neckControl.m_aPosition_C;  
-
-    // Reposition an rotation.
-
-    neckControl.setNeckBallPosition(direction, aNeckPosition);
+    neckControl.applyKeys(neckControl.m_keys_C);    
 
     ////////////////////////////////////
     // Balsaru Head
@@ -176,13 +173,13 @@ implements ICmpState<CmpNeckController>
       config.neck_period,
       time,
       distance,
-      vB
+      this._m_neckKey
     );
 
     vB.setTo
     (
-      vB.x + body.x,
-      vB.y + body.y
+      this._m_neckKey.x + body.x,
+      this._m_neckKey.y + body.y
     );
 
     neckControl.m_head.setPosition(vB.x, vB.y);
@@ -225,6 +222,8 @@ implements ICmpState<CmpNeckController>
   private _m_v_A : V2;
 
   private _m_v_B : V2;
+
+  private _m_neckKey : NeckBallKey;
 
   private _m_startPosition : Phaser.Math.Vector2;
 

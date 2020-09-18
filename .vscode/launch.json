@@ -15,16 +15,9 @@
       "type": "chrome",
       "request": "launch",
       "name": "1942 Launch",
-      "url": "http://192.168.1.21:8080 ",
+      "url": "http://192.168.1.2:8080",
       "webRoot": "${workspaceFolder}",
-      "disableNetworkCache" : true,      
-      
-      "pathMappings": [
-        {
-          "url": "http://192.168.1.29:8080/test",
-          "path": "${workspaceFolder}/test"
-        }
-      ]
+      "disableNetworkCache" : true
     }
   ]
 }

@@ -14,6 +14,7 @@ import { IBulletManager } from "../bulletManager/iBulletManager";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
 import { DC_CONFIG, DC_MESSAGE_ID } from "../commons/1942enums";
 import { Ty_Image, Ty_physicsActor, V3 } from "../commons/1942types";
+import { CnfBalsaruHead } from "../configObjects/cnfBalsaruHead";
 import { CnfBalsaruInit } from "../configObjects/cnfBalsaruInit";
 import { FcBalsaru } from "../factories/fcBalsaru";
 import { GameManager } from "../gameManager/gameManager";
@@ -39,9 +40,14 @@ implements IBossManager
       DC_CONFIG.kBalsaruInit
     );
 
+    let headConfig = levelConfiguration.getConfig<CnfBalsaruHead>
+    (
+      DC_CONFIG.kBalsaruHead
+    );
+
     // Create balsaru.
 
-    let balsaru = FcBalsaru.Create(_scene, initConfig);
+    let balsaru = FcBalsaru.Create(_scene, initConfig, headConfig);
     this._m_balsaru = balsaru;
 
     return;
@@ -108,7 +114,11 @@ implements IBossManager
   setBulletManager(_bulletManager: IBulletManager)
   : void 
   {
-    // TODO
+    this._m_balsaru.sendMessage
+    (
+      DC_MESSAGE_ID.kSetBulletManager,
+      _bulletManager
+    );
     
     return;
   }

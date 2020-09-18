@@ -8,9 +8,9 @@
  * @since August-18-2020
  */
 
-import { CnfHero } from "../commons/1942config";
 import { DC_COMPONENT_ID, DC_MESSAGE_ID, DC_SECONDARY_ACTION } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
+import { CnfKalebio } from "../configObjects/cnfKalebio";
 import { SttHeroBarrelRoll } from "../states/heroController/sttHeroBarrelRoll";
 import { SttHeroNormal } from "../states/heroController/sttHeroNormal";
 import { SttHeroPowerShield } from "../states/heroController/sttHeroPowerShield";
@@ -41,7 +41,7 @@ implements IBaseComponent<Ty_physicsSprite>
     controller._m_activeState = new SttHeroNormal();
     controller.addState(controller._m_activeState);
 
-    controller._m_config = new CnfHero();
+    controller._m_config = new CnfKalebio();
     return controller;
   }
   
@@ -231,7 +231,7 @@ implements IBaseComponent<Ty_physicsSprite>
    * 
    * @param _config configuration object. 
    */
-  setConfiguration(_config : CnfHero)
+  setConfiguration(_config : CnfKalebio)
   : void
   {
     this._m_config = _config;
@@ -292,7 +292,7 @@ implements IBaseComponent<Ty_physicsSprite>
   /**
    * Reference to the hero configuartion object.
    */
-  private _m_config : CnfHero;
+  private _m_config : CnfKalebio;
 
   /**
    * Reference to the hero actor.

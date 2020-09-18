@@ -8,15 +8,22 @@
  * @since September-04-2020
  */
 
-import { DC_CONFIG } from "../commons/1942enums";
-import { Ty_Image, Ty_physicsActor, Ty_physicsSprite, Ty_Sprite, V2 } from "../commons/1942types";
+import { DC_CONFIG, DC_MESSAGE_ID } from "../commons/1942enums";
+import { Ty_Image, Ty_physicsActor, Ty_physicsSprite, Ty_Sprite, V2, V3 } from "../commons/1942types";
 import { CnfBalsaruIdle } from "../configObjects/cnfBalsaruIdle";
 import { CnfBalsaruInit } from "../configObjects/cnfBalsaruInit";
+import { CnfBalsaruShrink } from "../configObjects/cnfBalsaruShrink";
 import { GameManager } from "../gameManager/gameManager";
+import { NeckBallKey } from "../states/balsaruNeck.ts/neckBallKey";
 import { SttNeckIdle } from "../states/balsaruNeck.ts/sttNeckIlde";
+import { SttNeckFollow } from "../states/balsaruNeck.ts/sttNeckFollow";
+import { SttNeckEvade } from "../states/balsaruNeck.ts/sttNeckEvade";
+import { SttNeckRumble } from "../states/balsaruNeck.ts/sttNeckRumble";
+import { SttNeckShrink } from "../states/balsaruNeck.ts/sttNeckShrink";
 import { IBaseState } from "../states/IBaseState";
 import { NullState } from "../states/nullState";
 import { cmpFSM } from "./cmpFSM";
+import { CnfBalsaruHead } from "../configObjects/cnfBalsaruHead";
 
 export class CmpNeckController 
 extends cmpFSM<Ty_physicsSprite>
@@ -25,7 +32,7 @@ extends cmpFSM<Ty_physicsSprite>
   /* Public                                           */
   /****************************************************/
   
-  static Create()
+  static Create(_scene : Phaser.Scene)
   : CmpNeckController
   {
     let cmp = new CmpNeckController();
@@ -56,6 +63,46 @@ extends cmpFSM<Ty_physicsSprite>
 
     cmp.addState(idle);
 
+    // Shrink State
+
+    let shrink = new SttNeckShrink();
+
+    let shrink_config = levelConfig.getConfig<CnfBalsaruShrink>
+    (
+      DC_CONFIG.kBalsaruShrink
+    );
+
+    shrink.setup(shrink_config);
+    shrink.setComponent(cmp);
+
+    cmp.addState(shrink);
+
+    // Rumble State
+
+    let rumble = new SttNeckRumble();
+
+    rumble.setComponent(cmp);
+
+    cmp.addState(rumble);
+
+    // Follow State
+
+    let follow = new SttNeckFollow();
+
+    follow.setComponent(cmp);
+    follow.setup();
+
+    cmp.addState(follow);
+
+    // Evade State
+
+    let evade = new SttNeckEvade();
+
+    evade.setComponent(cmp);
+    evade.setup(_scene);
+
+    cmp.addState(evade);
+
     // Set active state.
 
     cmp.setActiveState('idle');
@@ -75,7 +122,8 @@ extends cmpFSM<Ty_physicsSprite>
     _head : Ty_Sprite, 
     _body : Ty_Image, 
     _aNeckBalls : Ty_Image[],
-    _config : CnfBalsaruInit
+    _config : CnfBalsaruInit,
+    _headConfig : CnfBalsaruHead
   )
   : void
   {
@@ -84,7 +132,9 @@ extends cmpFSM<Ty_physicsSprite>
     this.m_aNeckBalls = _aNeckBalls;
     this.m_head = _head;
     this.m_body = _body;
+
     this.m_config = _config;
+    this.m_headConfig = _headConfig;
 
     // Prepare animation properties
 
@@ -95,9 +145,9 @@ extends cmpFSM<Ty_physicsSprite>
 
     this.m_direction = new Phaser.Math.Vector2();
 
-    this.m_aPosition_A = new Array<V2>();
-    this.m_aPosition_B = new Array<V2>();
-    this.m_aPosition_C = new Array<V2>();
+    this.m_keys_A = new Array<NeckBallKey>();
+    this.m_keys_B = new Array<NeckBallKey>();
+    this.m_keys_C = new Array<NeckBallKey>();
 
     let index : number  = 0;
 
@@ -105,13 +155,28 @@ extends cmpFSM<Ty_physicsSprite>
 
     while(index < size)
     {
-      this.m_aPosition_A.push(new Phaser.Math.Vector2());
-      this.m_aPosition_B.push(new Phaser.Math.Vector2());
-      this.m_aPosition_C.push(new Phaser.Math.Vector2());
+      this.m_keys_A.push(new NeckBallKey());
+      this.m_keys_B.push(new NeckBallKey());
+      this.m_keys_C.push(new NeckBallKey());
 
       ++index;
     }
     return;
+  }
+
+  receive(_id : number, _msg : any)
+  : void
+  {    
+    switch(_id)
+    {
+      case DC_MESSAGE_ID.kSetNeckState:
+
+      this.setActiveState(_msg as string);
+      return;
+
+      default:
+      return;
+    }
   }
 
   destroy()
@@ -137,7 +202,7 @@ extends cmpFSM<Ty_physicsSprite>
     _start_position : V2,
     _direction : V2, 
     _offset : number,
-    _aPosition : V2[] 
+    _aKeys : NeckBallKey[] 
   )
   : void
   {
@@ -145,13 +210,21 @@ extends cmpFSM<Ty_physicsSprite>
 
     let length : number = 0;
 
-    while(index < _aPosition.length)
+    let maxLength : number = _aKeys.length * _offset;
+
+    let key : NeckBallKey;
+
+    while(index < _aKeys.length)
     {
-      _aPosition[index].setTo
-      (
-        _start_position.x + _direction.x * length,
-        _start_position.y + _direction.y * length 
-      );
+      key = _aKeys[index];
+
+      key.x = _start_position.x + _direction.x * length;
+      key.y = _start_position.y + _direction.y * length;
+
+      key.angle = Phaser.Math.RadToDeg(_direction.angle());
+
+      key.scale_x = this.linearInterpolation(1.0, 0.6, length / maxLength);
+      key.scale_y = key.scale_x;
 
       length += _offset;
 
@@ -185,7 +258,7 @@ extends cmpFSM<Ty_physicsSprite>
     _amplitude : number,
     _period : number,
     _time : number,
-    _aPosition : V2[]
+    _aKeys : NeckBallKey[] 
   )
   : void
   {
@@ -197,13 +270,20 @@ extends cmpFSM<Ty_physicsSprite>
 
     let index : number = 0;
 
-    let size = _aPosition.length;
+    let size = _aKeys.length;
 
     let length = 0;
 
+    let vA = this._m_v_B;
+
+    let key : NeckBallKey;
+
+    let maxLength : number = _aKeys.length * _offset;
+
     while(index < size)
     {
-      
+      key = _aKeys[index];
+
       this.getWavePosition
       (
         _direction,
@@ -212,16 +292,32 @@ extends cmpFSM<Ty_physicsSprite>
         _period,
         _time,
         length,
-        _aPosition[index]
+        key
       );      
 
-      _aPosition[index].setTo
-      (
-        _aPosition[index].x + _start_position.x,
-        _aPosition[index].y + _start_position.y
-      );
+      key.x = key.x + _start_position.x;
+      key.y = key.y + _start_position.y; 
 
       length += _offset;
+
+      // Angle
+
+      if(index > 0)
+      {
+        vA.x = key.x - _aKeys[index - 1].x;
+        vA.y = key.y - _aKeys[index - 1].y;
+
+        key.angle = Phaser.Math.RadToDeg(vA.angle());
+      }
+      else
+      {
+        key.angle = Phaser.Math.RadToDeg(_direction.angle());
+      }
+
+      // Scale
+
+      key.scale_x = this.linearInterpolation(1.0, 0.6, length / maxLength);
+      key.scale_y = key.scale_x;
 
       ++index;
     }
@@ -248,7 +344,7 @@ extends cmpFSM<Ty_physicsSprite>
     _period : number,
     _time : number,
     _offset : number,
-    _output : V2
+    _output : NeckBallKey
   )
   : void
   {
@@ -256,12 +352,8 @@ extends cmpFSM<Ty_physicsSprite>
 
     let fn_x = this.waveFnX(_amplitude, _period, _time, _offset);
 
-    _output.setTo
-    (
-      _direction.x * _offset + (_normal.x * fn_x),
-      _direction.y * _offset + (_normal.y * fn_x)  
-    );
-
+    _output.x = _direction.x * _offset + (_normal.x * fn_x);
+    _output.y = _direction.y * _offset + (_normal.y * fn_x);
     return;
   }
 
@@ -286,74 +378,139 @@ extends cmpFSM<Ty_physicsSprite>
   }
 
   /**
-   * Re-position the neck ball to the given list of the positions.
    * 
-   * Rotates each neck towards the vector from the previous ball position to the
-   * itself. The first ball doen't has a previous position, thats the reason 
-   * why it need a direction.
-   * 
-   * @param _direction_first the direction of the first ball.
-   * @param _aPositions list of positions.
+   * @param _bodyPoint 
+   * @param _p1 
+   * @param _p2 
+   * @param _headPoint 
+   * @param _aKeys 
    */
-  public setNeckBallPosition
+  getBezierFormation
   (
-    _direction_first : V2, 
-    _aPositions : V2[]
+    _bodyPoint : V2, 
+    _p1 : V2, 
+    _p2 : V2, 
+    _headPoint : V2,
+    _aKeys : NeckBallKey[]
   )
-  : void
   {
     let index : number = 0;
 
-    let size : number = _aPositions.length;
+    let size : number = _aKeys.length;
 
-    let aNeckBalls = this.m_aNeckBalls;
+    let key : NeckBallKey;
 
-    let neckBall : Ty_Image;
+    let t : number;
 
     let vA = this._m_v_A;
 
-    while(index < size)
+    while(index < _aKeys.length)
     {
+      key = _aKeys[index];
 
-      neckBall = aNeckBalls[index];
+      t = index / size;
 
-      neckBall.setPosition
+      this.getBezierPosition
       (
-        _aPositions[index].x,
-        _aPositions[index].y
+        _bodyPoint,
+        _p1,
+        _p2,
+        _headPoint,
+        t,
+        key
       );
 
-      // Rotate the neck ball towards the vector from the previous position to
-      // this neck ball position.
+      // Key Angle
 
       if(index > 0)
       {
-        // Rotate towards the vector from previous position to this neck ball
-        // position. 
+        vA.x = key.x - _aKeys[index - 1].x;
+        vA.y = key.y - _aKeys[index - 1].y;
 
-        vA.setTo
-        (
-          neckBall.x - _aPositions[index - 1].x,
-          neckBall.y - _aPositions[index - 1].y
-        );
-
-        vA.normalize();
-
-        neckBall.setAngle
-        (
-          Phaser.Math.RadToDeg(vA.angle())
-        );
+        key.angle = Phaser.Math.RadToDeg(vA.angle());
       }
       else
       {
-        // Rotate towards neck direction.
-
-        neckBall.setAngle
+        vA.setTo
         (
-          Phaser.Math.RadToDeg(_direction_first.angle())
+          _p1.x - _bodyPoint.x,
+          _p1.y - _bodyPoint.y
         );
+
+        key.angle = Phaser.Math.RadToDeg(vA.angle());
       }
 
+      // Key Scale
+
+      key.scale_x = this.linearInterpolation(1.0, 0.6, t);
+      key.scale_y = key.scale_x;
+
+      ++index;
+    }
+    return;
+  }
+
+  /**
+   * Get a position from a bezier curve.
+   * 
+   * @param _p0 
+   * @param _p1 
+   * @param _p2 
+   * @param _p3 
+   * @param _t 
+   * @param _output 
+   */
+  getBezierPosition
+  (
+    _p0 : V2, 
+    _p1 : V2, 
+    _p2 : V2, 
+    _p3 : V2, 
+    _t : number,
+    _output : NeckBallKey
+  )
+  : void
+  {
+    // Calculate Q0
+
+    let l0_x : number = this.linearInterpolation(_p0.x, _p1.x, _t);
+    let l0_y : number = this.linearInterpolation(_p0.y, _p1.y, _t);
+
+    let l1_x : number = this.linearInterpolation(_p1.x, _p2.x, _t);
+    let l1_y : number = this.linearInterpolation(_p1.y, _p2.y, _t);
+
+    let q0_x : number = this.linearInterpolation(l0_x, l1_x, _t);
+    let q0_y : number = this.linearInterpolation(l0_y, l1_y, _t);
+
+    // Calculate Q1
+
+    let l2_x : number = this.linearInterpolation(_p2.x, _p3.x, _t);
+    let l2_y : number = this.linearInterpolation(_p2.y, _p3.y, _t);
+    
+    let q1_x : number = this.linearInterpolation(l1_x, l2_x, _t);
+    let q1_y : number = this.linearInterpolation(l1_y, l2_y, _t);
+
+    _output.x = this.linearInterpolation(q0_x, q1_x, _t);
+    _output.y = this.linearInterpolation(q0_y, q1_y, _t);
+    return;
+  }
+
+  /**
+   * 
+   * @param _keys 
+   */
+  public applyKeys(_keys : NeckBallKey[])
+  : void
+  {
+    let index = 0;
+
+    let size = _keys.length;
+
+    let aNeckBalls = this.m_aNeckBalls;
+
+    while(index < size)
+    {
+      _keys[index].apply(aNeckBalls[index]);
       ++index;
     }
     return;
@@ -379,6 +536,100 @@ extends cmpFSM<Ty_physicsSprite>
   }
 
   /**
+   * Interpolate an array of neck keys.
+   * 
+   * @param _A from. 
+   * @param _B to.
+   * @param _step step (0.0 - 1.0).
+   * @param _output output.
+   */
+  public neckKeyArrayLinearInterpolation
+  (
+    _A : NeckBallKey[],
+    _B : NeckBallKey[],
+    _step : number,
+    _output : NeckBallKey[]
+  )
+  : void
+  {
+    let index = 0;
+
+    let size : number = _output.length;
+
+    while(index < size)
+    {      
+      this.neckKeyLinearInterpolation
+      (
+        _A[index],
+        _B[index],
+        _step,
+        _output[index]
+      );
+
+      ++index;
+    }
+    return;
+  }
+
+  /**
+   * Interpolate neck keys.
+   * 
+   * @param _A from. 
+   * @param _B to.
+   * @param _step step (0.0 - 1.0).
+   * @param _output output.
+   */
+  public neckKeyLinearInterpolation
+  (
+    _A : NeckBallKey, 
+    _B : NeckBallKey,
+    _step : number, 
+    _output : NeckBallKey
+  )
+  : void
+  {
+    _output.x = this.linearInterpolation(_A.x, _B.x, _step);
+    _output.y = this.linearInterpolation(_A.y, _B.y, _step);
+
+    _output.scale_x = this.linearInterpolation(_A.scale_x, _B.scale_x, _step);
+    _output.scale_y = this.linearInterpolation(_A.scale_y, _B.scale_y, _step);
+    
+    _output.angle = this.linearInterpolation(_A.angle, _B.angle, _step);
+    return;
+  }
+
+  public captureNeck(_akey : NeckBallKey[])
+  : void
+  {
+    let index = 0;
+
+    let size = _akey.length;
+
+    let aNeckBalls = this.m_aNeckBalls;
+
+    while(index < size)
+    {
+      _akey[index].capture(aNeckBalls[index]);
+
+      ++index;
+    }
+    return;
+  }
+
+  /**
+   * Linear interpolation
+   * 
+   * @param _a from. 
+   * @param _b to.
+   * @param _step (0.0 - 1.0).
+   */
+  public linearInterpolation(_a : number, _b : number, _step : number)
+  : number
+  {
+    return _a + (_b - _a) * _step;
+  }
+
+  /**
    * Get the normal vector.
    * 
    * @param _vA vector. 
@@ -396,11 +647,11 @@ extends cmpFSM<Ty_physicsSprite>
   ///////////////////////////////////
   // Animation properties
 
-  m_aPosition_A : V2[];
+  m_keys_A : NeckBallKey[];
 
-  m_aPosition_B : V2[];
+  m_keys_B : NeckBallKey[];
 
-  m_aPosition_C : V2[];
+  m_keys_C : NeckBallKey[];
 
   m_direction : V2;
   
@@ -415,6 +666,8 @@ extends cmpFSM<Ty_physicsSprite>
   m_vecToHead : Phaser.Math.Vector2;
 
   m_config : CnfBalsaruInit;
+
+  m_headConfig : CnfBalsaruHead;
   
   m_time : number;
 
