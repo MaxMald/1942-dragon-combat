@@ -93,7 +93,7 @@ export class CmpMovementEnemy implements IBaseComponent<Ty_physicsSprite>
   }
 
   /**
-   * Set the position of the wrapped object, considering the limints defined
+   * Set the position of the wrapped object, considering the limits defined
    * by the bounding rectangle.
    * 
    * @param _x x value.

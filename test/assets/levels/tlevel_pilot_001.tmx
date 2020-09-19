@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="377">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="468">
  <editorsettings>
   <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
  <properties>
-  <property name="camera_speed" type="float" value="50"/>
+  <property name="camera_speed" type="float" value="0"/>
  </properties>
  <tileset firstgid="1" source="level_tilesets/items_icons.tsx"/>
  <layer id="1" name="Gruid [KEEP LOCKED]" width="34" height="300" locked="1">
@@ -23,7 +23,7 @@
  <objectgroup id="7" name="ConfigurationObjects">
   <object id="322" name="Cadmio Config" type="CadmioConfig" gid="12" x="1228.02" y="9598.21" width="65" height="57">
    <properties>
-    <property name="speed" type="float" value="50"/>
+    <property name="speed" type="float" value="1000"/>
    </properties>
   </object>
   <object id="332" name="Canus Config" type="CanusConfig" gid="9" x="1337" y="9598.33" width="65" height="57"/>
@@ -51,18 +51,19 @@
     <property name="speed" type="float" value="1600"/>
    </properties>
   </object>
-  <object id="345" name="Bullet State : TripleShot" type="Hero_bulletStateTripleShot" gid="11" x="1354.83" y="9436.16" width="65" height="57">
+  <object id="345" name="Bullet State : TripleShot" type="Hero_bulletStateTripleShot" gid="11" x="1353.5" y="9441.49" width="65" height="57">
    <properties>
     <property name="frecuency" type="int" value="3"/>
     <property name="opening" type="float" value="15"/>
    </properties>
   </object>
-  <object id="346" name="Power Shield" type="HeroPowerShieldConfig" gid="10" x="1488.33" y="9436.67" width="65" height="57">
+  <object id="346" name="Power Shield" type="HeroPowerShieldConfig" gid="10" x="1464.33" y="9441.34" width="65" height="57">
    <properties>
     <property name="explosion_radius" type="float" value="200"/>
     <property name="explosion_time" type="float" value="0.3"/>
     <property name="max_radius" type="float" value="150"/>
     <property name="shield_max_time" type="float" value="1"/>
+    <property name="texture_key" value="dragon_shield"/>
    </properties>
   </object>
   <object id="347" x="1214.83" y="9001.83" width="500" height="41">
@@ -73,7 +74,7 @@
     <property name="speed" type="float" value="2000"/>
    </properties>
   </object>
-  <object id="374" name="Basic" type="EnemyBasicBulletConfig" gid="11" x="1333.33" y="9129" width="65" height="57">
+  <object id="374" name="Basic" type="EnemyBasicBulletConfig" gid="11" x="1310.66" y="9129" width="65" height="57">
    <properties>
     <property name="speed" type="float" value="1200"/>
    </properties>
@@ -82,170 +83,43 @@
    <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Score Manager</text>
   </object>
   <object id="376" name="Score Config" type="ScoreManagerConfig" gid="12" x="1216.67" y="8977" width="65" height="57"/>
+  <object id="377" x="1213" y="8708.5" width="500" height="41">
+   <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Balsaru </text>
+  </object>
+  <object id="378" name="Balsaru Init" type="BalsaruInit" gid="3" x="1214" y="8833.67" width="65" height="57"/>
+  <object id="379" name="State : Idle" type="BalsaruIdle" gid="3" x="1368.17" y="8836" width="65" height="57">
+   <properties>
+    <property name="length" type="int" value="540"/>
+    <property name="neck_amplitude" type="float" value="80"/>
+    <property name="neck_period" type="float" value="1.5"/>
+   </properties>
+  </object>
+  <object id="381" name="State : Shrink" type="BalsaruShrink" gid="3" x="1443.17" y="8835" width="65" height="57">
+   <properties>
+    <property name="length" type="int" value="370"/>
+    <property name="time" type="float" value="0.5"/>
+   </properties>
+  </object>
+  <object id="382" name="Balsaru Head" type="BalsaruHead" gid="3" x="1292.83" y="8835" width="65" height="57">
+   <properties>
+    <property name="mass" type="float" value="20"/>
+    <property name="vision_radius" type="int" value="450"/>
+   </properties>
+  </object>
+  <object id="383" name="Errante Spawner Config" type="ErranteSpawnerConfig" gid="11" x="1432" y="9131.67" width="65" height="57"/>
+  <object id="467" name="Kalebio Config" type="KalebioConfig" gid="8" x="1552.67" y="9444.33" width="65" height="57">
+   <properties>
+    <property name="collider_height" type="int" value="100"/>
+    <property name="collider_width" type="int" value="75"/>
+    <property name="collider_x" type="int" value="0"/>
+    <property name="collider_y" type="int" value="-15"/>
+    <property name="movement_mode" value="ABSOLUTE"/>
+    <property name="x" type="int" value="540"/>
+    <property name="y" type="int" value="1720"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="2" name="Errantes" offsetx="-3" offsety="6">
-  <object id="2" name="Errante" type="Errante" x="188.788" y="9098.98">
-   <properties>
-    <property name="has_weapon" type="bool" value="false"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="12" name="Errante" type="Errante" x="860.515" y="9093.34">
-   <properties>
-    <property name="has_weapon" type="bool" value="false"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="13" name="Errante" type="Errante" x="954.91" y="8834.25">
-   <point/>
-  </object>
-  <object id="15" name="Errante" type="Errante" x="754.242" y="8677.59">
-   <point/>
-  </object>
-  <object id="16" name="Errante" type="Errante" x="142.243" y="8832.91" rotation="360">
-   <point/>
-  </object>
-  <object id="18" name="Errante" type="Errante" x="339.576" y="8690.59" rotation="360">
-   <point/>
-  </object>
-  <object id="20" name="Errante" type="Errante" x="784.516" y="8377.34">
-   <properties>
-    <property name="hasWeapon" type="bool" value="true"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="21" name="Errante" type="Errante" x="882.516" y="8457.34">
-   <point/>
-  </object>
-  <object id="22" name="Errante" type="Errante" x="992.517" y="8375.34">
-   <point/>
-  </object>
-  <object id="30" name="Errante" type="Errante" x="550.182" y="8574.01">
-   <point/>
-  </object>
-  <object id="31" name="Errante" type="Errante" x="92.5157" y="8380.67">
-   <point/>
-  </object>
-  <object id="32" name="Errante" type="Errante" x="190.516" y="8460.67">
-   <point/>
-  </object>
-  <object id="33" name="Errante" type="Errante" x="300.516" y="8378.67">
-   <properties>
-    <property name="init_time" type="float" value="1.5"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="34" name="Errante" type="Errante" x="812.848" y="8128.67">
-   <point/>
-  </object>
-  <object id="35" name="Errante" type="Errante" x="885.516" y="8129.34">
-   <properties>
-    <property name="hasWeapon" type="bool" value="true"/>
-   </properties>
-   <point/>
-  </object>
-  <object id="36" name="Errante" type="Errante" x="960.848" y="8130.67">
-   <point/>
-  </object>
-  <object id="37" name="Errante" type="Errante" x="109.516" y="8129.34">
-   <point/>
-  </object>
-  <object id="38" name="Errante" type="Errante" x="182.183" y="8130.01">
-   <point/>
-  </object>
-  <object id="39" name="Errante" type="Errante" x="257.516" y="8131.34">
-   <point/>
-  </object>
-  <object id="40" name="Errante" type="Errante" x="467.516" y="7991.34">
-   <point/>
-  </object>
-  <object id="41" name="Errante" type="Errante" x="540.182" y="7992.01">
-   <point/>
-  </object>
-  <object id="42" name="Errante" type="Errante" x="615.516" y="7993.34">
-   <point/>
-  </object>
-  <object id="58" name="Errante" type="Errante" x="47.5152" y="7621.34">
-   <point/>
-  </object>
-  <object id="59" name="Errante" type="Errante" x="156.183" y="7620.01">
-   <point/>
-  </object>
-  <object id="60" name="Errante" type="Errante" x="258.516" y="7620.34">
-   <point/>
-  </object>
-  <object id="74" name="Errante" type="Errante" x="531.88" y="7285.31">
-   <point/>
-  </object>
-  <object id="75" name="Errante" type="Errante" x="633.516" y="7235.34">
-   <point/>
-  </object>
-  <object id="76" name="Errante" type="Errante" x="446.516" y="7234.34">
-   <point/>
-  </object>
-  <object id="79" name="Errante" type="Errante" x="856.516" y="7106.34">
-   <point/>
-  </object>
-  <object id="80" name="Errante" type="Errante" x="216.516" y="7104.34">
-   <point/>
-  </object>
-  <object id="81" name="Errante" type="Errante" x="547.516" y="6778.67">
-   <point/>
-  </object>
-  <object id="84" name="Errante" type="Errante" x="922.848" y="6678">
-   <point/>
-  </object>
-  <object id="85" name="Errante" type="Errante" x="861.516" y="6620.67">
-   <point/>
-  </object>
-  <object id="86" name="Errante" type="Errante" x="989.516" y="6621.34">
-   <point/>
-  </object>
-  <object id="87" name="Errante" type="Errante" x="208.181" y="6671.33">
-   <point/>
-  </object>
-  <object id="88" name="Errante" type="Errante" x="146.848" y="6614">
-   <point/>
-  </object>
-  <object id="89" name="Errante" type="Errante" x="274.849" y="6614.67">
-   <point/>
-  </object>
-  <object id="90" name="Errante" type="Errante" x="546.182" y="6447.34">
-   <point/>
-  </object>
-  <object id="91" name="Errante" type="Errante" x="484.85" y="6390.01">
-   <point/>
-  </object>
-  <object id="92" name="Errante" type="Errante" x="612.849" y="6390.68">
-   <point/>
-  </object>
-  <object id="93" name="Errante" type="Errante" x="921.516" y="6346.67">
-   <point/>
-  </object>
-  <object id="96" name="Errante" type="Errante" x="206.848" y="6340">
-   <point/>
-  </object>
-  <object id="99" name="Errante" type="Errante" x="542.182" y="6159.34">
-   <point/>
-  </object>
-  <object id="102" name="Errante" type="Errante" x="917.516" y="6058.67">
-   <point/>
-  </object>
-  <object id="103" name="Errante" type="Errante" x="856.182" y="6001.34">
-   <point/>
-  </object>
-  <object id="104" name="Errante" type="Errante" x="984.182" y="6002.01">
-   <point/>
-  </object>
-  <object id="105" name="Errante" type="Errante" x="202.848" y="6052">
-   <point/>
-  </object>
-  <object id="106" name="Errante" type="Errante" x="141.516" y="5994.67">
-   <point/>
-  </object>
-  <object id="107" name="Errante" type="Errante" x="269.516" y="5995.34">
-   <point/>
-  </object>
   <object id="126" name="Errante" type="Errante" x="552.546" y="5523.31">
    <point/>
   </object>
@@ -343,33 +217,6 @@
    <point/>
   </object>
   <object id="219" name="Errante" type="Errante" x="61.3333" y="3158.85">
-   <point/>
-  </object>
-  <object id="238" name="Errante" type="Errante" x="541.667" y="9088.67">
-   <point/>
-  </object>
-  <object id="252" name="Errante" type="Errante" x="543" y="7784">
-   <point/>
-  </object>
-  <object id="253" name="Errante" type="Errante" x="946" y="7785">
-   <point/>
-  </object>
-  <object id="254" name="Errante" type="Errante" x="120" y="7786">
-   <point/>
-  </object>
-  <object id="255" name="Errante" type="Errante" x="758" y="7478">
-   <point/>
-  </object>
-  <object id="257" name="Errante" type="Errante" x="335" y="7480">
-   <point/>
-  </object>
-  <object id="258" name="Errante" type="Errante" x="806.999" y="7619">
-   <point/>
-  </object>
-  <object id="259" name="Errante" type="Errante" x="915.667" y="7617.67">
-   <point/>
-  </object>
-  <object id="260" name="Errante" type="Errante" x="1018" y="7618">
    <point/>
   </object>
   <object id="261" name="Errante" type="Errante" x="74.9697" y="5733.64">
@@ -520,47 +367,23 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="8" name="Rangers" locked="1">
-  <object id="352" name="Ranger" type="Ranger" x="532" y="8286.67">
-   <point/>
-  </object>
-  <object id="353" name="Ranger" type="Ranger" x="865.333" y="7904">
-   <point/>
-  </object>
-  <object id="354" name="Ranger" type="Ranger" x="218.667" y="7584">
-   <point/>
-  </object>
-  <object id="355" name="Ranger" type="Ranger" x="770.667" y="6794.67">
-   <point/>
-  </object>
-  <object id="356" name="Ranger" type="Ranger" x="302" y="6796">
-   <point/>
-  </object>
-  <object id="357" name="Ranger" type="Ranger" x="540" y="5960">
-   <point/>
-  </object>
+ <objectgroup id="8" name="Rangers">
   <object id="358" name="Ranger" type="Ranger" x="750" y="1666">
    <point/>
   </object>
   <object id="359" name="Ranger" type="Ranger" x="390" y="1666">
    <point/>
   </object>
-  <object id="360" name="Ranger" type="Ranger" x="542" y="9023">
-   <properties>
-    <property name="health" type="float" value="100"/>
-   </properties>
-   <point/>
-  </object>
  </objectgroup>
- <objectgroup id="9" name="Sonics" locked="1">
-  <object id="369" name="Sonic" type="Sonic" x="521" y="8912.33">
+ <objectgroup id="9" name="Sonics">
+  <object id="369" name="Sonic" type="Sonic" x="524.03" y="5642.63">
    <properties>
     <property name="coord_x" type="float" value="1"/>
     <property name="coord_y" type="float" value="1"/>
    </properties>
    <point/>
   </object>
-  <object id="370" name="Sonic" type="Sonic" x="577.333" y="8913.33">
+  <object id="370" name="Sonic" type="Sonic" x="580.363" y="5643.63">
    <properties>
     <property name="coord_x" type="float" value="0"/>
     <property name="coord_y" type="float" value="1"/>
@@ -568,11 +391,11 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="10" name="ArponShip" locked="1">
-  <object id="371" name="ArponShip" type="ArponShip" x="286.667" y="9534.67">
+ <objectgroup id="10" name="ArponShip">
+  <object id="371" name="ArponShip" type="ArponShip" x="254.667" y="4438.67">
    <point/>
   </object>
-  <object id="372" name="ArponShip" type="ArponShip" x="812" y="9533.33">
+  <object id="372" name="ArponShip" type="ArponShip" x="780" y="4437.33">
    <point/>
   </object>
  </objectgroup>
@@ -582,8 +405,8 @@
   <object id="336" name="Cadmio" type="Cadmio" gid="1" x="206.864" y="7534.14" width="59" height="59"/>
   <object id="337" name="Canus" type="Canus" gid="2" x="809.894" y="7515.95" width="59" height="59"/>
  </objectgroup>
- <objectgroup id="4" name="Boss" locked="1">
-  <object id="318" name="Boss" type="Boss" x="560.061" y="1935.45">
+ <objectgroup id="4" name="Boss">
+  <object id="380" name="Boss" type="Boss" x="564.485" y="9706.12">
    <point/>
   </object>
  </objectgroup>

@@ -13,10 +13,10 @@ import { IBossManager } from "../bossManager/IBossManager";
 import { NullBossManager } from "../bossManager/NullBossManager";
 import { NullBulletSpawner } from "../bulletManager/bulletSpawner/nullBulletSpawner";
 import { NullBulletManager } from "../bulletManager/nullBulletManager";
-import { CnfHero } from "../commons/1942config";
 import { DC_CONFIG, DC_MESSAGE_ID } from "../commons/1942enums";
 import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
 import { CmpNullEnemyController } from "../components/cmpNullEnemyController";
+import { CnfKalebio } from "../configObjects/cnfKalebio";
 import { CnfPowerShield } from "../configObjects/cnfPowerShield";
 import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
@@ -299,7 +299,7 @@ export class GameManager
    * @param _scene phaser scene.
    * @param _cnfHero configuration file.
    */
-  initHero(_scene : Phaser.Scene, _cnfHero : CnfHero)
+  initHero(_scene : Phaser.Scene, _cnfHero : CnfKalebio)
   : OPRESULT
   {
     // Destroys previous playerController    

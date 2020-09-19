@@ -22,8 +22,7 @@ implements IConfigObject
    * Create a configuration object with default values.
    */
   constructor()
-  {
-    
+  {    
     this.collision_damage = 1.0;
     this.speed = 1200.0;
     this.texture_key = "fireball";
