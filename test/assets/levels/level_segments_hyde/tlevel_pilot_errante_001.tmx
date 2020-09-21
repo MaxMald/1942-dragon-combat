@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="16" height="160" tilewidth="68" tileheight="60" infinite="0" nextlayerid="12" nextobjectid="1048">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="16" height="160" tilewidth="68" tileheight="60" infinite="0" nextlayerid="12" nextobjectid="932">
  <editorsettings>
-  <export target="tlevel_pilot_001.json" format="json"/>
+  <export format="json"/>
  </editorsettings>
  <properties>
   <property name="camera_speed" type="float" value="200"/>
  </properties>
- <tileset firstgid="1" source="level_tilesets/items_icons.tsx"/>
+ <tileset firstgid="1" source="../level_tilesets/items_icons.tsx"/>
  <layer id="1" name="Gruid [KEEP LOCKED]" width="16" height="160" locked="1">
   <data encoding="base64">
    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
@@ -115,7 +115,7 @@
   <object id="363" type="Guide Line" x="816" y="0" height="9600"/>
   <object id="364" type="Guide Line" x="952" y="0" height="9600"/>
  </objectgroup>
- <objectgroup id="7" name="ConfigurationObjects">
+ <objectgroup id="7" name="ConfigurationObjects" locked="1">
   <object id="322" name="Cadmio Config" type="CadmioConfig" gid="12" x="1228.02" y="9598.21" width="65" height="57">
    <properties>
     <property name="speed" type="float" value="200"/>
@@ -179,314 +179,247 @@
   </object>
   <object id="582" name="Basic" type="EnemyBasicBulletConfig" gid="11" x="1342.5" y="9127.17" width="65" height="57">
    <properties>
-    <property name="speed" type="float" value="600"/>
+    <property name="speed" type="float" value="1200"/>
    </properties>
   </object>
   <object id="931" name="Errante Spawner Config" type="ErranteSpawnerConfig" gid="11" x="1496" y="9600" width="65" height="57"/>
-  <object id="966" name="Sonic Spawner Config" type="SonicSpawnerConfig" gid="12" x="1632" y="9600" width="65" height="57"/>
  </objectgroup>
  <objectgroup id="2" name="First Wave" offsetx="-3" offsety="6">
-  <object id="962" name="Sonico " type="Sonic" x="544" y="9000">
+  <object id="713" name="Errante" type="Errante" x="680" y="9000">
    <point/>
   </object>
-  <object id="968" name="Sonico " type="Sonic" x="544" y="8940">
+  <object id="714" name="Errante" type="Errante" x="816" y="8940">
    <point/>
   </object>
-  <object id="969" name="Sonico " type="Sonic" x="544" y="8880">
+  <object id="715" name="Errante" type="Errante" x="136" y="8700">
    <point/>
   </object>
-  <object id="970" name="Sonico " type="Sonic" x="476" y="8520">
+  <object id="716" name="Errante" type="Errante" x="272" y="8640">
    <point/>
   </object>
-  <object id="971" name="Sonico " type="Sonic" x="612" y="8460">
-   <properties>
-    <property name="coord_x" type="float" value="1"/>
-   </properties>
+  <object id="717" name="Errante" type="Errante" x="408" y="8340">
    <point/>
   </object>
-  <object id="972" name="Sonico " type="Sonic" x="476" y="8400">
+  <object id="718" name="Errante" type="Errante" x="544" y="8220">
    <point/>
   </object>
-  <object id="973" name="Sonico " type="Sonic" x="612" y="8340">
-   <properties>
-    <property name="coord_x" type="float" value="1"/>
-   </properties>
+  <object id="719" name="Errante" type="Errante" x="272" y="8220">
    <point/>
   </object>
-  <object id="974" name="Sonico " type="Sonic" x="476" y="8280">
+  <object id="720" name="Errante" type="Errante" x="680" y="7980">
    <point/>
   </object>
-  <object id="996" name="Sonico " type="Sonic" x="544" y="7560">
-   <properties>
-    <property name="coord_y" type="float" value="0.08"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="721" name="Errante" type="Errante" x="544" y="7860">
    <point/>
   </object>
-  <object id="997" name="Sonico " type="Sonic" x="272" y="7560">
-   <properties>
-    <property name="coord_y" type="float" value="0.24"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="722" name="Errante" type="Errante" x="816" y="7860">
    <point/>
   </object>
-  <object id="998" name="Sonico " type="Sonic" x="408" y="7560">
-   <properties>
-    <property name="coord_y" type="float" value="0.16"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="723" name="Errante" type="Errante" x="544" y="6660">
    <point/>
   </object>
-  <object id="1002" name="Sonico " type="Sonic" x="680" y="7560">
-   <properties>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="724" name="Errante" type="Errante" x="272" y="6540">
    <point/>
   </object>
-  <object id="1011" name="Sonico " type="Sonic" x="136" y="7560">
-   <properties>
-    <property name="coord_y" type="float" value="0.32"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="725" name="Errante" type="Errante" x="816" y="6540">
    <point/>
   </object>
-  <object id="1012" name="Sonico " type="Sonic" x="816" y="7380">
-   <properties>
-    <property name="coord_x" type="float" value="1"/>
-    <property name="coord_y" type="float" value="0.08"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="726" name="Errante" type="Errante" x="544" y="6360">
    <point/>
   </object>
-  <object id="1013" name="Sonico " type="Sonic" x="544" y="7380">
-   <properties>
-    <property name="coord_x" type="float" value="1"/>
-    <property name="coord_y" type="float" value="0.24"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="727" name="Errante" type="Errante" x="544" y="6240">
    <point/>
   </object>
-  <object id="1014" name="Sonico " type="Sonic" x="680" y="7380">
-   <properties>
-    <property name="coord_x" type="float" value="1"/>
-    <property name="coord_y" type="float" value="0.16"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="728" name="Errante" type="Errante" x="136" y="6000">
    <point/>
   </object>
-  <object id="1015" name="Sonico " type="Sonic" x="952" y="7380">
-   <properties>
-    <property name="coord_x" type="float" value="1"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="729" name="Errante" type="Errante" x="952" y="6000">
    <point/>
   </object>
-  <object id="1016" name="Sonico " type="Sonic" x="408" y="7380">
-   <properties>
-    <property name="coord_x" type="float" value="1"/>
-    <property name="coord_y" type="float" value="0.32"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="799" name="Errante" type="Errante" x="408" y="7560">
    <point/>
   </object>
-  <object id="1017" name="Sonico " type="Sonic" x="544" y="7920">
-   <properties>
-    <property name="coord_x" type="float" value="0.5"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="800" name="Errante" type="Errante" x="680" y="7440">
    <point/>
   </object>
-  <object id="1018" name="Sonico " type="Sonic" x="680" y="7980">
-   <properties>
-    <property name="coord_x" type="float" value="1"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="801" name="Errante" type="Errante" x="272" y="7320">
    <point/>
   </object>
-  <object id="1019" name="Sonico " type="Sonic" x="408" y="7980">
-   <properties>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="802" name="Errante" type="Errante" x="952" y="6960">
    <point/>
   </object>
-  <object id="1020" name="Sonico " type="Sonic" x="544" y="7860">
-   <properties>
-    <property name="coord_x" type="float" value="0.5"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="803" name="Errante" type="Errante" x="136" y="7080">
    <point/>
   </object>
-  <object id="1021" name="Sonico " type="Sonic" x="748" y="7920">
-   <properties>
-    <property name="coord_x" type="float" value="1"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="804" name="Errante" type="Errante" x="816" y="7200">
    <point/>
   </object>
-  <object id="1022" name="Sonico " type="Sonic" x="340" y="7920">
-   <properties>
-    <property name="coord_x" type="float" value="0"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="848" name="Errante" type="Errante" x="544" y="5700">
    <point/>
   </object>
-  <object id="1023" name="Sonico " type="Sonic" x="476" y="7080">
-   <properties>
-    <property name="coord_x" type="float" value="0.46"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="849" name="Errante" type="Errante" x="680" y="5640">
    <point/>
   </object>
-  <object id="1024" name="Sonico " type="Sonic" x="612" y="7080">
-   <properties>
-    <property name="coord_x" type="float" value="0.54"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="850" name="Errante" type="Errante" x="408" y="5640">
    <point/>
   </object>
-  <object id="1025" name="Sonico " type="Sonic" x="408" y="6960">
-   <properties>
-    <property name="coord_x" type="float" value="0.38"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="857" name="Errante" type="Errante" x="272" y="5580">
    <point/>
   </object>
-  <object id="1026" name="Sonico " type="Sonic" x="680" y="6960">
-   <properties>
-    <property name="coord_x" type="float" value="0.62"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="858" name="Errante" type="Errante" x="816" y="5580">
    <point/>
   </object>
-  <object id="1027" name="Sonico " type="Sonic" x="340" y="6900">
-   <properties>
-    <property name="coord_x" type="float" value="0.3"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="859" name="Errante" type="Errante" x="544" y="5400">
    <point/>
   </object>
-  <object id="1028" name="Sonico " type="Sonic" x="748" y="6900">
-   <properties>
-    <property name="coord_x" type="float" value="0.7"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="860" name="Errante" type="Errante" x="748" y="5280">
    <point/>
   </object>
-  <object id="1029" name="Sonico " type="Sonic" x="272" y="6840">
-   <properties>
-    <property name="coord_x" type="float" value="0.22"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="861" name="Errante" type="Errante" x="340" y="5280">
    <point/>
   </object>
-  <object id="1030" name="Sonico " type="Sonic" x="816" y="6840">
-   <properties>
-    <property name="coord_x" type="float" value="0.78"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="862" name="Errante" type="Errante" x="204" y="5160">
    <point/>
   </object>
-  <object id="1031" name="Sonico " type="Sonic" x="136" y="6900">
-   <properties>
-    <property name="coord_x" type="float" value="8"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="863" name="Errante" type="Errante" x="884" y="5160">
    <point/>
   </object>
-  <object id="1032" name="Sonico " type="Sonic" x="68" y="6840">
-   <properties>
-    <property name="coord_x" type="float" value="0"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="866" name="Errante" type="Errante" x="408" y="4860">
    <point/>
   </object>
-  <object id="1033" name="Sonico " type="Sonic" x="1020" y="6840">
-   <properties>
-    <property name="coord_x" type="float" value="1"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="867" name="Errante" type="Errante" x="408" y="4800">
    <point/>
   </object>
-  <object id="1034" name="Sonico " type="Sonic" x="952" y="6900">
-   <properties>
-    <property name="coord_x" type="float" value="0.92"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="868" name="Errante" type="Errante" x="680" y="4740">
    <point/>
   </object>
-  <object id="1036" name="Sonico " type="Sonic" x="544" y="6840">
-   <properties>
-    <property name="coord_x" type="float" value="0.5"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="869" name="Errante" type="Errante" x="680" y="4680">
    <point/>
   </object>
-  <object id="1038" name="Sonico " type="Sonic" x="476" y="6540">
-   <properties>
-    <property name="coord_y" type="float" value="0.08"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="874" name="Errante" type="Errante" x="204" y="4620">
    <point/>
   </object>
-  <object id="1039" name="Sonico " type="Sonic" x="204" y="6540">
-   <properties>
-    <property name="coord_y" type="float" value="0.24"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="875" name="Errante" type="Errante" x="204" y="4560">
    <point/>
   </object>
-  <object id="1040" name="Sonico " type="Sonic" x="340" y="6540">
-   <properties>
-    <property name="coord_y" type="float" value="0.16"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="876" name="Errante" type="Errante" x="884" y="4440">
    <point/>
   </object>
-  <object id="1041" name="Sonico " type="Sonic" x="612" y="6540">
-   <properties>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="877" name="Errante" type="Errante" x="884" y="4380">
    <point/>
   </object>
-  <object id="1042" name="Sonico " type="Sonic" x="68" y="6540">
-   <properties>
-    <property name="coord_y" type="float" value="0.32"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="878" name="Errante" type="Errante" x="884" y="4080">
    <point/>
   </object>
-  <object id="1043" name="Sonico " type="Sonic" x="680" y="6480">
-   <properties>
-    <property name="coord_y" type="float" value="0.08"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="879" name="Errante" type="Errante" x="748" y="3960">
    <point/>
   </object>
-  <object id="1044" name="Sonico " type="Sonic" x="408" y="6480">
-   <properties>
-    <property name="coord_y" type="float" value="0.24"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="881" name="Errante" type="Errante" x="204" y="4080">
    <point/>
   </object>
-  <object id="1045" name="Sonico " type="Sonic" x="544" y="6480">
-   <properties>
-    <property name="coord_y" type="float" value="0.16"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="882" name="Errante" type="Errante" x="340" y="3960">
    <point/>
   </object>
-  <object id="1046" name="Sonico " type="Sonic" x="816" y="6480">
-   <properties>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="883" name="Errante" type="Errante" x="544" y="3840">
    <point/>
   </object>
-  <object id="1047" name="Sonico " type="Sonic" x="272" y="6480">
-   <properties>
-    <property name="coord_y" type="float" value="0.32"/>
-    <property name="steer_force" type="float" value="2500"/>
-   </properties>
+  <object id="887" name="Errante" type="Errante" x="408" y="3720">
+   <point/>
+  </object>
+  <object id="888" name="Errante" type="Errante" x="680" y="3720">
+   <point/>
+  </object>
+  <object id="889" name="Errante" type="Errante" x="816" y="3660">
+   <point/>
+  </object>
+  <object id="890" name="Errante" type="Errante" x="272" y="3660">
+   <point/>
+  </object>
+  <object id="891" name="Errante" type="Errante" x="136" y="3360">
+   <point/>
+  </object>
+  <object id="892" name="Errante" type="Errante" x="272" y="3300">
+   <point/>
+  </object>
+  <object id="893" name="Errante" type="Errante" x="408" y="3360">
+   <point/>
+  </object>
+  <object id="894" name="Errante" type="Errante" x="680" y="3360">
+   <point/>
+  </object>
+  <object id="895" name="Errante" type="Errante" x="816" y="3300">
+   <point/>
+  </object>
+  <object id="896" name="Errante" type="Errante" x="952" y="3360">
+   <point/>
+  </object>
+  <object id="897" name="Errante" type="Errante" x="544" y="3180">
+   <point/>
+  </object>
+  <object id="898" name="Errante" type="Errante" x="408" y="3120">
+   <point/>
+  </object>
+  <object id="899" name="Errante" type="Errante" x="680" y="3120">
+   <point/>
+  </object>
+  <object id="900" name="Errante" type="Errante" x="544" y="3000">
+   <point/>
+  </object>
+  <object id="901" name="Errante" type="Errante" x="544" y="2700">
+   <point/>
+  </object>
+  <object id="902" name="Errante" type="Errante" x="408" y="2640">
+   <point/>
+  </object>
+  <object id="903" name="Errante" type="Errante" x="680" y="2640">
+   <point/>
+  </object>
+  <object id="904" name="Errante" type="Errante" x="272" y="2460">
+   <point/>
+  </object>
+  <object id="906" name="Errante" type="Errante" x="816" y="2460">
+   <point/>
+  </object>
+  <object id="907" name="Errante" type="Errante" x="408" y="2280">
+   <point/>
+  </object>
+  <object id="908" name="Errante" type="Errante" x="680" y="2280">
+   <point/>
+  </object>
+  <object id="909" name="Errante" type="Errante" x="544" y="2220">
+   <point/>
+  </object>
+  <object id="910" name="Errante" type="Errante" x="680" y="2400">
+   <point/>
+  </object>
+  <object id="912" name="Errante" type="Errante" x="408" y="2400">
+   <point/>
+  </object>
+  <object id="913" name="Errante" type="Errante" x="544" y="1920">
+   <point/>
+  </object>
+  <object id="914" name="Errante" type="Errante" x="680" y="1800">
+   <point/>
+  </object>
+  <object id="915" name="Errante" type="Errante" x="408" y="1800">
+   <point/>
+  </object>
+  <object id="916" name="Errante" type="Errante" x="68" y="1620">
+   <point/>
+  </object>
+  <object id="917" name="Errante" type="Errante" x="204" y="1500">
+   <point/>
+  </object>
+  <object id="918" name="Errante" type="Errante" x="340" y="1620">
+   <point/>
+  </object>
+  <object id="919" name="Errante" type="Errante" x="748" y="1620">
+   <point/>
+  </object>
+  <object id="920" name="Errante" type="Errante" x="884" y="1500">
+   <point/>
+  </object>
+  <object id="921" name="Errante" type="Errante" x="1020" y="1620">
    <point/>
   </object>
  </objectgroup>
