@@ -234,7 +234,14 @@ export const DC_COMPONENT_ID = Object.freeze
   /**
    * CmpImageInteractive
    */
-  kCmpImageInteractive : 31 as 31
+  kCmpImageInteractive : 31 as 31,
+
+  /**
+   * CmpBalsaruController
+   */
+  kBalsaruController : 32 as 32,
+
+  kBalsaruBulletController : 33 as 33
 });
 
 /****************************************************/
@@ -533,6 +540,20 @@ export const DC_MESSAGE_ID = Object.freeze
    * msg : MsgInputEvent
    */
   kPointerOut : 539 as 539,
+
+  /**
+   * Set the Balsaru Neck state.
+   * 
+   * msg : string
+   */
+  kSetNeckState : 540 as 540,
+
+  /**
+   * Fire a bullet.
+   * 
+   * msg : MsgSpawnBullet.
+   */
+  kFire : 541 as 541
 });
 
 /****************************************************/
@@ -829,5 +850,29 @@ export const DC_CONFIG = Object.freeze
   /**
    * Score Manager config object.
    */
-  kScoreManager : 18 as 18
+  kScoreManager : 18 as 18,
+
+  /**
+   * Balsaru initialization.
+   */
+  kBalsaruInit : 19 as 19,
+
+  /**
+   * Balsaru Idle.
+   */
+  kBalsaruIdle : 20 as 20,
+
+  /**
+   * Balsaru Shrink.
+   */
+  kBalsaruShrink : 21 as 21,
+
+  /**
+   * Balsaru Head
+   */
+  kBalsaruHead : 22 as 22,
+
+  kDebugBalsaruHead : 23 as 23,
+
+  kKalebio : 24 as 24
 });

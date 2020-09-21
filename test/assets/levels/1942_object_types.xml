@@ -73,6 +73,9 @@
   <property name="speed" type="float" default="500"/>
   <property name="texture_key" type="string" default="enemy"/>
  </objecttype>
+ <objecttype name="ErranteSpawnerConfig" color="#ff0000">
+  <property name="pool_size" type="int" default="30"/>
+ </objecttype>
  <objecttype name="Guide Line" color="#00007f"/>
  <objecttype name="Hero_bulletStateNormal" color="#ff0000">
   <property name="frecuency" type="int" default="8"/>
@@ -99,6 +102,23 @@
   <property name="collision_damage" type="int" default="1"/>
   <property name="speed" type="float" default="1200"/>
   <property name="texture_key" type="string" default="fireball"/>
+ </objecttype>
+ <objecttype name="KalebioConfig" color="#00ff00">
+  <property name="barrel_roll_duration" type="float" default="1"/>
+  <property name="bulletManager_key" type="string" default="cnf_bulletManager_hero"/>
+  <property name="collider_height" type="int" default="30"/>
+  <property name="collider_width" type="int" default="30"/>
+  <property name="collider_x" type="int" default="0"/>
+  <property name="collider_y" type="int" default="0"/>
+  <property name="fireRate" type="int" default="8"/>
+  <property name="frame" type="string" default="D001_Flight.png"/>
+  <property name="health" type="int" default="10"/>
+  <property name="maximum_speed" type="int" default="500"/>
+  <property name="movement_mode" type="string" default="MIXED"/>
+  <property name="score" type="int" default="0"/>
+  <property name="texture" type="string" default="DragonFlight"/>
+  <property name="x" type="int" default="500"/>
+  <property name="y" type="int" default="500"/>
  </objecttype>
  <objecttype name="Prop" color="#0303a4">
   <property name="image" type="string"/>
