@@ -24,7 +24,8 @@ implements ICmpState<CmpBalsaruController>
     this.m_id = 'idle';
     
     this._m_gm = GameManager.GetInstance();
-    this._m_duration = 5.0;
+    
+    this._m_duration = 2.0;
     return;
   }
 
@@ -67,7 +68,7 @@ implements ICmpState<CmpBalsaruController>
     
     if(this._m_time > this._m_duration)
     {
-      this._m_cmp.setActiveState('attack_anticipation');
+      this._m_cmp.setActiveState('attack');
     }
     return;
   }

@@ -89,12 +89,6 @@ extends Phaser.Scene
 
     bossManager.init(this, gameManager);
 
-    bossManager.setPosition
-    (
-      canvas.width * 0.5,
-      100.0
-    );
-
     gameManager.setBossManager(bossManager);
 
     ///////////////////////////////////

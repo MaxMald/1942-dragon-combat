@@ -1,7 +1,7 @@
 /**
  * HummingFlight Software Technologies - 2020
  *
- * @summary This component agroup actors. Actors are updated, initalizated and
+ * @summary This component group actors. Actors are updated, initialized and
  * destroyed by the update, init and destroy native method of the component.
  *
  * @file cmpActorGroup.ts
@@ -16,13 +16,12 @@ import { Ty_Image } from "../commons/1942types";
 import { IBaseComponent } from "./iBaseComponent";
 
 /**
- * This component a group actors. Actors are updated, initalizated and destroyed
+ * This component a group actors. Actors are updated, initialized and destroyed
  * by the update, init and destroy native method of the component.
  */
 export class CmpActorGroupImage
 implements IBaseComponent<Ty_Image>
-{
-  
+{  
   /**
    * Create a new component.
    */

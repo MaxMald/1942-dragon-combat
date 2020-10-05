@@ -333,8 +333,8 @@
                  "type":"Hero_bulletStateTripleShot",
                  "visible":true,
                  "width":65,
-                 "x":1353.49666666667,
-                 "y":9441.49333333333
+                 "x":1353.5,
+                 "y":9441.49
                 }, 
                 {
                  "gid":10,
@@ -382,7 +382,7 @@
                  "visible":true,
                  "width":65,
                  "x":1464.33,
-                 "y":9441.33666666667
+                 "y":9441.34
                 }, 
                 {
                  "height":41,
@@ -471,7 +471,7 @@
                  "type":"EnemyBasicBulletConfig",
                  "visible":true,
                  "width":65,
-                 "x":1310.66333333333,
+                 "x":1310.66,
                  "y":9129
                 }, 
                 {
@@ -688,7 +688,7 @@
                         {
                          "name":"vision_radius",
                          "type":"int",
-                         "value":450
+                         "value":800
                         }],
                  "rotation":0,
                  "type":"BalsaruHead",
@@ -800,8 +800,8 @@
                  "type":"KalebioConfig",
                  "visible":true,
                  "width":65,
-                 "x":1552.66666666667,
-                 "y":9444.33333333333
+                 "x":1552.67,
+                 "y":9444.33
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -5622,8 +5622,8 @@
                  "type":"Boss",
                  "visible":true,
                  "width":0,
-                 "x":564.484909090909,
-                 "y":9706.11787878788
+                 "x":564.485,
+                 "y":9706.12
                 }],
          "opacity":1,
          "type":"objectgroup",

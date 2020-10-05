@@ -103,7 +103,7 @@
   <object id="382" name="Balsaru Head" type="BalsaruHead" gid="3" x="1292.83" y="8835" width="65" height="57">
    <properties>
     <property name="mass" type="float" value="20"/>
-    <property name="vision_radius" type="int" value="450"/>
+    <property name="vision_radius" type="int" value="800"/>
    </properties>
   </object>
   <object id="383" name="Errante Spawner Config" type="ErranteSpawnerConfig" gid="11" x="1432" y="9131.67" width="65" height="57"/>

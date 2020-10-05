@@ -33,9 +33,11 @@ export class StateHeroFFlight implements IAnimationState
   : void 
   { 
     let sprite = this.m_component.getSprite();
+
     sprite.play('D001_Flight');
-    
-    sprite.anims.currentAnim.once('repeat', this._onRepeat, this);    
+
+    sprite.once('animationrepeat', this._onRepeat, this);
+
     return;
   }
   
@@ -90,7 +92,7 @@ export class StateHeroFFlight implements IAnimationState
   : void
   {
     let sprite = this.m_component.getSprite();
-    sprite.anims.currentAnim.removeAllListeners('repeat');
+    sprite.removeAllListeners('animationrepeat');
     return;
   }
   
@@ -104,7 +106,7 @@ export class StateHeroFFlight implements IAnimationState
     if(heroController.isPointerPressed()) 
     {
       let sprite = this.m_component.getSprite();
-      sprite.anims.currentAnim.once('repeat', this._onRepeat, this);
+      sprite.once('animationrepeat', this._onRepeat, this);
     }
     else
     {

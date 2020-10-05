@@ -16,7 +16,8 @@ import { CmpBalsaruController } from "../components/cmpBalsaruControllert";
 import { CmpDbgBalsaruHead } from "../components/cmpDbgBalsaruHead";
 import { CmpImageController } from "../components/cmpImageController";
 import { CmpNeckController } from "../components/cmpNeckController";
-import { CmpSpriteController } from "../components/cmpSpriteController";
+import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
+import { CmpPhysicSpriteController } from "../components/cmpPhysicSpriteController";
 import { CnfBalsaruHead } from "../configObjects/cnfBalsaruHead";
 import { CnfBalsaruInit } from "../configObjects/cnfBalsaruInit";
 
@@ -42,8 +43,8 @@ export class FcBalsaru
 
     let shipSprite : Ty_Image = _scene.add.image
     (
-      0.0,
-      0.0,
+      _scene.game.canvas.width * 0.5,
+      -800,
       _cnf_init.texture_ship
     );
 
@@ -68,7 +69,7 @@ export class FcBalsaru
     {
       neck_ball_sprite = _scene.add.image
       (
-        0, 300,
+        0, -300,
         _cnf_init.texture_neck_ball
       );
 
@@ -83,7 +84,7 @@ export class FcBalsaru
 
     let head_sprite : Ty_physicsSprite = _scene.physics.add.sprite
     (
-      0, 1000,
+      0, -300,
       _cnf_init.texture_head
     );
 
@@ -93,9 +94,11 @@ export class FcBalsaru
 
     head_sprite.setData('actor', head);
 
-    head.addComponent(CmpSpriteController.Create());
+    head.addComponent(CmpPhysicSpriteController.Create());
+    head.addComponent(CmpNullCollisionController.GetInstance());
 
-    // Neck Controller
+    ///////////////////////////////////
+    // Neck Behavior Controller
 
     let neckController : CmpNeckController = CmpNeckController.Create(_scene);
 
@@ -109,7 +112,27 @@ export class FcBalsaru
     );
 
     head.addComponent(neckController);
-    head.addComponent(CmpBalsaruController.Create());
+
+    ///////////////////////////////////
+    // Balsaru Controller
+
+    let balsaruController : CmpBalsaruController = CmpBalsaruController.Create(_scene);
+
+    balsaruController.setup
+    (
+      _scene,
+      ship,
+      _cnf_init,
+      _cnf_head
+    );
+    
+    // Add controller to head.
+
+    head.addComponent(balsaruController);    
+    
+    ///////////////////////////////////
+    // Bullet Controller
+
     head.addComponent(CmpBalsaruBulletController.Create());
 
     // Head Debugging
@@ -125,7 +148,6 @@ export class FcBalsaru
     head.init();
 
     prefabActor.addChild(head);
-
 
     return prefabActor
   }

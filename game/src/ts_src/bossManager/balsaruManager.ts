@@ -11,9 +11,9 @@
 import { BaseActor } from "../actors/baseActor";
 import { PrefabActor } from "../actors/prefabActor";
 import { IBulletManager } from "../bulletManager/iBulletManager";
-import { NullBulletManager } from "../bulletManager/nullBulletManager";
-import { DC_CONFIG, DC_MESSAGE_ID } from "../commons/1942enums";
-import { Ty_Image, Ty_physicsActor, V3 } from "../commons/1942types";
+import { DC_COMPONENT_ID, DC_CONFIG, DC_MESSAGE_ID } from "../commons/1942enums";
+import { Ty_Image, Ty_physicsActor, Ty_physicsSprite, V3 } from "../commons/1942types";
+import { CmpBalsaruController } from "../components/cmpBalsaruControllert";
 import { CnfBalsaruHead } from "../configObjects/cnfBalsaruHead";
 import { CnfBalsaruInit } from "../configObjects/cnfBalsaruInit";
 import { FcBalsaru } from "../factories/fcBalsaru";
@@ -48,7 +48,17 @@ implements IBossManager
     // Create balsaru.
 
     let balsaru = FcBalsaru.Create(_scene, initConfig, headConfig);
+
     this._m_balsaru = balsaru;
+
+    // Get Balsaru Controller.
+
+    let head : BaseActor<Ty_physicsSprite> = balsaru.getChild('head');
+
+    this._m_balsaruController = head.getComponent
+    (
+      DC_COMPONENT_ID.kBalsaruController
+    );
 
     return;
   }
@@ -56,16 +66,17 @@ implements IBossManager
   update(_dt: number)
   : void 
   {
+    // Update Prefab.
+
     this._m_balsaru.update();
+
     return;
   }
 
   getBossHealth()
   : number 
   {
-    // TODO
-
-    return 0;
+    return this._m_balsaruController.getHealth();
   }
 
   setPosition(_x: number, _y: number)
@@ -98,7 +109,25 @@ implements IBossManager
   setHero(_playerController: IPlayerController, _actor: Ty_physicsActor)
   : void 
   {
-    // TODO
+    // Get the head actor.
+
+    let head = this._m_balsaru.getChild<BaseActor<Ty_physicsSprite>>('head');
+
+    // Collision with the player bullet manager.
+
+    let heroBulletManager = _playerController.getBulletManager();
+
+    let gameManager = GameManager.GetInstance();
+
+    heroBulletManager.collisionVsSprite
+    (
+      gameManager.getGameScene(),
+      head.getWrappedInstance()
+    );
+    
+    // Save hero.
+
+    this._m_hero = _actor;
 
     return;
   }
@@ -106,9 +135,7 @@ implements IBossManager
   getHero()
   : Ty_physicsActor 
   {
-    // TODO
-
-    return null;
+    return this._m_hero;
   }
 
   setBulletManager(_bulletManager: IBulletManager)
@@ -119,16 +146,16 @@ implements IBossManager
       DC_MESSAGE_ID.kSetBulletManager,
       _bulletManager
     );
-    
+
+    this._m_bulletManager = _bulletManager;
+
     return;
   }
 
   getBulletManager()
   : IBulletManager 
   {
-    // TODO
-
-    return NullBulletManager.GetInstance();
+    return this._m_bulletManager;
   }
 
   suscribe
@@ -140,7 +167,15 @@ implements IBossManager
   )
   : void 
   {
-    // TODO
+    // Subscribe.
+
+    this._m_balsaruController.suscribe
+    (
+      _event,
+      _username,
+      _fn,
+      _context
+    );
 
     return;
   }
@@ -148,7 +183,11 @@ implements IBossManager
   unsuscribe(_event: string, _username: string)
   : void 
   {
-    // TODO
+    this._m_balsaruController.unsuscribe
+    (
+      _event,
+      _username
+    );
 
     return;
   }
@@ -180,7 +219,13 @@ implements IBossManager
   destroy()
   : void 
   {
+    this._m_balsaruController = null;
+    
     this._m_balsaru.destroy();
+
+    this._m_hero = null;
+
+    this._m_bulletManager = null;
     return;
   }
   
@@ -189,7 +234,27 @@ implements IBossManager
   /****************************************************/
   
   /**
+   * Reference to the balsaru controller.
+   */
+  private _m_balsaruController : CmpBalsaruController;
+
+  /**
    * Balsaru.
    */
   private _m_balsaru : PrefabActor;
+
+  /**
+   * Reference of the hero.
+   */
+  private _m_hero : BaseActor<Ty_physicsSprite>;
+
+  /**
+   * Reference of the boss's bullet manager.
+   */
+  private _m_bulletManager : IBulletManager;
+
+  /**
+   * Health Points
+   */
+  private _m_hp : number;
 }

@@ -8,8 +8,7 @@
  * @since September-09-2020
  */
 
-import { DC_MESSAGE_ID } from "../../commons/1942enums";
-import { Ty_Image, V2 } from "../../commons/1942types";
+import { V2 } from "../../commons/1942types";
 import { CmpNeckController } from "../../components/cmpNeckController";
 import { CnfBalsaruShrink } from "../../configObjects/cnfBalsaruShrink";
 import { GameManager } from "../../gameManager/gameManager";
@@ -27,7 +26,7 @@ implements ICmpState<CmpNeckController>
 
     this._m_start_position = new Phaser.Math.Vector2();
     this._m_direction = new Phaser.Math.Vector2();
-    this._m_time = 0.0;
+    this._m_step = 0.0;
 
     this._m_keyA = new NeckBallKey();
     this._m_keyB = new NeckBallKey();
@@ -69,7 +68,7 @@ implements ICmpState<CmpNeckController>
 
     this._m_direction.setTo(0.0, 1.0);
     
-    this._m_time = 0.0;
+    this._m_step = 0.0;
 
     // Capture the actual position and Neck Ball state    
 
@@ -126,12 +125,12 @@ implements ICmpState<CmpNeckController>
   : void 
   {
     
-    this._m_time += this._m_gm.m_dt;
-    let time = this._m_time;
+    this._m_step += this._m_gm.m_dt;
+    let step = this._m_step;
 
-    if(time < this._m_config.time)
+    if(step < this._m_config.time)
     {
-      let step : number = time / this._m_config.time;
+      step /= this._m_config.time;
 
       let neckControl = this._m_control;
 
@@ -161,14 +160,6 @@ implements ICmpState<CmpNeckController>
       (
         keyC.x,
         keyC.y
-      );
-    }
-    else
-    {
-      this._m_control.m_actor.sendMessage
-      (
-        DC_MESSAGE_ID.kSetNeckState,
-        'rumble'
       );
     }
     return;
@@ -205,7 +196,7 @@ implements ICmpState<CmpNeckController>
 
   private _m_direction : V2;
 
-  private _m_time : number;
+  private _m_step : number;
 
   private _m_keyA : NeckBallKey;
 

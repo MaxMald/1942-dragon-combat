@@ -21,6 +21,9 @@ import { IPlayerController } from "../playerController/IPlayerController";
 import { StateSpiderAttack } from "../states/stateSpiderAttack";
 import { IBossManager } from "./IBossManager";
 
+/**
+ * 
+ */
 export class SpiderBossManager
 implements IBossManager
 {
@@ -57,17 +60,20 @@ implements IBossManager
     phySprite.setData('actor', spiderActor);
 
     spiderActor.addComponent(CmpPhysicSpriteController.Create());
+
     spiderActor.addComponent(new CmpSpiderBossController());
+
     spiderActor.addComponent(CmpNullCollisionController.GetInstance());
 
     spiderActor.init();
 
     this._m_spider = spiderActor;
+
     return;
   }
 
   /**
-   * Updat the spider.
+   * Update the spider.
    * 
    * @param _dt delta time 
    */
@@ -133,6 +139,7 @@ implements IBossManager
     );
 
     this._m_hero = _actor;
+
     return;
   }
 

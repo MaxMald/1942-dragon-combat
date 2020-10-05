@@ -18,6 +18,7 @@ import { CmpNullCollisionController } from "../components/cmpNullCollisionContro
 import { CmpNullEnemyController } from "../components/cmpNullEnemyController";
 import { CnfKalebio } from "../configObjects/cnfKalebio";
 import { CnfPowerShield } from "../configObjects/cnfPowerShield";
+import { DebugManager } from "../debugManager/debugManager";
 import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
 import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
@@ -177,6 +178,7 @@ export class GameManager
 
     this._m_levelConfiguration = new LevelConfiguration();
 
+    this._m_debugManager = DebugManager.Create();
     this._m_itemManager = new NullItemManager();
     this._m_playerController = new NullPlayerController();
     this._m_basicBulletControlPool = new BasicBulletControlPool();
@@ -334,16 +336,32 @@ export class GameManager
   update(_dt : number)
   : void
   {
+    // save delta time.
+
     this.m_dt = _dt; 
+
+    // Camera distance.
+
     this._m_distance += _dt * this._m_cameraSpeed;
+
+    // Clear debugging paint
+
+    this._m_debugManager.clearGraphics();
+
+    // Game play updated.
 
     if(!this._m_gameplayStop)
     {
       this._m_ambientGenrator.update(_dt);
+
       this._m_levelGenerator.update(_dt, this._m_distance);
+      
       this._m_playerController.update(_dt);
+      
       this._m_enemiesManager.update(_dt);
+      
       this._m_bossManager.update(_dt);
+      
       this._m_itemManager.update(_dt);
     }    
     
@@ -364,6 +382,15 @@ export class GameManager
     this._m_uiManager.receive(_id, _msg);
     this._m_bossManager.receive(_id, _msg);
     return;
+  }
+
+  /**
+   * Get the debug manager.
+   */
+  getDebugManager()
+  : DebugManager
+  {
+    return this._m_debugManager;
   }
 
   /**
@@ -580,7 +607,14 @@ export class GameManager
   setGameScene(_scene : Phaser.Scene)
   : void
   {
+    // Save game scene.
+    
     this._m_scene = _scene;
+
+    // Initialize the debug manager.
+
+    this._m_debugManager.init(_scene);
+
     return;
   }
 
@@ -666,11 +700,17 @@ export class GameManager
     // Prepare the modules.
      
     NullState.Prepare();
+    
     NullBulletSpawner.Prepare();
+    
     CmpNullEnemyController.Prepare();
+    
     CmpNullCollisionController.Prepare();
+    
     NullBulletManager.Prepare();
+    
     NullEnemySpawner.Prepare();
+    
     NullEnemiesManager.Prepare();
 
     this.init();
@@ -689,11 +729,17 @@ export class GameManager
     // Shutdown the modules.
 
     NullEnemiesManager.Shutdown();
+
     NullEnemySpawner.Shutdown();
+    
     NullBulletManager.Shutdown();
+    
     CmpNullCollisionController.Shutdown(); 
+    
     CmpNullEnemyController.Shutdown();  
+    
     NullBulletSpawner.Shutdown();
+    
     NullState.ShutDown();
 
     return;
@@ -735,8 +781,16 @@ export class GameManager
   private _restart()
   : void
   {
-    this.reset();
+    this.reset();    
+
+    // destroy graphics.
+
+    this._m_debugManager.destroyGraphics();
+
+    // start test scene.
+    
     this._m_scene.scene.start('test');
+    
     return;
   }
   
@@ -759,6 +813,11 @@ export class GameManager
    * Reference to the LevelGenerator.
    */
   private _m_levelGenerator : ILevelGenerator;
+
+  /**
+   * Reference to the debug manager.
+   */
+  private _m_debugManager : DebugManager;
 
   /**
    * Reference to the LevelConfiguration.

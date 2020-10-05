@@ -241,7 +241,9 @@ export const DC_COMPONENT_ID = Object.freeze
    */
   kBalsaruController : 32 as 32,
 
-  kBalsaruBulletController : 33 as 33
+  kBalsaruBulletController : 33 as 33,
+
+  kForceController : 34 as 34
 });
 
 /****************************************************/
@@ -553,7 +555,28 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : MsgSpawnBullet.
    */
-  kFire : 541 as 541
+  kFire : 541 as 541,
+
+  /**
+   * Set the mass.
+   * 
+   * msg : number.
+   */
+  kSetMass : 542 as 542,
+
+  /**
+   * Set the speed.
+   * 
+   * msg : number.
+   */
+  kSetSpeed : 543 as 543,
+
+  /**
+   * Set the maximum speed.
+   * 
+   * msg : number.
+   */
+  kSetMaxSpeed : 544 as 544
 });
 
 /****************************************************/
@@ -738,6 +761,29 @@ export const DC_SECONDARY_ACTION = Object.freeze
    * Dragon Shield.
    */
   kShield : 1 as 1
+});
+
+/****************************************************/
+/* Configuration Objects                            */
+/****************************************************/
+
+/**
+ * Configuration objects identifiers.
+ */
+
+export type DC_COLOR = EnumLiteralsOf<typeof DC_COLOR>;
+
+export const DC_COLOR = Object.freeze
+({
+  kNegro : 0x000000 as 0x000000,
+
+  kWhite : 0xFFFFFF as 0xFFFFFF,
+
+  kRed : 0xFF0000 as 0xFF0000,
+
+  kGreen : 0x00FF00 as 0x00FF00,
+
+  kBlue : 0x0000FF as 0x0000FF
 });
 
 /****************************************************/

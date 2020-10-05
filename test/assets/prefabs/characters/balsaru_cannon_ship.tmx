@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="54" height="96" tilewidth="20" tileheight="20" infinite="0" nextlayerid="3" nextobjectid="9">
+ <tileset firstgid="1" name="balsaru_cannon_ship" tilewidth="1363" tileheight="469" tilecount="3" columns="0">
+  <grid orientation="orthogonal" width="1" height="1"/>
+  <tile id="0">
+   <image width="1363" height="469" source="../../images/balsaru/balsaru_ship_2.png"/>
+  </tile>
+  <tile id="1">
+   <image width="225" height="79" source="../../images/balsaru/cannon.png"/>
+  </tile>
+  <tile id="2">
+   <image width="172" height="172" source="../../images/balsaru/cannon_base.png"/>
+  </tile>
+ </tileset>
+ <objectgroup id="2" name="ship">
+  <object id="1" name="ship" type="ph_Image" gid="1" x="308" y="262" width="1363" height="469" rotation="90">
+   <properties>
+    <property name="frame_key" value=""/>
+    <property name="frequency" type="float" value="1"/>
+    <property name="texture" value="balsaru_ship_2"/>
+   </properties>
+  </object>
+  <object id="3" name="cannon_point_r" x="686.333" y="602.333">
+   <point/>
+  </object>
+  <object id="4" name="cannon_point_r" x="713.5" y="931.5">
+   <point/>
+  </object>
+  <object id="5" name="cannon_point_r" x="677" y="1311">
+   <point/>
+  </object>
+  <object id="6" name="cannon_point_r" x="390" y="604">
+   <point/>
+  </object>
+  <object id="7" name="cannon_point_r" x="364.667" y="924">
+   <point/>
+  </object>
+  <object id="8" name="cannon_point_r" x="406" y="1312">
+   <point/>
+  </object>
+ </objectgroup>
+</map>

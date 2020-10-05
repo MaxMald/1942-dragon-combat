@@ -13706,7 +13706,8 @@ define("game/src/ts_src/states/balsaruController.ts/sttBalsaruAttackAticipation"
             this.m_id = 'attack_anticipation';
             this._m_gm = gameManager_40.GameManager.GetInstance();
             this._m_time = 0.0;
-            this._m_duration = 1.0;
+            this._m_duration_shrink = 0.5;
+            this._m_duration_rumble = 1.0;
             return;
         }
         SttBalsaruAttackAnticipation.prototype.setComponent = function (_component) {
@@ -13718,9 +13719,10 @@ define("game/src/ts_src/states/balsaruController.ts/sttBalsaruAttackAticipation"
         };
         SttBalsaruAttackAnticipation.prototype.onEnter = function () {
             this._m_time = 0.0;
-            this._m_cmp.m_actor.sendMessage(_1942enums_112.DC_MESSAGE_ID.kSetNeckState, 'rumble');
             var head = this._m_cmp.m_actor.getWrappedInstance();
             head.setTint(0xff0000);
+            this._m_cmp.m_actor.sendMessage(_1942enums_112.DC_MESSAGE_ID.kSetNeckState, 'shrink');
+            this._m_activeState = this._updateShrink;
             return;
         };
         SttBalsaruAttackAnticipation.prototype.onExit = function () {
@@ -13730,15 +13732,32 @@ define("game/src/ts_src/states/balsaruController.ts/sttBalsaruAttackAticipation"
             return;
         };
         SttBalsaruAttackAnticipation.prototype.update = function () {
-            this._m_time += this._m_gm.m_dt;
-            if (this._m_time > this._m_duration) {
-                this._m_cmp.setActiveState('attack');
+            if (this._m_activeState != null) {
+                this._m_activeState.call(this);
             }
             return;
         };
         SttBalsaruAttackAnticipation.prototype.destroy = function () {
             this._m_gm = null;
             this._m_cmp = null;
+            return;
+        };
+        SttBalsaruAttackAnticipation.prototype._updateRumble = function () {
+            this._m_time += this._m_gm.m_dt;
+            if (this._m_time > this._m_duration_rumble) {
+                this._m_time = 0.0;
+                this._m_cmp.setActiveState('attack');
+                this._m_activeState = this._updateShrink;
+            }
+            return;
+        };
+        SttBalsaruAttackAnticipation.prototype._updateShrink = function () {
+            this._m_time += this._m_gm.m_dt;
+            if (this._m_time > this._m_duration_shrink) {
+                this._m_time = 0.0;
+                this._m_cmp.m_actor.sendMessage(_1942enums_112.DC_MESSAGE_ID.kSetNeckState, 'rumble');
+                this._m_activeState = this._updateRumble;
+            }
             return;
         };
         return SttBalsaruAttackAnticipation;
@@ -14088,6 +14107,7 @@ define("game/src/ts_src/states/balsaruNeck.ts/sttNeckEvade", ["require", "export
             this._m_forceC = new Phaser.Math.Vector2();
             this._m_direction = new Phaser.Math.Vector2();
             this._m_steerForce = new Phaser.Math.Vector2();
+            this._m_fleePosition = new Phaser.Math.Vector2();
             this._m_speed = 0.0;
             this._m_forceMagnitude = 3000.0;
             this._m_danger_radius = 250.0;
@@ -14118,6 +14138,7 @@ define("game/src/ts_src/states/balsaruNeck.ts/sttNeckEvade", ["require", "export
             this._m_speed = 0.0;
             this._m_direction.setTo(0.0, 1.0);
             this._m_centerPoint.setTo(neckControl.m_body.x, neckControl.m_body.y + neckControl.m_headConfig.neck_length);
+            this._m_activeState = this.updateEvade;
             return;
         };
         SttNeckEvade.prototype.onExit = function () {
@@ -14127,8 +14148,20 @@ define("game/src/ts_src/states/balsaruNeck.ts/sttNeckEvade", ["require", "export
             return;
         };
         SttNeckEvade.prototype.update = function () {
-            var neckControl = this._m_control;
             this._m_graphics.clear();
+            this._m_activeState.call(this);
+            this._neckCurve();
+            return;
+        };
+        SttNeckEvade.prototype.destroy = function () {
+            this._m_control = null;
+            this._m_gm = null;
+            this._m_start_position = null;
+            this._m_direction = null;
+            return;
+        };
+        SttNeckEvade.prototype.updateEvade = function () {
+            var neckControl = this._m_control;
             this._m_steerForce.setTo(0.0, 0.0);
             var dt = this._m_gm.m_dt;
             var bulletPool = this._m_playerBulletManager.getPool();
@@ -14169,6 +14202,39 @@ define("game/src/ts_src/states/balsaruNeck.ts/sttNeckEvade", ["require", "export
                 bodyToHead.scale(200 * -dt);
                 headSprite.setPosition(headSprite.x + bodyToHead.x, headSprite.y + bodyToHead.y);
             }
+            else if (bodyToHead.x > (max_length * 0.5)) {
+                this._m_fleePosition.setTo(body.x + bodyToHead.x * -1, body.y + bodyToHead.y);
+                this._m_activeState = this._updateFlee;
+            }
+            return;
+        };
+        SttNeckEvade.prototype._updateFlee = function () {
+            var neckControl = this._m_control;
+            var head = neckControl.m_head;
+            this._m_steerForce.setTo(0.0, 0.0);
+            var dt = this._m_gm.m_dt;
+            var desire = this._m_forceA;
+            desire.set(this._m_fleePosition.x - head.x, this._m_fleePosition.y - head.y);
+            desire.normalize();
+            desire.scale(neckControl.m_headConfig.speed);
+            var actualForce = this._m_forceB;
+            actualForce.copy(this._m_direction);
+            actualForce.scale(this._m_speed);
+            var steerForce = this._m_forceC;
+            steerForce.copy(desire);
+            steerForce.subtract(actualForce);
+            head.setPosition(head.x + actualForce.x * dt, head.y + actualForce.y * dt);
+            this._m_direction.copy(actualForce.normalize());
+            var headToTarget = this._m_forceA;
+            headToTarget.setTo(this._m_fleePosition.x - head.x, this._m_fleePosition.y - head.y);
+            if (headToTarget.length() < 1.0) {
+                this._m_activeState = this.updateEvade;
+            }
+            return;
+        };
+        SttNeckEvade.prototype._neckCurve = function () {
+            var neckControl = this._m_control;
+            var headSprite = neckControl.m_head;
             var p1 = this._m_forceA;
             var p2 = this._m_forceB;
             var startPosition = this._m_start_position;
@@ -14178,13 +14244,6 @@ define("game/src/ts_src/states/balsaruNeck.ts/sttNeckEvade", ["require", "export
             p3.setTo(headSprite.x, headSprite.y);
             neckControl.getBezierFormation(startPosition, p1, p2, p3, neckControl.m_keys_C);
             neckControl.applyKeys(neckControl.m_keys_C);
-            return;
-        };
-        SttNeckEvade.prototype.destroy = function () {
-            this._m_control = null;
-            this._m_gm = null;
-            this._m_start_position = null;
-            this._m_direction = null;
             return;
         };
         SttNeckEvade.prototype.evadeBullet = function (_bullet) {
@@ -14284,7 +14343,7 @@ define("game/src/ts_src/states/balsaruNeck.ts/sttNeckRumble", ["require", "expor
     }());
     exports.SttNeckRumble = SttNeckRumble;
 });
-define("game/src/ts_src/states/balsaruNeck.ts/sttNeckShrink", ["require", "exports", "game/src/ts_src/commons/1942enums", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/states/balsaruNeck.ts/neckBallKey"], function (require, exports, _1942enums_116, gameManager_45, neckBallKey_2) {
+define("game/src/ts_src/states/balsaruNeck.ts/sttNeckShrink", ["require", "exports", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/states/balsaruNeck.ts/neckBallKey"], function (require, exports, gameManager_45, neckBallKey_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.SttNeckShrink = void 0;
@@ -14294,7 +14353,7 @@ define("game/src/ts_src/states/balsaruNeck.ts/sttNeckShrink", ["require", "expor
             this._m_gm = gameManager_45.GameManager.GetInstance();
             this._m_start_position = new Phaser.Math.Vector2();
             this._m_direction = new Phaser.Math.Vector2();
-            this._m_time = 0.0;
+            this._m_step = 0.0;
             this._m_keyA = new neckBallKey_2.NeckBallKey();
             this._m_keyB = new neckBallKey_2.NeckBallKey();
             this._m_keyC = new neckBallKey_2.NeckBallKey();
@@ -14315,7 +14374,7 @@ define("game/src/ts_src/states/balsaruNeck.ts/sttNeckShrink", ["require", "expor
             var neckControl = this._m_control;
             this._m_start_position.setTo(neckControl.m_body.x, neckControl.m_body.y);
             this._m_direction.setTo(0.0, 1.0);
-            this._m_time = 0.0;
+            this._m_step = 0.0;
             neckControl.captureNeck(neckControl.m_keys_A);
             neckControl.getLineFormation(this._m_start_position, this._m_direction, this._m_config.length / (neckControl.m_config.num_neck_balls + 1), neckControl.m_keys_B);
             this._m_keyA.set(neckControl.m_head.x, neckControl.m_head.y, 1.0, 1.0, 0);
@@ -14329,19 +14388,16 @@ define("game/src/ts_src/states/balsaruNeck.ts/sttNeckShrink", ["require", "expor
             return;
         };
         SttNeckShrink.prototype.update = function () {
-            this._m_time += this._m_gm.m_dt;
-            var time = this._m_time;
-            if (time < this._m_config.time) {
-                var step = time / this._m_config.time;
+            this._m_step += this._m_gm.m_dt;
+            var step = this._m_step;
+            if (step < this._m_config.time) {
+                step /= this._m_config.time;
                 var neckControl = this._m_control;
                 neckControl.neckKeyArrayLinearInterpolation(neckControl.m_keys_A, neckControl.m_keys_B, step, neckControl.m_keys_C);
                 neckControl.applyKeys(neckControl.m_keys_C);
                 var keyC = this._m_keyC;
                 neckControl.neckKeyLinearInterpolation(this._m_keyA, this._m_keyB, step, this._m_keyC);
                 neckControl.m_head.setPosition(keyC.x, keyC.y);
-            }
-            else {
-                this._m_control.m_actor.sendMessage(_1942enums_116.DC_MESSAGE_ID.kSetNeckState, 'rumble');
             }
             return;
         };
@@ -14357,7 +14413,7 @@ define("game/src/ts_src/states/balsaruNeck.ts/sttNeckShrink", ["require", "expor
     }());
     exports.SttNeckShrink = SttNeckShrink;
 });
-define("game/src/ts_src/components/cmpNeckController", ["require", "exports", "game/src/ts_src/commons/1942enums", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/states/balsaruNeck.ts/neckBallKey", "game/src/ts_src/states/balsaruNeck.ts/sttNeckIlde", "game/src/ts_src/states/balsaruNeck.ts/sttNeckFollow", "game/src/ts_src/states/balsaruNeck.ts/sttNeckEvade", "game/src/ts_src/states/balsaruNeck.ts/sttNeckRumble", "game/src/ts_src/states/balsaruNeck.ts/sttNeckShrink", "game/src/ts_src/states/nullState", "game/src/ts_src/components/cmpFSM"], function (require, exports, _1942enums_117, gameManager_46, neckBallKey_3, sttNeckIlde_1, sttNeckFollow_1, sttNeckEvade_1, sttNeckRumble_1, sttNeckShrink_1, nullState_7, cmpFSM_3) {
+define("game/src/ts_src/components/cmpNeckController", ["require", "exports", "game/src/ts_src/commons/1942enums", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/states/balsaruNeck.ts/neckBallKey", "game/src/ts_src/states/balsaruNeck.ts/sttNeckIlde", "game/src/ts_src/states/balsaruNeck.ts/sttNeckFollow", "game/src/ts_src/states/balsaruNeck.ts/sttNeckEvade", "game/src/ts_src/states/balsaruNeck.ts/sttNeckRumble", "game/src/ts_src/states/balsaruNeck.ts/sttNeckShrink", "game/src/ts_src/states/nullState", "game/src/ts_src/components/cmpFSM"], function (require, exports, _1942enums_116, gameManager_46, neckBallKey_3, sttNeckIlde_1, sttNeckFollow_1, sttNeckEvade_1, sttNeckRumble_1, sttNeckShrink_1, nullState_7, cmpFSM_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CmpNeckController = void 0;
@@ -14375,12 +14431,12 @@ define("game/src/ts_src/components/cmpNeckController", ["require", "exports", "g
             var gameManger = gameManager_46.GameManager.GetInstance();
             var levelConfig = gameManger.getLevelConfiguration();
             var idle = new sttNeckIlde_1.SttNeckIdle();
-            var idle_config = levelConfig.getConfig(_1942enums_117.DC_CONFIG.kBalsaruIdle);
+            var idle_config = levelConfig.getConfig(_1942enums_116.DC_CONFIG.kBalsaruIdle);
             idle.setup(idle_config);
             idle.setComponent(cmp);
             cmp.addState(idle);
             var shrink = new sttNeckShrink_1.SttNeckShrink();
-            var shrink_config = levelConfig.getConfig(_1942enums_117.DC_CONFIG.kBalsaruShrink);
+            var shrink_config = levelConfig.getConfig(_1942enums_116.DC_CONFIG.kBalsaruShrink);
             shrink.setup(shrink_config);
             shrink.setComponent(cmp);
             cmp.addState(shrink);
@@ -14428,7 +14484,7 @@ define("game/src/ts_src/components/cmpNeckController", ["require", "exports", "g
         };
         CmpNeckController.prototype.receive = function (_id, _msg) {
             switch (_id) {
-                case _1942enums_117.DC_MESSAGE_ID.kSetNeckState:
+                case _1942enums_116.DC_MESSAGE_ID.kSetNeckState:
                     this.setActiveState(_msg);
                     return;
                 default:
@@ -14436,6 +14492,10 @@ define("game/src/ts_src/components/cmpNeckController", ["require", "exports", "g
             }
         };
         CmpNeckController.prototype.destroy = function () {
+            this.m_aNeckBalls.forEach(function (_image) {
+                _image.destroy();
+                return;
+            });
             _super.prototype.destroy.call(this);
             return;
         };
@@ -14629,7 +14689,7 @@ define("game/src/ts_src/factories/fcBalsaru", ["require", "exports", "game/src/t
     }());
     exports.FcBalsaru = FcBalsaru;
 });
-define("game/src/ts_src/bossManager/balsaruManager", ["require", "exports", "game/src/ts_src/bulletManager/nullBulletManager", "game/src/ts_src/commons/1942enums", "game/src/ts_src/factories/fcBalsaru"], function (require, exports, nullBulletManager_19, _1942enums_118, fcBalsaru_1) {
+define("game/src/ts_src/bossManager/balsaruManager", ["require", "exports", "game/src/ts_src/bulletManager/nullBulletManager", "game/src/ts_src/commons/1942enums", "game/src/ts_src/factories/fcBalsaru"], function (require, exports, nullBulletManager_19, _1942enums_117, fcBalsaru_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BalsaruManager = void 0;
@@ -14638,8 +14698,8 @@ define("game/src/ts_src/bossManager/balsaruManager", ["require", "exports", "gam
         }
         BalsaruManager.prototype.init = function (_scene, _gameManager) {
             var levelConfiguration = _gameManager.getLevelConfiguration();
-            var initConfig = levelConfiguration.getConfig(_1942enums_118.DC_CONFIG.kBalsaruInit);
-            var headConfig = levelConfiguration.getConfig(_1942enums_118.DC_CONFIG.kBalsaruHead);
+            var initConfig = levelConfiguration.getConfig(_1942enums_117.DC_CONFIG.kBalsaruInit);
+            var headConfig = levelConfiguration.getConfig(_1942enums_117.DC_CONFIG.kBalsaruHead);
             var balsaru = fcBalsaru_1.FcBalsaru.Create(_scene, initConfig, headConfig);
             this._m_balsaru = balsaru;
             return;
@@ -14656,7 +14716,7 @@ define("game/src/ts_src/bossManager/balsaruManager", ["require", "exports", "gam
             var ship = balsaru.getChild('ship');
             var shipSprite = ship.getWrappedInstance();
             var move = new Phaser.Math.Vector3(_x - shipSprite.x, _y - shipSprite.y);
-            balsaru.sendMessage(_1942enums_118.DC_MESSAGE_ID.kAgentMove, move);
+            balsaru.sendMessage(_1942enums_117.DC_MESSAGE_ID.kAgentMove, move);
             return;
         };
         BalsaruManager.prototype.setHero = function (_playerController, _actor) {
@@ -14666,7 +14726,7 @@ define("game/src/ts_src/bossManager/balsaruManager", ["require", "exports", "gam
             return null;
         };
         BalsaruManager.prototype.setBulletManager = function (_bulletManager) {
-            this._m_balsaru.sendMessage(_1942enums_118.DC_MESSAGE_ID.kSetBulletManager, _bulletManager);
+            this._m_balsaru.sendMessage(_1942enums_117.DC_MESSAGE_ID.kSetBulletManager, _bulletManager);
             return;
         };
         BalsaruManager.prototype.getBulletManager = function () {
@@ -14695,7 +14755,7 @@ define("game/src/ts_src/bossManager/balsaruManager", ["require", "exports", "gam
     }());
     exports.BalsaruManager = BalsaruManager;
 });
-define("test/pilot/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/bulletManager/bulletManager", "game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletSpawner", "game/src/ts_src/levelGenerator/levelGeneratorConfig", "game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletSpawner", "game/src/ts_src/enemiesManager/enemiesManager", "game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner", "game/src/ts_src/uiManager/UIManager", "game/src/ts_src/scoreManager/scoreManager", "game/src/ts_src/bossManager/spiderBossManager", "game/src/ts_src/itemManager/ItemManager", "game/src/ts_src/bulletManager/bulletSpawner/heroTripleShotSpawner", "game/src/ts_src/enemiesManager/enemySpawner/rangerSpawner", "game/src/ts_src/commons/1942enums", "game/src/ts_src/enemiesManager/enemySpawner/sonicSpawner", "game/src/ts_src/enemiesManager/enemySpawner/arponShipSpawner", "game/src/ts_src/bulletManager/bulletSpawner/arponBulletSpawner"], function (require, exports, gameManager_47, bulletManager_1, heroBasicBulletSpawner_1, levelGeneratorConfig_1, enemyBasicBulletSpawner_1, enemiesManager_1, erranteSpawner_1, UIManager_1, scoreManager_2, spiderBossManager_1, ItemManager_1, heroTripleShotSpawner_1, rangerSpawner_1, _1942enums_119, sonicSpawner_1, arponShipSpawner_1, arponBulletSpawner_1) {
+define("test/pilot/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_src/gameManager/gameManager", "game/src/ts_src/bulletManager/bulletManager", "game/src/ts_src/bulletManager/bulletSpawner/heroBasicBulletSpawner", "game/src/ts_src/levelGenerator/levelGeneratorConfig", "game/src/ts_src/bulletManager/bulletSpawner/enemyBasicBulletSpawner", "game/src/ts_src/enemiesManager/enemiesManager", "game/src/ts_src/enemiesManager/enemySpawner/erranteSpawner", "game/src/ts_src/uiManager/UIManager", "game/src/ts_src/scoreManager/scoreManager", "game/src/ts_src/bossManager/spiderBossManager", "game/src/ts_src/itemManager/ItemManager", "game/src/ts_src/bulletManager/bulletSpawner/heroTripleShotSpawner", "game/src/ts_src/enemiesManager/enemySpawner/rangerSpawner", "game/src/ts_src/commons/1942enums", "game/src/ts_src/enemiesManager/enemySpawner/sonicSpawner", "game/src/ts_src/enemiesManager/enemySpawner/arponShipSpawner", "game/src/ts_src/bulletManager/bulletSpawner/arponBulletSpawner"], function (require, exports, gameManager_47, bulletManager_1, heroBasicBulletSpawner_1, levelGeneratorConfig_1, enemyBasicBulletSpawner_1, enemiesManager_1, erranteSpawner_1, UIManager_1, scoreManager_2, spiderBossManager_1, ItemManager_1, heroTripleShotSpawner_1, rangerSpawner_1, _1942enums_118, sonicSpawner_1, arponShipSpawner_1, arponBulletSpawner_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Test = void 0;
@@ -14711,7 +14771,7 @@ define("test/pilot/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_
             var levelConfiguration = gameManager.getLevelConfiguration();
             levelConfiguration.init(this, gameManager);
             var scoreManager = scoreManager_2.ScoreManager.Create();
-            var scoreManagerConfig = levelConfiguration.getConfig(_1942enums_119.DC_CONFIG.kScoreManager);
+            var scoreManagerConfig = levelConfiguration.getConfig(_1942enums_118.DC_CONFIG.kScoreManager);
             scoreManager.init(this, scoreManagerConfig);
             gameManager.setScoreManager(scoreManager);
             var ambientGenConfig = JSON.parse(this.game.cache.text.get('cnf_ambient'));
@@ -14730,7 +14790,7 @@ define("test/pilot/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_
             enim_bulletManager.init(this, cnfEnemiesBulletMng.pool_size, cnfEnemiesBulletMng.texture_key, new Phaser.Geom.Point(-enim_padding, -enim_padding), new Phaser.Geom.Point(canvas.width + enim_padding, canvas.height + enim_padding));
             bossManager.setBulletManager(enim_bulletManager);
             var enemyBulletSpawner = enemyBasicBulletSpawner_1.EnemyBasicBulletSpawner.Create();
-            var enemyBasicBulletConfig = levelConfiguration.getConfig(_1942enums_119.DC_CONFIG.kEnemyBasicBullet);
+            var enemyBasicBulletConfig = levelConfiguration.getConfig(_1942enums_118.DC_CONFIG.kEnemyBasicBullet);
             enemyBulletSpawner.setBulletConfig(enemyBasicBulletConfig);
             enim_bulletManager.addSpawner(enemyBulletSpawner);
             var arponSpawner = arponBulletSpawner_1.ArponBulletSpawner.Create();
@@ -14742,19 +14802,19 @@ define("test/pilot/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_
             enemiesManager.setBulletManager(enim_bulletManager);
             gameManager.setEnemiesManager(enemiesManager);
             var erranteSpawner = erranteSpawner_1.ErranteSpawner.Create();
-            var erranteSpawnerConfig = levelConfiguration.getConfig(_1942enums_119.DC_CONFIG.kErranteSpawner);
+            var erranteSpawnerConfig = levelConfiguration.getConfig(_1942enums_118.DC_CONFIG.kErranteSpawner);
             erranteSpawner.init(erranteSpawnerConfig);
             enemiesManager.addSpawner(erranteSpawner);
             var rangerSpawner = rangerSpawner_1.RangerSpawner.Create();
-            var rangerSpawnerConfig = levelConfiguration.getConfig(_1942enums_119.DC_CONFIG.kRangerSpawner);
+            var rangerSpawnerConfig = levelConfiguration.getConfig(_1942enums_118.DC_CONFIG.kRangerSpawner);
             rangerSpawner.init(rangerSpawnerConfig);
             enemiesManager.addSpawner(rangerSpawner);
             var sonicSpawner = sonicSpawner_1.SonicSpawner.Create();
-            var sonicSpawnerConfig = levelConfiguration.getConfig(_1942enums_119.DC_CONFIG.kSonicSpawner);
+            var sonicSpawnerConfig = levelConfiguration.getConfig(_1942enums_118.DC_CONFIG.kSonicSpawner);
             sonicSpawner.init(sonicSpawnerConfig);
             enemiesManager.addSpawner(sonicSpawner);
             var arponShipSpawner = arponShipSpawner_1.ArponShipSpawner.Create();
-            var arponShipSpanwerConfig = levelConfiguration.getConfig(_1942enums_119.DC_CONFIG.kArponShipSpawner);
+            var arponShipSpanwerConfig = levelConfiguration.getConfig(_1942enums_118.DC_CONFIG.kArponShipSpawner);
             arponShipSpawner.init(arponShipSpanwerConfig);
             enemiesManager.addSpawner(arponShipSpawner);
             var cnfBulletMng = JSON.parse(this.game.cache.text.get('cnf_bulletManager_hero'));
@@ -14767,7 +14827,7 @@ define("test/pilot/src/ts_src/scenes/test", ["require", "exports", "game/src/ts_
             var tripleShotSpawner = heroTripleShotSpawner_1.heroTripleShotSpawner.Create();
             tripleShotSpawner.init();
             bulletMng.addSpawner(tripleShotSpawner);
-            var heroConfig = levelConfiguration.getConfig(_1942enums_119.DC_CONFIG.kKalebio);
+            var heroConfig = levelConfiguration.getConfig(_1942enums_118.DC_CONFIG.kKalebio);
             gameManager.initHero(this, heroConfig);
             var playercontroller = gameManager.getPlayerController();
             playercontroller.setBulletManager(bulletMng);
@@ -14876,7 +14936,7 @@ define("game/src/ts_src/playerController/playerControllerConfig", ["require", "e
     }());
     exports.PlayerControllerConfig = PlayerControllerConfig;
 });
-define("game/src/ts_src/components/cmpTargetController", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_120) {
+define("game/src/ts_src/components/cmpTargetController", ["require", "exports", "game/src/ts_src/commons/1942enums"], function (require, exports, _1942enums_119) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CmpTargetController = void 0;
@@ -14885,7 +14945,7 @@ define("game/src/ts_src/components/cmpTargetController", ["require", "exports", 
         }
         CmpTargetController.Create = function () {
             var controller = new CmpTargetController();
-            controller.m_id = _1942enums_120.DC_COMPONENT_ID.kCollisionController;
+            controller.m_id = _1942enums_119.DC_COMPONENT_ID.kCollisionController;
             return controller;
         };
         CmpTargetController.prototype.init = function (_actor) {

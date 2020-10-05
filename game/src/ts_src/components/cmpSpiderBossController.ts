@@ -142,6 +142,7 @@ implements IBaseComponent<Ty_physicsSprite>
   : void
   {
     this._m_health += _points;
+    
     if(this._m_health <= 0)
     {
       this._m_health = 0;

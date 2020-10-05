@@ -8,7 +8,6 @@
  * @since September-16-2020
  */
 
-
 import { DC_MESSAGE_ID } from "../../commons/1942enums";
 import { Ty_physicsSprite } from "../../commons/1942types";
 import { CmpBalsaruController } from "../../components/cmpBalsaruControllert";
@@ -29,7 +28,10 @@ implements ICmpState<CmpBalsaruController>
     this._m_gm = GameManager.GetInstance();
 
     this._m_time = 0.0;
-    this._m_duration = 1.0;
+
+    this._m_duration_shrink = 0.5;
+    this._m_duration_rumble = 1.0;
+
     return;
   }
 
@@ -51,18 +53,26 @@ implements ICmpState<CmpBalsaruController>
   {
     this._m_time = 0.0;
 
-    // Set Neck State
+    ///////////////////////////////////
+    // Balsaru Head
 
-    this._m_cmp.m_actor.sendMessage
+    let head : Ty_physicsSprite 
+      = this._m_cmp.m_head.getWrappedInstance();
+
+    head.setTint(0xff0000);
+
+    ///////////////////////////////////
+    // Shrink state
+
+    this._m_cmp.m_head.sendMessage
     (
       DC_MESSAGE_ID.kSetNeckState,
       'rumble'
     );
 
-    let head : Ty_physicsSprite = this._m_cmp.m_actor.getWrappedInstance();
+    // Set active state.
 
-    head.setTint(0xff0000);
-
+    this._m_activeState = this._updateRumble;
     return;
   }
 
@@ -81,11 +91,9 @@ implements ICmpState<CmpBalsaruController>
   update()
   : void 
   {
-    this._m_time += this._m_gm.m_dt;
-
-    if(this._m_time > this._m_duration)
+    if(this._m_activeState != null)
     {
-      this._m_cmp.setActiveState('attack');
+      this._m_activeState.call(this);
     }
     return;
   }
@@ -103,10 +111,50 @@ implements ICmpState<CmpBalsaruController>
   /****************************************************/
   /* Private                                          */
   /****************************************************/
-  
+
+  private _updateRumble()
+  : void
+  {
+    this._m_time += this._m_gm.m_dt;
+
+    if(this._m_time > this._m_duration_rumble)
+    {
+      this._m_time = 0.0;
+
+      this._m_cmp.setActiveState('attack');
+
+      this._m_activeState = this._updateShrink;
+    }
+    return;
+  }
+
+  private _updateShrink()
+  : void
+  {
+    this._m_time += this._m_gm.m_dt;
+
+    if(this._m_time > this._m_duration_shrink)
+    {
+      this._m_time = 0.0;
+
+      this._m_cmp.m_head.sendMessage
+      (
+        DC_MESSAGE_ID.kSetNeckState,
+        'rumble'
+      );
+
+      this._m_activeState = this._updateRumble;
+    }
+    return;
+  }
+
+  private _m_activeState : () => void;
+
   private _m_time : number;
 
-  private _m_duration : number;
+  private _m_duration_rumble : number;
+
+  private _m_duration_shrink : number;
 
   private _m_gm : GameManager;
 

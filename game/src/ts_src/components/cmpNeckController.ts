@@ -9,21 +9,20 @@
  */
 
 import { DC_CONFIG, DC_MESSAGE_ID } from "../commons/1942enums";
-import { Ty_Image, Ty_physicsActor, Ty_physicsSprite, Ty_Sprite, V2, V3 } from "../commons/1942types";
+import { Ty_Image, Ty_physicsActor, Ty_physicsSprite, Ty_Sprite, V2 } from "../commons/1942types";
 import { CnfBalsaruIdle } from "../configObjects/cnfBalsaruIdle";
 import { CnfBalsaruInit } from "../configObjects/cnfBalsaruInit";
 import { CnfBalsaruShrink } from "../configObjects/cnfBalsaruShrink";
 import { GameManager } from "../gameManager/gameManager";
 import { NeckBallKey } from "../states/balsaruNeck.ts/neckBallKey";
 import { SttNeckIdle } from "../states/balsaruNeck.ts/sttNeckIlde";
-import { SttNeckFollow } from "../states/balsaruNeck.ts/sttNeckFollow";
-import { SttNeckEvade } from "../states/balsaruNeck.ts/sttNeckEvade";
 import { SttNeckRumble } from "../states/balsaruNeck.ts/sttNeckRumble";
 import { SttNeckShrink } from "../states/balsaruNeck.ts/sttNeckShrink";
 import { IBaseState } from "../states/IBaseState";
 import { NullState } from "../states/nullState";
 import { cmpFSM } from "./cmpFSM";
 import { CnfBalsaruHead } from "../configObjects/cnfBalsaruHead";
+import { SttNeckManual } from "../states/balsaruNeck.ts/sttNeckManual";
 
 export class CmpNeckController 
 extends cmpFSM<Ty_physicsSprite>
@@ -87,21 +86,12 @@ extends cmpFSM<Ty_physicsSprite>
 
     // Follow State
 
-    let follow = new SttNeckFollow();
+    let manual = new SttNeckManual();
 
-    follow.setComponent(cmp);
-    follow.setup();
+    manual.setComponent(cmp);
+    manual.setup();
 
-    cmp.addState(follow);
-
-    // Evade State
-
-    let evade = new SttNeckEvade();
-
-    evade.setComponent(cmp);
-    evade.setup(_scene);
-
-    cmp.addState(evade);
+    cmp.addState(manual);
 
     // Set active state.
 
@@ -182,6 +172,15 @@ extends cmpFSM<Ty_physicsSprite>
   destroy()
   : void 
   {
+
+    this.m_aNeckBalls.forEach
+    (
+      function(_image : Ty_Image)
+      {
+        _image.destroy();
+        return;
+      }
+    );
     
     super.destroy();
     return;
