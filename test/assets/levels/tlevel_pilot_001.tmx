@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="468">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="470">
  <editorsettings>
   <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
@@ -87,20 +87,20 @@
    <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Balsaru </text>
   </object>
   <object id="378" name="Balsaru Init" type="BalsaruInit" gid="3" x="1214" y="8833.67" width="65" height="57"/>
-  <object id="379" name="State : Idle" type="BalsaruIdle" gid="3" x="1368.17" y="8836" width="65" height="57">
+  <object id="379" name="State : Idle" type="BalsaruIdle" gid="3" x="1370.84" y="8835.33" width="65" height="57">
    <properties>
     <property name="length" type="int" value="540"/>
     <property name="neck_amplitude" type="float" value="80"/>
     <property name="neck_period" type="float" value="1.5"/>
    </properties>
   </object>
-  <object id="381" name="State : Shrink" type="BalsaruShrink" gid="3" x="1443.17" y="8835" width="65" height="57">
+  <object id="381" name="State : Shrink" type="BalsaruShrink" gid="3" x="1607.84" y="8835" width="65" height="57">
    <properties>
     <property name="length" type="int" value="370"/>
     <property name="time" type="float" value="0.5"/>
    </properties>
   </object>
-  <object id="382" name="Balsaru Head" type="BalsaruHead" gid="3" x="1292.83" y="8835" width="65" height="57">
+  <object id="382" name="Balsaru Head" type="BalsaruHead" gid="3" x="1291.5" y="8835.67" width="65" height="57">
    <properties>
     <property name="mass" type="float" value="20"/>
     <property name="vision_radius" type="int" value="800"/>
@@ -118,6 +118,8 @@
     <property name="y" type="int" value="1720"/>
    </properties>
   </object>
+  <object id="468" name="State : Evade" type="BalsaruEvade" gid="3" x="1448.17" y="8834.17" width="65" height="57"/>
+  <object id="469" name="State : Attack" type="BalsaruAttack" gid="3" x="1525.5" y="8835.5" width="65" height="57"/>
  </objectgroup>
  <objectgroup id="2" name="Errantes" offsetx="-3" offsety="6">
   <object id="126" name="Errante" type="Errante" x="552.546" y="5523.31">

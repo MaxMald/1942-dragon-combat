@@ -14,6 +14,7 @@ import { DC_COMPONENT_ID, DC_MESSAGE_ID } from "../../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite, V2 } from "../../commons/1942types";
 import { CmpBalsaruController } from "../../components/cmpBalsaruControllert";
 import { CmpSimpleBulletController } from "../../components/cmpSimpleBulletControl";
+import { CnfBalsaruEvade } from "../../configObjects/cnfBalsaruEvade";
 import { CnfBalsaruHead } from "../../configObjects/cnfBalsaruHead";
 import { GameManager } from "../../gameManager/gameManager";
 import { IPlayerController } from "../../playerController/IPlayerController";
@@ -32,8 +33,17 @@ implements ICmpState<CmpBalsaruController>
   /**
    *
    */
-  constructor()
+  constructor(_config ?: CnfBalsaruEvade)
   {
+    // Configuration object
+
+    if(_config === undefined)
+    {
+      _config = new CnfBalsaruEvade();
+    }
+
+    this._m_config = _config;
+
     this.m_id = 'evade';
     
     this._m_gm = GameManager.GetInstance();
@@ -42,25 +52,16 @@ implements ICmpState<CmpBalsaruController>
 
     this._m_time = 0.0;
 
-    this._m_duration = 5.0;
-
-    this._m_fleeMaximumLength = 3000.0;
-
-    this._m_dashSpeed = 6000.0;
-
-    this._m_collisionRadius = 250.0;
-
-    this._m_angleThreshold = 18;
-
     // Movement properties
-
-    this._m_dashCoolDown = 5;
 
     this._m_sinceLastDash = 0.0;
 
     this._m_destinationDirection = new Phaser.Math.Vector2(1.0, 0.0);
 
-    this._m_destinationDirection.rotate(45 * Phaser.Math.RAD_TO_DEG);
+    this._m_destinationDirection.rotate
+    (
+      _config.dash_destination_angle * Phaser.Math.RAD_TO_DEG
+    );
 
     this._m_dashDestination = new Phaser.Math.Vector2();
 
@@ -94,18 +95,10 @@ implements ICmpState<CmpBalsaruController>
     return this._m_cmp;
   }
 
-  setStateDuration(_duration : number)
-  : void
+  getStateConfiguration()
+  : CnfBalsaruEvade
   {
-    this._m_duration = _duration;    
-    return;
-  }
-
-  setFleeMaxLength(_maxLength : number)
-  : void
-  {
-    this._m_fleeMaximumLength = _maxLength;
-    return;
+    return this._m_config;
   }
 
   onEnter()
@@ -115,7 +108,7 @@ implements ICmpState<CmpBalsaruController>
 
     this._m_time = 0.0;
 
-    this._m_sinceLastDash = this._m_dashCoolDown;
+    this._m_sinceLastDash = this._m_config.dash_cooldown;
 
     // Get Kalebio bullet manager.
 
@@ -176,7 +169,7 @@ implements ICmpState<CmpBalsaruController>
 
     this._m_sinceLastDash += dt;
 
-    if(this._m_time > this._m_duration)
+    if(this._m_time > this._m_config.duration)
     {
       this._m_cmp.setActiveState('attack_anticipation');
     }
@@ -248,11 +241,13 @@ implements ICmpState<CmpBalsaruController>
 
     // Apply force.
 
+    let stateConfig = this._m_config;
+
     forceController.arrive
     (
       this._m_dashDestination,
       headPosition,
-      this._m_dashSpeed
+      stateConfig.dash_speed
     );
 
     return;
@@ -299,7 +294,9 @@ implements ICmpState<CmpBalsaruController>
 
     let max_len = headConfig.neck_length;
 
-    if( this._m_angleThreshold > angle)
+    let stateConfig = this._m_config;
+
+    if( stateConfig.dash_angle_threshold > angle)
     {
       
       let destinationDirection = this._m_destinationDirection;
@@ -314,7 +311,7 @@ implements ICmpState<CmpBalsaruController>
 
       return;
     }
-    else if(angle > (180 - this._m_angleThreshold))
+    else if(angle > (180 - stateConfig.dash_angle_threshold))
     {
       let destinationDirection = this._m_destinationDirection;
 
@@ -347,7 +344,7 @@ implements ICmpState<CmpBalsaruController>
 
     if(forceController.getSteerForce().length())
     {
-      if(this._m_sinceLastDash >= this._m_dashCoolDown)
+      if(this._m_sinceLastDash >= stateConfig.dash_cooldown)
       {
         this._m_sinceLastDash = 0;
 
@@ -496,7 +493,9 @@ implements ICmpState<CmpBalsaruController>
 
     let distToCollision = vecToCollision.length();
 
-    let dangerRadius : number = this._m_collisionRadius;
+    let stateConfig = this._m_config;
+
+    let dangerRadius : number = stateConfig.collision_radius;
 
     let shipSprite = this._m_cmp.m_ship.getWrappedInstance();
 
@@ -539,7 +538,7 @@ implements ICmpState<CmpBalsaruController>
       (
         desirePosition,
         headPosition,
-        this._m_fleeMaximumLength
+        stateConfig.flee_max_speed
       );
     }
     return;
@@ -552,11 +551,6 @@ implements ICmpState<CmpBalsaruController>
    * 
    */
   private _m_time : number;
-
-  /**
-   * 
-   */
-  private _m_duration : number;
 
   /**
    * 
@@ -576,8 +570,6 @@ implements ICmpState<CmpBalsaruController>
   ///////////////////////////////////
   // Dash Properties
 
-  private _m_dashCoolDown : number; 
-
   private _m_sinceLastDash : number;
 
   ///////////////////////////////////
@@ -587,11 +579,6 @@ implements ICmpState<CmpBalsaruController>
    * The active state.
    */
   private _m_activeState : () => void;
-
-  /**
-   * The speed of the dash.
-   */
-  private _m_dashSpeed : number;
 
   /**
    * A vector from head to bullet.
@@ -629,27 +616,17 @@ implements ICmpState<CmpBalsaruController>
   private _m_desirePosition : V2;
 
   /**
-   * The radius of the predicted collision area.
-   */
-  private _m_collisionRadius : number;
-
-  /**
    * Vector from the body position to the target position.
    */
   private _m_bodyToHead : V2;
 
   /**
-   * The maximum magnitude of the seek force.
-   */
-  private _m_fleeMaximumLength : number;
-
-  /**
-   * 
-   */
-  private _m_angleThreshold : number;
-
-  /**
    * 
    */
   private _m_destinationDirection : V2;
+
+  /**
+   * Configuration object.
+   */
+  private _m_config : CnfBalsaruEvade;
 }

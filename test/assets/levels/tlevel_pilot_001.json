@@ -633,8 +633,8 @@
                  "type":"BalsaruIdle",
                  "visible":true,
                  "width":65,
-                 "x":1368.17,
-                 "y":8836
+                 "x":1370.83666666667,
+                 "y":8835.33333333334
                 }, 
                 {
                  "gid":3,
@@ -661,7 +661,7 @@
                  "type":"BalsaruShrink",
                  "visible":true,
                  "width":65,
-                 "x":1443.17,
+                 "x":1607.83666666667,
                  "y":8835
                 }, 
                 {
@@ -694,8 +694,8 @@
                  "type":"BalsaruHead",
                  "visible":true,
                  "width":65,
-                 "x":1292.83,
-                 "y":8835
+                 "x":1291.49666666667,
+                 "y":8835.66666666667
                 }, 
                 {
                  "gid":11,
@@ -802,6 +802,82 @@
                  "width":65,
                  "x":1552.67,
                  "y":9444.33
+                }, 
+                {
+                 "gid":3,
+                 "height":57,
+                 "id":468,
+                 "name":"State : Evade",
+                 "properties":[
+                        {
+                         "name":"collision_radius",
+                         "type":"float",
+                         "value":250
+                        }, 
+                        {
+                         "name":"dash_angle_threshold",
+                         "type":"float",
+                         "value":18
+                        }, 
+                        {
+                         "name":"dash_cooldown",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"dash_destination_angle",
+                         "type":"float",
+                         "value":45
+                        }, 
+                        {
+                         "name":"dash_speed",
+                         "type":"float",
+                         "value":6000
+                        }, 
+                        {
+                         "name":"duration",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"flee_max_speed",
+                         "type":"float",
+                         "value":3000
+                        }],
+                 "rotation":0,
+                 "type":"BalsaruEvade",
+                 "visible":true,
+                 "width":65,
+                 "x":1448.16666666667,
+                 "y":8834.16666666667
+                }, 
+                {
+                 "gid":3,
+                 "height":57,
+                 "id":469,
+                 "name":"State : Attack",
+                 "properties":[
+                        {
+                         "name":"duration",
+                         "type":"float",
+                         "value":5
+                        }, 
+                        {
+                         "name":"fire_rate",
+                         "type":"float",
+                         "value":0.3
+                        }, 
+                        {
+                         "name":"seek_max_speed",
+                         "type":"float",
+                         "value":750
+                        }],
+                 "rotation":0,
+                 "type":"BalsaruAttack",
+                 "visible":true,
+                 "width":65,
+                 "x":1525.5,
+                 "y":8835.5
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -5632,7 +5708,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":468,
+ "nextobjectid":470,
  "orientation":"orthogonal",
  "properties":[
         {

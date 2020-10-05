@@ -27,11 +27,16 @@ import { GameManager } from "../gameManager/gameManager";
 import { MxListenerManager } from "listeners/mxListenerManager";
 import { IBossManager } from "../bossManager/IBossManager";
 import { MxListener } from "listeners/mxListener";
+import { CnfBalsaruEvade } from "../configObjects/cnfBalsaruEvade";
 
 export class CmpBalsaruController
 extends cmpFSM<Ty_physicsSprite>
 {
-  static Create(_scene : Phaser.Scene)
+  static Create
+  (
+    _scene : Phaser.Scene,
+    _evadeConfig ?: CnfBalsaruEvade
+  )
   : CmpBalsaruController
   {
     
@@ -75,7 +80,7 @@ extends cmpFSM<Ty_physicsSprite>
 
     // Evade State
 
-    let evade = new SttBalsaruEvade();
+    let evade = new SttBalsaruEvade(_evadeConfig);
 
     evade.setComponent(cmp);
 

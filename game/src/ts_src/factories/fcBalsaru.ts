@@ -10,6 +10,7 @@
 
 import { BaseActor } from "../actors/baseActor";
 import { PrefabActor } from "../actors/prefabActor";
+import { DC_CONFIG } from "../commons/1942enums";
 import { Ty_Image, Ty_physicsSprite } from "../commons/1942types";
 import { CmpBalsaruBulletController } from "../components/cmpBalsaruBulletController";
 import { CmpBalsaruController } from "../components/cmpBalsaruControllert";
@@ -20,6 +21,8 @@ import { CmpNullCollisionController } from "../components/cmpNullCollisionContro
 import { CmpPhysicSpriteController } from "../components/cmpPhysicSpriteController";
 import { CnfBalsaruHead } from "../configObjects/cnfBalsaruHead";
 import { CnfBalsaruInit } from "../configObjects/cnfBalsaruInit";
+import { GameManager } from "../gameManager/gameManager";
+import { ILevelConfiguration } from "../levelConfiguration/ILevelConfiguration";
 
 export class FcBalsaru
 {
@@ -116,7 +119,17 @@ export class FcBalsaru
     ///////////////////////////////////
     // Balsaru Controller
 
-    let balsaruController : CmpBalsaruController = CmpBalsaruController.Create(_scene);
+    let gameManager : GameManager = GameManager.GetInstance();
+
+    let levelConfiguration : ILevelConfiguration 
+      = gameManager.getLevelConfiguration();
+
+    let balsaruController : CmpBalsaruController 
+      = CmpBalsaruController.Create
+      (
+        _scene,
+        levelConfiguration.getConfig(DC_CONFIG.kBalsaruEvade)
+      );
 
     balsaruController.setup
     (

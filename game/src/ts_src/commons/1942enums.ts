@@ -920,5 +920,9 @@ export const DC_CONFIG = Object.freeze
 
   kDebugBalsaruHead : 23 as 23,
 
-  kKalebio : 24 as 24
+  kKalebio : 24 as 24,
+
+  kBalsaruEvade : 25 as 25,
+
+  kBalsaruAttack : 26 as 26
 });

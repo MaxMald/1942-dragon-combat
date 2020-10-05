@@ -14,6 +14,8 @@ import { Ty_TileMap, Ty_TileObject } from "../commons/1942types";
 import { CnfArponBullet } from "../configObjects/cnfArponBullet";
 import { CnfArponBulletSpawner } from "../configObjects/cnfArponBulletSpawner";
 import { CnfArponShipSpawner } from "../configObjects/cnfArponShipSpawner";
+import { CnfBalsaruAttack } from "../configObjects/cnfBalsaruAttack";
+import { CnfBalsaruEvade } from "../configObjects/cnfBalsaruEvade";
 import { CnfBalsaruHead } from "../configObjects/cnfBalsaruHead";
 import { CnfBalsaruIdle } from "../configObjects/cnfBalsaruIdle";
 import { CnfBalsaruInit } from "../configObjects/cnfBalsaruInit";
@@ -83,6 +85,8 @@ implements ILevelConfiguration
     this.addConfig(new CnfBalsaruIdle());
     this.addConfig(new CnfBalsaruShrink());
     this.addConfig(new CnfBalsaruHead());
+    this.addConfig(new CnfBalsaruEvade());
+    this.addConfig(new CnfBalsaruAttack());
     this.addConfig(new CnfKalebio());
 
     return;

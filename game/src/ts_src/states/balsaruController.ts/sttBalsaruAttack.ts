@@ -11,6 +11,7 @@
 import { DC_BULLET_TYPE, DC_MESSAGE_ID } from "../../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite, V2 } from "../../commons/1942types";
 import { CmpBalsaruController } from "../../components/cmpBalsaruControllert";
+import { CnfBalsaruAttack } from "../../configObjects/cnfBalsaruAttack";
 import { CnfBalsaruHead } from "../../configObjects/cnfBalsaruHead";
 import { GameManager } from "../../gameManager/gameManager";
 import { MsgSpawnBullet } from "../../messages/msgSpawnBullet";
@@ -24,8 +25,17 @@ implements ICmpState<CmpBalsaruController>
   /* Public                                           */
   /****************************************************/
   
-  constructor()
+  constructor(_config ?: CnfBalsaruAttack)
   {
+    if(_config === undefined)
+    {
+      _config = new CnfBalsaruAttack();
+    }
+
+    this._m_config = _config;
+
+    this._m_config = _config;
+
     this.m_id = 'attack';
     
     this._m_gm = GameManager.GetInstance();
@@ -33,8 +43,6 @@ implements ICmpState<CmpBalsaruController>
     // State properties
 
     this._m_time = 0.0;
-
-    this._m_duration = 5.0;
 
     // Movement properties
 
@@ -48,10 +56,6 @@ implements ICmpState<CmpBalsaruController>
 
     this._m_triggerTime = 0.0;
     
-    this._m_fireRate = 0.3;
-
-    this._m_seekMaximumLength = 750.0;
-    
     this._m_bulletDirection = new Phaser.Math.Vector3();
 
     this._m_bulletData = new MsgSpawnBullet();
@@ -59,31 +63,16 @@ implements ICmpState<CmpBalsaruController>
     return;
   }
 
-  setFireRate(_fireRate : number)
-  : void
+  getStateConfiguration()
+  : CnfBalsaruAttack
   {
-    this._m_fireRate = _fireRate;
-    return;
-  }
-
-  setSeekMaxLength(_maxLength : number)
-  : void
-  {
-    this._m_seekMaximumLength = _maxLength;
-    return;
+    return this._m_config;
   }
 
   setComponent(_component: CmpBalsaruController)
   : void 
   {
     this._m_cmp = _component;
-    return;
-  }
-
-  setStateDuration(_duration : number)
-  : void
-  { 
-    this._m_duration = _duration;
     return;
   }
 
@@ -160,7 +149,9 @@ implements ICmpState<CmpBalsaruController>
 
     this._m_time += dt;
 
-    if(this._m_time > this._m_duration)
+    let stateConfig = this._m_config;
+
+    if(this._m_time > stateConfig.duration)
     {
       // Move to the next state.
 
@@ -243,7 +234,7 @@ implements ICmpState<CmpBalsaruController>
     (
       desirePosition,
       headPosition,
-      this._m_seekMaximumLength
+      stateConfig.seek_max_speed
     );
 
     ///////////////////////////////////
@@ -251,7 +242,7 @@ implements ICmpState<CmpBalsaruController>
 
     this._m_triggerTime += this._m_gm.m_dt;
 
-    if(this._m_triggerTime > this._m_fireRate)
+    if(this._m_triggerTime > stateConfig.fire_rate)
     {
       this._m_triggerTime = 0;
 
@@ -307,8 +298,6 @@ implements ICmpState<CmpBalsaruController>
 
   private _m_time : number;  
 
-  private _m_duration : number;
-
   private _m_gm : GameManager;
 
   private _m_cmp : CmpBalsaruController;
@@ -320,11 +309,6 @@ implements ICmpState<CmpBalsaruController>
    * 
    */
   private _m_triggerTime : number;
-
-  /**
-   * 
-   */
-  private _m_fireRate : number;
 
   /**
    * 
@@ -355,12 +339,12 @@ implements ICmpState<CmpBalsaruController>
   private _m_headPosition : V2;
 
   /**
-   * The maximum magnitude of the seek force.
-   */
-  private _m_seekMaximumLength : number;
-
-  /**
    * Reference to Kalebio.
    */
   private _m_kalebio : Ty_physicsActor;
+
+  /**
+   * State configuration object.
+   */
+  private _m_config : CnfBalsaruAttack;
 }

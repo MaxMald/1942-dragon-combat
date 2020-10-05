@@ -18,6 +18,20 @@
   <property name="texture_key" type="string" default="arpon_ship"/>
   <property name="weapon_texture_key" type="string" default="arpon_weapon"/>
  </objecttype>
+ <objecttype name="BalsaruAttack" color="#000000">
+  <property name="duration" type="float" default="5"/>
+  <property name="fire_rate" type="float" default="0.3"/>
+  <property name="seek_max_speed" type="float" default="750"/>
+ </objecttype>
+ <objecttype name="BalsaruEvade" color="#000000">
+  <property name="collision_radius" type="float" default="250"/>
+  <property name="dash_angle_threshold" type="float" default="18"/>
+  <property name="dash_cooldown" type="float" default="5"/>
+  <property name="dash_destination_angle" type="float" default="45"/>
+  <property name="dash_speed" type="float" default="6000"/>
+  <property name="duration" type="float" default="5"/>
+  <property name="flee_max_speed" type="float" default="3000"/>
+ </objecttype>
  <objecttype name="BalsaruHead" color="#000000">
   <property name="mass" type="float" default="1"/>
   <property name="neck_length" type="int" default="540"/>
