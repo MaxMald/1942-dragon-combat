@@ -117,6 +117,11 @@ implements ICmpEnemyController
 
       this._onDesactived(_obj as Ty_physicsActor);
       return;
+
+      case DC_MESSAGE_ID.kCollisionWithHero:
+
+      this._onKill(this._actor);
+      return;
     }
     return;
   }

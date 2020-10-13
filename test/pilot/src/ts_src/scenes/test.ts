@@ -24,8 +24,6 @@ import { CnfArponShipSpawner } from "../../../../../game/src/ts_src/configObject
 import { ArponBulletSpawner } from "../../../../../game/src/ts_src/bulletManager/bulletSpawner/arponBulletSpawner";
 import { CnfErranteSpawner } from "../../../../../game/src/ts_src/configObjects/cnfErranteSpawner";
 import { CnfScoreManager } from "../../../../../game/src/ts_src/configObjects/cnfScoreManager";
-import { BalsaruManager } from "../../../../../game/src/ts_src/bossManager/balsaruManager";
-import { NullBossManager } from "../../../../../game/src/ts_src/bossManager/NullBossManager";
 import { CnfKalebio } from "../../../../../game/src/ts_src/configObjects/cnfKalebio";
   
 export class Test 

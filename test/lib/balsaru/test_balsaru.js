@@ -10643,6 +10643,9 @@ define("game/src/ts_src/components/cmpErranteController", ["require", "exports",
                 case _1942enums_82.DC_MESSAGE_ID.kDesactive:
                     this._onDesactived(_obj);
                     return;
+                case _1942enums_82.DC_MESSAGE_ID.kCollisionWithHero:
+                    this._onKill(this._actor);
+                    return;
             }
             return;
         };
