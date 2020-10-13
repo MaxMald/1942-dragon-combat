@@ -7020,7 +7020,7 @@ define("game/src/ts_src/components/cmpHeroInput", ["require", "exports", "game/s
             var heroSprite = _actor.getWrappedInstance();
             var heroPosition = new Phaser.Math.Vector2(heroSprite.x, heroSprite.y);
             this._m_v3.x = pointer.position.x - heroPosition.x;
-            this._m_v3.y = pointer.position.y - heroPosition.y;
+            this._m_v3.y = pointer.position.y - heroPosition.y - 100.0;
             if (this._m_v3.length() > this._m_player_speed) {
                 this._m_v3.normalize();
                 this._m_v3.x *= this._m_player_speed;

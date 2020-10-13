@@ -15,7 +15,8 @@ import { IBaseComponent } from "./iBaseComponent";
 /**
  * Input controller of the Hero.
  */
-export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite>
+export class CmpHeroInput 
+  implements IBaseComponent<Phaser.Physics.Arcade.Sprite>
 {
   /****************************************************/
   /* Public                                           */
@@ -215,7 +216,7 @@ export class CmpHeroInput implements IBaseComponent<Phaser.Physics.Arcade.Sprite
       = new Phaser.Math.Vector2(heroSprite.x, heroSprite.y);
 
     this._m_v3.x = pointer.position.x - heroPosition.x;
-    this._m_v3.y = pointer.position.y - heroPosition.y;
+    this._m_v3.y = pointer.position.y - heroPosition.y - 100.0;
 
     if(this._m_v3.length() > this._m_player_speed) {
       
