@@ -111,6 +111,7 @@ implements ICmpEnemyController
       case DC_MESSAGE_ID.kKill :
       
       this._onKill(_obj as Ty_physicsActor);
+      this._explode();
       return;
 
       case DC_MESSAGE_ID.kDesactive :
@@ -120,7 +121,8 @@ implements ICmpEnemyController
 
       case DC_MESSAGE_ID.kCollisionWithHero:
 
-      this._onKill(this._actor);
+      this._onHeroCollision(_obj as Ty_physicsActor);
+      this._explode();
       return;
     }
     return;
@@ -244,15 +246,30 @@ implements ICmpEnemyController
    */
   private _onKill(_actor : Ty_physicsActor)
   : void
-  {    
-    this._m_spawner.disasemble(_actor);
-
-    this._m_enemiesManager.disableActor(_actor);
-
+  {
     GameManager.ReceiveMessage
     (
       DC_MESSAGE_ID.kAddScorePoints,
       this._m_config.score 
+    );
+    return;
+  }
+
+  private _explode()
+  : void
+  {
+    this._m_spawner.disasemble(this._actor);
+    this._m_enemiesManager.disableActor(this._actor);
+    return;
+  }
+
+  private _onHeroCollision(_hero : Ty_physicsActor)
+  : void
+  {
+    _hero.sendMessage
+    (
+      DC_MESSAGE_ID.kHit,
+      this._m_config.collision_damage
     );
     return;
   }

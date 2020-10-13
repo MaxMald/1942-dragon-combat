@@ -25,6 +25,7 @@ import { ArponBulletSpawner } from "../../../../../game/src/ts_src/bulletManager
 import { CnfErranteSpawner } from "../../../../../game/src/ts_src/configObjects/cnfErranteSpawner";
 import { CnfScoreManager } from "../../../../../game/src/ts_src/configObjects/cnfScoreManager";
 import { CnfKalebio } from "../../../../../game/src/ts_src/configObjects/cnfKalebio";
+import { BalsaruManager } from "../../../../../game/src/ts_src/bossManager/balsaruManager";
   
 export class Test 
 extends Phaser.Scene
@@ -80,20 +81,18 @@ extends Phaser.Scene
 
     gameManager.initLevelGenerator(this, levelGenConfig);
 
+    /****************************************************/
+    /* BOSS                                             */
+    /****************************************************/
+
     ///////////////////////////////////
     // Boss Manager
 
     let canvas = this.game.canvas;
 
-    let bossManager : SpiderBossManager = new SpiderBossManager();
+    let bossManager : BalsaruManager = new BalsaruManager();
 
     bossManager.init(this, gameManager);
-
-    bossManager.setPosition
-    (
-      canvas.width * 0.5,
-      100.0
-    );
 
     gameManager.setBossManager(bossManager);
 

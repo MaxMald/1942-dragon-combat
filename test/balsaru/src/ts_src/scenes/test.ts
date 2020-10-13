@@ -80,6 +80,10 @@ extends Phaser.Scene
 
     gameManager.initLevelGenerator(this, levelGenConfig);
 
+    /****************************************************/
+    /* Boss                                             */
+    /****************************************************/
+
     ///////////////////////////////////
     // Boss Manager
 
