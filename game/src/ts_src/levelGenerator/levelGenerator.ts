@@ -9,6 +9,7 @@
  * @since July-08-2020
  */
 
+import { CmdBossStage } from "../commands/levelCommands/cmdBossStage";
 import { CmdEnterBoss } from "../commands/levelCommands/cmdEnterBoss";
 import { CmdSpawnArponShip } from "../commands/levelCommands/cmdSpawnArponShip";
 import { CmdSpawnCadmio } from "../commands/levelCommands/cmdSpawnCadmio";
@@ -17,6 +18,7 @@ import { CmdSpawnErrante } from "../commands/levelCommands/cmdSpawnErrante";
 import { CmdSpawnRanger } from "../commands/levelCommands/cmdSpawnRanger";
 import { CmdSpawnSonic } from "../commands/levelCommands/cmdSpawnSonic";
 import { ILevelCommand } from "../commands/levelCommands/iLevelCommands";
+import { DC_MESSAGE_ID } from "../commons/1942enums";
 import { Point, Ty_TileMap, Ty_TileObject } from "../commons/1942types";
 import { CnfArponShip } from "../configObjects/cnfArponShip";
 import { CnfCadmio } from "../configObjects/cnfCadmio";
@@ -52,6 +54,8 @@ implements ILevelGenerator
     levelGenerator._m_cadmioConfig = new CnfCadmio();
     levelGenerator._m_itemManagerConfig = new CnfItemManager();
 
+    levelGenerator._m_isRunning = true;
+
     return levelGenerator;
   }
 
@@ -65,6 +69,8 @@ implements ILevelGenerator
   init(_scene : Phaser.Scene, _config : LevelGeneratorConfig)
   : void
   {
+
+    this._m_distance = 0;
 
     if(!_scene.cache.tilemap.has(_config.map_key))
     {
@@ -80,16 +86,14 @@ implements ILevelGenerator
     
     // Load Configuartion Objects.
 
-    let levelConfiguartion = gameManager.getLevelConfiguration();
-    levelConfiguartion.setFromMap(map, 'ConfigurationObjects');
+    let levelConfiguration = gameManager.getLevelConfiguration();
+    levelConfiguration.setFromMap(map, 'ConfigurationObjects');
     
     // Load Map Objects.
 
     this.loadMap(map);
 
-    // Setup map properties.
-
-    
+    // Setup map properties.   
 
     let properties : any = map.properties as any;
     let propertiesSize : number = properties.length;
@@ -195,15 +199,45 @@ implements ILevelGenerator
     return;
   }
 
+  receiveMessage(_id : number, _msg : any)
+  : void
+  {
+    switch(_id)
+    {
+      case DC_MESSAGE_ID.kBossStage : 
+
+      this._m_isRunning = false;
+      return;
+
+      case DC_MESSAGE_ID.kBossEnter : 
+
+      this._m_isRunning = false;
+      return;
+
+      case DC_MESSAGE_ID.kResume : 
+
+      this._m_isRunning = true;
+      return;
+    }
+    return;
+  }
+
   /**
    * Updates the LevelGenerator.
    * 
    * @param _dt delta time. 
-   * @param _distance distance traveled by the camera.
+   * @param _camera_speed distance traveled by the camera.
    */
-  update(_dt: number, _distance : number)
+  update(_dt: number, _camera_speed : number)
   : void 
   { 
+    if(!this._m_isRunning)
+    {
+      return;
+    }
+
+    this._m_distance += _dt * _camera_speed;
+
     let aCommands = this._m_aLevelCommands;
     let command : ILevelCommand;
     let position : Point;
@@ -214,7 +248,7 @@ implements ILevelGenerator
 
       position = command.getPosition();
 
-      if(position.y <= _distance)
+      if(position.y <= this._m_distance)
       {      
         // Execute and destroy the command.
         
@@ -320,6 +354,12 @@ implements ILevelGenerator
       case "Boss":
 
       this._bossEnter(_object);
+      return;
+
+      // Boss enter in position.
+      case "BossStage":
+
+      this._bossStage(_object);
       return;
       
       default:
@@ -435,7 +475,7 @@ implements ILevelGenerator
    * spawns a Cadmio Fruit when the game camera canvas reach the command height
    * (position y component).
    *
-   * The position of the Camdio Fruit will be -50 at y. The x value will the
+   * The position of the Cadmio Fruit will be -50 at y. The x value will the
    * same as the command position x value.
    *
    * @param _object tiled object. 
@@ -467,7 +507,21 @@ implements ILevelGenerator
   : void
   {
     let command : CmdEnterBoss = new CmdEnterBoss();
+
+    command.setFromObject(_object);
     command.setPosition(_object.x, _object.y);
+
+    this._m_aLevelCommands.push(command);
+    return;
+  }
+
+  private _bossStage(_object : Ty_TileObject)
+  : void
+  {
+    let command : CmdBossStage = new CmdBossStage();
+    
+    command.setPosition(_object.x, _object.y);
+    command.setFromObject(_object);    
 
     this._m_aLevelCommands.push(command);
   }
@@ -499,6 +553,16 @@ implements ILevelGenerator
    * List of level commands.
    */
   private _m_aLevelCommands : Array<ILevelCommand>; 
+
+  /**
+   * Indicates if the level is running.
+   */
+  private _m_isRunning : boolean;
+
+  /**
+   * Indicates the 
+   */
+  private _m_distance : number;
 
   /**
    * Height of the camera (pix).

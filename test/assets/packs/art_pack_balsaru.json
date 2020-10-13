@@ -19,6 +19,30 @@
         "type" : "image",
         "key" : "balsaru_head",
         "url" : "images/balsaru/balsaru_head.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "balsaru_head",
+        "url" : "images/balsaru/balsaru_head.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "balsaru_head",
+        "url" : "images/balsaru/balsaru_head.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "balsaru_ship_top",
+        "url" : "images/balsaru/balsaru_ship_top.png"
+      },
+
+      {
+        "type" : "image",
+        "key" : "balsaru_ship_bottom",
+        "url" : "images/balsaru/balsaru_ship_bottom.png"
       }
     ]
   }

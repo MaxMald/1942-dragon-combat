@@ -9,6 +9,7 @@
  */
 
 import { BaseActor } from "../actors/baseActor";
+import { GetUIDepth } from "../commons/1942config";
 import { Ty_Text } from "../commons/1942types";
 import { CmpTextController } from "../components/cmpTextController";
 import { CmpUIHealthController } from "../components/cmpUIHealthController";
@@ -32,6 +33,8 @@ export class FcUIHealth
       "Health: 10", 
       { fontFamily: 'Arial', fontSize: 64, color: '#000000' }
     );
+
+    text.setDepth(GetUIDepth());
 
     let actor = BaseActor.Create<Ty_Text>(text, "hero_ui_health");
 

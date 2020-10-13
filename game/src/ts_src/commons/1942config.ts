@@ -33,3 +33,9 @@ export class CnfBulletManager
   playzone_padding : number;
 }
 
+export function GetUIDepth()
+: number
+{
+  return 20;
+}
+

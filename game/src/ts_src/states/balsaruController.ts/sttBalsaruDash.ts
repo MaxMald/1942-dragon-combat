@@ -236,7 +236,7 @@ implements ICmpState<CmpBalsaruController>
     
     // Get ship position.
 
-    let ship = this._m_cmp.m_ship.getWrappedInstance();
+    let ship = this._m_cmp.m_shipSprite;
 
     let shipPosition = this._m_shipPosition.set(ship.x, ship.y);
 
@@ -428,7 +428,7 @@ implements ICmpState<CmpBalsaruController>
 
     let shipPosition = this._m_shipPosition;
 
-    let shipSprite = this._m_cmp.m_ship.getWrappedInstance();
+    let shipSprite = this._m_cmp.m_shipSprite;
 
     shipPosition.set(shipSprite.x, shipSprite.y);
 

@@ -25,9 +25,12 @@ export interface ILevelGenerator
    * Update the LevelGenerator.
    * 
    * @param _dt delta time.
-   * @param _distance distance traveled by the camera.
+   * @param _cameraSpeed the speed of the camera.
    */
-  update(_dt : number, _distance : number)
+  update(_dt : number, _cameraSpeed : number)
+  : void;
+
+  receiveMessage(_id : number, _msg : any)
   : void;
 
   /**

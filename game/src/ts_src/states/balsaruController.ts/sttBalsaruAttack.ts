@@ -179,7 +179,7 @@ implements ICmpState<CmpBalsaruController>
 
     // Get distance from ship to kalebio
 
-    let shipSprite = this._m_cmp.m_ship.getWrappedInstance();
+    let shipSprite = this._m_cmp.m_shipSprite;
 
     let headConfig : CnfBalsaruHead = this._m_cmp.m_headConfig;
 

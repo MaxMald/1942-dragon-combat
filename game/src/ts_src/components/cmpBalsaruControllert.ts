@@ -28,6 +28,7 @@ import { MxListenerManager } from "listeners/mxListenerManager";
 import { IBossManager } from "../bossManager/IBossManager";
 import { MxListener } from "listeners/mxListener";
 import { CnfBalsaruEvade } from "../configObjects/cnfBalsaruEvade";
+import { ILevelGenerator } from "../levelGenerator/iLevelGenerator";
 
 export class CmpBalsaruController
 extends cmpFSM<Ty_physicsSprite>
@@ -52,6 +53,8 @@ extends cmpFSM<Ty_physicsSprite>
     
     cmp._m_active_state = NullState.GetInstance();
 
+    cmp._m_stage_min_hp = 0;
+
     ///////////////////////////////////
     // Listeners
 
@@ -68,7 +71,7 @@ extends cmpFSM<Ty_physicsSprite>
 
     idle.setComponent(cmp);
 
-    cmp.addState(idle);    
+    cmp.addState(idle);
 
     // Follow State
 
@@ -136,8 +139,6 @@ extends cmpFSM<Ty_physicsSprite>
     // Get head.
 
     this.m_head = _actor;
-
-    this._m_hp = 1000;
     
     // Balsaru enter the scene.
 
@@ -199,6 +200,13 @@ extends cmpFSM<Ty_physicsSprite>
     return this._m_hp;
   }
 
+  setStageMinHP(_hp : number)
+  : void
+  {
+    this._m_stage_min_hp = _hp;
+    return;
+  }
+
   /**
    * 
    * @param _points 
@@ -208,7 +216,16 @@ extends cmpFSM<Ty_physicsSprite>
   {
     this._m_hp += _points;
     
-    if(this._m_hp <= 0)
+    if(this._m_hp <= this._m_stage_min_hp)
+    {      
+      this.setActiveState('out');
+
+      let levelGenerator : ILevelGenerator 
+        = this._m_gameManager.getLevelGenerator();
+
+      levelGenerator.receiveMessage(DC_MESSAGE_ID.kResume, undefined);
+
+    } else if(this._m_hp <= 0)
     {
       this._m_hp = 0;
       
@@ -233,7 +250,8 @@ extends cmpFSM<Ty_physicsSprite>
   setup
   (
     _scene : Phaser.Scene, 
-    _ship : BaseActor<Ty_Image>,
+    _ship : BaseActor<Phaser.GameObjects.Group>,
+    _shipSprite : Ty_Image,
     _initConfig : CnfBalsaruInit,
     _headConfig : CnfBalsaruHead
   )
@@ -242,6 +260,10 @@ extends cmpFSM<Ty_physicsSprite>
     // Save ship
 
     this.m_ship = _ship;
+
+    // Sprite ship
+
+    this.m_shipSprite = _shipSprite
 
     // Save the scene reference.
 
@@ -253,10 +275,12 @@ extends cmpFSM<Ty_physicsSprite>
 
     this.m_headConfig = _headConfig;
 
+    this._m_hp = _headConfig.health;
+
     return;
   }
 
-  setShip(_actor : BaseActor<Ty_Image>)
+  setShip(_actor : BaseActor<Phaser.GameObjects.Group>)
   : void
   {
     this.m_ship = _actor;
@@ -358,7 +382,12 @@ extends cmpFSM<Ty_physicsSprite>
   /**
    * Reference to Balsaru ship or body.
    */
-  m_ship : BaseActor<Ty_Image>;
+  m_ship : BaseActor<Phaser.GameObjects.Group>;
+
+  /**
+   * Ship sprite
+   */
+  m_shipSprite : Ty_Image;
 
   /**
    * Reference to the scene.
@@ -386,6 +415,11 @@ extends cmpFSM<Ty_physicsSprite>
   /****************************************************/
   /* Private                                          */
   /****************************************************/   
+
+  /**
+   * Minimum of hp that the boss needs to be in the actual stage.
+   */
+  private _m_stage_min_hp : number;
 
   /**
    * Private Game Manager.

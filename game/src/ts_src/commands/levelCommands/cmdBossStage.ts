@@ -3,9 +3,9 @@
  *
  * @summary 
  *
- * @file cmdEnterBoss.ts
+ * @file cmdBossStage.ts
  * @author Max Alberto Solano Maldonado <nuup20@gmail.com>
- * @since August-12-2020
+ * @since October-07-2020
  */
 
 import { DC_MESSAGE_ID } from "../../commons/1942enums";
@@ -14,7 +14,7 @@ import { GameManager } from "../../gameManager/gameManager";
 import { ILevelGenerator } from "../../levelGenerator/iLevelGenerator";
 import { ILevelCommand } from "./iLevelCommands";
 
-export class CmdEnterBoss
+export class CmdBossStage
 implements ILevelCommand
 {
   /****************************************************/
@@ -32,7 +32,7 @@ implements ILevelCommand
   { 
     GameManager.ReceiveMessage
     (
-      DC_MESSAGE_ID.kBossEnter, 
+      DC_MESSAGE_ID.kBossStage, 
       this.m_stage_min_hp
     );
 
@@ -91,5 +91,6 @@ implements ILevelCommand
   /****************************************************/
   
   private _m_position : Point;
+  
   
 }

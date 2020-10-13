@@ -11,11 +11,11 @@
 import { BaseActor } from "../actors/baseActor";
 import { PrefabActor } from "../actors/prefabActor";
 import { DC_CONFIG } from "../commons/1942enums";
-import { Ty_Image, Ty_physicsSprite } from "../commons/1942types";
+import { Ty_Image, Ty_physicsSprite, Ty_TileMap, Ty_TileObject } from "../commons/1942types";
 import { CmpBalsaruBulletController } from "../components/cmpBalsaruBulletController";
 import { CmpBalsaruController } from "../components/cmpBalsaruControllert";
 import { CmpDbgBalsaruHead } from "../components/cmpDbgBalsaruHead";
-import { CmpImageController } from "../components/cmpImageController";
+import { CmpGroupController } from "../components/cmpGroupController";
 import { CmpNeckController } from "../components/cmpNeckController";
 import { CmpNullCollisionController } from "../components/cmpNullCollisionController";
 import { CmpPhysicSpriteController } from "../components/cmpPhysicSpriteController";
@@ -23,6 +23,7 @@ import { CnfBalsaruHead } from "../configObjects/cnfBalsaruHead";
 import { CnfBalsaruInit } from "../configObjects/cnfBalsaruInit";
 import { GameManager } from "../gameManager/gameManager";
 import { ILevelConfiguration } from "../levelConfiguration/ILevelConfiguration";
+import { ImageBuilder } from "../prefabBuilder/objectBuilder/ImageBuilder";
 
 export class FcBalsaru
 {
@@ -40,20 +41,81 @@ export class FcBalsaru
   {
     let prefabActor : PrefabActor = PrefabActor.Create('Balsaru');
     
+    let topSpritesDepth : number = 10;
+
     /****************************************************/
     /* Balsaru Ship                                     */
     /****************************************************/    
 
-    let shipSprite : Ty_Image = _scene.add.image
-    (
-      _scene.game.canvas.width * 0.5,
-      -800,
-      _cnf_init.texture_ship
-    );
+    // Get the prefab balsaru.
 
-    let ship = BaseActor.Create<Ty_Image>(shipSprite, 'ship');
+    let key : string = "prefab_balsaru";
 
-    ship.addComponent(CmpImageController.Create());
+    if(!_scene.cache.tilemap.has(key))
+    {
+      throw new Error("Prefab Tiled Map of key : " + key + " not found.");
+    }
+
+    // Get the map.
+
+    let prefabMap : Ty_TileMap = _scene.add.tilemap(key);
+
+    // Iterate over object layers
+
+    let a_oLayersNames : string[] = prefabMap.getObjectLayerNames();
+
+    let index : number = 0;
+
+    let objLayer : Phaser.Tilemaps.ObjectLayer;
+
+    let group : Phaser.GameObjects.Group = _scene.add.group();
+
+    let shipSprite : Ty_Image;
+
+    while(index < a_oLayersNames.length)
+    {
+      // Object Layer
+
+      objLayer = prefabMap.getObjectLayer(a_oLayersNames[index]);
+
+      // Iterate over objects in this object layer.
+
+      let objectIndex : number = 0;
+
+      let aObjects : Ty_TileObject[] = objLayer.objects;
+
+      let object : Ty_TileObject;   
+
+      while(objectIndex < aObjects.length)
+      {
+        object = aObjects[objectIndex];
+        
+        if(object.name == "ship_top")
+        {
+          shipSprite = ImageBuilder.Create(_scene, object);
+
+          shipSprite.setDepth(topSpritesDepth);
+
+          group.add(shipSprite);
+        }
+        else if(object.name == "ship_bottom")
+        {
+          let shipBottom = ImageBuilder.Create(_scene, object);
+          
+          shipBottom.setDepth(-100);
+
+          group.add(shipBottom);
+        }
+
+        ++objectIndex;
+      }
+
+      ++index;
+    }
+
+    let ship = BaseActor.Create<Phaser.GameObjects.Group>(group, 'ship');
+
+    ship.addComponent(CmpGroupController.Create());
 
     ship.init();
 
@@ -66,7 +128,8 @@ export class FcBalsaru
     let aNeckBalls = new Array<Ty_Image>();
 
     let neck_ball_sprite : Ty_Image;
-    let index : number = 0;
+    
+    index = 0;
 
     while(index < _cnf_init.num_neck_balls)
     {
@@ -75,6 +138,8 @@ export class FcBalsaru
         0, -300,
         _cnf_init.texture_neck_ball
       );
+
+      neck_ball_sprite.setDepth(topSpritesDepth);
 
       aNeckBalls.push(neck_ball_sprite);
 
@@ -87,9 +152,12 @@ export class FcBalsaru
 
     let head_sprite : Ty_physicsSprite = _scene.physics.add.sprite
     (
-      0, -300,
+      shipSprite.x, 
+      shipSprite.y + _cnf_head.neck_length,
       _cnf_init.texture_head
     );
+
+    head_sprite.setDepth(topSpritesDepth);
 
     head_sprite.setOrigin(0.5, 0.6);
 
@@ -135,6 +203,7 @@ export class FcBalsaru
     (
       _scene,
       ship,
+      shipSprite,
       _cnf_init,
       _cnf_head
     );

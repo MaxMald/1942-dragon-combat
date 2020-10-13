@@ -11,7 +11,6 @@
 import { BaseActor } from "../actors/baseActor";
 import { Ty_Text } from "../commons/1942types";
 import { CmpTextController } from "../components/cmpTextController";
-import { CmpUIHealthController } from "../components/cmpUIHealthController";
 import { CmpUIScoreController } from "../components/cmpUIScoreController";
 
 export class FcUIScore

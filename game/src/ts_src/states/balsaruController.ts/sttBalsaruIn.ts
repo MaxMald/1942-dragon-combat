@@ -35,7 +35,11 @@ implements ICmpState<CmpBalsaruController>
 
     this._m_desirePosition = new Phaser.Math.Vector2();
 
+    this._m_headDestination = new Phaser.Math.Vector2();
+
     this._m_translation = new Phaser.Math.Vector2();
+
+    this._m_headPosition = new Phaser.Math.Vector2();
     
     this._m_start = new Phaser.Math.Vector2();
     
@@ -79,15 +83,13 @@ implements ICmpState<CmpBalsaruController>
 
     // Set the desire position.
 
+    let ship : Ty_Image = this._m_cmp.m_shipSprite;
+
     this._m_desirePosition.setTo
     (
       this._m_cmp.m_scene.game.canvas.width * 0.5,
-      0
-    );
-
-    // Get the start position of the ship.
-
-    let ship : Ty_Image = this._m_cmp.m_ship.getWrappedInstance();
+      ship.height * 0.5
+    );   
 
     this._m_start.setTo(ship.x, ship.y);
 
@@ -104,8 +106,18 @@ implements ICmpState<CmpBalsaruController>
     this._m_cmp.m_head.sendMessage
     (
       DC_MESSAGE_ID.kSetNeckState,
-      'idle'
+      'manual'
     );
+
+    // Force Controller
+
+    let forceController = this._m_cmp.m_forceController;
+
+    forceController.setSpeed(500);
+
+    let direction : V2 = forceController.getDirection();
+
+    direction.set(0.0, 1.0);
 
     return;
   }
@@ -131,6 +143,11 @@ implements ICmpState<CmpBalsaruController>
     
     let time = this._m_time;
 
+    let shipSprite = this._m_cmp.m_shipSprite;
+
+    ///////////////////////////////////
+    // Ship Movement
+
     if(time > this._m_duration)
     {
       // Next state.
@@ -147,12 +164,48 @@ implements ICmpState<CmpBalsaruController>
       
       let ship = this._m_cmp.m_ship.getWrappedInstance();
 
-      ship.setPosition
+      // destination 
+
+      let desirePosition : V2 = this._m_desirePosition;
+
+      desirePosition.set
       (
         this._m_start.x + this._m_translation.x * step,
         this._m_start.y + this._m_translation.y * step
+      );      
+
+      ship.incXY
+      (
+        desirePosition.x - shipSprite.x,
+        desirePosition.y - shipSprite.y
       );
     }
+
+    ///////////////////////////////////
+    // Head Desire Position
+
+    let headDestination = this._m_headDestination;
+
+    let neck_len = this._m_cmp.m_headConfig.neck_length;
+
+    headDestination.set
+    (
+      shipSprite.x, 
+      shipSprite.y + neck_len
+    );
+
+    let headPosition = this._m_headPosition;
+
+    let headSprite = this._m_cmp.m_head.getWrappedInstance();
+
+    headPosition.set(headSprite.x, headSprite.y);
+
+    this._m_cmp.m_forceController.arrive
+    (
+      headDestination,
+      headPosition,
+      500
+    );
 
     return;
   }
@@ -193,6 +246,16 @@ implements ICmpState<CmpBalsaruController>
    * The desire position of the ship.
    */
   private _m_desirePosition : V2;
+
+  /**
+   * The desire position fo the head.
+   */
+  private _m_headDestination : V2;
+
+  /**
+   * The head position.
+   */
+  private _m_headPosition : V2;
 
   /**
    * The vector from the start position to the desire position.

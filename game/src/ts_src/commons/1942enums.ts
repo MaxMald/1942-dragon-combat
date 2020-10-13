@@ -243,7 +243,9 @@ export const DC_COMPONENT_ID = Object.freeze
 
   kBalsaruBulletController : 33 as 33,
 
-  kForceController : 34 as 34
+  kForceController : 34 as 34,
+
+  kGroupController : 35 as 35
 });
 
 /****************************************************/
@@ -576,7 +578,28 @@ export const DC_MESSAGE_ID = Object.freeze
    * 
    * msg : number.
    */
-  kSetMaxSpeed : 544 as 544
+  kSetMaxSpeed : 544 as 544,
+
+  /**
+   * Boss Stage.
+   * 
+   * msg : undefined.
+   */
+  kBossStage : 545 as 545,
+
+  /**
+   * Resume activity.
+   * 
+   * msg : undefined.
+   */
+  kResume : 546 as 546,
+
+  /**
+   * Stop activity.
+   * 
+   * msg : undefined.
+   */
+  kStop : 547 as 547 
 });
 
 /****************************************************/

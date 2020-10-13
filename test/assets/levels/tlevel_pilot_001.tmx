@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="470">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="493">
  <editorsettings>
   <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
  <properties>
-  <property name="camera_speed" type="float" value="0"/>
+  <property name="camera_speed" type="float" value="100"/>
  </properties>
  <tileset firstgid="1" source="level_tilesets/items_icons.tsx"/>
  <layer id="1" name="Gruid [KEEP LOCKED]" width="34" height="300" locked="1">
@@ -87,20 +87,20 @@
    <text fontfamily="MS Shell Dlg 2" pixelsize="32" wrap="1" bold="1">Balsaru </text>
   </object>
   <object id="378" name="Balsaru Init" type="BalsaruInit" gid="3" x="1214" y="8833.67" width="65" height="57"/>
-  <object id="379" name="State : Idle" type="BalsaruIdle" gid="3" x="1370.84" y="8835.33" width="65" height="57">
+  <object id="379" name="State : Idle" type="BalsaruIdle" gid="3" x="1361.34" y="8833.83" width="65" height="57">
    <properties>
     <property name="length" type="int" value="540"/>
     <property name="neck_amplitude" type="float" value="80"/>
     <property name="neck_period" type="float" value="1.5"/>
    </properties>
   </object>
-  <object id="381" name="State : Shrink" type="BalsaruShrink" gid="3" x="1607.84" y="8835" width="65" height="57">
+  <object id="381" name="State : Shrink" type="BalsaruShrink" gid="3" x="1584.34" y="8835" width="65" height="57">
    <properties>
     <property name="length" type="int" value="370"/>
     <property name="time" type="float" value="0.5"/>
    </properties>
   </object>
-  <object id="382" name="Balsaru Head" type="BalsaruHead" gid="3" x="1291.5" y="8835.67" width="65" height="57">
+  <object id="382" name="Balsaru Head" type="BalsaruHead" gid="3" x="1287" y="8833.17" width="65" height="57">
    <properties>
     <property name="mass" type="float" value="20"/>
     <property name="vision_radius" type="int" value="800"/>
@@ -118,26 +118,23 @@
     <property name="y" type="int" value="1720"/>
    </properties>
   </object>
-  <object id="468" name="State : Evade" type="BalsaruEvade" gid="3" x="1448.17" y="8834.17" width="65" height="57"/>
-  <object id="469" name="State : Attack" type="BalsaruAttack" gid="3" x="1525.5" y="8835.5" width="65" height="57"/>
+  <object id="468" name="State : Evade" type="BalsaruEvade" gid="3" x="1435.67" y="8834.17" width="65" height="57"/>
+  <object id="469" name="State : Attack" type="BalsaruAttack" gid="3" x="1510.5" y="8835" width="65" height="57"/>
  </objectgroup>
  <objectgroup id="2" name="Errantes" offsetx="-3" offsety="6">
-  <object id="126" name="Errante" type="Errante" x="552.546" y="5523.31">
+  <object id="126" name="Errante" type="Errante" x="799.213" y="8574.64">
    <point/>
   </object>
-  <object id="129" name="Errante" type="Errante" x="771.182" y="5407.34">
+  <object id="129" name="Errante" type="Errante" x="800.515" y="8494.67">
    <point/>
   </object>
-  <object id="130" name="Errante" type="Errante" x="351.182" y="5404.34">
+  <object id="130" name="Errante" type="Errante" x="265.182" y="8574.34">
    <point/>
   </object>
-  <object id="131" name="Errante" type="Errante" x="921.182" y="5316.34">
+  <object id="131" name="Errante" type="Errante" x="798.515" y="8421.01">
    <point/>
   </object>
-  <object id="132" name="Errante" type="Errante" x="171.849" y="5294.34">
-   <point/>
-  </object>
-  <object id="133" name="Errante" type="Errante" x="557.516" y="5150.67">
+  <object id="132" name="Errante" type="Errante" x="263.182" y="8491.01">
    <point/>
   </object>
   <object id="144" name="Errante" type="Errante" x="902.182" y="4558.01">
@@ -239,19 +236,10 @@
   <object id="266" name="Errante" type="Errante" x="1045.45" y="5730.3">
    <point/>
   </object>
-  <object id="267" name="Errante" type="Errante" x="962.304" y="4990.54">
+  <object id="267" name="Errante" type="Errante" x="950.304" y="8890.54">
    <point/>
   </object>
-  <object id="268" name="Errante" type="Errante" x="761.636" y="4833.88">
-   <point/>
-  </object>
-  <object id="269" name="Errante" type="Errante" x="149.637" y="4989.2" rotation="360">
-   <point/>
-  </object>
-  <object id="270" name="Errante" type="Errante" x="346.97" y="4846.88" rotation="360">
-   <point/>
-  </object>
-  <object id="271" name="Errante" type="Errante" x="557.576" y="4730.3">
+  <object id="269" name="Errante" type="Errante" x="259.637" y="8415.2" rotation="360">
    <point/>
   </object>
   <object id="272" name="Errante" type="Errante" x="76.1864" y="3654.01">
@@ -368,6 +356,69 @@
   <object id="315" name="Errante" type="Errante" x="284" y="108">
    <point/>
   </object>
+  <object id="470" name="Errante" type="Errante" x="550.212" y="8574.47">
+   <point/>
+  </object>
+  <object id="471" name="Errante" type="Errante" x="548.212" y="8491.14">
+   <point/>
+  </object>
+  <object id="472" name="Errante" type="Errante" x="544.667" y="8415.33" rotation="360">
+   <point/>
+  </object>
+  <object id="474" name="Errante" type="Errante" x="814.546" y="9209.31">
+   <point/>
+  </object>
+  <object id="475" name="Errante" type="Errante" x="811.848" y="9133.34">
+   <point/>
+  </object>
+  <object id="476" name="Errante" type="Errante" x="278.515" y="9209.01">
+   <point/>
+  </object>
+  <object id="477" name="Errante" type="Errante" x="809.848" y="9039.68">
+   <point/>
+  </object>
+  <object id="478" name="Errante" type="Errante" x="276.515" y="9125.68">
+   <point/>
+  </object>
+  <object id="479" name="Errante" type="Errante" x="272.97" y="9049.87" rotation="360">
+   <point/>
+  </object>
+  <object id="480" name="Errante" type="Errante" x="563.545" y="9209.14">
+   <point/>
+  </object>
+  <object id="481" name="Errante" type="Errante" x="561.545" y="9125.81">
+   <point/>
+  </object>
+  <object id="482" name="Errante" type="Errante" x="558" y="9050" rotation="360">
+   <point/>
+  </object>
+  <object id="484" name="Errante" type="Errante" x="800.546" y="8155.31">
+   <point/>
+  </object>
+  <object id="485" name="Errante" type="Errante" x="801.848" y="8075.34">
+   <point/>
+  </object>
+  <object id="486" name="Errante" type="Errante" x="266.515" y="8155.01">
+   <point/>
+  </object>
+  <object id="487" name="Errante" type="Errante" x="799.848" y="8001.68">
+   <point/>
+  </object>
+  <object id="488" name="Errante" type="Errante" x="264.515" y="8071.68">
+   <point/>
+  </object>
+  <object id="489" name="Errante" type="Errante" x="260.97" y="7995.87" rotation="360">
+   <point/>
+  </object>
+  <object id="490" name="Errante" type="Errante" x="551.545" y="8155.14">
+   <point/>
+  </object>
+  <object id="491" name="Errante" type="Errante" x="549.545" y="8071.81">
+   <point/>
+  </object>
+  <object id="492" name="Errante" type="Errante" x="546" y="7996" rotation="360">
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="8" name="Rangers">
   <object id="358" name="Ranger" type="Ranger" x="750" y="1666">
@@ -408,7 +459,16 @@
   <object id="337" name="Canus" type="Canus" gid="2" x="809.894" y="7515.95" width="59" height="59"/>
  </objectgroup>
  <objectgroup id="4" name="Boss">
-  <object id="380" name="Boss" type="Boss" x="564.485" y="9706.12">
+  <object id="380" name="Boss" type="Boss" x="545.818" y="8834.12">
+   <point/>
+  </object>
+  <object id="473" name="BossStage" type="BossStage" x="544" y="8314">
+   <point/>
+  </object>
+  <object id="483" name="BossStage" type="BossStage" x="544" y="7872">
+   <properties>
+    <property name="stage_min_hp" type="int" value="0"/>
+   </properties>
    <point/>
   </object>
  </objectgroup>

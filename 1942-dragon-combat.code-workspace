@@ -15,6 +15,7 @@
 			"Balsaru's",
 			"Kalebio",
 			"balsaru"
-		]
+		],
+		"debug.javascript.warnOnLongPrediction": false
 	}
 }

@@ -38,6 +38,10 @@ implements ICmpState<CmpBalsaruController>
     this._m_translation = new Phaser.Math.Vector2();
     
     this._m_start = new Phaser.Math.Vector2();
+
+    this._m_headDestination = new Phaser.Math.Vector2();
+
+    this._m_headPosition = new Phaser.Math.Vector2();
     
     return;
   }
@@ -78,15 +82,29 @@ implements ICmpState<CmpBalsaruController>
 
     // Set the desire position
 
+    let ship : Ty_Image = this._m_cmp.m_shipSprite;
+
     this._m_desirePosition.setTo
     (
       this._m_cmp.m_scene.game.canvas.width * 0.5,
-      -800
+      -ship.height * 0.25
     );
 
-    // Get the start position of the ship.
+    ///////////////////////////////////
+    // Head Desire Position
 
-    let ship : Ty_Image = this._m_cmp.m_ship.getWrappedInstance();
+    let headDestination = this._m_headDestination;
+
+    headDestination.copy(this._m_desirePosition);
+
+    let neck_len = this._m_cmp.m_headConfig.neck_length;
+
+    headDestination.x += neck_len;
+
+    ///////////////////////////////////
+    // Ship Translation
+
+    // Get the start position of the ship.   
 
     this._m_start.setTo(ship.x, ship.y);
 
@@ -103,7 +121,7 @@ implements ICmpState<CmpBalsaruController>
     this._m_cmp.m_head.sendMessage
     (
       DC_MESSAGE_ID.kSetNeckState,
-      'idle'
+      'manual'
     );
 
     return;
@@ -118,6 +136,15 @@ implements ICmpState<CmpBalsaruController>
   receive(_id: number, _obj: any)
   : void 
   {
+    switch(_id)
+    {
+      case DC_MESSAGE_ID.kBossStage:
+
+      this._m_cmp.setStageMinHP(_obj as number);
+      this._m_cmp.setActiveState('in');
+      return;
+    }
+
     return;
   }
 
@@ -130,11 +157,14 @@ implements ICmpState<CmpBalsaruController>
     
     let time = this._m_time;    
 
+    let shipSprite = this._m_cmp.m_shipSprite;
+
+    ////////////////////////////////////
+    // Ship Movement.
+
     if(time > this._m_duration)
     {
-      // Next state.
-
-      this._m_cmp.setActiveState('in');
+      // Wait
     }
     else
     {
@@ -146,12 +176,36 @@ implements ICmpState<CmpBalsaruController>
       
       let ship = this._m_cmp.m_ship.getWrappedInstance();
 
-      ship.setPosition
+      // destination 
+
+      let desirePosition : V2 = this._m_desirePosition;
+
+      desirePosition.set
       (
         this._m_start.x + this._m_translation.x * step,
         this._m_start.y + this._m_translation.y * step
       );      
+
+      ship.incXY
+      (
+        desirePosition.x - shipSprite.x,
+        desirePosition.y - shipSprite.y
+      );
     }
+
+    ////////////////////////////////////
+    // Head Movement
+
+    let headSprite = this._m_cmp.m_head.getWrappedInstance();
+
+    this._m_headPosition.set(headSprite.x, headSprite.y);
+
+    this._m_cmp.m_forceController.arrive
+    (
+      this._m_headDestination,
+      this._m_headPosition,
+      1000
+    );
 
     return;
   }
@@ -192,6 +246,16 @@ implements ICmpState<CmpBalsaruController>
    * The desire position of the ship.
    */
   private _m_desirePosition : V2;
+
+  /**
+   * The desire of the position of the head.
+   */
+  private _m_headDestination : V2;
+
+  /**
+   * The position of the head.
+   */
+  private _m_headPosition : V2;
 
   /**
    * The vector from the start position to the desire position.

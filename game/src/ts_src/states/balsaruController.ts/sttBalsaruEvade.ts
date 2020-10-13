@@ -268,7 +268,7 @@ implements ICmpState<CmpBalsaruController>
     
     // Get ship position.
 
-    let ship = this._m_cmp.m_ship.getWrappedInstance();
+    let ship = this._m_cmp.m_shipSprite;
 
     let shipPosition = this._m_shipPosition.set(ship.x, ship.y);
 
@@ -497,7 +497,7 @@ implements ICmpState<CmpBalsaruController>
 
     let dangerRadius : number = stateConfig.collision_radius;
 
-    let shipSprite = this._m_cmp.m_ship.getWrappedInstance();
+    let shipSprite = this._m_cmp.m_shipSprite;
 
     if(distToCollision <= dangerRadius)
     {

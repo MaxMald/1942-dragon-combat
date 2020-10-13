@@ -46,9 +46,11 @@ implements ILevelCommand
   : void 
   {
     let gameManager : GameManager = GameManager.GetInstance();
+
     let itemManager : IItemManager = gameManager.getItemManager();
 
     itemManager.spawn(this._m_position.x, -50.0, DC_ITEM_TYPE.kCadmio);
+    
     return;
   }
 

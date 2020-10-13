@@ -17,29 +17,9 @@ import { BaseBuilder } from "./BaseBuilder";
 export class ImageBuilder 
 extends BaseBuilder
 {
-
-  init()
-  : void 
-  { }
-
-  build
-  (
-    _scene : Phaser.Scene, 
-    _object: Ty_TileObject,
-    _xOffset ?: number,
-    _yOffset ?: number
-  )
-  : IActor 
+  static Create(_scene : Phaser.Scene, _object : Ty_TileObject)
+  : Ty_Image
   {
-    let name : string = _object.name;
-
-    if(name === '' || name === undefined)
-    {
-      console.warn('Object does not has name');
-
-      name = 'object';
-    }   
-
     let texture : string = '';
     
     let frame_str : string = undefined;
@@ -176,6 +156,35 @@ extends BaseBuilder
 
     image.setRotation(rotation);
 
+    return image;
+  }
+
+  init()
+  : void 
+  { }
+
+  build
+  (
+    _scene : Phaser.Scene, 
+    _object: Ty_TileObject,
+    _xOffset ?: number,
+    _yOffset ?: number
+  )
+  : IActor 
+  {
+    let name : string = _object.name;
+
+    if(name === '' || name === undefined)
+    {
+      console.warn('Object does not has name');
+
+      name = 'object';
+    }       
+
+    // Create Image.
+
+    let image = ImageBuilder.Create(_scene, _object);
+
     // Create Actor.
 
     let actor = BaseActor.Create<Ty_Image>(image, name);
@@ -189,5 +198,5 @@ extends BaseBuilder
 
   destroy()
   : void 
-  { }  
+  { }
 }

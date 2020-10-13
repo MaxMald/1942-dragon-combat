@@ -179,6 +179,12 @@ extends Phaser.Scene
       'prefabs/gui/prefab_ui_loseBox_A.json'
     );
 
+    this.load.tilemapTiledJSON
+    (
+      'prefab_balsaru',
+      'prefabs/characters/prefab_balsaru_ship.json'
+    );
+
     return;
   }
 

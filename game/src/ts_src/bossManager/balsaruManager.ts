@@ -60,6 +60,10 @@ implements IBossManager
       DC_COMPONENT_ID.kBalsaruController
     );
 
+    // active
+    
+    this.desactive();
+
     return;
   }
 
@@ -68,7 +72,10 @@ implements IBossManager
   {
     // Update Prefab.
 
-    this._m_balsaru.update();
+    if(this._m_isActive)
+    {
+      this._m_balsaru.update();
+    }    
 
     return;
   }
@@ -195,24 +202,44 @@ implements IBossManager
   receive(_id: DC_MESSAGE_ID, _msg: any)
   : void 
   {
-    // TODO
+    if(_id == DC_MESSAGE_ID.kBossEnter)
+    {
+      this.active();
 
+      this._m_balsaruController.setStageMinHP(_msg as number);
+    }
+
+    this._m_balsaru.sendMessage
+    (
+      _id, 
+      _msg
+    );
     return;
   }
 
   active()
   : void 
   {
-    // TODO
-
+    this._m_isActive = true;
+    
+    this._m_balsaru.sendMessage
+    (
+      DC_MESSAGE_ID.kActive,
+      undefined
+    );
     return;
   }
 
   desactive()
   : void 
   {
-    // TODO
+    this._m_isActive = false;
 
+    this._m_balsaru.sendMessage
+    (
+      DC_MESSAGE_ID.kDesactive,
+      undefined
+    );
     return;
   }
 
@@ -256,5 +283,5 @@ implements IBossManager
   /**
    * Health Points
    */
-  private _m_hp : number;
+  private _m_isActive : boolean;
 }

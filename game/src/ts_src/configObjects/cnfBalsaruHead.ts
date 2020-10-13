@@ -75,6 +75,11 @@ implements IConfigObject
           this.visionRadius = property.value as number;
           break;
 
+          case "max_health":
+
+          this.health = property.value as number;
+          break;
+
           default:
           break;
         }
@@ -116,4 +121,9 @@ implements IConfigObject
    * How far a balsaru can detect coming objects.
    */
   visionRadius : number;
+
+  /**
+   * Initial health of Balsaru.
+   */
+  health : number;
 }

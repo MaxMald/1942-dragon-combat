@@ -160,7 +160,6 @@ export class GameManager
       manager.sendMessageToManagers(_id, _msg);
       return;
     }
-    return;
   }
 
   /**
@@ -340,10 +339,6 @@ export class GameManager
 
     this.m_dt = _dt; 
 
-    // Camera distance.
-
-    this._m_distance += _dt * this._m_cameraSpeed;
-
     // Clear debugging paint
 
     this._m_debugManager.clearGraphics();
@@ -354,7 +349,7 @@ export class GameManager
     {
       this._m_ambientGenrator.update(_dt);
 
-      this._m_levelGenerator.update(_dt, this._m_distance);
+      this._m_levelGenerator.update(_dt, this._m_cameraSpeed);
       
       this._m_playerController.update(_dt);
       
@@ -379,6 +374,7 @@ export class GameManager
   sendMessageToManagers(_id : DC_MESSAGE_ID, _msg : any)
   : void
   {
+    this._m_levelGenerator.receiveMessage(_id, _msg);
     this._m_uiManager.receive(_id, _msg);
     this._m_bossManager.receive(_id, _msg);
     return;

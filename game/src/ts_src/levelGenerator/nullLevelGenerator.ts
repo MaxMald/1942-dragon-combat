@@ -45,6 +45,10 @@ implements ILevelGenerator
   : void 
   { }
 
+  receiveMessage(_id : number, _msg : any)
+  : void
+  {}
+
   /**
    * No implementation.
    */
