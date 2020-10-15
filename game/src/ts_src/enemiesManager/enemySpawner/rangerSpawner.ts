@@ -89,15 +89,15 @@ implements IEnemySpawner
   spawn(_actor: Ty_physicsActor, _x: number, _y: number, _data ?: any)
   : void 
   {
-    this.assemble(_actor, _data);  
-    
-    // Set position.
+     // Set position.
 
-    _actor.sendMessage
-    (
-      DC_MESSAGE_ID.kToPosition, 
-      new Phaser.Math.Vector3(_x, _y)
-    );
+     _actor.sendMessage
+     (
+       DC_MESSAGE_ID.kToPosition, 
+       new Phaser.Math.Vector3(_x, _y)
+     );
+
+    this.assemble(_actor, _data); 
     return;
   }
 
@@ -123,15 +123,8 @@ implements IEnemySpawner
     {
       let config = _data as CnfRangerConfig;
 
-      _actor.addComponent(controller);
-      
-      controller.init(_actor);
-      controller.setEnemiesManager(this._m_enemiesManager);
-      controller.setConfig(config);
-
-      controller.setActiveState('pursuit');
-
-      // Set Texture.
+      ///////////////////////////////////
+      // Sprite
 
       let sprite = _actor.getWrappedInstance();
       sprite.setTexture(config.texture_key);
@@ -143,6 +136,17 @@ implements IEnemySpawner
         (sprite.width * 0.5) - circle_radius,
         (sprite.height * 0.5) - circle_radius
       );
+
+      ///////////////////////////////////
+      // Controller
+
+      _actor.addComponent(controller);
+      
+      controller.init(_actor);
+      controller.setEnemiesManager(this._m_enemiesManager);
+      controller.setConfig(config);
+
+      controller.setActiveState('backEntrance');      
 
       // Health Points.
 

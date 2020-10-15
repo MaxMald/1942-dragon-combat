@@ -11,6 +11,12 @@
 
       {
         "type" : "image",
+        "key" : "enemy_ranger_02",
+        "url" : "images/ranger_02.png"
+      },
+
+      {
+        "type" : "image",
         "key" : "arpon_ship",
         "url" : "images/arpon_ship.png"
       },

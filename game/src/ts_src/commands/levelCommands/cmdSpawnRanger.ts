@@ -39,7 +39,7 @@ implements ILevelCommand
     enemiesManager.spawn
     (
       this._m_position.x, 
-      gameScene.game.canvas.height, 
+      gameScene.game.canvas.height + 300, 
       DC_ENEMY_TYPE.kRanger,
       this._m_config
     );

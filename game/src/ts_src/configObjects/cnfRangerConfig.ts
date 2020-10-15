@@ -30,6 +30,14 @@ implements IConfigObject
     this.speed = 300.0;
     this.steer_force = 200.0;
     this.texture_key = 'enemy_ranger';
+    this.texture_key_back = "enemy_ranger_02";
+    this.waiting_time = 2.0;
+    this.backEntranceDepth = -10.0;
+    
+    this.entrancePositionGap = 100;
+    this.entranceTime = 2.0;
+
+    this.backEntranceDuration = 5.0;
     return;
   }
 
@@ -48,6 +56,26 @@ implements IConfigObject
 
         switch(property.name)
         {
+          case "back_entrance_duration" :
+
+          this.backEntranceDuration = property.value as number;
+          break;
+
+          case "entrance_position_gap" :
+
+          this.entrancePositionGap = property.value as number;
+          break;
+
+          case "entrance_duration":
+
+          this.entranceTime = property.value as number;
+          break;
+
+          case "waiting_time":
+
+          this.waiting_time = property.value as number;
+          break;
+
           case "collision_damage":
 
           this.collision_damage = property.value as number;
@@ -86,6 +114,16 @@ implements IConfigObject
           case "texture_key":
 
           this.texture_key = property.value as string;
+          break;
+
+          case "texture_key_back":
+
+          this.texture_key_back = property.value as string;
+          break;
+
+          case "back_entrance_depth":
+          
+          this.backEntranceDepth = property.value as number;
           break;
 
           case "mass":
@@ -155,5 +193,20 @@ implements IConfigObject
    */
   texture_key : string;
 
+  texture_key_back : string;
+
   mass : number;
+
+  waiting_time : number;
+
+  /**
+   * 
+   */
+  entrancePositionGap : number;
+
+  entranceTime : number;
+
+  backEntranceDuration : number;
+
+  backEntranceDepth : number;
 }

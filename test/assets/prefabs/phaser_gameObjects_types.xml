@@ -152,7 +152,11 @@
   <property name="image" type="string"/>
  </objecttype>
  <objecttype name="Ranger" color="#ff5500">
+  <property name="back_entrance_depth" type="float" default="-10"/>
+  <property name="back_entrance_duration" type="float" default="5"/>
   <property name="collision_damage" type="float" default="5"/>
+  <property name="entrance_duration" type="float" default="2"/>
+  <property name="entrance_position_gap" type="float" default="-400"/>
   <property name="explosion_radius" type="float" default="200"/>
   <property name="health" type="float" default="2"/>
   <property name="life_time" type="float" default="7"/>
@@ -161,6 +165,8 @@
   <property name="speed" type="float" default="200"/>
   <property name="steer_force" type="float" default="200"/>
   <property name="texture_key" type="string" default="enemy_ranger"/>
+  <property name="texture_key_back" type="string" default="enemy_ranger_02"/>
+  <property name="waiting_time" type="float" default="3"/>
  </objecttype>
  <objecttype name="ScoreManagerConfig" color="#ffff00">
   <property name="kills_for_add" type="int" default="1"/>

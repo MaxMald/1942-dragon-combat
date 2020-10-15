@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="566">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="300" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="568">
  <editorsettings>
   <export target="tlevel_pilot_001.json" format="json"/>
  </editorsettings>
@@ -236,9 +236,6 @@
   <object id="266" name="Errante" type="Errante" x="1045.45" y="5730.3">
    <point/>
   </object>
-  <object id="267" name="Errante" type="Errante" x="950.304" y="8890.54">
-   <point/>
-  </object>
   <object id="269" name="Errante" type="Errante" x="271.637" y="883.2" rotation="360">
    <point/>
   </object>
@@ -365,33 +362,6 @@
   <object id="472" name="Errante" type="Errante" x="556.667" y="883.33" rotation="360">
    <point/>
   </object>
-  <object id="474" name="Errante" type="Errante" x="814.546" y="9209.31">
-   <point/>
-  </object>
-  <object id="475" name="Errante" type="Errante" x="811.848" y="9133.34">
-   <point/>
-  </object>
-  <object id="476" name="Errante" type="Errante" x="278.515" y="9209.01">
-   <point/>
-  </object>
-  <object id="477" name="Errante" type="Errante" x="809.848" y="9039.68">
-   <point/>
-  </object>
-  <object id="478" name="Errante" type="Errante" x="276.515" y="9125.68">
-   <point/>
-  </object>
-  <object id="479" name="Errante" type="Errante" x="272.97" y="9049.87" rotation="360">
-   <point/>
-  </object>
-  <object id="480" name="Errante" type="Errante" x="563.545" y="9209.14">
-   <point/>
-  </object>
-  <object id="481" name="Errante" type="Errante" x="561.545" y="9125.81">
-   <point/>
-  </object>
-  <object id="482" name="Errante" type="Errante" x="558" y="9050" rotation="360">
-   <point/>
-  </object>
   <object id="484" name="Errante" type="Errante" x="812.546" y="623.31">
    <point/>
   </object>
@@ -417,60 +387,6 @@
    <point/>
   </object>
   <object id="492" name="Errante" type="Errante" x="558" y="464" rotation="360">
-   <point/>
-  </object>
-  <object id="548" name="Errante" type="Errante" x="828.546" y="8699.31">
-   <point/>
-  </object>
-  <object id="549" name="Errante" type="Errante" x="825.848" y="8623.34">
-   <point/>
-  </object>
-  <object id="550" name="Errante" type="Errante" x="292.515" y="8699.01">
-   <point/>
-  </object>
-  <object id="551" name="Errante" type="Errante" x="823.848" y="8529.68">
-   <point/>
-  </object>
-  <object id="552" name="Errante" type="Errante" x="290.515" y="8615.68">
-   <point/>
-  </object>
-  <object id="553" name="Errante" type="Errante" x="286.97" y="8539.87" rotation="360">
-   <point/>
-  </object>
-  <object id="554" name="Errante" type="Errante" x="577.545" y="8699.14">
-   <point/>
-  </object>
-  <object id="555" name="Errante" type="Errante" x="575.545" y="8615.81">
-   <point/>
-  </object>
-  <object id="556" name="Errante" type="Errante" x="572" y="8540" rotation="360">
-   <point/>
-  </object>
-  <object id="557" name="Errante" type="Errante" x="836.546" y="8255.31">
-   <point/>
-  </object>
-  <object id="558" name="Errante" type="Errante" x="833.848" y="8179.34">
-   <point/>
-  </object>
-  <object id="559" name="Errante" type="Errante" x="300.515" y="8255.01">
-   <point/>
-  </object>
-  <object id="560" name="Errante" type="Errante" x="831.848" y="8085.68">
-   <point/>
-  </object>
-  <object id="561" name="Errante" type="Errante" x="298.515" y="8171.68">
-   <point/>
-  </object>
-  <object id="562" name="Errante" type="Errante" x="294.97" y="8095.87" rotation="360">
-   <point/>
-  </object>
-  <object id="563" name="Errante" type="Errante" x="585.545" y="8255.14">
-   <point/>
-  </object>
-  <object id="564" name="Errante" type="Errante" x="583.545" y="8171.81">
-   <point/>
-  </object>
-  <object id="565" name="Errante" type="Errante" x="580" y="8096" rotation="360">
    <point/>
   </object>
  </objectgroup>
@@ -523,105 +439,6 @@
    <properties>
     <property name="stage_min_hp" type="int" value="0"/>
    </properties>
-   <point/>
-  </object>
-  <object id="493" name="Errante" type="Errante" x="902.182" y="7856.68">
-   <point/>
-  </object>
-  <object id="494" name="Errante" type="Errante" x="210.183" y="7860.01">
-   <point/>
-  </object>
-  <object id="495" name="Errante" type="Errante" x="918.606" y="7677.82">
-   <point/>
-  </object>
-  <object id="496" name="Errante" type="Errante" x="857.274" y="7620.49">
-   <point/>
-  </object>
-  <object id="497" name="Errante" type="Errante" x="985.274" y="7621.16">
-   <point/>
-  </object>
-  <object id="498" name="Errante" type="Errante" x="203.94" y="7671.15">
-   <point/>
-  </object>
-  <object id="499" name="Errante" type="Errante" x="142.607" y="7613.82">
-   <point/>
-  </object>
-  <object id="500" name="Errante" type="Errante" x="270.607" y="7614.49">
-   <point/>
-  </object>
-  <object id="501" name="Errante" type="Errante" x="541.941" y="7447.16">
-   <point/>
-  </object>
-  <object id="502" name="Errante" type="Errante" x="480.607" y="7389.83">
-   <point/>
-  </object>
-  <object id="503" name="Errante" type="Errante" x="608.607" y="7390.5">
-   <point/>
-  </object>
-  <object id="504" name="Errante" type="Errante" x="917.274" y="7174.49">
-   <point/>
-  </object>
-  <object id="505" name="Errante" type="Errante" x="855.941" y="7117.16">
-   <point/>
-  </object>
-  <object id="506" name="Errante" type="Errante" x="983.941" y="7117.83">
-   <point/>
-  </object>
-  <object id="507" name="Errante" type="Errante" x="202.607" y="7167.82">
-   <point/>
-  </object>
-  <object id="508" name="Errante" type="Errante" x="141.274" y="7110.49">
-   <point/>
-  </object>
-  <object id="509" name="Errante" type="Errante" x="269.273" y="7111.16">
-   <point/>
-  </object>
-  <object id="510" name="Errante" type="Errante" x="685.061" y="6345.7">
-   <point/>
-  </object>
-  <object id="511" name="Errante" type="Errante" x="772.061" y="6271.7">
-   <point/>
-  </object>
-  <object id="512" name="Errante" type="Errante" x="856.061" y="6199.7">
-   <point/>
-  </object>
-  <object id="513" name="Errante" type="Errante" x="936.061" y="6145.04">
-   <point/>
-  </object>
-  <object id="514" name="Errante" type="Errante" x="1014.73" y="6079.7">
-   <point/>
-  </object>
-  <object id="515" name="Errante" type="Errante" x="377.67" y="6725.52">
-   <point/>
-  </object>
-  <object id="516" name="Errante" type="Errante" x="290.67" y="6651.52">
-   <point/>
-  </object>
-  <object id="517" name="Errante" type="Errante" x="202.67" y="6575.52">
-   <point/>
-  </object>
-  <object id="518" name="Errante" type="Errante" x="130.67" y="6518.86">
-   <point/>
-  </object>
-  <object id="519" name="Errante" type="Errante" x="61.3333" y="6457.52">
-   <point/>
-  </object>
-  <object id="520" name="Errante" type="Errante" x="76.1864" y="6952.68">
-   <point/>
-  </object>
-  <object id="521" name="Errante" type="Errante" x="184.855" y="6951.35">
-   <point/>
-  </object>
-  <object id="522" name="Errante" type="Errante" x="287.188" y="6951.68">
-   <point/>
-  </object>
-  <object id="523" name="Errante" type="Errante" x="835.671" y="6950.34">
-   <point/>
-  </object>
-  <object id="524" name="Errante" type="Errante" x="944.339" y="6949.01">
-   <point/>
-  </object>
-  <object id="525" name="Errante" type="Errante" x="1046.67" y="6949.34">
    <point/>
   </object>
   <object id="526" name="Errante" type="Errante" x="563.364" y="5893.64">
@@ -678,16 +495,20 @@
   <object id="543" name="Errante" type="Errante" x="1034" y="4783.67">
    <point/>
   </object>
-  <object id="544" name="Ranger" type="Ranger" x="750" y="4964.67">
+  <object id="566" name="Ranger" type="Ranger" x="722" y="9474">
+   <properties>
+    <property name="entrance_duration" type="float" value="2"/>
+    <property name="entrance_position_gap" type="float" value="-400"/>
+    <property name="mass" type="float" value="1"/>
+    <property name="steer_force" type="float" value="200"/>
+   </properties>
    <point/>
   </object>
-  <object id="545" name="Ranger" type="Ranger" x="390" y="4964.67">
-   <point/>
-  </object>
-  <object id="546" name="ArponShip" type="ArponShip" x="254.667" y="7737.34">
-   <point/>
-  </object>
-  <object id="547" name="ArponShip" type="ArponShip" x="780" y="7736">
+  <object id="567" name="Ranger" type="Ranger" x="362" y="9474">
+   <properties>
+    <property name="back_entrance_duration" type="float" value="10"/>
+    <property name="mass" type="float" value="2"/>
+   </properties>
    <point/>
   </object>
  </objectgroup>

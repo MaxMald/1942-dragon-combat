@@ -9,14 +9,14 @@
  */
 
 import { DC_MESSAGE_ID } from "../../commons/1942enums";
-import { Point, Ty_physicsActor, Ty_physicsSprite, V2, V3 } from "../../commons/1942types";
+import { Ty_physicsActor, Ty_physicsSprite, V2, V3 } from "../../commons/1942types";
 import { CmpRangerController } from "../../components/cmpRangerController";
 import { CnfRangerConfig } from "../../configObjects/cnfRangerConfig";
 import { GameManager } from "../../gameManager/gameManager";
 import { IPlayerController } from "../../playerController/IPlayerController";
 import { IRangerState } from "./iRangerState";
 
-export class SttRangerPursuit 
+export class SttRangerEntrance
 implements IRangerState
 {
   /****************************************************/
@@ -26,34 +26,30 @@ implements IRangerState
   constructor()
   {
     this._m_gameManager = GameManager.GetInstance();
-    this.m_id = "pursuit";
+    this.m_id = "entrance";
 
-    this._m_direction = new Phaser.Math.Vector3();
-
+    this._m_toTarget = new Phaser.Math.Vector2();
+    this._m_desirePosition = new Phaser.Math.Vector2();
     this._m_selfPosition = new Phaser.Math.Vector2();
-    this._m_targetPosition = new Phaser.Math.Vector2();
-
-    this._m_cam_p1 = new Phaser.Geom.Point();
-    this._m_cam_p2 = new Phaser.Geom.Point();
+    this._m_startPosition = new Phaser.Math.Vector2();
 
     return;
   }
   
-  init( _controller : CmpRangerController, _actor : Ty_physicsActor) 
+  init
+  ( 
+    _controller : CmpRangerController, 
+    _actor : Ty_physicsActor
+  ) 
   : void
   {
     this._m_controller = _controller;
     this._m_actor = _actor;
 
     let playerControl : IPlayerController 
-      = this._m_gameManager.getPlayerController();
-       
+      = this._m_gameManager.getPlayerController(); 
     this._m_target = playerControl.getPlayer();
-    this._m_direction.set(0.0, -1.0);
 
-    let canvas = this._m_gameManager.getGameScene().game.canvas;    
-
-    this._m_cam_p2.setTo(canvas.width, canvas.height);
     return;
   }
 
@@ -68,6 +64,29 @@ implements IRangerState
   : void 
   {
     this._m_time = 0.0;
+
+    ///////////////////////////////////
+    // Setup Force Controller
+
+    this._m_controller.m_forceController.getDirection().set(0.0, -1.0);
+    this._m_controller.m_forceController.setSpeed(0);
+
+    // Save desire position and start position.
+
+    let sprite = this._m_actor.getWrappedInstance();
+
+    this._m_desirePosition.set
+    (
+      sprite.x,
+      sprite.y + this._m_config.entrancePositionGap
+    );
+
+    this._m_startPosition.set
+    (
+      sprite.x,
+      sprite.y
+    );
+
     return;
   }
 
@@ -110,43 +129,56 @@ implements IRangerState
 
     let time : number
     
-    // Count down only if the ranger is inside the camera canvas.
-
     time = this._m_time + deltaTime;
-    
-    this._m_time = time;
 
-    // Pursuit if the time reach the max time.
+    this._m_time = time;    
+
+    // Calculate the animation step.
 
     let config = this._m_config;
 
-    if(time >= config.waiting_time)
+    let step : number = (time / config.entranceTime);
+
+    if(step >= 1.0)
     {
-      this._m_controller.setActiveState('pursuit');
+      this._m_controller.setActiveState('aim');
       return;
     }
+    else
+    {
+      // Tween with a parable method
 
-    ///////////////////////////////////
-    // Pursuit
+      step = -Math.pow(step - 1, 2) + 1.0;
 
-    let selfPosition : V2 = this._m_selfPosition;
+      // Calculate the translation.
 
-    let targetPosition : V2 = this._m_targetPosition;
+      let desirePosition = this._m_desirePosition;
 
-    let sprite = this._m_actor.getWrappedInstance();
+      let startPosition = this._m_startPosition;
 
-    selfPosition.set(sprite.x, sprite.y);
+      let translation = this._m_toTarget;
 
-    let targetSprite = this._m_target.getWrappedInstance();
+      translation.copy(desirePosition);
 
-    targetPosition.set(targetSprite.x, targetSprite.y);
+      translation.subtract(startPosition);
 
-    this._m_controller.m_forceController.seek
-    (
-      targetPosition, 
-      selfPosition, 
-      this._m_config.steer_force
-    );
+      translation.scale(step);
+
+      // Calculate the position.
+
+      let selfPosition = this._m_selfPosition;
+
+      selfPosition.copy(startPosition);
+
+      selfPosition.add(translation);
+      
+      // Set position.
+
+      let sprite = this._m_actor.getWrappedInstance();
+
+      sprite.setPosition(selfPosition.x, selfPosition.y);
+
+    }
 
     return;
   }  
@@ -171,7 +203,6 @@ implements IRangerState
   private _explode()
   : void
   {
-    let hero = this._m_target;
     let heroSprite = this._m_target.getWrappedInstance();
     let selfSprite = this._m_actor.getWrappedInstance();
 
@@ -196,21 +227,11 @@ implements IRangerState
     return;
   }
 
-  private _insideCanvas()
-  : boolean
-  {
-    let p1 = this._m_cam_p1;
-    let p2 = this._m_cam_p2;
+  private _m_toTarget : V2;
 
-    let sprite = this._m_actor.getWrappedInstance();
+  private _m_startPosition : V2;
 
-    return (p1.x < sprite.x && sprite.x < p2.x) 
-           && (p1.y < sprite.y && sprite.y < p2.y);
-  }
-  
-  private _m_direction : V3;
-
-  private _m_targetPosition : V2;
+  private _m_desirePosition : V2;
 
   private _m_selfPosition : V2;
 
@@ -225,10 +246,4 @@ implements IRangerState
   private _m_controller : CmpRangerController;
 
   private _m_actor : Ty_physicsActor;
-
-  private _m_cam_p1 : Point;
-
-  private _m_cam_p2 : Point;
-
-  private _m_waitTime : number;
 }

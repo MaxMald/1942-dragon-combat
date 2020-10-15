@@ -9,17 +9,25 @@
  */
 
 import { DC_COMPONENT_ID } from "../commons/1942enums";
-import { Ty_physicsActor } from "../commons/1942types";
+import { Ty_physicsActor, Ty_physicsSprite, V2 } from "../commons/1942types";
 import { CnfRangerConfig } from "../configObjects/cnfRangerConfig";
 import { IEnemySpawner } from "../enemiesManager/enemySpawner/iEnemySpawner";
 import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
+import { GameManager } from "../gameManager/gameManager";
+import { DCForceController } from "../physics/dcForceController";
 import { IBaseState } from "../states/IBaseState";
 import { IRangerState } from "../states/rangerController/iRangerState";
+import { SttRangerAim } from "../states/rangerController/sttRangerAim";
+import { SttRangerBackEntrance } from "../states/rangerController/sttRangerBackEntrance";
+import { SttRangerEntrance } from "../states/rangerController/sttRangerEntrance";
 import { SttRangerExplosion } from "../states/rangerController/sttRangerExplosion";
 import { SttRangerIdle } from "../states/rangerController/sttRangerIdle";
 import { SttRangerPursuit } from "../states/rangerController/sttRangerPursuit";
 import { ICmpEnemyController } from "./iCmpEnemyController";
 
+/**
+ * 
+ */
 export class CmpRangerController
 implements ICmpEnemyController
 {  
@@ -36,11 +44,17 @@ implements ICmpEnemyController
     
     cmp._m_hStates = new Map<string, IRangerState>();
 
-    cmp.addState(new SttRangerExplosion());    
+    cmp.addState(new SttRangerExplosion());
     cmp.addState(new SttRangerPursuit());
+    cmp.addState(new SttRangerAim());
+    cmp.addState(new SttRangerEntrance());
+    cmp.addState(new SttRangerBackEntrance());
 
     let idleState = new SttRangerIdle();
+
     cmp.addState(idleState);
+
+    cmp.m_forceController = new DCForceController();
 
     cmp._m_active_state = idleState;
 
@@ -50,6 +64,8 @@ implements ICmpEnemyController
   init(_actor: Ty_physicsActor)
   : void 
   {
+    this.m_forceController.init(_actor);
+
     this._m_actor = _actor;
 
     this._m_hStates.forEach
@@ -62,14 +78,29 @@ implements ICmpEnemyController
       },
       this
     );
+
+    this._m_gameManager = GameManager.GetInstance();
     return;
   }
 
   update(_actor: Ty_physicsActor)
   : void 
-  {
+  {    
     this._m_active_state.update();
+
+    this.m_forceController.update(this._m_gameManager.m_dt);
+
+    ///////////////////////////////////
+    // Rotation
+
+    let sprite : Ty_physicsSprite = this._m_actor.getWrappedInstance();
+
+    let direction : V2 = this.m_forceController.getDirection();
+
+    sprite.setAngle(Phaser.Math.RadToDeg(direction.angle()));
+    
     return;
+
   }
 
   receive(_id: number, _obj: any)
@@ -122,6 +153,13 @@ implements ICmpEnemyController
       },
       this
     );
+
+    ///////////////////////////////////
+    // Set Physics data
+
+    this.m_forceController.setMaxSpeed(_config.speed);
+    this.m_forceController.setMass(_config.mass);
+
     return;
   }
 
@@ -190,10 +228,17 @@ implements ICmpEnemyController
   {
     this._m_spawner = null;
     this._m_enemiesManager = null;
+    this._m_config = null;
+    this._m_actor = null;
+    
+    this.m_forceController.destroy();
+    this.m_forceController = null;
     return;
   }
 
   m_id: number;
+
+  m_forceController : DCForceController;
 
   /****************************************************/
   /* Protected                                        */
@@ -213,5 +258,7 @@ implements ICmpEnemyController
 
   private _m_enemiesManager : IEnemiesManager;
 
-  private _m_actor : Ty_physicsActor;  
+  private _m_actor : Ty_physicsActor;
+
+  private _m_gameManager : GameManager;
 }
