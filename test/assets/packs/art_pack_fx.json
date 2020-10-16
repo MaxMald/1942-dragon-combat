@@ -1,0 +1,12 @@
+{ 
+  "pilot": {
+    "files": [
+      {
+        "type": "atlas",
+        "key": "fx_particles",
+        "textureURL": "images/fx/fx_particles.png",
+        "atlasURL": "images/fx/fx_particles.js"
+      }
+    ]
+  }
+}

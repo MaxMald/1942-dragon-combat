@@ -7147,7 +7147,7 @@
                         {
                          "name":"back_entrance_duration",
                          "type":"float",
-                         "value":5
+                         "value":1
                         }, 
                         {
                          "name":"collision_damage",
@@ -7212,7 +7212,7 @@
                         {
                          "name":"waiting_time",
                          "type":"float",
-                         "value":3
+                         "value":1
                         }],
                  "rotation":0,
                  "type":"Ranger",
@@ -7235,7 +7235,7 @@
                         {
                          "name":"back_entrance_duration",
                          "type":"float",
-                         "value":10
+                         "value":1
                         }, 
                         {
                          "name":"collision_damage",
@@ -7300,7 +7300,7 @@
                         {
                          "name":"waiting_time",
                          "type":"float",
-                         "value":3
+                         "value":1
                         }],
                  "rotation":0,
                  "type":"Ranger",

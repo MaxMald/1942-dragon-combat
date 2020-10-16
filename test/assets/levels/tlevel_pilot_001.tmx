@@ -497,17 +497,20 @@
   </object>
   <object id="566" name="Ranger" type="Ranger" x="722" y="9474">
    <properties>
+    <property name="back_entrance_duration" type="float" value="1"/>
     <property name="entrance_duration" type="float" value="2"/>
     <property name="entrance_position_gap" type="float" value="-400"/>
     <property name="mass" type="float" value="1"/>
     <property name="steer_force" type="float" value="200"/>
+    <property name="waiting_time" type="float" value="1"/>
    </properties>
    <point/>
   </object>
   <object id="567" name="Ranger" type="Ranger" x="362" y="9474">
    <properties>
-    <property name="back_entrance_duration" type="float" value="10"/>
+    <property name="back_entrance_duration" type="float" value="1"/>
     <property name="mass" type="float" value="2"/>
+    <property name="waiting_time" type="float" value="1"/>
    </properties>
    <point/>
   </object>

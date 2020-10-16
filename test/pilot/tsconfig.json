@@ -35,6 +35,7 @@
     "../../game/src/ts_src/pools/**/*",
     "../../game/src/ts_src/itemManager/**/*",
     "../../game/src/ts_src/prefabBuilder/**/*",
+    "../../game/src/ts_src/effectsManager/**/*",
     "../../game/src/ts_src/levelConfiguration/**/*", "../../game/src/ts_src/configObjects/enemyBasicBulletConfig.ts"
   ],
 

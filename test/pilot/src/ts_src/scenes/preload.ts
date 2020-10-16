@@ -52,7 +52,13 @@ extends Phaser.Scene
     (
       "dragon_anim",
       "animations/DragonFlight.json"
-    );   
+    );
+
+    this.load.animation
+    (
+      "explosion_a",
+      "animations/fx_explosion_animation.json"
+    )
 
     ///////////////////////////////////
     // Images        
@@ -162,6 +168,13 @@ extends Phaser.Scene
     (
       tiledMap.key,
       tiledMap.url
+    );
+
+    this.load.pack
+    (
+      'fx_pack',
+      'packs/art_pack_fx.json',
+      'pilot'
     );
 
     ///////////////////////////////////

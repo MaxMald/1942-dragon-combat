@@ -1,0 +1,434 @@
+{
+  "anims": [
+    {
+      "key": "explosion_a",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "fx_particles",
+          "frame": "explosion_01.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_02.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_03.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_04.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_05.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_06.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_07.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_08.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_09.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_10.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_11.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_12.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_13.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_14.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_15.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_16.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_17.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_18.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_28.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_29.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_30.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_31.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_32.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_33.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_34.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_35.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_36.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_19.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_20.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_21.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_22.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_23.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_24.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_25.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_26.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_27.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_37.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_38.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_39.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_40.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_41.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_42.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_43.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_44.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_45.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_46.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_47.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_48.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_49.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_50.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_51.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_52.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_53.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_54.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_55.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_56.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_57.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_58.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_59.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_60.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_61.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_62.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_63.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_64.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_65.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_66.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_67.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_68.png",
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "fx_particles",
+          "frame": "explosion_69.png",
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 24,
+      "duration": 1,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": 0,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    }
+  ],
+  "globalTimeScale": 1
+}

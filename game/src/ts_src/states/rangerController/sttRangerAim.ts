@@ -12,6 +12,7 @@ import { DC_MESSAGE_ID } from "../../commons/1942enums";
 import { Point, Ty_physicsActor, Ty_physicsSprite, V2} from "../../commons/1942types";
 import { CmpRangerController } from "../../components/cmpRangerController";
 import { CnfRangerConfig } from "../../configObjects/cnfRangerConfig";
+import { EffectsManager } from "../../effectsManager/effectsManager";
 import { GameManager } from "../../gameManager/gameManager";
 import { IPlayerController } from "../../playerController/IPlayerController";
 import { IRangerState } from "./iRangerState";
@@ -72,7 +73,7 @@ implements IRangerState
   {
     this._m_time = 0.0;
 
-    // Stop
+    // Stop movement.
 
     this._m_controller.m_forceController.setSpeed(0.0);
     return;
@@ -81,6 +82,25 @@ implements IRangerState
   onExit()
   : void 
   {
+    // Effect
+
+    let fx : EffectsManager = this._m_gameManager.getEffectsManager();
+
+    let actor = this._m_controller.getActor();
+
+    let sprite : Ty_physicsSprite = actor.getWrappedInstance();
+
+    // Get Direction
+
+    let direction = this._m_controller.m_forceController.getDirection();
+
+    fx.spawnPoof
+    (
+      sprite.x - direction.x * sprite.width * 0.5, 
+      sprite.y - direction.y * sprite.width * 0.5, 
+      10
+    );
+
     return;
   }
 
@@ -196,29 +216,7 @@ implements IRangerState
   private _explode()
   : void
   {
-    let hero = this._m_target;
-
-    let heroSprite = this._m_target.getWrappedInstance();
-    let selfSprite = this._m_actor.getWrappedInstance();
-
-    let vecToPlayer = new Phaser.Math.Vector2
-    (
-      heroSprite.x - selfSprite.x,
-      heroSprite.y - selfSprite.y
-    );
-
-    let config = this._m_config;
-    if(vecToPlayer.length() <= config.explosion_radius)
-    {
-      this._m_target.sendMessage
-      (
-        DC_MESSAGE_ID.kRangerExplosionHit,
-        config.collision_damage
-      );
-    }
-
-    this._m_controller.desactiveActor();
-    this._m_controller.setActiveState('idle');
+    this._m_controller.setActiveState('explosion');
     return;
   }
   

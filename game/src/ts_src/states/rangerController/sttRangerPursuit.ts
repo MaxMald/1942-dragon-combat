@@ -9,7 +9,7 @@
  */
 
 import { DC_MESSAGE_ID } from "../../commons/1942enums";
-import { Point, Ty_physicsActor, Ty_physicsSprite, V2, V3 } from "../../commons/1942types";
+import { Point, Ty_physicsActor, V2, V3 } from "../../commons/1942types";
 import { CmpRangerController } from "../../components/cmpRangerController";
 import { CnfRangerConfig } from "../../configObjects/cnfRangerConfig";
 import { GameManager } from "../../gameManager/gameManager";
@@ -120,9 +120,9 @@ implements IRangerState
 
     let config = this._m_config;
 
-    if(time >= config.waiting_time)
+    if(time >= config.life_time)
     {
-      this._m_controller.setActiveState('pursuit');
+      this._explode();
       return;
     }
 
@@ -171,28 +171,7 @@ implements IRangerState
   private _explode()
   : void
   {
-    let hero = this._m_target;
-    let heroSprite = this._m_target.getWrappedInstance();
-    let selfSprite = this._m_actor.getWrappedInstance();
-
-    let vecToPlayer = new Phaser.Math.Vector2
-    (
-      heroSprite.x - selfSprite.x,
-      heroSprite.y - selfSprite.y
-    );
-
-    let config = this._m_config;
-    if(vecToPlayer.length() <= config.explosion_radius)
-    {
-      this._m_target.sendMessage
-      (
-        DC_MESSAGE_ID.kRangerExplosionHit,
-        config.collision_damage
-      );
-    }
-
-    this._m_controller.desactiveActor();
-    this._m_controller.setActiveState('idle');
+    this._m_controller.setActiveState('explosion');
     return;
   }
 
@@ -229,6 +208,4 @@ implements IRangerState
   private _m_cam_p1 : Point;
 
   private _m_cam_p2 : Point;
-
-  private _m_waitTime : number;
 }

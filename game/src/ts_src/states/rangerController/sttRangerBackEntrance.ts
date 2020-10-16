@@ -224,27 +224,7 @@ implements IRangerState
   private _explode()
   : void
   {
-    let heroSprite = this._m_target.getWrappedInstance();
-    let selfSprite = this._m_actor.getWrappedInstance();
-
-    let vecToPlayer = new Phaser.Math.Vector2
-    (
-      heroSprite.x - selfSprite.x,
-      heroSprite.y - selfSprite.y
-    );
-
-    let config = this._m_config;
-    if(vecToPlayer.length() <= config.explosion_radius)
-    {
-      this._m_target.sendMessage
-      (
-        DC_MESSAGE_ID.kRangerExplosionHit,
-        config.collision_damage
-      );
-    }
-
-    this._m_controller.desactiveActor();
-    this._m_controller.setActiveState('idle');
+    this._m_controller.setActiveState('explosion');
     return;
   }
 

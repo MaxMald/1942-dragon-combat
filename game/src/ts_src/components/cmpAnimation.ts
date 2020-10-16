@@ -9,7 +9,6 @@
  * @since July-24-2020
  */
 
-import { BaseActor } from "../actors/baseActor";
 import { DC_COMPONENT_ID } from "../commons/1942enums";
 import { Ty_physicsActor, Ty_physicsSprite } from "../commons/1942types";
 import { IAnimationState } from "../states/IAnimationState";
@@ -21,7 +20,8 @@ import { IBaseComponent } from "./iBaseComponent";
  * Animation component provides a map of states that can be used to handle 
  * diferents animation states.
  */
-export class CmpAnimation implements IBaseComponent<Phaser.Physics.Arcade.Sprite>
+export class CmpAnimation 
+  implements IBaseComponent<Phaser.Physics.Arcade.Sprite>
 {
   /****************************************************/
   /* Public                                           */
@@ -106,7 +106,8 @@ export class CmpAnimation implements IBaseComponent<Phaser.Physics.Arcade.Sprite
   removeState(_id : string)
   : void
   {
-    if(this._m_states.has(_id)) {
+    if(this._m_states.has(_id)) 
+    {
       this._m_states.delete(_id);
     }
     return;

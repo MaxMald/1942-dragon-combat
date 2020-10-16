@@ -19,6 +19,7 @@ import { CmpNullEnemyController } from "../components/cmpNullEnemyController";
 import { CnfKalebio } from "../configObjects/cnfKalebio";
 import { CnfPowerShield } from "../configObjects/cnfPowerShield";
 import { DebugManager } from "../debugManager/debugManager";
+import { EffectsManager } from "../effectsManager/effectsManager";
 import { NullEnemySpawner } from "../enemiesManager/enemySpawner/nullEnemySpawner";
 import { IEnemiesManager } from "../enemiesManager/iEnemiesManager";
 import { NullEnemiesManager } from "../enemiesManager/nullEnemiesManager";
@@ -186,7 +187,8 @@ export class GameManager
     this.setAmbientGenerator(new NullAmbientGenerator());
     this.setLevelGenerator(new NullLevelGenerator());
     this.setUIManager(new NullUIManager());
-    this.setBossManager(new NullBossManager());    
+    this.setBossManager(new NullBossManager());
+    this._m_effectManager = EffectsManager.Create();  
 
     return;
   }
@@ -229,6 +231,9 @@ export class GameManager
 
     this._m_levelConfiguration.destroy();
     this._m_levelConfiguration = null;
+
+    this._m_effectManager.destroy();
+    this._m_effectManager = null;
 
     // Initalize the game manager
 
@@ -584,6 +589,12 @@ export class GameManager
     return this._m_itemManager;
   }
 
+  getEffectsManager()
+  : EffectsManager
+  {
+    return this._m_effectManager;
+  }
+
   /**
    * Get the basic bullet control pool.
    * 
@@ -607,9 +618,13 @@ export class GameManager
     
     this._m_scene = _scene;
 
+    // Init Effects scene.
+
+    this._m_effectManager.init(_scene);
+
     // Initialize the debug manager.
 
-    this._m_debugManager.init(_scene);
+    this._m_debugManager.init(_scene);    
 
     return;
   }
@@ -844,6 +859,11 @@ export class GameManager
    * Reference to the ItemManager.
    */
   private _m_itemManager : IItemManager;
+
+  /**
+   * Reference to the EffectManager.
+   */
+  private _m_effectManager : EffectsManager;
 
   /**
    * Reference to the basic bullet control pool.
